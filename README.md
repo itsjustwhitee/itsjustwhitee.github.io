@@ -1,1 +1,0 @@
-# itsjustwhitee.github.io
