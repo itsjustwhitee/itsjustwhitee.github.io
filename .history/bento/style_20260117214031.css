@@ -106,25 +106,9 @@ body {
     justify-content: center;
 }
 
-.overlay {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    /* Gradiente scuro dal basso verso l'alto per far risaltare il testo bianco */
-    background: linear-gradient(to top, rgba(0, 31, 31, 0.9) 0%, rgba(0, 31, 31, 0.4) 40%, transparent 100%);
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    padding: 20px;
-    box-sizing: border-box;
-    z-index: 2;
-}
-
 .bio {
     font-size: 1.1rem;
-    color: var(--text-dim);
+    color: #555;
     max-width: 600px;
     margin: 10px auto;
     line-height: 1.6;
@@ -181,59 +165,4 @@ body {
     margin: 0;
     font-size: 0.9rem;
     opacity: 0.8;
-}
-
-/* Grid for Instagram manual cards */
-.ig-grid-container {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr 1fr;
-    width: 100%;
-    height: 100%;
-    gap: 0;
-}
-
-.ig-photo {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-/* Icon in the corner for cards with links */
-.card-corner-icon {
-    position: absolute;
-    top: 15px;
-    right: 15px;
-    z-index: 10;
-    background: rgba(255, 255, 255, 0.2);
-    backdrop-filter: blur(8px); /* glass blurred effect */
-    width: 35px;
-    height: 35px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    font-size: 1rem;
-    border: 1px solid rgba(255, 255, 255, 0.3);
-}
-
-/* Card fix for white ones */
-/* If the background is white, the text must become dark to be readable */
-.card[style*="background-color: #ffffff"] .overlay,
-.card[style*="background-color: white"] .overlay {
-    background: rgba(255, 255, 255, 0.1); /* Remove the dark gradient */
-    color: #031f1f; /* Dark color same as your --bg-color */
-}
-
-.card[style*="background-color: #ffffff"] .card-icon {
-    color: #031f1f;
-}
-
-/* Center content for cards without image (only color) */
-.card-image-bg[style*="background-color"] + .overlay {
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    background: none; /* Remove gradient if it's only a solid color */
 }

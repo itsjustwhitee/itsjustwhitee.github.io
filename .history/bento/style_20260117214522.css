@@ -124,7 +124,7 @@ body {
 
 .bio {
     font-size: 1.1rem;
-    color: var(--text-dim);
+    color: var(--text-dim);;
     max-width: 600px;
     margin: 10px auto;
     line-height: 1.6;
