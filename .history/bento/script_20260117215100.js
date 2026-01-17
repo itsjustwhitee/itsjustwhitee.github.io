@@ -8,7 +8,7 @@ const bentoData = [
     {
         type: "image",
         size: "small",
-        bg: "assets/logo_justwhitee.png",
+        bg: "assets/logo_itsjustwhitee.png",
     },
     {
         type: "instagram-manual",
@@ -73,7 +73,7 @@ const bentoData = [
         size: "wide",
         title: "My Wallapop Shop",
         desc: "...Or even here...",
-        bg: "assets/Wallapop.webp",
+        bg: "assets/Wallapop.jpg",
         link: "https://www.wallapop.com/user/matteof-452229251"
     },
     {
@@ -89,21 +89,21 @@ const bentoData = [
         size: "wide",
         title: "Me in private :D",
         link: "https://www.instagram.com/matteo.ttf",
-        bg: "#094f4f",
+        bg: "#ffffff",
     },
     {
         type: "image",
         size: "wide",
         title: "Some Notes and Resources",
         link: "https://justwhitee.notion.site/Materiali-utili-su-Notion-6d4afc02fd114ee1b65fac5ab8e25201?pvs=4",
-        bg: "#094f4f",
+        bg: "#ffffff",
     },
     {
         type: "image",
         size: "wide",
         title: "My amazon wishlist",
         link: "https://www.amazon.it/hz/wishlist/ls/2VEY37Y3KUVK8?ref_=wl_share",
-        bg: "#094f4f",
+        bg: "#ffffff",
     },
 ];
 
