@@ -9,7 +9,7 @@ const bentoData = [
         type: "image",
         size: "small",
         bg: "assets/logo_justwhitee.png",
-        transparent: true
+        bg: "#ffffff00"
     },
     {
         type: "instagram-manual",
@@ -131,10 +131,6 @@ function loadBento() {
             card.href = item.link;
             card.target = "_blank";
             card.classList.add('card-link');
-        }
-
-        if (item.transparent) {
-            card.classList.add('transparent');
         }
         
         card.classList.add('card', item.size);
