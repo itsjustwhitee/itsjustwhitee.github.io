@@ -1,10 +1,10 @@
 /* --- VARIABLES --- */
 :root {
-    --bg-color: #b6dada;   /* Page background (light aqua) */
+    --bg-color: #e3ffff;   /* Page background (light aqua) */
     --card-bg: #094f4f;    /* Card background (petrol) */
     --text-white: #ffffff; /* Main card text */
     --text-muted: #a5d1d1; /* Secondary card text */
-    --accent: #15686e;     /* Accent color */
+    --accent: #00bbc9;     /* Accent color */
     --radius: 28px;        /* Global roundness */
 }
 
