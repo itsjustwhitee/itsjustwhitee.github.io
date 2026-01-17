@@ -3,7 +3,7 @@ const bentoData = [
         // GitHub
         type: "iframe",
         size: "wide",
-        src: "https://github-profile-summary-cards.vercel.app/api/cards/profile-details?username=itsjustwhitee&theme=dark", //"https://github-readme-stats.vercel.app/api?username=itsjustwhitee&show_icons=true&theme=dark&hide_border=true",
+        src: "https://github-profile-summary-cards.vercel.app/api/cards/profile-details?username=itsjustwhitee&theme=monokai", //"https://github-readme-stats.vercel.app/api?username=itsjustwhitee&show_icons=true&theme=dark&hide_border=true",
     },
     {
         type: "image",
