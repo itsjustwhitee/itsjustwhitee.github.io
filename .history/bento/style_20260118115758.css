@@ -79,22 +79,10 @@ body {
     color: var(--text-white);
     text-decoration: none;
     display: flex; /* Required for layout logic */
-    border: 1px solid transparent; /* Prepare the border without showing it */
-    transition: transform 0.3s ease, box-shadow 0.3s ease, border 0.3s ease, filter 0.3s ease;
 }
 
 .card:hover {
     transform: scale(1.03);
-
-    /* 1. LIGHT */
-    filter: brightness(1.15); 
-    
-    /* 2. STROKE: makes visible the border with the aqua color */
-    border-color: rgba(0, 187, 201, 0.5); 
-
-    /* 3. GLOW:neon effect */
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3), /* Shadowa */
-                0 0 15px var(--accent); /* Glow */
 }
 
 /* Layer for Background Images */

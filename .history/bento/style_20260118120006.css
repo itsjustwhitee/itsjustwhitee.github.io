@@ -86,15 +86,15 @@ body {
 .card:hover {
     transform: scale(1.03);
 
-    /* 1. LIGHT */
+    /* 1. ILLUMINAZIONE: Aumenta leggermente la luminosità di tutta la card */
     filter: brightness(1.15); 
     
-    /* 2. STROKE: makes visible the border with the aqua color */
+    /* 2. CONTORNO: Rende visibile il bordo con il colore aqua */
     border-color: rgba(0, 187, 201, 0.5); 
 
-    /* 3. GLOW:neon effect */
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3), /* Shadowa */
-                0 0 15px var(--accent); /* Glow */
+    /* 3. GLOW: Un'ombra esterna soffusa del colore accent per l'effetto neon */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3), /* Ombra naturale scura */
+                0 0 15px var(--accent); /* Glow colorato aqua */
 }
 
 /* Layer for Background Images */
