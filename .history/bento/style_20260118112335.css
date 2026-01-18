@@ -256,3 +256,21 @@ body {
 .card.transparent .card-corner-icon {
     color: #031f1f !important;
 }
+
+/* --- OFFICIAL BRAND COLORS --- */
+.brand-github { color: #ffffff; }
+.brand-telegram { color: #51c5ff; }
+.brand-paypal { color: #19aeb9; }
+.brand-amazon { color: #ffc400; }
+.brand-ebay { color: #233a21; }
+.brand-vinted { color: #dffffd; }
+.brand-subito { color: #ffeae7; }
+.brand-notion { color: #9f9f9f; }
+
+/* Instagram Gradient - Effetto logo originale */
+.brand-instagram {
+    background: -webkit-linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    display: inline-block;
+}
