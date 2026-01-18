@@ -4,7 +4,6 @@ const bentoData = [
         type: "iframe",
         size: "wide",
         src: "https://github-readme-streak-stats.herokuapp.com/?user=itsjustwhitee&theme=dark&background=094f4f&hide_border=true", //"https://github-readme-stats.vercel.app/api?username=itsjustwhitee&show_icons=true&theme=dark&hide_border=true",
-        link: "https://github.com/itsjustwhitee"
     },
     {
         type: "image",
@@ -158,13 +157,7 @@ function loadBento() {
                 </div>
             `;
         } else if (item.type === "iframe") {
-            const cornerIconHtml = item.link ? `<div class="card-corner-icon">${getIcon(item.link)}</div>` : '';
-            card.innerHTML = `
-            <div class="iframe-container">
-                <iframe src="${item.src}"></iframe>
-            </div>
-            ${cornerIconHtml}
-        `;
+            card.innerHTML = `<div class="iframe-container"><iframe src="${item.src}"></iframe></div>`;
         }
         else if (item.type === "instagram-manual") {
             let photosHtml = '';
