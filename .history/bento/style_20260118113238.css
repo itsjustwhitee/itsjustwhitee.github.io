@@ -147,9 +147,10 @@ body {
     position: absolute;
     top: 15px;
     right: 15px;
-    z-index: 10; /*color: var(--text-white);*/
-    font-size: 1.1rem;
-    opacity: 1;
+    z-index: 10;
+    color: var(--text-white);
+    font-size: 1rem;
+    opacity: 0.7;
     pointer-events: none;
 }
 
@@ -197,7 +198,7 @@ body {
     height: 100%;
     border: none;
     overflow: hidden;
-    transform: scale(1.1); 
+    transform: scale(1.8); 
     transform-origin: center;
 }
 
