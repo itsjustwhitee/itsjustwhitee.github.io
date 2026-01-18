@@ -3,7 +3,7 @@ const bentoData = [
         // GitHub
         type: "iframe",
         size: "wide",
-        src: "https://github-readme-streak-stats.herokuapp.com/?user=itsjustwhitee&theme=dark&background=094f4f&hide_border=true", //"https://github-readme-stats.vercel.app/api?username=itsjustwhitee&show_icons=true&theme=dark&hide_border=true",
+        src: "https://github-readme-streak-stats.herokuapp.com/?user=justwhitee&theme=dark&background=094f4f&hide_border=true", //"https://github-readme-stats.vercel.app/api?username=itsjustwhitee&show_icons=true&theme=dark&hide_border=true",
         link: "https://github.com/itsjustwhitee"
     },
     {
@@ -58,7 +58,7 @@ const bentoData = [
         type: "image",
         size: "wide",
         title: "My Subito Shop",
-        desc: "Here there is something I do not use anymore...",
+        //desc: "Something I do not use anymore, may be you can find something useful!",
         bg: "assets/Subito.jpg",
         link: "https://www.subito.it/utente/115681616"
     },
@@ -66,7 +66,7 @@ const bentoData = [
         type: "image",
         size: "wide",
         title: "My Vinted Shop",
-        desc: "...and here...",
+        //desc: "...Or here...",
         bg: "assets/Vinted.webp",
         link: "https://www.vinted.it/member/98964478-matteottf"
     },
@@ -74,7 +74,7 @@ const bentoData = [
         type: "image",
         size: "wide",
         title: "My Wallapop Shop",
-        desc: "...and also here...",
+        //desc: "...Or even here...",
         bg: "assets/Wallapop.webp",
         link: "https://www.wallapop.com/user/matteof-452229251"
     },
@@ -82,7 +82,7 @@ const bentoData = [
         type: "image",
         size: "wide",
         title: "My ebay Shop",
-        desc: "...and finally here!",
+        //desc: "...Or finally here!",
         bg: "assets/ebay.jpg",
         link: "https://ebay.us/m/cxwlKH"
     },
