@@ -50,7 +50,7 @@ const bentoData = [
         type: "image",
         size: "wide",
         title: "Support Me",
-        desc: "If you want to buy me a hot chocolate or something, you can do it here!",
+        desc: "If you want to buy me a coffee or something, you can do it here!",
         bg: "assets/paypalBanner.jpg",
         link: "https://www.paypal.com/paypalme/justwhitee"
     },
