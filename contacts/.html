@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ho trovato un oggetto - Matteo Fontolan</title>
+    
+    <!-- Import stile da bento -->
+    <link rel="stylesheet" href="../bento/style.css">
+    <!-- FontAwesome per le icone -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <style>
+    /* CSS SPECIFICO PER CONTACTS.HTML */
+
+    /* Contenitore a colonna */
+    .contact-grid {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        max-width: 600px;
+        margin: 0 auto; /* Centra orizzontalmente */
+        padding-bottom: 40px;
+    }
+
+    .action-card {
+        position: relative;
+        min-height: 140px; 
+        width: 100%;
+        
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        
+        cursor: pointer;
+        text-decoration: none;
+        overflow: hidden;
+        border-radius: var(--radius);
+        background-color: var(--card-bg);
+        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    }
+
+    .overlay.center-content {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        z-index: 2;
+        padding: 10px;
+    }
+    
+    /* Stile per il testo */
+    .overlay h3 { margin: 10px 0 5px 0; font-size: 1.5rem; color: var(--text-white); }
+    .overlay p { margin: 0; color: var(--text-muted); font-size: 1rem; }
+
+    .hidden-info { display: none; }
+    .visible-info { display: block; }
+</style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- HEADER: Messaggio di ringraziamento -->
+        <header class="profile-header">
+
+            <img src="../bento/assets/propic.jpg" alt="Matteo Fontolan" class="profile-pic">
+            <h1>Ciao, sono Matteo!</h1>
+            <p class="bio">
+                Se sei qui, hai trovato qualcosa di mio... 😅<br>
+                Puoi contattarmi qui sotto per restituirmelo o farmi sapere dove l'hai trovato.
+                <br/>
+                Grazie!🙏
+            </p>
+        </header>
+
+        <!-- GRIGLIA PULSANTI -->
+        <main class="contact-grid">
+
+            <!-- 1. WHATSAPP -->
+            <div class="card wide action-card" onclick="openWhatsapp()">
+                <div class="card-image-bg" style="background-color: #128c3b;"></div>
+                <!-- ICONA ANGOLO -->
+                <div class="card-corner-icon">
+                    <i class="fa-brands fa-whatsapp"></i>
+                </div>
+                <div class="overlay center-content">
+                    <h3>Scrivimi su WhatsApp</h3>
+                </div>
+            </div>
+
+            <!-- 2. TELEGRAM (Link diretto) -->
+            <a href="https://t.me/justwhitee" class="card wide action-card">
+                <div class="card-image-bg" style="background-color: #237ed3;"></div>
+                <!-- ICONA ANGOLO -->
+                <div class="card-corner-icon">
+                    <i class="fa-brands fa-telegram"></i>
+                </div>
+                <div class="overlay center-content">
+                    <h3>Scrivimi su Telegram</h3>
+                </div>
+            </a>
+
+            <!-- 3. TELEFONO & VCARD -->
+            <div class="card wide action-card" onclick="revealPhone(this)">
+                <div class="card-image-bg" style="background-color: #094f4f;"></div>
+
+                <!-- ICONA ANGOLO -->
+                <div class="card-corner-icon">
+                    <i class="fa-solid fa-phone"></i>
+                </div>
+
+                <div class="overlay center-content">
+                    
+                    <!-- FASE 1: LUCCHETTO -->
+                    <div id="lock-view">
+                        <i class="fa-solid fa-lock card-icon" style="color: #96d1ce; font-size: 1.8rem;"></i>
+                        <h3>Mostra Numero</h3>
+                        <p>Tocca per sbloccare e chiamare</p>
+                    </div>
+
+                    <!-- FASE 2: NUMERO RIVELATO -->
+                    <div id="phone-view" class="hidden-info">
+                        <!-- Il numero viene iniettato qui dallo script -->
+                        <h3 id="phone-display" style="font-size: 1.5rem; margin-bottom: 10px;">...</h3>
+                        
+                        <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
+                            <!-- Bottone Chiama -->
+                            <a id="btn-call" href="#" style="background: var(--accent); padding: 8px 16px; border-radius: 20px; color: white; text-decoration: none;">
+                                <i class="fa-solid fa-phone"></i> Chiama
+                            </a>
+                            <a href="#" onclick="scaricaVcard(); return false;" style="background: white; color: var(--card-bg); padding: 8px 16px; border-radius: 20px; text-decoration: none; font-weight: bold;">
+                                <i class="fa-solid fa-address-card"></i> Salva Contatto
+                            </a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- SCRIPT DI SICUREZZA (Interno alla pagina, non usiamo script.js) -->
+    <script>
+    // --- CONFIGURAZIONE PRIVACY ---
+    // Spezza il numero per evitare che i bot lo leggano dal codice sorgente
+    const prefisso = "39";
+    const parte_A = "328";      // Metti qui i primi 3 numeri
+    const parte_B = "062";
+    const parte_C = "3267";  // Metti qui il resto
+    
+    // Ricostruzione per l'uso (invisibile ai bot statici)
+    const numeroPulito = prefisso + parte_A + parte_C + parte_B; 
+    const numeroVisuale = "+" + prefisso + " " + parte_A + " " + parte_C + parte_B;
+
+    // Funzione WhatsApp
+    function openWhatsapp() {
+        const testo = "Ciao Matteo, ho trovato il tuo oggetto! 👋";
+        window.open(`https://wa.me/${numeroPulito}?text=${encodeURIComponent(testo)}`, '_blank');
+    }
+
+    // Funzione Sblocco Grafico
+    function revealPhone(cardElement) {
+        const lockView = cardElement.querySelector('#lock-view');
+        const phoneView = cardElement.querySelector('#phone-view');
+        
+        if(phoneView.style.display === 'block') return;
+
+        lockView.style.display = 'none';
+        phoneView.style.display = 'block';
+
+        // Inietta il numero visibile e il link per chiamare
+        document.getElementById('phone-display').innerText = numeroVisuale;
+        document.getElementById('btn-call').href = `tel:+${numeroPulito}`;
+    }
+
+    // --- NUOVA FUNZIONE: Genera VCard Sicura ---
+    function scaricaVcard() {
+        // Dati della VCard
+        const nome = "Matteo";
+        const cognome = "Fontolan";
+        const email = "matteofontolan215@gmail.com";
+        const email2 = "justwhitee.studio@gmail.com";
+        const bento = "https://itsjustwhitee.github.io"; 
+        const instagram = "https://instagram.com/matteo.ttf";
+        const linkedin = "http://www.linkedin.com/in/justwhitee";
+
+        // Costruiamo il contenuto del file riga per riga
+        const vcardBody = [
+            "BEGIN:VCARD",
+            "VERSION:3.0",
+            `N:${cognome};${nome};;;`,
+            `FN:${nome} ${cognome}`,
+            `TEL;TYPE=CELL:${numeroVisuale}`, // Qui usa il numero ricostruito da JS!
+            `EMAIL:${email}`,
+            `EMAIL:${email2}`,
+            `URL:${bento}`,
+            `URL;TYPE=linkedin:${linkedin}`,
+            `URL;TYPE=instagram:${instagram}`,
+            "END:VCARD"
+        ].join("\n");
+
+        // Crea un "blob" (un file virtuale in memoria)
+        const blob = new Blob([vcardBody], { type: "text/vcard;charset=utf-8" });
+        const url = URL.createObjectURL(blob);
+        
+        // Crea un link temporaneo invisibile e lo clicca automaticamente
+        const link = document.createElement("a");
+        link.href = url;
+        link.setAttribute("download", "Matteo_Fontolan.vcf");
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+</script>
+</html>
