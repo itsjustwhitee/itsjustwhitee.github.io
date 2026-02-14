@@ -9,7 +9,7 @@ const bentoData = [
     {
         type: "image",
         size: "small",
-        bg: "assets/logo_justwhitee.png",
+        bg: "../assets/logo_justwhitee.png",
         transparent: true
     },
     {
