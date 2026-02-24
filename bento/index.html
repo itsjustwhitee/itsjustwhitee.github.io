@@ -6,27 +6,48 @@
     <title>justwhitee's bento</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <!-- Favicon -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
     <link rel="icon" type="image/png" href="../assets/logo_justwhitee.png">
     <link rel="apple-touch-icon" sizes="180x180" href="../assets/logo_justwhitee.png">
-    <link rel="shortcut icon" href="../assets/logo_justwhitee.png">
 </head>
 <body>
     <div class="container">
-        <!-- Profile Header -->
+
         <header class="profile-header">
-            <img src="../assets/propic.jpg" alt="That should've been me :C" class="profile-pic">
-            <h1>Matteo Fontolan - justwhitee</h1>
-            <p class="bio">Tech enthusiast 👾 | Computer Engineering (M.Sc. WIP) 🧑‍💻 | Foodie 🍣| Caricature & Graphic Design for hobby 🖱️ 
-            </p>
+            <img src="../assets/propic.jpg" alt="Matteo Fontolan" class="profile-pic">
+            <p class="header-label">// justwhitee's bento</p>
+            <h1>Matteo <span>Fontolan</span></h1>
+            <p class="bio">Tech enthusiast 👾 | Computer Engineering (M.Sc. WIP) 🧑‍💻 | Foodie 🍣 | Caricature &amp; Graphic Design for hobby 🖱️</p>
             <p class="cta">So, how can I help you? 😁 Feel free to ask! 💡</p>
         </header>
 
-        <!-- Bento Grid -->
-        <main class="bento-grid" id="bento-grid">
-            <!-- Contents will be displayed here by JS -->
-        </main>
+        <main class="bento-grid" id="bento-grid"></main>
+
+        <footer class="site-footer">
+            <div class="footer-inner">
+                <img src="../assets/logo_justwhitee.png" alt="justwhitee logo" class="footer-logo">
+                <p class="footer-name">justwhitee &mdash; Matteo Fontolan</p>
+                <p class="footer-copy">
+                    &copy; <span id="footer-year"></span> Matteo Fontolan
+                    <br/>
+                    Creative work (caricatures, illustrations, graphic design) is protected by copyright.
+                    Do not reproduce without explicit permission.<br>
+                    Code, repositories and other works/assets are released under <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank">copyleft</a> &mdash;
+                    because knowledge is worthless if it's not shared.
+                </p>
+                <div class="footer-links">
+                    <a href="https://github.com/itsjustwhitee" target="_blank"><i class="fa-brands fa-github"></i> itsjustwhitee</a>
+                     <span class="footer-sep">//</span>
+                    <a href="mailto:justwhitee.studio@gmail.com" target="_blank"><i class="fa-solid fa-envelope"></i> justwhitee.studio@gmail.com</a>
+                     <span class="footer-sep">//</span>
+                    <a href="http://www.linkedin.com/in/justwhitee" target="_blank"><i class="fa-brands fa-linkedin"></i> @justwhitee</a>
+                </div>
+            </div>
+        </footer>
+
     </div>
     <script src="script.js"></script>
+    <script>document.getElementById('footer-year').textContent = new Date().getFullYear();</script>
 </body>
 </html>
