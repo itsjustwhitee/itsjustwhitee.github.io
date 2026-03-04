@@ -1,9 +1,762 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Matteo Fontolan — justwhitee</title>
+    <link rel="stylesheet" href="shared.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/svg+xml" href="assets/logo.svg">
+    <link rel="icon" type="image/png" href="assets/logo_justwhitee.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/logo_justwhitee.png">
+
+    <style>
+    body { padding: 0; }
+
+    /* ── HERO ────────────────────────────────────────────────────────────── */
+    #hero {
+        min-height: 100vh;
+        display: flex; flex-direction: column;
+        justify-content: center; align-items: flex-start;
+        padding: 120px 28px 80px;
+        max-width: 1100px; margin: 0 auto;
+        position: relative; z-index: 1;
+    }
+
+    .hero-eyebrow {
+        font-size: 0.72rem; letter-spacing: 0.3em; text-transform: uppercase;
+        color: var(--accent-bright);
+        opacity: 0; animation: fadeUp 0.6s ease 0.2s forwards;
+        margin-bottom: 22px;
+    }
+
+    .hero-name {
+        font-family: 'Syne', sans-serif; font-weight: 800;
+        font-size: clamp(3.2rem, 8vw, 7rem);
+        line-height: 0.95; color: #fff;
+        opacity: 0; animation: fadeUp 0.7s ease 0.35s forwards;
+        margin-bottom: 24px;
+    }
+    .hero-name .accent { color: var(--accent-bright); }
+
+    /* Role as styled pill-tags */
+    .hero-role-tags {
+        display: flex; flex-wrap: wrap; gap: 8px;
+        opacity: 0; animation: fadeUp 0.7s ease 0.5s forwards;
+        margin-bottom: 38px;
+    }
+    .hero-tag {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.9rem; font-weight: 700;
+        padding: 9px 20px; border-radius: 999px;
+        background: rgba(0,187,201,0.1);
+        border: 1px solid rgba(0,187,201,0.32);
+        color: var(--accent-bright);
+        letter-spacing: 0.03em;
+        transition: background 0.2s, border-color 0.2s;
+    }
+    .hero-tag:hover { background: rgba(0,187,201,0.2); border-color: rgba(0,187,201,0.6); }
+
+    .hero-desc {
+        font-size: 0.92rem; color: var(--text-bio);
+        line-height: 1.85; max-width: 560px;
+        opacity: 0; animation: fadeUp 0.7s ease 0.65s forwards;
+        margin-bottom: 48px;
+    }
+
+    .hero-ctas {
+        display: flex; gap: 12px; flex-wrap: wrap; align-items: center;
+        opacity: 0; animation: fadeUp 0.7s ease 0.8s forwards;
+    }
+    .hero-ctas .btn-pill { padding: 11px 22px; font-size: 0.78rem; }
+    .btn-cv { background: rgba(255,255,255,0.08); color: #fff; border: 1px solid rgba(255,255,255,0.2); }
+    .btn-cv:hover { background: rgba(255,255,255,0.15); }
+    .btn-bento { background: rgba(9,134,143,0.18); color: var(--accent-bright); border: 1px solid rgba(0,187,201,0.28); }
+    .btn-bento:hover { background: rgba(9,134,143,0.32); border-color: rgba(0,187,201,0.6); }
+
+    /* Giant parallax logo — fixed right, exactly half visible, fades+slides on scroll */
+    .hero-logo-giant {
+        position: fixed;
+        right: 0;
+        top: 50%;
+        transform: translateY(-50%) translateX(50%);
+        width: clamp(800px, 90vw, 1300px);
+        pointer-events: none;
+        z-index: 0;
+        opacity: 0;
+        filter: drop-shadow(0 0 120px rgba(0,187,201,0.08));
+        will-change: transform, opacity;
+    }
+
+    .hero-scroll {
+        position: absolute; bottom: 36px; left: 50%;
+        transform: translateX(-50%);
+        font-size: 0.6rem; letter-spacing: 0.22em; text-transform: uppercase;
+        color: rgba(255,255,255,0.2);
+        display: flex; flex-direction: column; align-items: center; gap: 8px;
+        opacity: 0; animation: fadeUp 0.7s ease 1.4s forwards;
+    }
+    .scroll-line {
+        width: 1px; height: 52px;
+        background: linear-gradient(to bottom, var(--accent-bright), transparent);
+        animation: scrollPulse 2.2s ease-in-out infinite;
+    }
+    @keyframes scrollPulse {
+        0%,100% { opacity: 0.25; transform: scaleY(1); }
+        50%      { opacity: 1;   transform: scaleY(1.15); }
+    }
+
+    /* ── SECTIONS ────────────────────────────────────────────────────────── */
+    .section { padding: 100px 28px; max-width: 1100px; margin: 0 auto; }
+    .section-header { margin-bottom: 56px; }
+    .section-title {
+        font-family: 'Syne', sans-serif;
+        font-size: clamp(1.8rem, 4vw, 2.8rem);
+        font-weight: 800; color: #fff; line-height: 1.1;
+    }
+    .section-title .accent { color: var(--accent-bright); }
+    .section-sub { font-size: 0.82rem; color: var(--text-muted); margin-top: 10px; line-height: 1.6; max-width: 520px; }
+
+    .section-divider {
+        width: calc(100% - 56px); margin: 0 28px; height: 1px;
+        background: linear-gradient(to right, rgba(0,187,201,0.3), transparent);
+    }
+
+    /* ── ABOUT ───────────────────────────────────────────────────────────── */
+    .about-grid { display: grid; grid-template-columns: 1fr 1.3fr; gap: 56px; align-items: center; }
+    .about-pic-wrap { position: relative; }
+    .about-pic {
+        width: 100%; aspect-ratio: 1; border-radius: var(--radius);
+        object-fit: cover; box-shadow: 0 24px 60px rgba(0,0,0,0.55); display: block;
+    }
+    .about-pic-badge {
+        position: absolute; bottom: -16px; right: -16px;
+        background: linear-gradient(135deg, #0d6060, #083c3c);
+        border: 1px solid rgba(0,187,201,0.3); border-radius: 16px; padding: 14px 18px;
+        font-family: 'Syne', sans-serif; font-size: 0.75rem; font-weight: 700;
+        color: var(--accent-bright); box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+    }
+    .about-pic-badge span { font-size: 1.3rem; display: block; color: #fff; }
+    .about-text h3 { font-family: 'Syne', sans-serif; font-size: 1.3rem; font-weight: 800; color: #fff; margin-bottom: 16px; line-height: 1.2; }
+    .about-text p { font-size: 0.85rem; color: var(--text-bio); line-height: 1.85; margin-bottom: 16px; }
+    .about-text p:last-of-type { margin-bottom: 28px; }
+    .about-links { display: flex; gap: 10px; flex-wrap: wrap; }
+    .about-links .btn-pill { padding: 9px 18px; font-size: 0.72rem; }
+
+    /* ── PROJECTS ────────────────────────────────────────────────────────── */
+    .projects-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+
+    .project-card {
+        position: relative;
+        background: linear-gradient(145deg, #0d2f2f 0%, #081c1c 100%);
+        border: 1px solid rgba(9,134,143,0.2);
+        border-radius: var(--radius); padding: 0; overflow: hidden;
+        transition: transform 0.4s cubic-bezier(0.175,0.885,0.32,1.275),
+                    box-shadow 0.4s ease, border-color 0.4s ease;
+    }
+    .project-card::before {
+        content: ''; position: absolute; top: 0; left: 0; right: 0;
+        height: 2px;
+        background: linear-gradient(to right, var(--accent-bright), transparent);
+        opacity: 0; transition: opacity 0.35s ease;
+    }
+    .project-card:hover { transform: translateY(-7px); border-color: rgba(0,187,201,0.4); box-shadow: 0 28px 60px rgba(0,0,0,0.55), 0 0 22px rgba(9,134,143,0.15); }
+    .project-card:hover::before { opacity: 1; }
+
+    .project-img-wrap { overflow: hidden; background: rgba(9,134,143,0.08); display: flex; align-items: center; justify-content: center; }
+    .project-img {
+        width: 100%; height: 160px; object-fit: contain; display: block;
+        padding: 16px;
+        transition: transform 0.5s ease, filter 0.5s ease;
+        filter: brightness(0.92);
+    }
+    .project-card:hover .project-img { transform: scale(1.04); filter: brightness(1); }
+
+    .project-img-placeholder {
+        width: 100%; height: 190px;
+        background: linear-gradient(135deg, rgba(9,134,143,0.2) 0%, rgba(0,0,0,0.35) 100%);
+        display: flex; align-items: center; justify-content: center;
+        font-size: 3rem; opacity: 0.35;
+    }
+
+    .project-body { padding: 26px 26px 22px; }
+
+    .project-card.featured {
+        grid-column: span 2;
+        display: grid; grid-template-columns: 1fr 1fr;
+    }
+    .project-card.featured .project-img-wrap { height: 100%; }
+    .project-card.featured .project-img { height: 100%; min-height: 280px; padding: 24px; }
+    .project-card.featured .project-img-placeholder { height: 100%; min-height: 280px; }
+    .project-card.featured .project-body { padding: 32px 30px 28px; }
+
+    .project-meta { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; flex-wrap: wrap; }
+    .project-badge {
+        font-size: 0.56rem; letter-spacing: 0.14em; text-transform: uppercase;
+        padding: 4px 10px; border-radius: 999px;
+        background: rgba(0,187,201,0.12); border: 1px solid rgba(0,187,201,0.25); color: var(--accent-bright);
+    }
+    .project-badge.intern { background: rgba(255,168,0,0.1); border-color: rgba(255,168,0,0.25); color: #ffa800; }
+    .project-year { font-size: 0.59rem; color: var(--text-muted); letter-spacing: 0.1em; }
+
+    .project-card h3 { font-family: 'Syne', sans-serif; font-size: 1.1rem; font-weight: 800; color: #fff; line-height: 1.25; margin-bottom: 8px; }
+    .project-card .tagline { font-size: 0.72rem; color: var(--accent-bright); margin-bottom: 12px; font-style: italic; opacity: 0.8; }
+    .project-card .proj-desc { font-size: 0.78rem; color: var(--text-bio); line-height: 1.75; }
+
+    .project-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 16px; }
+    .tag { font-size: 0.56rem; padding: 3px 9px; border-radius: 6px; background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.1); color: rgba(255,255,255,0.5); letter-spacing: 0.05em; }
+
+    .project-footer { display: flex; align-items: center; justify-content: space-between; margin-top: 18px; flex-wrap: wrap; gap: 10px; }
+    .project-link { display: inline-flex; align-items: center; gap: 6px; font-size: 0.68rem; color: var(--accent-bright); transition: gap 0.2s; text-decoration: none; }
+    .project-link:hover { gap: 10px; }
+
+    .project-contributors { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+    .contrib-label { font-size: 0.56rem; color: var(--text-muted); letter-spacing: 0.08em; text-transform: uppercase; }
+    .contrib-chip { font-size: 0.57rem; padding: 2px 9px; border-radius: 999px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); color: rgba(255,255,255,0.5); }
+
+    /* Stat boxes inside featured card */
+    .project-stats { display: flex; flex-direction: column; gap: 10px; margin-top: 16px; }
+    .stat-box { background: rgba(9,134,143,0.1); border: 1px solid rgba(9,134,143,0.2); border-radius: 12px; padding: 12px 14px; }
+    .stat-box-label { font-size: 0.56rem; text-transform: uppercase; letter-spacing: 0.15em; color: var(--accent-bright); margin-bottom: 4px; }
+    .stat-box-value { font-family: 'Syne', sans-serif; font-size: 1.5rem; font-weight: 800; color: #fff; }
+    .stat-box-desc  { font-size: 0.67rem; color: var(--text-muted); margin-top: 2px; line-height: 1.4; }
+
+    /* ── SKILLS ──────────────────────────────────────────────────────────── */
+    .skills-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+
+    .skill-group { border-radius: var(--radius-sm); padding: 24px 22px; border: 1px solid rgba(9,134,143,0.18); transition: border-color 0.3s ease, transform 0.3s ease; }
+    .skill-group:hover { transform: translateY(-3px); }
+
+    .skill-group:nth-child(1) { background: linear-gradient(145deg, rgba(0,187,201,0.18) 0%, rgba(0,187,201,0.06) 100%); border-color: rgba(0,187,201,0.22); }
+    .skill-group:nth-child(1):hover { border-color: rgba(0,187,201,0.5); }
+    .skill-group:nth-child(2) { background: linear-gradient(145deg, rgba(255,210,60,0.18) 0%, rgba(255,210,60,0.05) 100%); border-color: rgba(255,210,60,0.2); }
+    .skill-group:nth-child(2):hover { border-color: rgba(255,210,60,0.45); }
+    .skill-group:nth-child(3) { background: linear-gradient(145deg, rgba(90,181,245,0.18) 0%, rgba(90,181,245,0.05) 100%); border-color: rgba(90,181,245,0.2); }
+    .skill-group:nth-child(3):hover { border-color: rgba(90,181,245,0.45); }
+    .skill-group:nth-child(4) { background: linear-gradient(145deg, rgba(192,122,240,0.18) 0%, rgba(192,122,240,0.05) 100%); border-color: rgba(192,122,240,0.2); }
+    .skill-group:nth-child(4):hover { border-color: rgba(192,122,240,0.45); }
+    .skill-group:nth-child(5) { background: linear-gradient(145deg, rgba(240,160,90,0.18) 0%, rgba(240,160,90,0.05) 100%); border-color: rgba(240,160,90,0.2); }
+    .skill-group:nth-child(5):hover { border-color: rgba(240,160,90,0.45); }
+    .skill-group:nth-child(6) { background: linear-gradient(145deg, rgba(90,240,160,0.18) 0%, rgba(90,240,160,0.05) 100%); border-color: rgba(90,240,160,0.18); }
+    .skill-group:nth-child(6):hover { border-color: rgba(90,240,160,0.42); }
+
+    .skill-group-label { font-size: 0.59rem; letter-spacing: 0.25em; text-transform: uppercase; margin-bottom: 16px; opacity: 0.85; }
+    .skill-group:nth-child(1) .skill-group-label { color: var(--accent-bright); }
+    .skill-group:nth-child(2) .skill-group-label { color: #ffd060; }
+    .skill-group:nth-child(3) .skill-group-label { color: #5ab5f5; }
+    .skill-group:nth-child(4) .skill-group-label { color: #c07af0; }
+    .skill-group:nth-child(5) .skill-group-label { color: #f0a05a; }
+    .skill-group:nth-child(6) .skill-group-label { color: #5af0a0; }
+
+    .skill-pills { display: flex; flex-wrap: wrap; gap: 6px; }
+    .skill-pill { font-size: 0.67rem; padding: 5px 11px; border-radius: 8px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); color: var(--text-body); transition: background 0.2s, border-color 0.2s, transform 0.2s; }
+    .skill-pill:hover { background: rgba(255,255,255,0.13); transform: scale(1.05); }
+
+    /* ── EXPERIENCE & EDUCATION ──────────────────────────────────────────── */
+    .exp-edu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; }
+    .exp-col-label { font-size: 0.67rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 26px; }
+
+    .timeline { position: relative; padding-left: 32px; }
+    .timeline::before { content: ''; position: absolute; left: 0; top: 8px; bottom: 0; width: 1px; background: linear-gradient(to bottom, var(--accent-bright), transparent); opacity: 0.3; }
+    .tl-item { position: relative; margin-bottom: 40px; }
+    .tl-item::before { content: ''; position: absolute; left: -36px; top: 7px; width: 9px; height: 9px; border-radius: 50%; background: var(--accent-bright); box-shadow: 0 0 10px rgba(0,187,201,0.5); }
+    .tl-period { font-size: 0.61rem; letter-spacing: 0.12em; color: var(--accent-bright); opacity: 0.7; margin-bottom: 5px; text-transform: uppercase; }
+    .tl-role   { font-family: 'Syne', sans-serif; font-size: 0.98rem; font-weight: 800; color: #fff; margin-bottom: 3px; }
+    .tl-company{ font-size: 0.71rem; color: var(--text-muted); margin-bottom: 10px; }
+    .tl-desc   { font-size: 0.77rem; color: var(--text-bio); line-height: 1.75; }
+
+    .edu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .edu-card { background: linear-gradient(145deg, #0d2f2f 0%, #081c1c 100%); border: 1px solid rgba(9,134,143,0.18); border-radius: var(--radius-sm); padding: 20px 18px; transition: border-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease; }
+    .edu-card:hover { border-color: rgba(0,187,201,0.35); transform: translateY(-4px); box-shadow: 0 12px 32px rgba(0,0,0,0.35), 0 0 14px rgba(0,187,201,0.08); }
+    .edu-period { font-size: 0.59rem; color: var(--accent-bright); opacity: 0.7; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 7px; }
+    .edu-degree { font-family: 'Syne', sans-serif; font-size: 0.9rem; font-weight: 800; color: #fff; margin-bottom: 3px; }
+    .edu-school { font-size: 0.7rem; color: var(--text-muted); margin-bottom: 8px; }
+    .edu-grade  { font-size: 0.67rem; color: var(--accent-bright); }
+
+    /* ── CTA ─────────────────────────────────────────────────────────────── */
+    #cta { padding: 80px 28px 120px; max-width: 1100px; margin: 0 auto; text-align: center; }
+    #cta h2 { font-family: 'Syne', sans-serif; font-size: clamp(1.8rem, 4vw, 3rem); font-weight: 800; color: #fff; margin-bottom: 18px; line-height: 1.1; }
+    #cta h2 .accent { color: var(--accent-bright); }
+    #cta > div > p { font-size: 0.88rem; color: var(--text-bio); line-height: 1.75; max-width: 500px; margin: 0 auto 36px; }
+    .cta-links { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; }
+    .cta-links .btn-pill { padding: 12px 24px; font-size: 0.78rem; }
+
+    /* ── FOOTER ──────────────────────────────────────────────────────────── */
+    .site-footer { margin: 0; }
+    .site-footer .footer-inner { padding: 0 28px 32px; }
+
+    /* ── PARALLAX ORBS ───────────────────────────────────────────────────── */
+    .parallax-orb { position: fixed; border-radius: 50%; pointer-events: none; z-index: 0; filter: blur(90px); }
+    .orb1 { width: 550px; height: 550px; background: radial-gradient(circle, rgba(0,187,201,0.06) 0%, transparent 70%); top: -80px; right: -80px; }
+    .orb2 { width: 420px; height: 420px; background: radial-gradient(circle, rgba(9,79,79,0.1) 0%, transparent 70%); bottom: 30%; left: -80px; }
+
+    /* ── RESPONSIVE ──────────────────────────────────────────────────────── */
+    @media (max-width: 1000px) { .hero-logo-giant { display: none; } }
+    @media (max-width: 900px) {
+        .about-grid { grid-template-columns: 1fr; }
+        .about-pic-wrap { max-width: 320px; margin: 0 auto; }
+        .projects-grid { grid-template-columns: 1fr; }
+        .project-card.featured { grid-column: span 1; grid-template-columns: 1fr; }
+        .project-card.featured .project-img { height: 220px; }
+        .skills-grid { grid-template-columns: 1fr 1fr; }
+        .exp-edu-grid { grid-template-columns: 1fr; gap: 48px; }
+        .edu-grid { grid-template-columns: 1fr; }
+        .edu-card[style*="grid-column"] { grid-column: span 1 !important; }
+    }
+    @media (max-width: 600px) {
+        .hero-name { font-size: clamp(2.6rem, 14vw, 4rem); }
+        .skills-grid { grid-template-columns: 1fr; }
+        .hero-ctas { flex-direction: column; align-items: flex-start; }
+        .section { padding: 70px 20px; }
+        .site-nav { padding: 0 20px; }
+        .nav-links { gap: 14px; }
+    }
+    </style>
+</head>
 <body>
 
-<h1>Test</h1>
-<p>Test</p>
+    <div class="parallax-orb orb1" id="orb1"></div>
+    <div class="parallax-orb orb2" id="orb2"></div>
 
+    <!-- ── NAV ──────────────────────────────────────────────────────────── -->
+    <nav class="site-nav">
+        <a href="index.html" class="nav-logo">
+            <img src="assets/logo_justwhitee.png" alt="justwhitee">
+            justwhitee
+        </a>
+        <ul class="nav-links">
+            <li><a href="#about">// about</a></li>
+            <li><a href="#projects">// projects</a></li>
+            <li><a href="#skills">// skills</a></li>
+            <li><a href="bento/">// bento</a></li>
+        </ul>
+    </nav>
+
+    <!-- ── HERO ─────────────────────────────────────────────────────────── -->
+    <section id="hero">
+        <p class="hero-eyebrow">// hello world · itsjustwhitee</p>
+        <h1 class="hero-name">
+            Matteo<br><span class="accent">Fontolan</span>
+        </h1>
+        <div class="hero-role-tags">
+            <span class="hero-tag">MSc Computer Engineering · Università di Bologna</span>
+        </div>
+        <p class="hero-desc">
+            I build things at the intersection of software and hardware —
+            from Edge AI systems to IoT controllers to parallel GPU algorithms.
+            I care about systems that are not just correct, but <em>well-engineered</em>.
+        </p>
+        <div class="hero-ctas">
+            <a href="#projects" class="btn-pill btn-primary">
+                <i class="fa-solid fa-folder-open"></i> View Projects
+            </a>
+            <a href="assets/cvMatteoFontolan.pdf" target="_blank" class="btn-pill btn-cv">
+                <i class="fa-solid fa-file-lines"></i> Curriculum
+            </a>
+            <a href="bento/" class="btn-pill btn-bento">
+                <img src="assets/bento.png" alt="" width="15" height="15" style="object-fit:contain;opacity:0.9;vertical-align:middle;" aria-hidden="true"> Bento
+            </a>
+            <a href="https://github.com/itsjustwhitee" target="_blank" class="btn-pill btn-ghost">
+                <i class="fa-brands fa-github"></i> GitHub
+            </a>
+        </div>
+
+        <img src="assets/logo.svg" alt="" class="hero-logo-giant" id="logo-giant" aria-hidden="true">
+        <div class="hero-scroll">scroll<div class="scroll-line"></div></div>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <!-- ── ABOUT ─────────────────────────────────────────────────────────── -->
+    <section id="about" class="section">
+        <div class="section-header reveal">
+            <p class="section-label">// 01 &mdash; about me</p>
+            <h2 class="section-title">Passionate geek,<br><span class="accent">practical engineer.</span></h2>
+        </div>
+        <div class="about-grid">
+            <div class="about-pic-wrap reveal">
+                <img src="assets/propic.jpg" alt="Matteo Fontolan" class="about-pic">
+                <div class="about-pic-badge"><span>96/110</span>BSc grade</div>
+            </div>
+            <div class="about-text reveal" style="transition-delay:0.12s">
+                <h3>From Ferrara, building at the edge of systems.</h3>
+                <p>I'm a Computer Engineering student at the University of Bologna (Alma Mater Studiorum), currently pursuing my Master's Degree after graduating with 96/110. My background spans software architecture, computer vision, accelerated computing, and IoT systems.</p>
+                <p>I love digging into how things actually work — not just making code run, but understanding the system beneath it. Whether that's writing CUDA kernels, designing a decoupled IoT architecture on an ESP32, or integrating a real-time depth estimation pipeline with industrial robots.</p>
+                <p>Outside of engineering, I'm a foodie 🍣, I draw caricatures and do graphic design for fun 🖱️, and I believe <em>knowledge is worthless if it's not shared</em>.</p>
+                <div class="about-links">
+                    <a href="http://www.linkedin.com/in/justwhitee" target="_blank" class="btn-pill btn-ghost"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
+                    <a href="https://github.com/itsjustwhitee" target="_blank" class="btn-pill btn-ghost"><i class="fa-brands fa-github"></i> GitHub</a>
+                    <a href="/cdn-cgi/l/email-protection#eb868a9f9f8e848d84859f84878a85ab8c868a8287c5888486" class="btn-pill btn-ghost"><i class="fa-solid fa-envelope"></i> Email</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <!-- ── PROJECTS ───────────────────────────────────────────────────────── -->
+    <section id="projects" class="section">
+        <div class="section-header reveal">
+            <p class="section-label">// 02 &mdash; projects</p>
+            <h2 class="section-title">Things I've <span class="accent">built.</span></h2>
+            <p class="section-sub">Selected work from university courses, internships, and personal curiosity.</p>
+        </div>
+
+        <div class="projects-grid">
+
+            <!-- EdgeCV4Safety FEATURED -->
+            <div class="project-card featured reveal">
+                <div class="project-img-wrap">
+                    <img src="assets/projects/edgecv4safety.png"
+                         onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"
+                         alt="EdgeCV4Safety" class="project-img">
+                    <div class="project-img-placeholder" style="display:none;">🤖</div>
+                </div>
+                <div class="project-body">
+                    <div class="project-meta">
+                        <span class="project-badge intern">Internship · Thesis</span>
+                        <span class="project-year">apr–oct 2025</span>
+                    </div>
+                    <h3>EdgeCV4Safety</h3>
+                    <p class="tagline">AI-Driven Contextual Safety System for Industry 5.0</p>
+                    <p class="proj-desc">Modular Computer Vision system replacing physical safety barriers. Deployed on NVIDIA Jetson AGX Orin: YOLO11 + UniDepth v2 over ONNX Runtime, robot control via RTDE, real-time proximity awareness for Universal Robots.</p>
+                    <div class="project-stats">
+                        <div class="stat-box">
+                            <p class="stat-box-label">Inference</p>
+                            <p class="stat-box-value">~5 FPS</p>
+                            <p class="stat-box-desc">on Jetson AGX Orin via TensorRT</p>
+                        </div>
+                        <div class="stat-box">
+                            <p class="stat-box-label">Architecture</p>
+                            <p class="stat-box-desc">Super-repo with Git Submodules — strict decoupling of Vision and Robot Control components.</p>
+                        </div>
+                    </div>
+                    <div class="project-tags">
+                        <span class="tag">Python</span><span class="tag">ONNX</span><span class="tag">TensorRT</span>
+                        <span class="tag">CUDA</span><span class="tag">YOLO11</span><span class="tag">UniDepth</span>
+                        <span class="tag">RTDE</span><span class="tag">Docker</span><span class="tag">GigE Vision</span>
+                    </div>
+                    <div class="project-footer">
+                        <a href="https://github.com/EdgeCV4Safety/EdgeCV4Safety" target="_blank" class="project-link">
+                            <i class="fa-brands fa-github"></i> GitHub <i class="fa-solid fa-arrow-right" style="font-size:0.58rem;"></i>
+                        </a>
+                        <div class="project-contributors">
+                            <span class="contrib-label">with</span>
+                            <div class="contrib-names">
+                                <span class="contrib-chip">Riccardo Venanzi</span>
+                                <span class="contrib-chip">Davide Tazzioli</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- HashCrackerz -->
+            <div class="project-card reveal">
+                <div class="project-img-wrap">
+                    <img src="assets/projects/hashcrackerz.png"
+                         onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"
+                         alt="HashCrackerz" class="project-img">
+                    <div class="project-img-placeholder" style="display:none;">⚡</div>
+                </div>
+                <div class="project-body">
+                    <div class="project-meta">
+                        <span class="project-badge">MSc Course</span>
+                        <span class="project-year">dec 2025 – feb 2026</span>
+                    </div>
+                    <h3>HashCrackerz</h3>
+                    <p class="tagline">Multi-Platform SHA-256 Parallel Cracking Suite</p>
+                    <p class="proj-desc">High-performance SHA-256 cracker comparing NVIDIA CUDA, AMD ROCm/HIP, and multi-core CPU via OpenMP. Kernel optimizations include constant memory, loop unrolling, and dynamic work scheduling.</p>
+                    <div class="project-tags">
+                        <span class="tag">C++</span><span class="tag">CUDA</span><span class="tag">ROCm/HIP</span>
+                        <span class="tag">OpenMP</span><span class="tag">OpenSSL</span><span class="tag">PowerShell</span>
+                    </div>
+                    <div class="project-footer">
+                        <a href="https://github.com/HashCrackerz" target="_blank" class="project-link">
+                            <i class="fa-brands fa-github"></i> GitHub <i class="fa-solid fa-arrow-right" style="font-size:0.58rem;"></i>
+                        </a>
+                        <div class="project-contributors">
+                            <span class="contrib-label">with</span>
+                            <div class="contrib-names">
+                                <span class="contrib-chip">Andrea Vitale</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RackController -->
+            <div class="project-card reveal">
+                <div class="project-img-wrap">
+                    <img src="assets/projects/rackcontroller.svg"
+                         onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"
+                         alt="RackController" class="project-img">
+                    <div class="project-img-placeholder" style="display:none;">🖥️</div>
+                </div>
+                <div class="project-body">
+                    <div class="project-meta">
+                        <span class="project-badge">Personal</span>
+                        <span class="project-year">jan – feb 2026</span>
+                    </div>
+                    <h3>RackController v3.0</h3>
+                    <p class="tagline">Smart Cooling &amp; IoT Ecosystem</p>
+                    <p class="proj-desc">Custom cooling system for a DIY network rack on ESP32-S3. Decoupled: C++ REST firmware + Nginx/Docker frontend. Dynamic PWM fan control, OLED night-mode display, real-time web dashboard.</p>
+                    <div class="project-tags">
+                        <span class="tag">C++</span><span class="tag">ESP32-S3</span><span class="tag">Docker</span>
+                        <span class="tag">Nginx</span><span class="tag">HTML/JS</span><span class="tag">JSON</span>
+                    </div>
+                    <div class="project-footer">
+                        <a href="https://github.com/itsjustwhitee/RackController" target="_blank" class="project-link">
+                            <i class="fa-brands fa-github"></i> GitHub <i class="fa-solid fa-arrow-right" style="font-size:0.58rem;"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <!-- ── SKILLS ─────────────────────────────────────────────────────────── -->
+    <section id="skills" class="section">
+        <div class="section-header reveal">
+            <p class="section-label">// 03 &mdash; skills</p>
+            <h2 class="section-title">Tech <span class="accent">stack.</span></h2>
+            <p class="section-sub">Languages, tools, and platforms I work with regularly.</p>
+        </div>
+        <div class="skills-grid">
+            <div class="skill-group reveal">
+                <p class="skill-group-label">// languages</p>
+                <div class="skill-pills">
+                    <span class="skill-pill">C / C++</span><span class="skill-pill">Python</span>
+                    <span class="skill-pill">Java</span><span class="skill-pill">Go</span>
+                    <span class="skill-pill">JavaScript</span><span class="skill-pill">SQL</span><span class="skill-pill">Bash</span>
+                </div>
+            </div>
+            <div class="skill-group reveal">
+                <p class="skill-group-label">// accelerated & hardware</p>
+                <div class="skill-pills">
+                    <span class="skill-pill">CUDA</span><span class="skill-pill">ROCm/HIP</span>
+                    <span class="skill-pill">OpenMP</span><span class="skill-pill">ONNX Runtime</span>
+                    <span class="skill-pill">TensorRT</span><span class="skill-pill">Unix / Linux</span>
+                </div>
+            </div>
+            <div class="skill-group reveal">
+                <p class="skill-group-label">// devops & tools</p>
+                <div class="skill-pills">
+                    <span class="skill-pill">Docker</span><span class="skill-pill">Nginx</span>
+                    <span class="skill-pill">Git</span><span class="skill-pill">JSON</span>
+                    <span class="skill-pill">Typst</span><span class="skill-pill">LaTeX</span><span class="skill-pill">Node.js</span>
+                </div>
+            </div>
+            <div class="skill-group reveal">
+                <p class="skill-group-label">// AI / computer vision</p>
+                <div class="skill-pills">
+                    <span class="skill-pill">YOLO</span><span class="skill-pill">UniDepth</span>
+                    <span class="skill-pill">Depth Anything</span><span class="skill-pill">PyTorch</span>
+                    <span class="skill-pill">SciPy</span><span class="skill-pill">NumPy</span>
+                </div>
+            </div>
+            <div class="skill-group reveal">
+                <p class="skill-group-label">// networking & protocols</p>
+                <div class="skill-pills">
+                    <span class="skill-pill">GigE Vision</span><span class="skill-pill">RTDE / ModBus</span>
+                    <span class="skill-pill">OPC UA</span><span class="skill-pill">TSN</span>
+                    <span class="skill-pill">REST API</span><span class="skill-pill">UDP Sockets</span>
+                </div>
+            </div>
+            <div class="skill-group reveal">
+                <p class="skill-group-label">// design & other</p>
+                <div class="skill-pills">
+                    <span class="skill-pill">Figma</span><span class="skill-pill">Affinity Photo</span>
+                    <span class="skill-pill">Blender</span><span class="skill-pill">Gimp</span>
+                    <span class="skill-pill">HTML / CSS</span><span class="skill-pill">Notion</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <!-- ── EXPERIENCE & EDUCATION ─────────────────────────────────────────── -->
+    <section id="experience" class="section">
+        <div class="section-header reveal">
+            <p class="section-label">// 04 &mdash; experience &amp; education</p>
+            <h2 class="section-title">Where I've <span class="accent">been.</span></h2>
+        </div>
+        <div class="exp-edu-grid">
+            <div class="reveal">
+                <p class="exp-col-label">Lavoro</p>
+                <div class="timeline">
+                    <div class="tl-item">
+                        <p class="tl-period">mag 2025 — presente</p>
+                        <p class="tl-role">Tutor Didattico</p>
+                        <p class="tl-company">Libera professione · Ferrara, IT</p>
+                        <p class="tl-desc">Supporto accademico per studenti superiori in Informatica e Matematica, con focus su logica e problem solving.</p>
+                    </div>
+                    <div class="tl-item">
+                        <p class="tl-period">apr 2025 — ott 2025</p>
+                        <p class="tl-role">Computer Vision Engineer Intern</p>
+                        <p class="tl-company">BI-REX Competence Center · Bologna, IT</p>
+                        <p class="tl-desc">Sviluppo del framework EdgeCV4Safety sulla linea pilota industriale: pipeline di visione artificiale ottimizzate integrate con robotica collaborativa UR.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="reveal" style="transition-delay:0.1s">
+                <p class="exp-col-label">Formazione</p>
+                <div class="edu-grid">
+                    <div class="edu-card">
+                        <p class="edu-period">ott 2025 — in corso</p>
+                        <p class="edu-degree">Laurea Magistrale LM<br>Ingegneria Informatica</p>
+                        <p class="edu-school">Università di Bologna</p>
+                        <p class="edu-grade">// Sistemi Real-Time · Calcolo Accelerato</p>
+                    </div>
+                    <div class="edu-card">
+                        <p class="edu-period">ott 2022 — dic 2025</p>
+                        <p class="edu-degree">Laurea Triennale<br>Ingegneria Informatica</p>
+                        <p class="edu-school">Università di Bologna</p>
+                        <p class="edu-grade">// Voto 96/110 · BI-REX</p>
+                    </div>
+                    <div class="edu-card" style="grid-column:span 2">
+                        <p class="edu-period">set 2017 — lug 2022</p>
+                        <p class="edu-degree">Maturità Scientifica</p>
+                        <p class="edu-school">Liceo Galileo Galilei · Adria (RO)</p>
+                        <p class="edu-grade">// Voto 96/100 · Scienze Applicate</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <!-- ── CTA ───────────────────────────────────────────────────────────── -->
+    <section id="cta">
+        <div class="reveal">
+            <p class="section-label" style="display:block;margin-bottom:18px;">// let's connect</p>
+            <h2>Want to <span class="accent">work together?</span></h2>
+            <p>I'm open to internships, collaborations, and interesting projects. If you have an idea or just want to chat tech, I'm always up for it.</p>
+            <div class="cta-links">
+                <a href="/cdn-cgi/l/email-protection#264b475252434940494852494a474866414b474f4a0845494b" class="btn-pill btn-primary">
+                    <i class="fa-solid fa-envelope"></i> <span class="__cf_email__" data-cfemail="701d110404151f161f1e041f1c111e30171d11191c5e131f1d">[email&#160;protected]</span>
+                </a>
+                <a href="https://t.me/justwhitee" target="_blank" class="btn-pill btn-ghost">
+                    <i class="fa-brands fa-telegram"></i> Telegram
+                </a>
+                <a href="http://www.linkedin.com/in/justwhitee" target="_blank" class="btn-pill btn-ghost">
+                    <i class="fa-brands fa-linkedin"></i> LinkedIn
+                </a>
+                <a href="https://github.com/itsjustwhitee" target="_blank" class="btn-pill btn-ghost">
+                    <i class="fa-brands fa-github"></i> GitHub
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ── FOOTER ─────────────────────────────────────────────────────────── -->
+    <footer class="site-footer">
+        <div class="footer-inner">
+            <img src="assets/logo_justwhitee.png" alt="justwhitee logo" class="footer-logo">
+            <p class="footer-name">justwhitee &mdash; Matteo Fontolan</p>
+            <p class="footer-copy">
+                &copy; <span id="footer-year"></span> Matteo Fontolan<br>
+                Creative work (caricatures, illustrations, graphic design) is protected by copyright. Do not reproduce without explicit permission.<br>
+                Code and repositories are released under <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank">copyleft</a> — because knowledge is worthless if it's not shared.
+            </p>
+            <div class="footer-links">
+                <a href="https://github.com/itsjustwhitee" target="_blank"><i class="fa-brands fa-github"></i> itsjustwhitee</a>
+                <span class="footer-sep">//</span>
+                <a href="/cdn-cgi/l/email-protection#4c26393f383b2425382929623f38392825230c2b212d2520622f2321"><i class="fa-solid fa-envelope"></i> <span class="__cf_email__" data-cfemail="bfd5cacccbc8d7d6cbdada91cccbcadbd6d0ffd8d2ded6d391dcd0d2">[email&#160;protected]</span></a>
+                <span class="footer-sep">//</span>
+                <a href="http://www.linkedin.com/in/justwhitee" target="_blank"><i class="fa-brands fa-linkedin"></i> @justwhitee</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+    document.getElementById('footer-year').textContent = new Date().getFullYear();
+
+    // Scroll reveal — bidirectional: animates in AND out as you scroll
+    const reveals = document.querySelectorAll('.reveal');
+    const revealObs = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                // Stagger siblings that are entering together
+                const siblings = [...entry.target.parentElement.querySelectorAll('.reveal')];
+                const idx = siblings.indexOf(entry.target);
+                const delay = Math.min(idx * 80, 280);
+                entry.target.style.transitionDelay = delay + 'ms';
+                entry.target.classList.add('visible');
+            } else {
+                // Remove on exit so it re-animates next time
+                entry.target.style.transitionDelay = '0ms';
+                entry.target.classList.remove('visible');
+            }
+        });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+    reveals.forEach(el => revealObs.observe(el));
+
+    // Nav active highlighting
+    const sections = document.querySelectorAll('section[id]');
+    const navLinks = document.querySelectorAll('.nav-links a[href^="#"]');
+
+    // Giant logo scroll parallax
+    const logoGiant = document.getElementById('logo-giant');
+    const heroSection = document.getElementById('hero');
+    if (logoGiant) {
+        // Entrance: slide in from right after short delay
+        setTimeout(() => {
+            logoGiant.style.transition = 'transform 1s cubic-bezier(0.25,0.46,0.45,0.94), opacity 1s ease';
+            logoGiant.style.opacity = '0.18';
+            logoGiant.style.transform = 'translateY(-50%) translateX(50%)';
+        }, 600);
+
+        window.addEventListener('scroll', () => {
+            const sy = window.scrollY;
+            const heroH = heroSection ? heroSection.offsetHeight : window.innerHeight;
+            // progress: 0 at top, 1 when hero fully scrolled past
+            const progress = Math.min(sy / (heroH * 0.7), 1);
+
+            // Slide further right as user scrolls (exits screen cleanly)
+            // At progress=1: translateX goes from 50% to 150% (fully off screen)
+            const tx = 50 + progress * 100;
+            const op = Math.max(0, 0.18 - progress * 0.18);
+
+            logoGiant.style.transition = 'none'; // no transition during scroll for smoothness
+            logoGiant.style.transform = `translateY(-50%) translateX(${tx}%)`;
+            logoGiant.style.opacity = op;
+
+            // Nav active section
+            let cur = '';
+            sections.forEach(s => { if (sy >= s.offsetTop - 120) cur = s.id; });
+            navLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + cur));
+        }, { passive: true });
+    } else {
+        window.addEventListener('scroll', () => {
+            const sy = window.scrollY;
+            let cur = '';
+            sections.forEach(s => { if (sy >= s.offsetTop - 120) cur = s.id; });
+            navLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + cur));
+        }, { passive: true });
+    }
+
+    // Mouse parallax orbs
+    const orb1 = document.getElementById('orb1');
+    const orb2 = document.getElementById('orb2');
+    let ticking = false;
+    window.addEventListener('mousemove', e => {
+        if (ticking) return; ticking = true;
+        requestAnimationFrame(() => {
+            const x = e.clientX / window.innerWidth;
+            const y = e.clientY / window.innerHeight;
+            if (orb1) orb1.style.transform = `translate(${x * 30}px, ${y * 30}px)`;
+            if (orb2) orb2.style.transform = `translate(${-x * 20}px, ${-y * 20}px)`;
+            ticking = false;
+        });
+    }, { passive: true });
+    </script>
 </body>
 </html>
