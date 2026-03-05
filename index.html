@@ -880,7 +880,6 @@
             const rect = edgeSvg.getBoundingClientRect();
             const centerX = rect.left + rect.width / 2;
             const centerY = rect.top + rect.height / 2;
-
             const dx = (e.clientX - centerX) / (window.innerWidth / 2);
             const dy = (e.clientY - centerY) / (window.innerHeight / 2);
 
@@ -889,10 +888,8 @@
             const offsetX = 20;
             const tx = (dx * movementLimitX) + offset;
             const ty = dy * movementLimitY;
-
             pupilGroup.style.transform = `translate(${tx}px, ${ty}px)`;
         });
-
         const edgeCard = edgeSvg.closest('.project-card');
         if (edgeCard) {
             edgeCard.addEventListener('mouseleave', () => {
