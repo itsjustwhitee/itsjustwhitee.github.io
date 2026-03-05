@@ -884,9 +884,11 @@
             const dx = (e.clientX - centerX) / (window.innerWidth / 2);
             const dy = (e.clientY - centerY) / (window.innerHeight / 2);
 
-            const movementLimit = 100; 
-            const tx = dx * movementLimit;
-            const ty = dy * movementLimit;
+            const movementLimitX = 180;
+            const movementLimitY = 120;
+            const offsetX = 20;
+            const tx = (dx * movementLimitX) + offset;
+            const ty = dy * movementLimitY;
 
             pupilGroup.style.transform = `translate(${tx}px, ${ty}px)`;
         });
