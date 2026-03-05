@@ -304,11 +304,11 @@ body::before {
         grid-auto-rows: auto;
         gap: 12px;
     }
-    /* Differentiate card heights by size class */
-    .small { min-height: 90px; }
-    .wide  { min-height: 130px; }
+    /* Size hierarchy: small ≈ 1 unit, wide ≈ 2 units tall */
+    .small { min-height: 90px;  max-height: 110px; }
+    .wide  { min-height: 160px; }
     .tall,
-    .large { min-height: 300px; }
+    .large { min-height: 280px; }
     /* Wide cards: keep horizontal layout (icon + text side by side) */
     .card.wide .solid-overlay {
         flex-direction: row;
@@ -317,23 +317,30 @@ body::before {
         gap: 16px;
         padding: 20px 20px;
     }
-    /* GitHub card: tall enough to fit avatar + stats + graph */
-    .card-github { min-height: 360px; }
-    /* Instagram cards: taller so 2×2 photo grid looks good */
-    .card:has(.ig-grid-container) { min-height: 300px; }
+    /* GitHub card: 2:1 ratio (full width, half as tall) */
+    .card-github { min-height: 200px; max-height: 240px; }
+    /* Instagram cards: square-ish for the 2×2 photo grid */
+    .card:has(.ig-grid-container) { min-height: 280px; max-height: 320px; }
 
-    /* GitHub card */
-    .gh-card  { padding: 18px 18px; gap: 12px; }
-    .gh-stats { grid-template-columns: repeat(2, 1fr); gap: 6px; }
-    .gh-stat  { padding: 7px 4px; }
-    .gh-stat-val { font-size: 0.9rem; }
-    .gh-avatar   { width: 44px; height: 44px; }
-    .gh-name     { font-size: 0.95rem; }
-    .gh-bars     { height: 44px; }
+    /* Small card: compact — just icon + label */
+    .card.small { min-height: 90px; max-height: 110px; }
+    .card.small .solid-overlay { gap: 6px; padding: 14px 16px; flex-direction: row; text-align: left; justify-content: flex-start; }
+    .card.small .solid-icon-wrap { width: 40px; height: 40px; border-radius: 12px; flex-shrink: 0; }
+    .card.small .solid-icon-wrap img { width: 20px; height: 20px; }
 
-    /* Small cards */
-    .card.small { min-height: 120px; }
-    .card.small .solid-overlay { gap: 8px; padding: 16px; }
+    /* GitHub card internals — compact for 2:1 box */
+    .card-github .gh-card  { padding: 14px 16px; gap: 8px; }
+    .card-github .gh-header { gap: 12px; }
+    .card-github .gh-avatar { width: 40px; height: 40px; }
+    .card-github .gh-name   { font-size: 0.88rem; }
+    .card-github .gh-handle { font-size: 0.65rem; }
+    .card-github .gh-location { display: none; }
+    .card-github .gh-stats  { grid-template-columns: repeat(4, 1fr); gap: 5px; }
+    .card-github .gh-stat   { padding: 5px 2px; }
+    .card-github .gh-stat-val { font-size: 0.82rem; }
+    .card-github .gh-stat-lbl { font-size: 0.52rem; }
+    .card-github .gh-bars   { height: 32px; }
+    .card-github .gh-graph-label { font-size: 0.52rem; }
 
     /* Footer */
     .site-footer { margin-top: 40px; }

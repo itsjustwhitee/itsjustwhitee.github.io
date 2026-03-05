@@ -45,7 +45,7 @@
     }
     .hero-tag {
         font-family: 'JetBrains Mono', monospace;
-        font-size: 0.85rem; font-weight: 700;
+        font-size: 0.9rem; font-weight: 700;
         padding: 9px 20px; border-radius: 999px;
         background: rgba(0,187,201,0.1);
         border: 1px solid rgba(0,187,201,0.32);
@@ -721,7 +721,9 @@
     <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
     document.getElementById('footer-year').textContent = new Date().getFullYear();
 
-    // Scroll reveal — one-way: animates in once, stays visible
+    // Scroll reveal — bidirectional (in on scroll down, out on scroll up)
+    // Guard: ignore "exit" callbacks for the first 800ms (initial load quirk on file://)
+    const revealStart = Date.now();
     const reveals = document.querySelectorAll('.reveal');
     const revealObs = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
@@ -731,12 +733,15 @@
                 const delay = Math.min(idx * 80, 280);
                 entry.target.style.transitionDelay = delay + 'ms';
                 entry.target.classList.add('visible');
-                revealObs.unobserve(entry.target); // stop watching once visible
+            } else if (Date.now() - revealStart > 800) {
+                // Only hide after page has settled — avoids flash-of-invisible on load
+                entry.target.style.transitionDelay = '0ms';
+                entry.target.classList.remove('visible');
             }
         });
     }, { threshold: 0.05, rootMargin: '0px 0px -20px 0px' });
     reveals.forEach(el => revealObs.observe(el));
-    // Fallback: force-reveal anything still hidden after 2s (e.g. file:// quirks)
+    // Hard fallback: anything still hidden after 2s gets force-shown
     setTimeout(() => {
         document.querySelectorAll('.reveal:not(.visible)').forEach(el => {
             el.style.transitionDelay = '0ms';
