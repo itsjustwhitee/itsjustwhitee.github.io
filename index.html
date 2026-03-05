@@ -886,7 +886,7 @@
             const movementLimitX = 120;
             const movementLimitY = 100;
             const offsetX = 20;
-            const tx = (dx * movementLimitX) + offset;
+            const tx = (dx * movementLimitX) + offsetX;
             const ty = dy * movementLimitY;
             pupilGroup.style.transform = `translate(${tx}px, ${ty}px)`;
         });
