@@ -134,9 +134,11 @@
     /* ── PROJECTS ────────────────────────────────────────────────────────── */
     /* HashCrackerz */
     .cracker-logo {
-        transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        transition: transform 0.15s ease-out !important;
         transform-style: preserve-3d;
         cursor: pointer;
+        transform-origin: center;
+        backface-visibility: hidden;
     }
     .project-card:hover .cracker-logo {
         filter: drop-shadow(0 10px 20px rgba(0,0,0,0.3));
@@ -914,12 +916,12 @@
     if (crackerCard && crackerImg) {
         crackerCard.addEventListener('mousemove', (e) => {
             const rect = crackerCard.getBoundingClientRect();
-            const x = e.clientX - rect.left - rect.width / 2;
-            const y = e.clientY - rect.top - rect.height / 2;
-            const maxRot = 15;
-            const rotX = -(y / (rect.height / 2)) * maxRot;
-            const rotY = (x / (rect.width / 2)) * maxRot;
-            crackerImg.style.transform = `perspective(1000px) rotateX(${rotX}deg) rotateY(${rotY}deg) scale(1.05)`;
+            const x = (e.clientX - rect.left) / rect.width - 0.5;
+            const y = (e.clientY - rect.top) / rect.height - 0.5;
+            const maxRot = 20;
+            const rotX = -y * maxRot;
+            const rotY = x * maxRot;
+            crackerImg.style.transform = `perspective(1000px) rotateX(${rotX}deg) rotateY(${rotY}deg) scale(1.1)`;
         });
         crackerCard.addEventListener('mouseleave', () => {
             crackerImg.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1)`;
