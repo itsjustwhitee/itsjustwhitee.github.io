@@ -133,15 +133,29 @@
 
     /* ── PROJECTS ────────────────────────────────────────────────────────── */
     /* HashCrackerz */
-    .cracker-logo {
-        transition: transform 0.15s ease-out !important;
-        transform-style: preserve-3d;
-        cursor: pointer;
-        transform-origin: center;
-        backface-visibility: hidden;
+    #hashcrackerz-card .project-img-wrap {
+        position: relative;
+        overflow: hidden;
     }
-    .project-card:hover .cracker-logo {
-        filter: drop-shadow(0 10px 20px rgba(0,0,0,0.3));
+    .crumb {
+        position: absolute;
+        width: 6px;
+        height: 6px;
+        background-color: #e0ac69;
+        border-radius: 2px;
+        pointer-events: none;
+        opacity: 0;
+        z-index: 10;
+    }
+    @keyframes crumbFall {
+        0% {
+            transform: translate(0, 0) rotate(0deg);
+            opacity: 1;
+        }
+        100% {
+            transform: translate(var(--dx), 100px) rotate(var(--rot));
+            opacity: 0;
+        }
     }
     
     /* EdgeCV4Safety */
@@ -542,11 +556,11 @@
             </div>
 
             <!-- HashCrackerz -->
-            <div class="project-card reveal" id="cracker-card">
+            <div class="project-card reveal" id="hashcrackerz-card">
                 <div class="project-img-wrap">
                     <img src="assets/projects/hashcrackerz.png"
                          onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"
-                         alt="HashCrackerz" class="project-img cracker-logo">
+                         alt="HashCrackerz" class="project-img">
                     <div class="project-img-placeholder" style="display:none;">⚡</div>
                 </div>
                 <div class="project-body">
@@ -853,8 +867,8 @@
 
     if (fanWrapper) {
         const projectCard = fanWrapper.closest('.project-card');
-        const BASE_SPEED = 1.0;  
-        const MAX_SPEED  = 3.5; 
+        const BASE_SPEED = 0.7;  
+        const MAX_SPEED  = 1.8; 
         let currentAngle = 0;
         let currentSpeed = BASE_SPEED;
         let targetSpeed = BASE_SPEED;
@@ -910,21 +924,40 @@
         }
     }
 
-    const crackerCard = document.getElementById('cracker-card');
-    const crackerImg = crackerCard ? crackerCard.querySelector('.cracker-logo') : null;
+    const crackerCard = document.getElementById('hashcrackerz-card');
+    const imgWrap = crackerCard ? crackerCard.querySelector('.project-img-wrap') : null;
+    if (crackerCard && imgWrap) {
+        let intervalId = null;
+        function createCrumb() {
+            const crumb = document.createElement('div');
+            crumb.classList.add('crumb');
 
-    if (crackerCard && crackerImg) {
-        crackerCard.addEventListener('mousemove', (e) => {
-            const rect = crackerCard.getBoundingClientRect();
-            const x = (e.clientX - rect.left) / rect.width - 0.5;
-            const y = (e.clientY - rect.top) / rect.height - 0.5;
-            const maxRot = 20;
-            const rotX = -y * maxRot;
-            const rotY = x * maxRot;
-            crackerImg.style.transform = `perspective(1000px) rotateX(${rotX}deg) rotateY(${rotY}deg) scale(1.1)`;
+            const startX = Math.random() * imgWrap.offsetWidth;
+            const startY = (Math.random() * 0.5 + 0.5) * imgWrap.offsetHeight;
+            crumb.style.left = `${startX}px`;
+            crumb.style.top = `${startY}px`;
+            const dx = (Math.random() - 0.5) * 80;
+            const rot = (Math.random() - 0.5) * 360;
+            
+            crumb.style.setProperty('--dx', `${dx}px`);
+            crumb.style.setProperty('--rot', `${rot}deg`);
+            const duration = Math.random() * 0.5 + 0.5;
+            crumb.style.animation = `crumbFall ${duration}s ease-in forwards`;
+            imgWrap.appendChild(crumb);
+            setTimeout(() => {
+                crumb.remove();
+            }, duration * 1000);
+        }
+        crackerCard.addEventListener('mouseenter', () => {
+            if (!intervalId) {
+                intervalId = setInterval(createCrumb, 100);
+            }
         });
         crackerCard.addEventListener('mouseleave', () => {
-            crackerImg.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1)`;
+            if (intervalId) {
+                clearInterval(intervalId);
+                intervalId = null;
+            }
         });
     }
     </script>
