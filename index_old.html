@@ -45,7 +45,7 @@
     }
     .hero-tag {
         font-family: 'JetBrains Mono', monospace;
-        font-size: 0.85rem; font-weight: 700;
+        font-size: 0.9rem; font-weight: 700;
         padding: 9px 20px; border-radius: 999px;
         background: rgba(0,187,201,0.1);
         border: 1px solid rgba(0,187,201,0.32);
@@ -337,12 +337,7 @@
 
         /* CTA */
         #cta { padding: 52px 18px 72px; }
-        .cta-links {
-            flex-direction: row;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 10px;
-        }
+        .cta-links { flex-direction: column; align-items: stretch; }
         .cta-links .btn-pill { justify-content: center; }
 
         /* Footer */
@@ -430,7 +425,7 @@
                 <div class="about-links">
                     <a href="http://www.linkedin.com/in/justwhitee" target="_blank" class="btn-pill btn-ghost"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
                     <a href="https://github.com/itsjustwhitee" target="_blank" class="btn-pill btn-ghost"><i class="fa-brands fa-github"></i> GitHub</a>
-                    <a href="/cdn-cgi/l/email-protection#177d626463607f7e63727239646362737e7857707a767e7b3974787a" class="btn-pill btn-ghost"><i class="fa-solid fa-envelope"></i> Email</a>
+                    <a href="mailto:justwhitee.studio@gmail.com" class="btn-pill btn-ghost"><i class="fa-solid fa-envelope"></i> Email</a>
                 </div>
             </div>
         </div>
@@ -682,7 +677,7 @@
             <h2>Want to <span class="accent">work together?</span></h2>
             <p>I'm open to internships, collaborations, and interesting projects. If you have an idea or just want to chat tech, I'm always up for it.</p>
             <div class="cta-links">
-                <a href="/cdn-cgi/l/email-protection#ed87989e999a8584998888c39e9998898482ad8a808c8481c38e8280" class="btn-pill btn-primary">
+                <a href="mailto:justwhitee.studio@gmail.com" class="btn-pill btn-primary">
                     <i class="fa-solid fa-envelope"></i> Email
                 </a>
                 <a href="https://t.me/justwhitee" target="_blank" class="btn-pill btn-ghost">
@@ -711,17 +706,17 @@
             <div class="footer-links">
                 <a href="https://github.com/itsjustwhitee" target="_blank"><i class="fa-brands fa-github"></i> itsjustwhitee</a>
                 <span class="footer-sep">//</span>
-                <a href="/cdn-cgi/l/email-protection#d3b9a6a0a7a4bbbaa7b6b6fda0a7a6b7babc93b4beb2babffdb0bcbe"><i class="fa-solid fa-envelope"></i> <span class="__cf_email__" data-cfemail="5d37282e292a3534293838732e29283934321d3a303c3431733e3230">[email&#160;protected]</span></a>
+                <a href="mailto:justwhitee.studio@gmail.com"><i class="fa-solid fa-envelope"></i> justwhitee.studio@gmail.com</a>
                 <span class="footer-sep">//</span>
                 <a href="http://www.linkedin.com/in/justwhitee" target="_blank"><i class="fa-brands fa-linkedin"></i> @justwhitee</a>
             </div>
         </div>
     </footer>
 
-    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+    <script>
     document.getElementById('footer-year').textContent = new Date().getFullYear();
 
-    // Scroll reveal — one-way: animates in once, stays visible
+    // Scroll reveal — bidirectional
     const reveals = document.querySelectorAll('.reveal');
     const revealObs = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
@@ -731,18 +726,13 @@
                 const delay = Math.min(idx * 80, 280);
                 entry.target.style.transitionDelay = delay + 'ms';
                 entry.target.classList.add('visible');
-                revealObs.unobserve(entry.target); // stop watching once visible
+            } else {
+                entry.target.style.transitionDelay = '0ms';
+                entry.target.classList.remove('visible');
             }
         });
-    }, { threshold: 0.05, rootMargin: '0px 0px -20px 0px' });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
     reveals.forEach(el => revealObs.observe(el));
-    // Fallback: force-reveal anything still hidden after 2s (e.g. file:// quirks)
-    setTimeout(() => {
-        document.querySelectorAll('.reveal:not(.visible)').forEach(el => {
-            el.style.transitionDelay = '0ms';
-            el.classList.add('visible');
-        });
-    }, 2000);
 
     // Nav active highlighting
     const sections = document.querySelectorAll('section[id]');

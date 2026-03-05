@@ -304,11 +304,11 @@ body::before {
         grid-auto-rows: auto;
         gap: 12px;
     }
-    .small, .wide, .tall, .large {
-        grid-column: span 1;
-        grid-row: auto;
-        min-height: 140px;
-    }
+    /* Differentiate card heights by size class */
+    .small { min-height: 90px; }
+    .wide  { min-height: 130px; }
+    .tall,
+    .large { min-height: 300px; }
     /* Wide cards: keep horizontal layout (icon + text side by side) */
     .card.wide .solid-overlay {
         flex-direction: row;
@@ -317,8 +317,10 @@ body::before {
         gap: 16px;
         padding: 20px 20px;
     }
+    /* GitHub card: tall enough to fit avatar + stats + graph */
+    .card-github { min-height: 360px; }
     /* Instagram cards: taller so 2×2 photo grid looks good */
-    .card:has(.ig-grid-container) { min-height: 260px; }
+    .card:has(.ig-grid-container) { min-height: 300px; }
 
     /* GitHub card */
     .gh-card  { padding: 18px 18px; gap: 12px; }

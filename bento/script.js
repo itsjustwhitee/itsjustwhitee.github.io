@@ -253,6 +253,7 @@ function loadBento() {
         card.classList.add("card", item.size);
 
         if (item.type === "github-custom") {
+            card.classList.add("card-github");
             card.style.background = "linear-gradient(145deg, #0d2233 0%, #0a1a28 100%)";
             card.style.borderColor = "rgba(48,130,198,0.25)";
             buildGithubCard(card, item.username);
