@@ -136,13 +136,13 @@
     #hashcrackerz-card .project-img-wrap {
         position: relative;
         overflow: hidden;
-        min-height: 250px;
     }
     .crumb {
         position: absolute !important;
         border: 1px solid #000;
         pointer-events: none;
         z-index: 100;
+        top: 0; left: 0;
     }
     @keyframes crumbFall {
         0% {
@@ -943,17 +943,18 @@
             const relativeTop = rectImg.top - rectWrap.top;
             const imgW = rectImg.width;
             const imgH = rectImg.height;
+            const verticalAdjustment = -120; 
             const side = Math.random(); 
             let startX, startY;
-            if (side < 0.35) {
+            if (side < 0.35) { // Bordo Sinistro
                 startX = relativeLeft;
-                startY = relativeTop + (Math.random() * imgH);
-            } else if (side < 0.70) { 
+                startY = relativeTop + (Math.random() * imgH) + verticalAdjustment;
+            } else if (side < 0.70) { // Bordo Destro
                 startX = relativeLeft + imgW;
-                startY = relativeTop + (Math.random() * imgH);
-            } else {
+                startY = relativeTop + (Math.random() * imgH) + verticalAdjustment;
+            } else { // Bordo Inferiore
                 startX = relativeLeft + (Math.random() * imgW);
-                startY = relativeTop + imgH;
+                startY = relativeTop + imgH + verticalAdjustment;
             }
             crumb.style.left = `${startX}px`;
             crumb.style.top = `${startY}px`;
