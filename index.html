@@ -132,6 +132,16 @@
     .about-links .btn-pill { padding: 9px 18px; font-size: 0.72rem; }
 
     /* ── PROJECTS ────────────────────────────────────────────────────────── */
+    /* HashCrackerz */
+    .cracker-logo {
+        transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        transform-style: preserve-3d;
+        cursor: pointer;
+    }
+    .project-card:hover .cracker-logo {
+        filter: drop-shadow(0 10px 20px rgba(0,0,0,0.3));
+    }
+    
     /* EdgeCV4Safety */
     #edgecv-container {
         width: 100%;
@@ -530,11 +540,11 @@
             </div>
 
             <!-- HashCrackerz -->
-            <div class="project-card reveal">
+            <div class="project-card reveal" id="cracker-card">
                 <div class="project-img-wrap">
                     <img src="assets/projects/hashcrackerz.png"
                          onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"
-                         alt="HashCrackerz" class="project-img">
+                         alt="HashCrackerz" class="project-img cracker-logo">
                     <div class="project-img-placeholder" style="display:none;">⚡</div>
                 </div>
                 <div class="project-body">
@@ -841,8 +851,8 @@
 
     if (fanWrapper) {
         const projectCard = fanWrapper.closest('.project-card');
-        const BASE_SPEED = 1.2;  
-        const MAX_SPEED  = 5.0; 
+        const BASE_SPEED = 1.0;  
+        const MAX_SPEED  = 3.5; 
         let currentAngle = 0;
         let currentSpeed = BASE_SPEED;
         let targetSpeed = BASE_SPEED;
@@ -896,6 +906,24 @@
                 pupilGroup.style.transform = `translate(0px, 0px)`;
             });
         }
+    }
+
+    const crackerCard = document.getElementById('cracker-card');
+    const crackerImg = crackerCard ? crackerCard.querySelector('.cracker-logo') : null;
+
+    if (crackerCard && crackerImg) {
+        crackerCard.addEventListener('mousemove', (e) => {
+            const rect = crackerCard.getBoundingClientRect();
+            const x = e.clientX - rect.left - rect.width / 2;
+            const y = e.clientY - rect.top - rect.height / 2;
+            const maxRot = 15;
+            const rotX = -(y / (rect.height / 2)) * maxRot;
+            const rotY = (x / (rect.width / 2)) * maxRot;
+            crackerImg.style.transform = `perspective(1000px) rotateX(${rotX}deg) rotateY(${rotY}deg) scale(1.05)`;
+        });
+        crackerCard.addEventListener('mouseleave', () => {
+            crackerImg.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1)`;
+        });
     }
     </script>
 </body>
