@@ -139,13 +139,11 @@
     }
     .crumb {
         position: absolute;
-        width: 6px;
-        height: 6px;
-        background-color: #e0ac69;
-        border-radius: 2px;
+        border: 1px solid #000;
         pointer-events: none;
         opacity: 0;
         z-index: 10;
+        box-sizing: border-box;
     }
     @keyframes crumbFall {
         0% {
@@ -153,7 +151,7 @@
             opacity: 1;
         }
         100% {
-            transform: translate(var(--dx), 100px) rotate(var(--rot));
+            transform: translate(var(--dx), 120px) rotate(var(--rot));
             opacity: 0;
         }
     }
@@ -925,33 +923,37 @@
     }
 
     const crackerCard = document.getElementById('hashcrackerz-card');
+    const crackerImg = crackerCard ? crackerCard.querySelector('.project-img') : null;
     const imgWrap = crackerCard ? crackerCard.querySelector('.project-img-wrap') : null;
-    if (crackerCard && imgWrap) {
+    if (crackerCard && crackerImg && imgWrap) {
         let intervalId = null;
         function createCrumb() {
             const crumb = document.createElement('div');
             crumb.classList.add('crumb');
-
-            const startX = Math.random() * imgWrap.offsetWidth;
-            const startY = (Math.random() * 0.5 + 0.5) * imgWrap.offsetHeight;
+            const size = Math.floor(Math.random() * 7) + 4;
+            crumb.style.width = `${size}px`;
+            crumb.style.height = `${size}px`;
+            const colors = ['#ffffff', '#e0ac69', '#8b5a2b'];
+            crumb.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+            const imgWidth = crackerImg.offsetWidth;
+            const imgHeight = crackerImg.offsetHeight;
+            const imgLeft = crackerImg.offsetLeft;
+            const imgTop = crackerImg.offsetTop;
+            const startX = imgLeft + (Math.random() * imgWidth);
+            const startY = imgTop + (Math.random() * imgHeight);
             crumb.style.left = `${startX}px`;
             crumb.style.top = `${startY}px`;
-            const dx = (Math.random() - 0.5) * 80;
-            const rot = (Math.random() - 0.5) * 360;
-            
+            const dx = (Math.random() - 0.5) * 100;
+            const rot = (Math.random() - 0.5) * 720;
             crumb.style.setProperty('--dx', `${dx}px`);
             crumb.style.setProperty('--rot', `${rot}deg`);
-            const duration = Math.random() * 0.5 + 0.5;
+            const duration = Math.random() * 0.6 + 0.4;
             crumb.style.animation = `crumbFall ${duration}s ease-in forwards`;
             imgWrap.appendChild(crumb);
-            setTimeout(() => {
-                crumb.remove();
-            }, duration * 1000);
+            setTimeout(() => { crumb.remove(); }, duration * 1000);
         }
         crackerCard.addEventListener('mouseenter', () => {
-            if (!intervalId) {
-                intervalId = setInterval(createCrumb, 100);
-            }
+            if (!intervalId) intervalId = setInterval(createCrumb, 80); // Un po' più frequente
         });
         crackerCard.addEventListener('mouseleave', () => {
             if (intervalId) {
