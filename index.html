@@ -72,7 +72,7 @@
     .hero-logo-giant {
         position: fixed; right: 0; top: 50%;
         transform: translateY(-50%) translateX(50%);
-        width: clamp(800px, 90vw, 1300px);
+        width: clamp(800px, 90vw, 1150px);
         pointer-events: none; z-index: 0; opacity: 0;
         filter: drop-shadow(0 0 120px rgba(0,187,201,0.08));
         will-change: transform, opacity;
@@ -132,6 +132,21 @@
     .about-links .btn-pill { padding: 9px 18px; font-size: 0.72rem; }
 
     /* ── PROJECTS ────────────────────────────────────────────────────────── */
+    @keyframes fanSpin {
+        from { transform: rotate(0deg); }
+        to   { transform: rotate(360deg); }
+    }
+   .rack-spin-wrapper {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 100%;
+    }
+    .project-card:hover .rack-spin-wrapper {
+        animation-duration: 1.2s; 
+    }
+
     .projects-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
     .project-card {
         position: relative;
@@ -532,9 +547,11 @@
             <!-- RackController -->
             <div class="project-card reveal">
                 <div class="project-img-wrap">
-                    <img src="assets/projects/rackcontroller.svg"
-                         onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"
-                         alt="RackController" class="project-img">
+                    <div class="rack-spin-wrapper" id="rack-fan-wrapper">
+                        <img src="assets/projects/rackcontroller.svg"
+                            onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"
+                            alt="RackController" class="project-img">
+                    </div>
                     <div class="project-img-placeholder" style="display:none;">🖥️</div>
                 </div>
                 <div class="project-body">
@@ -799,6 +816,27 @@
             ticking = false;
         });
     }, { passive: true });
+
+    // ── FLUID FAN ROTATION - RACKCONTROLLER ──
+    const fanWrapper = document.getElementById('rack-fan-wrapper');
+
+    if (fanWrapper) {
+        const projectCard = fanWrapper.closest('.project-card');
+        const BASE_SPEED = 1.2;  
+        const MAX_SPEED  = 5.0; 
+        let currentAngle = 0;
+        let currentSpeed = BASE_SPEED;
+        let targetSpeed = BASE_SPEED;
+        projectCard.addEventListener('mouseenter', () => targetSpeed = MAX_SPEED);
+        projectCard.addEventListener('mouseleave', () => targetSpeed = BASE_SPEED);
+        function spinFan() {
+            currentSpeed += (targetSpeed - currentSpeed) * 0.05;
+            currentAngle += currentSpeed;
+            fanWrapper.style.transform = `rotate(${currentAngle}deg)`;
+            requestAnimationFrame(spinFan);
+        }
+        requestAnimationFrame(spinFan);
+    }
     </script>
 </body>
 </html>
