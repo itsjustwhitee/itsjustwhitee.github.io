@@ -132,6 +132,27 @@
     .about-links .btn-pill { padding: 9px 18px; font-size: 0.72rem; }
 
     /* ── PROJECTS ────────────────────────────────────────────────────────── */
+    /* EdgeCV4Safety */
+    #edgecv-container {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 250px; 
+    }
+
+    #edgecv-container svg {
+        width: 100%;
+        height: auto;
+        max-height: 100%;
+        display: block;
+    }
+    #pupil-focus-group {
+        transition: transform 0.1s ease-out;
+        will-change: transform;
+    }
+    /* Rack Controller */
     @keyframes fanSpin {
         from { transform: rotate(0deg); }
         to   { transform: rotate(360deg); }
@@ -466,9 +487,7 @@
             <!-- EdgeCV4Safety FEATURED -->
             <div class="project-card featured reveal">
                 <div class="project-img-wrap">
-                    <img src="assets/projects/edgecv4safety.png"
-                         onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"
-                         alt="EdgeCV4Safety" class="project-img">
+                    <div class="project-img-wrap" id="edgecv-container"></div>
                     <div class="project-img-placeholder" style="display:none;">🤖</div>
                 </div>
                 <div class="project-body">
@@ -836,6 +855,48 @@
             requestAnimationFrame(spinFan);
         }
         requestAnimationFrame(spinFan);
+    }
+
+    // ── LOADING AND EYE TRACKING EDGECV4SAFETY ──
+    const edgeContainer = document.getElementById('edgecv-container');
+
+    if (edgeContainer) {
+        fetch('assets/projects/edgecv4safety.svg')
+            .then(response => response.text())
+            .then(svgCode => {
+                edgeContainer.innerHTML = svgCode;
+                const edgeSvg = edgeContainer.querySelector('svg');
+                edgeSvg.classList.add('project-img');
+                initEyeTracking(edgeSvg);
+            })
+            .catch(err => console.error("Errore nel caricamento del logo EdgeCV: ", err));
+    }
+
+    function initEyeTracking(edgeSvg) {
+        const pupilGroup = document.getElementById('pupil-focus-group');
+        if (!pupilGroup) return;
+
+        window.addEventListener('mousemove', (e) => {
+            const rect = edgeSvg.getBoundingClientRect();
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 2;
+
+            const dx = (e.clientX - centerX) / (window.innerWidth / 2);
+            const dy = (e.clientY - centerY) / (window.innerHeight / 2);
+
+            const movementLimit = 100; 
+            const tx = dx * movementLimit;
+            const ty = dy * movementLimit;
+
+            pupilGroup.style.transform = `translate(${tx}px, ${ty}px)`;
+        });
+
+        const edgeCard = edgeSvg.closest('.project-card');
+        if (edgeCard) {
+            edgeCard.addEventListener('mouseleave', () => {
+                pupilGroup.style.transform = `translate(0px, 0px)`;
+            });
+        }
     }
     </script>
 </body>
