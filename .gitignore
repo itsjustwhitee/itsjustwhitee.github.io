@@ -1,0 +1,29 @@
+# --- Backup & Editor Specific ---
+.history/
+.vscode/
+
+# --- OS Specific ---
+.DS_Store
+Thumbs.db
+
+# --- Web & Node ---
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# --- Environment & Secrets ---
+.env
+.env.local
+
+# --- Build & Output  ---
+dist/
+build/
+out/
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+.venv/
