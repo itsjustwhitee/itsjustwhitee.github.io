@@ -11,6 +11,8 @@
     <link rel="icon" type="image/svg+xml" href="assets/logo.svg">
     <link rel="icon" type="image/png" href="assets/logo_justwhitee.png">
     <link rel="apple-touch-icon" sizes="180x180" href="assets/logo_justwhitee.png">
+    <!-- i18n must load before DOMContentLoaded fires -->
+    <script src="i18n.js"></script>
 
     <style>
     body { padding: 0; }
@@ -431,33 +433,34 @@
             justwhitee
         </a>
         <ul class="nav-links">
-            <li><a href="#about">// about</a></li>
-            <li><a href="#projects">// projects</a></li>
-            <li><a href="#skills">// skills</a></li>
-            <li><a href="bento/">// bento</a></li>
+            <li><a href="#about" data-i18n="nav.about">// about</a></li>
+            <li><a href="#projects" data-i18n="nav.projects">// projects</a></li>
+            <li><a href="#skills" data-i18n="nav.skills">// skills</a></li>
+            <li><a href="bento/" data-i18n="nav.bento">// bento</a></li>
+            <!-- language toggle injected here by i18n.js -->
         </ul>
     </nav>
 
     <!-- ── HERO ─────────────────────────────────────────────────────────── -->
     <section id="hero">
-        <p class="hero-eyebrow">// hello world · itsjustwhitee</p>
+        <p class="hero-eyebrow" data-i18n="hero.eyebrow">// hello world · itsjustwhitee</p>
         <h1 class="hero-name">
             Matteo<br><span class="accent">Fontolan</span>
         </h1>
         <div class="hero-role-tags">
-            <span class="hero-tag">MSc Computer Engineering · Università di Bologna</span>
+            <span class="hero-tag" data-i18n="hero.role_tag">MSc Computer Engineering · Università di Bologna</span>
         </div>
-        <p class="hero-desc">
+        <p class="hero-desc" data-i18n="hero.desc">
             I build things at the intersection of software and hardware,
             from Edge AI systems to IoT controllers to parallel GPU algorithms.
             I'm a firm believer that you don't truly 'own' a system until you've understood exactly how it works under the hood.
         </p>
         <div class="hero-ctas">
             <a href="#projects" class="btn-pill btn-primary">
-                <i class="fa-solid fa-folder-open"></i> View Projects
+                <i class="fa-solid fa-folder-open"></i> <span data-i18n="hero.btn_projects">View Projects</span>
             </a>
             <a href="assets/cvMatteoFontolan.pdf" target="_blank" class="btn-pill btn-cv">
-                <i class="fa-solid fa-file-lines"></i> Curriculum
+                <i class="fa-solid fa-file-lines"></i> <span data-i18n="hero.btn_cv">Curriculum</span>
             </a>
             <a href="bento/" class="btn-pill btn-bento">
                 <img src="assets/bento.png" alt="" width="15" height="15" style="object-fit:contain;opacity:0.9;vertical-align:middle;" aria-hidden="true"> Bento
@@ -468,7 +471,7 @@
         </div>
 
         <img src="assets/logo.svg" alt="" class="hero-logo-giant" id="logo-giant" aria-hidden="true">
-        <div class="hero-scroll">scroll<div class="scroll-line"></div></div>
+        <div class="hero-scroll"><span data-i18n="hero.scroll">scroll</span><div class="scroll-line"></div></div>
     </section>
 
     <div class="section-divider"></div>
@@ -476,19 +479,19 @@
     <!-- ── ABOUT ─────────────────────────────────────────────────────────── -->
     <section id="about" class="section">
         <div class="section-header reveal">
-            <p class="section-label">// 01 &mdash; about me</p>
-            <h2 class="section-title">Passionate geek,<br><span class="accent">practical engineer.</span></h2>
+            <p class="section-label" data-i18n="about.label">// 01 &mdash; about me</p>
+            <h2 class="section-title" data-i18n-html="about.title">Passionate geek,<br><span class="accent">practical engineer.</span></h2>
         </div>
         <div class="about-grid">
             <div class="about-pic-wrap reveal">
                 <img src="assets/propic.jpg" alt="Matteo Fontolan" class="about-pic">
-                <div class="about-pic-badge"><span>96/110</span>BSc grade</div>
+                <div class="about-pic-badge"><span>96/110</span><span data-i18n="about.badge">BSc grade</span></div>
             </div>
             <div class="about-text reveal" style="transition-delay:0.12s">
-                <h3>From Corbola to...</h3>
-                <p>I'm a Computer Engineering student at the University of Bologna (Alma Mater Studiorum), currently pursuing my Master's Degree after graduating, but I'm originally from Corbola, a small quiet town (really?) in the Rovigo province (Veneto).</p>
-                <p>I love digging into how things actually work and I define myself as a practical person. My journey has taken me from designing real-time safety systems for industrial robots to optimizing parallel algorithms on GPUs.</p>
-                <p>When I'm not staring at a terminal, I'm likely eating sushi 🍣, or drawing caricatures or overthinking a graphic design layout 🖱️. <br> I believe <em>knowledge is worthless if it's not shared</em>.</p>
+                <h3 data-i18n="about.h3">From Corbola to...</h3>
+                <p data-i18n="about.p1">I'm a Computer Engineering student at the University of Bologna (Alma Mater Studiorum), currently pursuing my Master's Degree after graduating, but I'm originally from Corbola, a small quiet town (really?) in the Rovigo province (Veneto).</p>
+                <p data-i18n="about.p2">I love digging into how things actually work and I define myself as a practical person. My journey has taken me from designing real-time safety systems for industrial robots to optimizing parallel algorithms on GPUs.</p>
+                <p data-i18n-html="about.p3_html">When I'm not staring at a terminal, I'm likely eating sushi 🍣, or drawing caricatures or overthinking a graphic design layout 🖱️. <br> I believe <em>knowledge is worthless if it's not shared</em>.</p>
                 <div class="about-links">
                     <a href="http://www.linkedin.com/in/justwhitee" target="_blank" class="btn-pill btn-ghost"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
                     <a href="https://github.com/itsjustwhitee" target="_blank" class="btn-pill btn-ghost"><i class="fa-brands fa-github"></i> GitHub</a>
@@ -503,9 +506,9 @@
     <!-- ── PROJECTS ───────────────────────────────────────────────────────── -->
     <section id="projects" class="section">
         <div class="section-header reveal">
-            <p class="section-label">// 02 &mdash; projects</p>
-            <h2 class="section-title">Things I've <span class="accent">built.</span></h2>
-            <p class="section-sub">Selected work from university courses, internships, and personal curiosity.</p>
+            <p class="section-label" data-i18n="projects.label">// 02 &mdash; projects</p>
+            <h2 class="section-title" data-i18n-html="projects.title">Things I've <span class="accent">built.</span></h2>
+            <p class="section-sub" data-i18n="projects.sub">Selected work from university courses, internships, and personal curiosity.</p>
         </div>
 
         <div class="projects-grid">
@@ -518,21 +521,21 @@
                 </div>
                 <div class="project-body">
                     <div class="project-meta">
-                        <span class="project-badge intern">Internship · Thesis</span>
+                        <span class="project-badge intern" data-i18n="proj.edgecv.badge">Internship · Thesis</span>
                         <span class="project-year">apr–oct 2025</span>
                     </div>
                     <h3>EdgeCV4Safety</h3>
-                    <p class="tagline">AI-Driven Contextual Safety System for Industry 5.0</p>
-                    <p class="proj-desc">Modular Computer Vision system replacing physical safety barriers. Deployed on NVIDIA Jetson AGX Orin: YOLO + UniDepth/DepthAnything over ONNX Runtime, robot control via RTDE, real-time proximity awareness for Universal Robots.</p>
+                    <p class="tagline" data-i18n="proj.edgecv.tagline">AI-Driven Contextual Safety System for Industry 5.0</p>
+                    <p class="proj-desc" data-i18n="proj.edgecv.desc">Modular Computer Vision system replacing physical safety barriers. Deployed on NVIDIA Jetson AGX Orin: YOLO + UniDepth/DepthAnything over ONNX Runtime, robot control via RTDE, real-time proximity awareness for Universal Robots.</p>
                     <div class="project-stats">
                         <div class="stat-box">
-                            <p class="stat-box-label">Inference</p>
+                            <p class="stat-box-label" data-i18n="proj.edgecv.stat1_lbl">Inference</p>
                             <p class="stat-box-value">~5 FPS</p>
-                            <p class="stat-box-desc">on Jetson AGX Orin via TensorRT</p>
+                            <p class="stat-box-desc" data-i18n="proj.edgecv.stat1_desc">on Jetson AGX Orin via TensorRT</p>
                         </div>
                         <div class="stat-box">
-                            <p class="stat-box-label">Architecture</p>
-                            <p class="stat-box-desc">Super-repo with Git Submodules — strict decoupling of Vision and Robot Control components.</p>
+                            <p class="stat-box-label" data-i18n="proj.edgecv.stat2_lbl">Architecture</p>
+                            <p class="stat-box-desc" data-i18n="proj.edgecv.stat2_desc">Super-repo with Git Submodules — strict decoupling of Vision and Robot Control components.</p>
                         </div>
                     </div>
                     <div class="project-tags">
@@ -545,7 +548,7 @@
                             <i class="fa-brands fa-github"></i> GitHub <i class="fa-solid fa-arrow-right" style="font-size:0.58rem;"></i>
                         </a>
                         <div class="project-contributors">
-                            <span class="contrib-label">with</span>
+                            <span class="contrib-label" data-i18n="projects.contrib_label">with</span>
                             <div class="contrib-names">
                                 <span class="contrib-chip">Riccardo Venanzi</span>
                                 <span class="contrib-chip">Davide Tazzioli</span>
@@ -565,12 +568,12 @@
                 </div>
                 <div class="project-body">
                     <div class="project-meta">
-                        <span class="project-badge">MSc Course</span>
+                        <span class="project-badge" data-i18n="proj.hash.badge">MSc Course</span>
                         <span class="project-year">dec 2025 – feb 2026</span>
                     </div>
                     <h3>HashCrackerz</h3>
-                    <p class="tagline">Multi-Platform SHA-256 Parallel Cracking Suite</p>
-                    <p class="proj-desc">High-performance SHA-256 cracker comparing NVIDIA CUDA, AMD ROCm/HIP, and multi-core CPU via OpenMP. Kernel optimizations include constant memory, loop unrolling, and dynamic work scheduling.</p>
+                    <p class="tagline" data-i18n="proj.hash.tagline">Multi-Platform SHA-256 Parallel Cracking Suite</p>
+                    <p class="proj-desc" data-i18n="proj.hash.desc">High-performance SHA-256 cracker comparing NVIDIA CUDA, AMD ROCm/HIP, and multi-core CPU via OpenMP. Kernel optimizations include constant memory, loop unrolling, and dynamic work scheduling.</p>
                     <div class="project-tags">
                         <span class="tag">C++</span><span class="tag">CUDA</span><span class="tag">ROCm/HIP</span>
                         <span class="tag">OpenMP</span><span class="tag">OpenSSL</span><span class="tag">PowerShell</span>
@@ -580,7 +583,7 @@
                             <i class="fa-brands fa-github"></i> GitHub <i class="fa-solid fa-arrow-right" style="font-size:0.58rem;"></i>
                         </a>
                         <div class="project-contributors">
-                            <span class="contrib-label">with</span>
+                            <span class="contrib-label" data-i18n="projects.contrib_label">with</span>
                             <div class="contrib-names">
                                 <span class="contrib-chip">Andrea Vitale</span>
                             </div>
@@ -601,12 +604,12 @@
                 </div>
                 <div class="project-body">
                     <div class="project-meta">
-                        <span class="project-badge">Personal</span>
+                        <span class="project-badge" data-i18n="proj.rack.badge">Personal</span>
                         <span class="project-year">jan – feb 2026</span>
                     </div>
                     <h3>RackController v3.0</h3>
-                    <p class="tagline">Smart Cooling &amp; IoT Ecosystem</p>
-                    <p class="proj-desc">Custom cooling system for a DIY network rack on ESP32-S3. Decoupled: C++ REST firmware + Nginx/Docker frontend. Dynamic PWM fan control, OLED night-mode display, real-time web dashboard.</p>
+                    <p class="tagline" data-i18n-html="proj.rack.tagline">Smart Cooling &amp; IoT Ecosystem</p>
+                    <p class="proj-desc" data-i18n="proj.rack.desc">Custom cooling system for a DIY network rack on ESP32-S3. Decoupled: C++ REST firmware + Nginx/Docker frontend. Dynamic PWM fan control, OLED night-mode display, real-time web dashboard.</p>
                     <div class="project-tags">
                         <span class="tag">C++</span><span class="tag">ESP32-S3</span><span class="tag">Docker</span>
                         <span class="tag">Nginx</span><span class="tag">HTML/JS</span><span class="tag">JSON</span>
@@ -627,9 +630,9 @@
     <!-- ── SKILLS ─────────────────────────────────────────────────────────── -->
     <section id="skills" class="section">
         <div class="section-header reveal">
-            <p class="section-label">// 03 — skills</p>
-            <h2 class="section-title">Tech <span class="accent">stack.</span></h2>
-            <p class="section-sub">A focused collection of technologies I use to bridge the gap between hardware and software.</p>
+            <p class="section-label" data-i18n="skills.label">// 03 — skills</p>
+            <h2 class="section-title" data-i18n-html="skills.title">Tech <span class="accent">stack.</span></h2>
+            <p class="section-sub" data-i18n="skills.sub">A focused collection of technologies I use to bridge the gap between hardware and software.</p>
         </div>
 
         <div class="skills-grid">
@@ -698,47 +701,47 @@
     <!-- ── EXPERIENCE & EDUCATION ─────────────────────────────────────────── -->
     <section id="experience" class="section">
         <div class="section-header reveal">
-            <p class="section-label">// 04 &mdash; experience &amp; education</p>
-            <h2 class="section-title">Where I've <span class="accent">been.</span></h2>
+            <p class="section-label" data-i18n-html="exp.label">// 04 &mdash; experience &amp; education</p>
+            <h2 class="section-title" data-i18n-html="exp.title">Where I've <span class="accent">been.</span></h2>
         </div>
         <div class="exp-edu-grid">
             <div class="reveal">
-                <p class="exp-col-label">Work</p>
+                <p class="exp-col-label" data-i18n="exp.col_work">Work</p>
                 <div class="timeline">
                     <div class="tl-item">
-                        <p class="tl-period">may 2025 — now</p>
-                        <p class="tl-role">Didactic Tutor</p>
-                        <p class="tl-company"> Ferrara, IT</p>
-                        <p class="tl-desc">Academic support for upper secondary students in Computer Science and Mathematics, with a focus on logic and problem solving.</p>
+                        <p class="tl-period" data-i18n="exp.tutor.period">may 2025 — now</p>
+                        <p class="tl-role" data-i18n="exp.tutor.role">Didactic Tutor</p>
+                        <p class="tl-company" data-i18n="exp.tutor.company"> Ferrara, IT</p>
+                        <p class="tl-desc" data-i18n="exp.tutor.desc">Academic support for upper secondary students in Computer Science and Mathematics, with a focus on logic and problem solving.</p>
                     </div>
                     <div class="tl-item">
-                        <p class="tl-period">apr 2025 — ott 2025</p>
-                        <p class="tl-role">Computer Vision Engineer Intern</p>
-                        <p class="tl-company">BI-REX Competence Center · Bologna, IT</p>
-                        <p class="tl-desc">Development of the EdgeCV4Safety framework on the industrial pilot line: optimized computer vision pipelines integrated with collaborative robotics UR.</p>
+                        <p class="tl-period" data-i18n="exp.birex.period">apr 2025 — ott 2025</p>
+                        <p class="tl-role" data-i18n="exp.birex.role">Computer Vision Engineer Intern</p>
+                        <p class="tl-company" data-i18n="exp.birex.company">BI-REX Competence Center · Bologna, IT</p>
+                        <p class="tl-desc" data-i18n="exp.birex.desc">Development of the EdgeCV4Safety framework on the industrial pilot line: optimized computer vision pipelines integrated with collaborative robotics UR.</p>
                     </div>
                 </div>
             </div>
             <div class="reveal" style="transition-delay:0.1s">
-                <p class="exp-col-label">Education</p>
+                <p class="exp-col-label" data-i18n="exp.col_edu">Education</p>
                 <div class="edu-grid">
                     <div class="edu-card">
-                        <p class="edu-period">oct 2025 — in progress</p>
-                        <p class="edu-degree">Master Degree <br>Computer Engineering</p>
-                        <p class="edu-school">Università di Bologna</p>
-                        <p class="edu-grade">// Real-Time Systems · Accelerated Computing</p>
+                        <p class="edu-period" data-i18n="edu.msc.period">oct 2025 — in progress</p>
+                        <p class="edu-degree" data-i18n-html="edu.msc.degree">Master Degree <br>Computer Engineering</p>
+                        <p class="edu-school" data-i18n="edu.msc.school">Università di Bologna</p>
+                        <p class="edu-grade" data-i18n="edu.msc.grade">// Real-Time Systems · Accelerated Computing</p>
                     </div>
                     <div class="edu-card">
-                        <p class="edu-period">oct 2022 — dec 2025</p>
-                        <p class="edu-degree">Bachelor Degree<br>Computer Engineering</p>
-                        <p class="edu-school">Università di Bologna</p>
-                        <p class="edu-grade">// Grade 96/110</p>
+                        <p class="edu-period" data-i18n="edu.bsc.period">oct 2022 — dec 2025</p>
+                        <p class="edu-degree" data-i18n-html="edu.bsc.degree">Bachelor Degree<br>Computer Engineering</p>
+                        <p class="edu-school" data-i18n="edu.bsc.school">Università di Bologna</p>
+                        <p class="edu-grade" data-i18n="edu.bsc.grade">// Grade 96/110</p>
                     </div>
                     <div class="edu-card" style="grid-column:span 2">
-                        <p class="edu-period">sep 2017 — jul 2022</p>
-                        <p class="edu-degree">Scientific High School Diploma</p>
-                        <p class="edu-school">Liceo Galileo Galilei · Adria (RO)</p>
-                        <p class="edu-grade">// Grade 96/100 · Applied Sciences</p>
+                        <p class="edu-period" data-i18n="edu.hs.period">sep 2017 — jul 2022</p>
+                        <p class="edu-degree" data-i18n="edu.hs.degree">Scientific High School Diploma</p>
+                        <p class="edu-school" data-i18n="edu.hs.school">Liceo Galileo Galilei · Adria (RO)</p>
+                        <p class="edu-grade" data-i18n="edu.hs.grade">// Grade 96/100 · Applied Sciences</p>
                     </div>
                 </div>
             </div>
@@ -750,9 +753,9 @@
     <!-- ── CTA ───────────────────────────────────────────────────────────── -->
     <section id="cta">
         <div class="reveal">
-            <p class="section-label" style="display:block;margin-bottom:18px;">// let's connect</p>
-            <h2>Want to <span class="accent">work together?</span></h2>
-            <p>I'm open to internships, collaborations, and interesting projects. If you have an idea or just want to chat tech, I'm always up for it.</p>
+            <p class="section-label" style="display:block;margin-bottom:18px;" data-i18n="cta.label">// let's connect</p>
+            <h2 data-i18n-html="cta.title">Want to <span class="accent">work together?</span></h2>
+            <p data-i18n="cta.desc">I'm open to internships, collaborations, and interesting projects. If you have an idea or just want to chat tech, I'm always up for it.</p>
             <div class="cta-links">
                 <a href="/cdn-cgi/l/email-protection#ed87989e999a8584998888c39e9998898482ad8a808c8481c38e8280" class="btn-pill btn-primary">
                     <i class="fa-solid fa-envelope"></i> Email
@@ -775,7 +778,7 @@
         <div class="footer-inner">
             <img src="assets/logo_justwhitee.png" alt="justwhitee logo" class="footer-logo">
             <p class="footer-name">justwhitee &mdash; Matteo Fontolan</p>
-            <p class="footer-copy">
+            <p class="footer-copy" data-i18n-html="home.footer_copy">
                 &copy; <span id="footer-year"></span> Matteo Fontolan<br>
                 Creative work (caricatures, illustrations, graphic design) is protected by copyright. Do not reproduce without explicit permission.<br>
                 Code and repositories are released under <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank">copyleft</a> — because knowledge is worthless if it's not shared.

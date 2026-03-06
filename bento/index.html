@@ -12,6 +12,8 @@
     <link rel="icon" type="image/svg+xml" href="../assets/logo.svg">
     <link rel="icon" type="image/png" href="../assets/logo_justwhitee.png">
     <link rel="apple-touch-icon" sizes="180x180" href="../assets/logo_justwhitee.png">
+    <!-- i18n must load before DOMContentLoaded fires -->
+    <script src="../i18n.js"></script>
 </head>
 <body>
 
@@ -24,6 +26,7 @@
         <ul class="nav-links">
             <li><a href="../">// home</a></li>
             <li><a href="./" class="active">// bento</a></li>
+            <!-- language toggle injected here by i18n.js -->
         </ul>
     </nav>
 
@@ -31,10 +34,10 @@
 
         <header class="profile-header">
             <img src="../assets/propic.jpg" alt="Matteo Fontolan" class="profile-pic">
-            <p class="header-label">// justwhitee's bento</p>
+            <p class="header-label" data-i18n="bento.header_label">// justwhitee's bento</p>
             <h1>Matteo <span>Fontolan</span></h1>
-            <p class="bio">Tech enthusiast 👾 | Computer Engineering (M.Sc. WIP) 🧑‍💻 | Foodie 🍣 | Caricature &amp; Graphic Design for hobby 🖱️</p>
-            <p class="cta">So, how can I help you? 😁 Feel free to ask! 💡</p>
+            <p class="bio" data-i18n-html="bento.bio">Tech enthusiast 👾 | Computer Engineering (M.Sc. WIP) 🧑‍💻 | Foodie 🍣 | Caricature &amp; Graphic Design for hobby 🖱️</p>
+            <p class="cta" data-i18n="bento.cta">So, how can I help you? 😁 Feel free to ask! 💡</p>
         </header>
 
         <main class="bento-grid" id="bento-grid"></main>
@@ -43,7 +46,7 @@
             <div class="footer-inner">
                 <img src="../assets/logo_justwhitee.png" alt="justwhitee logo" class="footer-logo">
                 <p class="footer-name">justwhitee &mdash; Matteo Fontolan</p>
-                <p class="footer-copy">
+                <p class="footer-copy" data-i18n-html="bento.footer_copy">
                     &copy; <span id="footer-year"></span> Matteo Fontolan
                     <br/>
                     Creative work (caricatures, illustrations, graphic design) is protected by copyright.
@@ -86,6 +89,7 @@
         },
         {
             type: "solid", size: "wide",
+            i18n_key: "telegram",
             title: "Contact Me ✍️",
             desc: "Collaborations? Reach out here or at justwhitee.studio@gmail.com",
             svgAsset: "assets/telegram.svg", iconColor: "#fff",
@@ -94,6 +98,7 @@
         },
         {
             type: "solid", size: "wide",
+            i18n_key: "paypal",
             title: "Support Me 💰",
             desc: "Buy me a hot chocolate if you feel like it!",
             svgAsset: "assets/paypal.svg", iconColor: "#009cde",
@@ -102,6 +107,7 @@
         },
         {
             type: "instagram-manual", size: "large",
+            i18n_key: "caricature",
             title: "Caricatures & Draws ✏️",
             username: "@justwhitee.caricature",
             images: [
@@ -115,6 +121,7 @@
         },
         {
             type: "instagram-manual", size: "large",
+            i18n_key: "studio",
             title: "Graphics & Art 🖱",
             username: "@justwhitee.studio",
             images: [
@@ -156,6 +163,7 @@
         },
         {
             type: "solid", size: "small",
+            i18n_key: "amazon",
             title: "Amazon Wishlist ✨",
             svgAsset: "assets/amazon.svg", iconColor: "#2d2d2d",
             link: "https://www.amazon.it/hz/wishlist/ls/2VEY37Y3KUVK8?ref_=wl_share",
@@ -163,6 +171,7 @@
         },
         {
             type: "solid", size: "small",
+            i18n_key: "notion",
             title: "Notes & Resources 🤓",
             svgAsset: "assets/notion.svg", iconColor: "#2d2d2d",
             link: "https://justwhitee.notion.site/Materiali-utili-su-Notion-6d4afc02fd114ee1b65fac5ab8e25201?pvs=4",
@@ -170,6 +179,7 @@
         },
         {
             type: "solid", size: "wide",
+            i18n_key: "private_ig",
             title: "Me in private 🙈",
             svgAsset: "assets/instagram.svg", iconColor: "#fff",
             link: "https://www.instagram.com/matteo.ttf",
@@ -194,12 +204,17 @@
             ? `<img src="${item.svgAsset}" width="${imgSize}" height="${imgSize}" alt="" class="brand-svg" style="filter:${item.iconColor === '#fff' ? 'brightness(0) invert(1)' : buildColorFilter(item.iconColor)}">`
             : "";
         const slugHtml = item.slug ? `<span class="card-slug">${item.slug}</span>` : "";
+        // Use translation if available, fall back to original value
+        const title = (item.i18n_key && window.t('card.' + item.i18n_key + '.title')) || item.title || "";
+        const desc  = item.desc
+            ? ((item.i18n_key && window.t('card.' + item.i18n_key + '.desc')) || item.desc)
+            : null;
         card.innerHTML = `
             <div class="overlay solid-overlay">
                 <div class="solid-icon-wrap">${iconHtml}</div>
                 <div class="card-text-group">
-                    <h3>${item.title || ""}</h3>
-                    ${item.desc ? `<p class="solid-desc">${item.desc}</p>` : ""}
+                    <h3>${title}</h3>
+                    ${desc ? `<p class="solid-desc">${desc}</p>` : ""}
                 </div>
             </div>
             ${slugHtml}
@@ -288,11 +303,12 @@
                 makeSolidCard(card, item);
             } else if (item.type === "instagram-manual") {
                 const photosHtml = item.images.map(src => `<img src="${src}" class="ig-photo" loading="lazy">`).join("");
+                const igTitle = (item.i18n_key && window.t('card.' + item.i18n_key + '.title')) || item.title;
                 card.innerHTML = `
                     <div class="ig-grid-container">${photosHtml}</div>
                     <div class="card-corner-icon"><i class="fa-brands fa-instagram"></i></div>
                     <div class="overlay">
-                        <h3>${item.title}</h3>
+                        <h3>${igTitle}</h3>
                         <p>${item.username}</p>
                     </div>
                     ${item.slug ? `<span class="card-slug">${item.slug}</span>` : ""}
