@@ -30,7 +30,7 @@
             // ── Home: hero ───────────────────────────────────────────────────
             'hero.eyebrow':      '// hello world · itsjustwhitee',
             'hero.role_tag':     'MSc Computer Engineering · Università di Bologna',
-            'hero.desc':         "I build things at the intersection of software and hardware, from Edge AI systems to IoT controllers to parallel GPU algorithms. I'm a firm believer that you don't truly 'own' a system until you've understood exactly how it works under the hood.",
+            'hero.desc':         "I build things at the intersection of silicon and code, from Edge AI systems to IoT controllers to parallel GPU algorithms. I'm a firm believer that you don't truly 'own' a system until you've porked around under the hood too see how it actually works.",
             'hero.btn_projects': 'View Projects',
             'hero.btn_cv':       'Curriculum',
             'hero.scroll':       'scroll',
@@ -73,7 +73,7 @@
 
             // ── Home: experience & education ─────────────────────────────────
             'exp.label':    '// 04 — experience &amp; education',
-            'exp.title':    'Where I\'ve <span class="accent">been.</span>',
+            'exp.title':    'My <span class="accent">journey.</span>',
             'exp.col_work': 'Work',
             'exp.col_edu':  'Education',
 
@@ -150,7 +150,7 @@
             // ── Home: hero ───────────────────────────────────────────────────
             'hero.eyebrow':      '// hello world · itsjustwhitee',
             'hero.role_tag':     'Ing. Informatica Magistrale · Università di Bologna',
-            'hero.desc':         "Costruisco cose tra software e hardware: dai sistemi Edge AI ai controller IoT fino agli algoritmi GPU paralleli. Sono convinto che non si conosca davvero un sistema finché non si capisce esattamente come funziona all'interno.",
+            'hero.desc':         "Sviluppo progetti all'intersezione tra software e hardware: dai sistemi Edge AI ai controller IoT fino agli algoritmi GPU paralleli. Sono convinto che non si conosca davvero un sistema finché non si capisce esattamente come funziona all'interno.",
             'hero.btn_projects': 'Vai ai Progetti',
             'hero.btn_cv':       'Curriculum',
             'hero.scroll':       'scorri',
@@ -160,13 +160,13 @@
             'about.title':   'Geek appassionato,<br><span class="accent">ingegnere pratico.</span>',
             'about.badge':   'voto triennale',
             'about.h3':      'Da Corbola a...',
-            'about.p1':      "Sono uno studente di Ingegneria Informatica all'Università di Bologna (Alma Mater Studiorum), attualmente alla Magistrale, ma in realtàvengo da Corbola, un piccolo e tranquillo paesino in provincia di Rovigo (Veneto).",
+            'about.p1':      "Sono uno studente di Ingegneria Informatica all'Università di Bologna (Alma Mater Studiorum), attualmente alla Magistrale, ma vengo da Corbola, un piccolo e tranquillo paesino (davvero!) in provincia di Rovigo (Veneto).",
             'about.p2':      "Amo capire come funzionano davvero le cose e mi considero una persona pratica. Il mio percorso mi ha portato dalla progettazione di sistemi di sicurezza real-time per robot industriali all'ottimizzazione di algoritmi paralleli su GPU.",
-            'about.p3_html': "Quando non fisso un terminale, probabilmente sto mangiando sushi 🍣, disegnando caricature o rimuginando su un layout di graphic design 🖱️.<br> Credo che <em>la conoscenza non valga nulla se non viene condivisa</em>.",
+            'about.p3_html': "Quando non fisso un terminale, probabilmente sto mangiando sushi 🍣, disegnando caricature o perfezionando un layout di graphic design 🖱️.<br> Credo che <em>la conoscenza non valga nulla se non viene condivisa</em>.",
 
             // ── Home: projects ───────────────────────────────────────────────
             'projects.label':         '// 02 — progetti',
-            'projects.title':         'Cose che ho <span class="accent">costruito.</span>',
+            'projects.title':         'Soluzioni che ho <span class="accent">progettato.</span>',
             'projects.sub':           'Lavori selezionati da corsi universitari, tirocini e curiosità personale.',
             'projects.contrib_label': 'con',
 
@@ -189,11 +189,11 @@
             // ── Home: skills ─────────────────────────────────────────────────
             'skills.label': '// 03 — competenze',
             'skills.title': 'Tech <span class="accent">stack.</span>',
-            'skills.sub':   'Una raccolta mirata di tecnologie che ho imparato a maneggiare.',
+            'skills.sub':   'Una selezione mirata di tecnologie che ho imparato a padroneggiare.',
 
             // ── Home: experience & education ─────────────────────────────────
             'exp.label':    '// 04 — esperienza &amp; formazione',
-            'exp.title':    'Dove sono <span class="accent">stato.</span>',
+            'exp.title':    'Il mio <span class="accent">percorso.</span>',
             'exp.col_work': 'Lavoro',
             'exp.col_edu':  'Formazione',
 
@@ -210,7 +210,7 @@
             'edu.msc.period': 'ott 2025 — in corso',
             'edu.msc.degree': 'Laurea Magistrale<br>Ingegneria Informatica',
             'edu.msc.school': 'Università di Bologna',
-            'edu.msc.grade':  '// Sistemi Real-Time · Accelerated Computing e altro...',
+            'edu.msc.grade':  '// Sistemi Real-Time, Calcolo Accelerato e altro...',
 
             'edu.bsc.period': 'ott 2022 — dic 2025',
             'edu.bsc.degree': 'Laurea Triennale<br>Ingegneria Informatica',
