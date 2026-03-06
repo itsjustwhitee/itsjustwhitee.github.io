@@ -9,7 +9,7 @@ A static personal website hosted on **GitHub Pages**, structured as a multi-page
 ```
 /
 ├── index.html              # Home page
-├── shared.css              # Global design system (variables, base styles, components)
+├── shared.css              # Global design system
 ├── i18n.js                 # Internationalisation engine (EN/IT)
 │
 ├── bento/
@@ -18,9 +18,9 @@ A static personal website hosted on **GitHub Pages**, structured as a multi-page
 │   └── assets/             # Brand SVGs and images for bento cards
 │
 ├── contacts/
-│   └── index.html          # Contacts page (with phone reveal + vCard download)
+│   └── index.html          # Contacts page
 │
-└── assets/                 # Global assets (logo, profile picture, project images, CV)
+└── assets/                 # Global assets
 ```
 
 ---
@@ -44,10 +44,7 @@ Grid of link cards rendered dynamically from the `bentoData` array in the page s
 - `instagram-manual` — 2×2 photo grid with overlay
 
 ### `contacts/index.html` — Contacts
-Minimal contact page designed for NFC/QR use cases (e.g. lost item tags). Features:
-- WhatsApp direct link with pre-filled message
-- Telegram link
-- Phone number reveal (hidden by default, shown on tap) with call button and vCard download
+Minimal contact page designed for NFC/QR use cases (e.g. lost item tags). Features: contacts.
 
 ---
 
