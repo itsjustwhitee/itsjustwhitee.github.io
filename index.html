@@ -12,7 +12,7 @@
     <link rel="icon" type="image/png" href="assets/favicon.png">
     <link rel="apple-touch-icon" sizes="180x180" href="assets/favicon.png">
 
-    <meta name="description" content="Website of Matteo Fontolan — Portfolio & Projects. Computer Engineering student at the University of Bologna, passionate about tech. Explore my CV, skills, and experience.">
+    <meta name="description" content="Matteo Fontolan: MSc Computer Engineering student at UniBo. A personal space for my evolving ideas, tech projects, and my journey in engineering.">
     <meta name="keywords" content="Matteo Fontolan, justwhitee, computer, engineering, CUDA, AI, Robotics, University of Bologna, ingegneria, informatica, Università di Bologna, CV, Portfolio, Projects, Skills, Experience, Education, unibo, ing, ingegnere">
     <link rel="canonical" href="https://justwhitee.org/">
 
@@ -30,6 +30,24 @@
 
     <link rel="icon" type="image/png" href="assets/favicon.png">
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+
+    <script type="application/ld+json">
+    {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Matteo Fontolan",
+    "url": "https://justwhitee.org",
+    "jobTitle": "MSc Computer Engineering Student",
+    "affiliation": {
+        "@type": "Organization",
+        "name": "University of Bologna"
+    },
+    "sameAs": [
+        "https://github.com/itsjustwhitee",
+        "https://linkedin.com/in/justwhitee"
+    ]
+    }
+    </script>
 
     <!-- i18n must load before DOMContentLoaded fires -->
     <script src="i18n.js"></script>
@@ -449,7 +467,7 @@
     <!-- ── NAV ──────────────────────────────────────────────────────────── -->
     <nav class="site-nav">
         <a href="." class="nav-logo">
-            <img src="assets/logo_justwhitee.png" alt="justwhitee">
+            <img src="assets/logo_justwhitee.png" alt="justwhitee logo">
             justwhitee
         </a>
         <ul class="nav-links">
@@ -483,14 +501,14 @@
                 <i class="fa-solid fa-file-lines"></i> <span data-i18n="hero.btn_cv">Curriculum</span>
             </a>
             <a href="bento/" class="btn-pill btn-bento">
-                <img src="assets/bento.png" alt="" width="15" height="15" style="object-fit:contain;opacity:0.9;vertical-align:middle;" aria-hidden="true"> Bento
+                <img src="assets/bento.png" alt="bento icon" width="15" height="15" style="object-fit:contain;opacity:0.9;vertical-align:middle;" aria-hidden="true"> Bento
             </a>
             <a href="https://github.com/itsjustwhitee" target="_blank" class="btn-pill btn-ghost">
                 <i class="fa-brands fa-github"></i> GitHub
             </a>
         </div>
 
-        <img src="assets/logo.svg" alt="" class="hero-logo-giant" id="logo-giant" aria-hidden="true">
+        <img src="assets/logo.svg" alt="logo justwhitee svg" class="hero-logo-giant" id="logo-giant" aria-hidden="true">
         <div class="hero-scroll"><span data-i18n="hero.scroll">scroll</span><div class="scroll-line"></div></div>
     </section>
 
@@ -504,7 +522,7 @@
         </div>
         <div class="about-grid">
             <div class="about-pic-wrap reveal">
-                <img src="assets/propic.jpg" alt="Matteo Fontolan" class="about-pic">
+                <img src="assets/propic.jpg" alt="Matteo Fontolan profile picture" class="about-pic">
                 <div class="about-pic-badge"><span>96/110</span><span data-i18n="about.badge">BSc grade</span></div>
             </div>
             <div class="about-text reveal" style="transition-delay:0.12s">
@@ -583,7 +601,7 @@
                 <div class="project-img-wrap">
                     <img src="assets/projects/hashcrackerz.png"
                          onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"
-                         alt="HashCrackerz" class="project-img">
+                         alt="HashCrackerz project logo" class="project-img">
                     <div class="project-img-placeholder" style="display:none;">⚡</div>
                 </div>
                 <div class="project-body">
@@ -618,7 +636,7 @@
                     <div class="rack-spin-wrapper" id="rack-fan-wrapper">
                         <img src="assets/projects/rackcontroller.svg"
                             onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"
-                            alt="RackController" class="project-img">
+                            alt="RackController project logo" class="project-img">
                     </div>
                     <div class="project-img-placeholder" style="display:none;">🖥️</div>
                 </div>
