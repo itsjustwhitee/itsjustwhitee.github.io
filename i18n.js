@@ -142,9 +142,9 @@
         },
         it: {
             // ── Home: nav ────────────────────────────────────────────────────
-            'nav.about':    '// chi sono',
-            'nav.projects': '// progetti',
-            'nav.skills':   '// competenze',
+            'nav.about':    '// about',
+            'nav.projects': '// projects',
+            'nav.skills':   '// skills',
             'nav.bento':    '// bento',
 
             // ── Home: hero ───────────────────────────────────────────────────
