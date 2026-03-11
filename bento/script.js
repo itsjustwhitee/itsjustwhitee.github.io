@@ -176,34 +176,16 @@ function buildColorFilter(hex) {
 async function buildGithubCard(card, username) {
     card.innerHTML = `<div class="gh-loading"><i class="fa-brands fa-github gh-spinner"></i></div>`;
 
+    const streakUrl = `https://nirzak-streak-stats.vercel.app/?user=${username}`
+        + `&theme=transparent&hide_border=true`
+        + `&ring=00bbc9&fire=00bbc9&currStreakLabel=00bbc9`
+        + `&sideLabels=aaaaaa&dates=555555`
+        + `&sideNums=ffffff&currStreakNum=ffffff`
+        + `&stroke=1a3a4a`;
+
     try {
-        const [userRes, eventsRes] = await Promise.all([
-            fetch(`https://api.github.com/users/${username}`),
-            fetch(`https://api.github.com/users/${username}/events/public?per_page=100`),
-        ]);
-        const user   = await userRes.json();
-        const events = await eventsRes.json();
-
-        const year = new Date().getFullYear();
-        let commits = 0;
-        const days = {};
-        if (Array.isArray(events)) {
-            events.forEach(e => {
-                if (e.type === "PushEvent") {
-                    const d = e.created_at?.slice(0, 10);
-                    const n = e.payload?.commits?.length || 0;
-                    commits += n;
-                    if (d) days[d] = (days[d] || 0) + n;
-                }
-            });
-        }
-
-        const sorted = Object.entries(days).sort(([a],[b]) => a.localeCompare(b)).slice(-28);
-        const maxVal = Math.max(1, ...sorted.map(([,v]) => v));
-        const barsHtml = sorted.map(([date, val]) => {
-            const h = Math.max(4, Math.round((val / maxVal) * 52));
-            return `<div class="gh-bar" style="height:${h}px" title="${date}: ${val} commits"></div>`;
-        }).join("");
+        const userRes = await fetch(`https://api.github.com/users/${username}`);
+        const user    = await userRes.json();
 
         const joinYear = new Date(user.created_at).getFullYear();
         const yearsOn  = new Date().getFullYear() - joinYear;
@@ -223,11 +205,14 @@ async function buildGithubCard(card, username) {
                     <div class="gh-stat"><span class="gh-stat-val">${user.public_repos}</span><span class="gh-stat-lbl">repos</span></div>
                     <div class="gh-stat"><span class="gh-stat-val">${user.followers}</span><span class="gh-stat-lbl">followers</span></div>
                     <div class="gh-stat"><span class="gh-stat-val">${yearsOn}y</span><span class="gh-stat-lbl">on github</span></div>
-                    <div class="gh-stat"><span class="gh-stat-val">${commits}</span><span class="gh-stat-lbl">recent commits</span></div>
                 </div>
-                <div class="gh-graph">
-                    <div class="gh-bars">${barsHtml || '<span class="gh-no-data">no recent push activity</span>'}</div>
-                    <div class="gh-graph-label">last 28 days of pushes</div>
+                <div class="gh-streak" style="margin-top:12px; width:100%; text-align:center;">
+                    <img src="${streakUrl}"
+                         alt="GitHub streak stats"
+                         class="gh-streak-img"
+                         style="width:100%; max-width:420px; height:auto; display:block; margin:0 auto;"
+                         loading="lazy"
+                         onerror="this.parentElement.style.display='none'">
                 </div>
             </div>
             <div class="card-corner-icon"><i class="fa-brands fa-github"></i></div>
