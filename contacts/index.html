@@ -11,9 +11,6 @@
     <link rel="icon" type="image/svg+xml" href="../assets/logo.svg">
     <link rel="icon" type="image/png" href="../assets/logo_justwhitee.png">
     <link rel="apple-touch-icon" sizes="180x180" href="../assets/logo_justwhitee.png">
-    <link rel="manifest" href="/manifest.json">
-    <meta name="theme-color" content="#00bbc9">
-    <meta name="robots" content="noindex, nofollow">
     <!-- i18n must load before DOMContentLoaded fires -->
     <script src="../i18n.js"></script>
 
@@ -160,11 +157,12 @@
         <main class="contact-grid">
 
             <!-- WHATSAPP -->
-            <button class="action-card" onclick="openWhatsapp()" style="background:none; text-align:left; width:100%;" aria-label="Apri WhatsApp">
+            <div class="action-card" onclick="openWhatsapp()" role="button" tabindex="0" style="cursor:pointer;"
+                 onkeydown="if(event.key==='Enter'||event.key===' ')openWhatsapp()">
                 <div class="card-bg" style="background: linear-gradient(145deg, #25d366 0%, #128c50 100%);"></div>
                 <div class="card-content">
                     <div class="card-icon-wrap">
-                        <i class="fa-brands fa-whatsapp"></i>
+                        <i class="fa-brands fa-whatsapp" style="color:#fff;"></i>
                     </div>
                     <div class="card-text">
                         <h3 data-i18n="contacts.wa.title">Scrivimi su WhatsApp</h3>
@@ -172,7 +170,7 @@
                     </div>
                 </div>
                 <span class="card-slug">// wa.me</span>
-            </button>
+            </div>
 
             <!-- TELEGRAM -->
             <a class="action-card" href="https://t.me/justwhitee" target="_blank">
@@ -190,7 +188,8 @@
             </a>
 
             <!-- TELEFONO & VCARD -->
-            <button class="action-card" id="phone-card" onclick="revealPhone()" aria-label="Mostra numero di telefono" style="background:none; text-align:left; width:100%;">
+            <div class="action-card" id="phone-card" onclick="revealPhone()" role="button" tabindex="0" style="cursor:pointer;"
+                 onkeydown="if(event.key==='Enter'||event.key===' ')revealPhone()">
                 <div class="card-bg" style="background: linear-gradient(145deg, #0d6060 0%, #083c3c 100%);"></div>
 
                 <div class="card-content" id="lock-view">
@@ -223,7 +222,7 @@
                 </div>
 
                 <span class="card-slug">// privato</span>
-            </button>
+            </div>
 
         </main>
 
@@ -262,8 +261,12 @@
             phoneView.classList.remove('hidden-info');
             document.getElementById('phone-display').innerText = numeroVisuale;
             document.getElementById('btn-call').href = `tel:+${numeroPulito}`;
-            document.getElementById('phone-card').onclick = null;
-            document.getElementById('phone-card').style.cursor = 'default';
+            const card = document.getElementById('phone-card');
+            card.onclick        = null;
+            card.onkeydown      = null;
+            card.style.cursor   = 'default';
+            card.removeAttribute('role');
+            card.removeAttribute('tabindex');
         }
     }
 
@@ -281,6 +284,7 @@
             `FN:${nome} ${cognome}`,
             `TEL;TYPE=CELL:${numeroVisuale}`,
             `EMAIL:${email}`,
+            `EMAIL:${email2}`,
             `URL:${bento}`,
             `URL;TYPE=linkedin:${linkedin}`,
             `URL;TYPE=instagram:${instagram}`,

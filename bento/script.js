@@ -192,7 +192,7 @@ async function buildGithubCard(card, username) {
                 if (e.type === "PushEvent") {
                     const d = e.created_at?.slice(0, 10);
                     const n = e.payload?.commits?.length || 0;
-                    if (e.created_at?.startsWith(year)) commits += n;
+                    commits += n;
                     if (d) days[d] = (days[d] || 0) + n;
                 }
             });
@@ -223,7 +223,7 @@ async function buildGithubCard(card, username) {
                     <div class="gh-stat"><span class="gh-stat-val">${user.public_repos}</span><span class="gh-stat-lbl">repos</span></div>
                     <div class="gh-stat"><span class="gh-stat-val">${user.followers}</span><span class="gh-stat-lbl">followers</span></div>
                     <div class="gh-stat"><span class="gh-stat-val">${yearsOn}y</span><span class="gh-stat-lbl">on github</span></div>
-                    <div class="gh-stat"><span class="gh-stat-val">${commits}+</span><span class="gh-stat-lbl">commits ${year}</span></div>
+                    <div class="gh-stat"><span class="gh-stat-val">${commits}</span><span class="gh-stat-lbl">recent commits</span></div>
                 </div>
                 <div class="gh-graph">
                     <div class="gh-bars">${barsHtml || '<span class="gh-no-data">no recent push activity</span>'}</div>
