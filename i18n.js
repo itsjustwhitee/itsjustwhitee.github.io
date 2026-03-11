@@ -37,7 +37,7 @@
 
             // ── Home: about ──────────────────────────────────────────────────
             'about.label':   '// 01 — about me',
-            'about.title':   'Passionate geek,<br><span class="accent">practical engineer.</span>',
+            'about.title':   'Passionate geek,<br><span class="accent">practical engineer</span>',
             'about.badge':   'BSc grade',
             'about.h3':      'From Corbola to...',
             'about.p1':      "I'm a Computer Engineering student at the University of Bologna (Alma Mater Studiorum), currently pursuing my Master's Degree after graduating, but I'm originally from Corbola, a small quiet town (really?) in the Rovigo province (Veneto).",
@@ -46,7 +46,7 @@
 
             // ── Home: projects ───────────────────────────────────────────────
             'projects.label':         '// 02 — projects',
-            'projects.title':         'Things I\'ve <span class="accent">built.</span>',
+            'projects.title':         'Things I\'ve <span class="accent">.</span>',
             'projects.sub':           'Selected work from university courses, internships, and personal curiosity.',
             'projects.contrib_label': 'with',
 
@@ -73,7 +73,7 @@
 
             // ── Home: experience & education ─────────────────────────────────
             'exp.label':    '// 04 — experience &amp; education',
-            'exp.title':    'My <span class="accent">journey.</span>',
+            'exp.title':    'My <span class="accent">journey</span>',
             'exp.col_work': 'Work',
             'exp.col_edu':  'Education',
 
@@ -117,7 +117,7 @@
             'bento.footer_copy':  '&copy; YEAR Matteo Fontolan<br>Creative work (caricatures, illustrations, graphic design) is protected by copyright. Do not reproduce without explicit permission.<br>Code, repositories and other works/assets are released under <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank">copyleft</a> &mdash; because knowledge is worthless if it\'s not shared.',
 
             'card.telegram.title':   'Contact Me ✍️',
-            'card.telegram.desc':    'Collaborations? Reach out here or at justwhitee.studio@gmail.com',
+            'card.telegram.desc':    'Collaborations? Reach out here or at matteo.fontolan@justwhitee.org',
             'card.paypal.title':     'Support Me 💰',
             'card.paypal.desc':      'Buy me a hot chocolate if you feel like it!',
             'card.amazon.title':     'Amazon Wishlist ✨',
@@ -125,6 +125,12 @@
             'card.private_ig.title': 'Me in private 🙈',
             'card.caricature.title': 'Caricatures & Draws ✏️',
             'card.studio.title':     'Graphics & Art 🖱',
+
+            // ── 404 ──────────────────────────────────────────────────────────
+            'notfound.label': '// 404 — page not found',
+            'notfound.title': "This page doesn't exist.",
+            'notfound.desc':  'The link you followed is broken, expired, or never existed.<br>Maybe you were looking for something else?',
+            'notfound.btn':   'Back to home',
 
             // ── Contacts ─────────────────────────────────────────────────────
             'contacts.header_label': '// contacts',
@@ -157,7 +163,7 @@
 
             // ── Home: about ──────────────────────────────────────────────────
             'about.label':   '// 01 — chi sono',
-            'about.title':   'Geek appassionato,<br><span class="accent">ingegnere pratico.</span>',
+            'about.title':   'Geek appassionato,<br><span class="accent">ingegnere pratico</span>',
             'about.badge':   'voto triennale',
             'about.h3':      'Da Corbola a...',
             'about.p1':      "Sono uno studente di Ingegneria Informatica all'Università di Bologna (Alma Mater Studiorum), attualmente alla Magistrale, ma vengo da Corbola, un piccolo e tranquillo paesino (davvero!) in provincia di Rovigo (Veneto).",
@@ -166,7 +172,7 @@
 
             // ── Home: projects ───────────────────────────────────────────────
             'projects.label':         '// 02 — progetti',
-            'projects.title':         'Soluzioni che ho <span class="accent">progettato.</span>',
+            'projects.title':         'Soluzioni che ho <span class="accent">progettato</span>',
             'projects.sub':           'Lavori selezionati da corsi universitari, tirocini e curiosità personale.',
             'projects.contrib_label': 'con',
 
@@ -188,12 +194,12 @@
 
             // ── Home: skills ─────────────────────────────────────────────────
             'skills.label': '// 03 — competenze',
-            'skills.title': 'Tech <span class="accent">stack.</span>',
+            'skills.title': 'Tech <span class="accent"></span>',
             'skills.sub':   'Una selezione mirata di tecnologie che ho imparato a padroneggiare.',
 
             // ── Home: experience & education ─────────────────────────────────
             'exp.label':    '// 04 — esperienza &amp; formazione',
-            'exp.title':    'Il mio <span class="accent">percorso.</span>',
+            'exp.title':    'Il mio <span class="accent">percorso</span>',
             'exp.col_work': 'Lavoro',
             'exp.col_edu':  'Formazione',
 
@@ -237,7 +243,7 @@
             'bento.footer_copy':  '&copy; YEAR Matteo Fontolan<br>Le opere creative (caricature, illustrazioni, graphic design) sono protette da copyright. Non riprodurre senza permesso esplicito.<br>Codice, repository e altri lavori/asset sono rilasciati sotto <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank">copyleft</a> &mdash; perché la conoscenza non vale nulla se non viene condivisa.',
 
             'card.telegram.title':   'Contattami ✍️',
-            'card.telegram.desc':    'Collaborazioni? Scrivimi qui o a justwhitee.studio@gmail.com',
+            'card.telegram.desc':    'Collaborazioni? Scrivimi qui o a matteo.fontolan@justwhitee.org',
             'card.paypal.title':     'Supportami 💰',
             'card.paypal.desc':      'Offrimi una cioccolata calda se ti va!',
             'card.amazon.title':     'Whishlist Amazon ✨',
@@ -245,6 +251,12 @@
             'card.private_ig.title': 'Io in privato 🙈',
             'card.caricature.title': 'Caricature & Disegni ✏️',
             'card.studio.title':     'Grafica & Arte 🖱',
+
+            // ── 404 ──────────────────────────────────────────────────────────
+            'notfound.label': '// 404 — pagina non trovata',
+            'notfound.title': 'Questa pagina non esiste.',
+            'notfound.desc':  'Il link che hai seguito è rotto, scaduto o non è mai esistito.<br>Forse stavi cercando qualcosa di diverso?',
+            'notfound.btn':   'Torna alla home',
 
             // ── Contacts ─────────────────────────────────────────────────────
             'contacts.header_label': '// contatti',

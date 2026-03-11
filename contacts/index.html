@@ -11,6 +11,9 @@
     <link rel="icon" type="image/svg+xml" href="../assets/logo.svg">
     <link rel="icon" type="image/png" href="../assets/logo_justwhitee.png">
     <link rel="apple-touch-icon" sizes="180x180" href="../assets/logo_justwhitee.png">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#00bbc9">
+    <meta name="robots" content="noindex, nofollow">
     <!-- i18n must load before DOMContentLoaded fires -->
     <script src="../i18n.js"></script>
 
@@ -157,7 +160,7 @@
         <main class="contact-grid">
 
             <!-- WHATSAPP -->
-            <div class="action-card" onclick="openWhatsapp()" style="cursor:pointer;">
+            <button class="action-card" onclick="openWhatsapp()" style="background:none; text-align:left; width:100%;" aria-label="Apri WhatsApp">
                 <div class="card-bg" style="background: linear-gradient(145deg, #25d366 0%, #128c50 100%);"></div>
                 <div class="card-content">
                     <div class="card-icon-wrap">
@@ -169,7 +172,7 @@
                     </div>
                 </div>
                 <span class="card-slug">// wa.me</span>
-            </div>
+            </button>
 
             <!-- TELEGRAM -->
             <a class="action-card" href="https://t.me/justwhitee" target="_blank">
@@ -187,7 +190,7 @@
             </a>
 
             <!-- TELEFONO & VCARD -->
-            <div class="action-card" id="phone-card" onclick="revealPhone()" style="cursor:pointer;">
+            <button class="action-card" id="phone-card" onclick="revealPhone()" aria-label="Mostra numero di telefono" style="background:none; text-align:left; width:100%;">
                 <div class="card-bg" style="background: linear-gradient(145deg, #0d6060 0%, #083c3c 100%);"></div>
 
                 <div class="card-content" id="lock-view">
@@ -220,7 +223,7 @@
                 </div>
 
                 <span class="card-slug">// privato</span>
-            </div>
+            </button>
 
         </main>
 
@@ -267,8 +270,7 @@
     function scaricaVcard() {
         const nome     = "Matteo";
         const cognome  = "Fontolan";
-        const email    = "matteofontolan@gmail.com";
-        const email2   = "justwhitee.studio@gmail.com";
+        const email    = "matteo.fontolan@justwhitee.org";
         const bento    = "https://itsjustwhitee.github.io";
         const instagram= "https://instagram.com/matteo.ttf";
         const linkedin = "http://www.linkedin.com/in/justwhitee";
@@ -279,7 +281,6 @@
             `FN:${nome} ${cognome}`,
             `TEL;TYPE=CELL:${numeroVisuale}`,
             `EMAIL:${email}`,
-            `EMAIL:${email2}`,
             `URL:${bento}`,
             `URL;TYPE=linkedin:${linkedin}`,
             `URL;TYPE=instagram:${instagram}`,

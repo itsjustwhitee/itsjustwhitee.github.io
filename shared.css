@@ -244,6 +244,13 @@ a { color: inherit; text-decoration: none; }
 .btn-primary { background: var(--accent-bright); color: #0b1414; }
 .btn-ghost   { background: rgba(255,255,255,0.12); color: #fff; border: 1px solid rgba(255,255,255,0.22); }
 
+/* ── FOCUS ACCESSIBILITY ─────────────────────────────────────────────────── */
+:focus-visible {
+    outline: 2px solid var(--accent-bright);
+    outline-offset: 3px;
+    border-radius: 4px;
+}
+
 /* ── SCROLL REVEAL ───────────────────────────────────────────────────────── */
 .reveal {
     opacity: 0; transform: translateY(32px);

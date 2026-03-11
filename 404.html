@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 — justwhitee</title>
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="stylesheet" href="shared.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="assets/favicon.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/favicon.png">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#00bbc9">
+    <!-- i18n must load before DOMContentLoaded fires -->
+    <script src="i18n.js"></script>
+
+    <style>
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        /* ── BACKGROUND ORBS ── */
+        .orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(80px);
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.18;
+        }
+        .orb-1 {
+            width: 500px; height: 500px;
+            background: radial-gradient(circle, #00bbc9, transparent 70%);
+            top: -100px; left: -100px;
+            animation: drift 12s ease-in-out infinite alternate;
+        }
+        .orb-2 {
+            width: 400px; height: 400px;
+            background: radial-gradient(circle, #09868f, transparent 70%);
+            bottom: -80px; right: -80px;
+            animation: drift 15s ease-in-out infinite alternate-reverse;
+        }
+        @keyframes drift {
+            from { transform: translate(0, 0); }
+            to   { transform: translate(40px, 30px); }
+        }
+
+        /* ── MAIN CONTENT ── */
+        .nf-content {
+            position: relative; z-index: 1;
+            display: flex; flex-direction: column;
+            align-items: center; text-align: center;
+            animation: fadeUp 0.6s ease both;
+        }
+
+        /* ── GIANT 404 ── */
+        .giant-404 {
+            font-family: 'Syne', sans-serif;
+            font-size: clamp(7rem, 22vw, 14rem);
+            font-weight: 800;
+            line-height: 1;
+            color: transparent;
+            background: linear-gradient(135deg, var(--accent-bright) 0%, rgba(0,187,201,0.2) 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            letter-spacing: -0.04em;
+            user-select: none;
+            margin-bottom: -8px;
+        }
+
+        .nf-label {
+            font-size: 0.7rem;
+            letter-spacing: 0.3em;
+            color: var(--accent-bright);
+            opacity: 0.6;
+            text-transform: uppercase;
+            margin-bottom: 24px;
+        }
+
+        .nf-title {
+            font-family: 'Syne', sans-serif;
+            font-size: clamp(1.4rem, 4vw, 2rem);
+            font-weight: 800;
+            color: #fff;
+            margin-bottom: 14px;
+            line-height: 1.2;
+        }
+
+        .nf-desc {
+            font-size: 0.85rem;
+            color: var(--text-bio);
+            max-width: 400px;
+            line-height: 1.7;
+            opacity: 0.8;
+            margin-bottom: 40px;
+        }
+
+        .nf-actions {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .nf-hint {
+            margin-top: 60px;
+            font-size: 0.6rem;
+            letter-spacing: 0.15em;
+            color: rgba(255,255,255,0.15);
+        }
+        .nf-hint span { color: rgba(0,187,201,0.35); }
+    </style>
+</head>
+<body>
+
+    <!-- NAV -->
+    <nav class="site-nav">
+        <a href="/" class="nav-logo">
+            <img src="assets/favicon.png" alt="justwhitee">
+            justwhitee
+        </a>
+        <ul class="nav-links">
+            <li><a href="/">// home</a></li>
+            <!-- language toggle injected here by i18n.js -->
+        </ul>
+    </nav>
+
+    <!-- BACKGROUND ORBS -->
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+
+    <!-- MAIN CONTENT -->
+    <div class="nf-content">
+        <div class="giant-404">404</div>
+        <p class="nf-label" data-i18n="notfound.label">// 404 — page not found</p>
+        <h1 class="nf-title" data-i18n="notfound.title">This page doesn't exist.</h1>
+        <p class="nf-desc" data-i18n-html="notfound.desc">
+            The link you followed is broken, expired, or never existed.<br>
+            Maybe you were looking for something else?
+        </p>
+        <div class="nf-actions">
+            <a href="/" class="btn-pill btn-primary">
+                <i class="fa-solid fa-house"></i>
+                <span data-i18n="notfound.btn">Back to home</span>
+            </a>
+        </div>
+        <p class="nf-hint">justwhitee &mdash; <span>justwhitee.org</span></p>
+    </div>
+
+</body>
+</html>
