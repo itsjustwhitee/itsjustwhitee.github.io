@@ -1,6 +1,6 @@
 # Personal Website — Internal Documentation
 
-A static personal website hosted on **GitHub Pages**, structured as a multi-page site with a shared design system. No build tools, no frameworks — just vanilla HTML, CSS, and JavaScript.
+A static personal website hosted on **GitHub Pages** with Cloudflare as CDN and DNS provider. No build tools, no frameworks — just vanilla HTML, CSS, and JavaScript.
 
 ---
 
@@ -16,17 +16,23 @@ A static personal website hosted on **GitHub Pages**, structured as a multi-page
 ├── sitemap.xml             # Single sitemap for all pages (covers / and /bento/)
 ├── robots.txt              # Crawler rules
 ├── favicon.ico             # Favicon (48×48)
+├── CNAME                   # Custom domain binding for GitHub Pages
 │
 ├── bento/
-│   ├── index.html          # Bento page
-│   ├── script.js           # Bento card logic
+│   ├── index.html          # Bento page (HTML only — no inline scripts)
+│   ├── script.js           # All bento card logic (external, browser-cacheable)
 │   ├── style.css           # Bento-specific styles
-│   └── assets/             # Brand SVGs and images for bento cards
+│   └── assets/             # Brand SVGs and .webp images for bento cards
 │
 ├── contacts/
 │   └── index.html          # Contacts page (noindex — QR/NFC only)
 │
 └── assets/                 # Global assets
+    ├── logo.svg             # Vector logo (used in navbar and footer)
+    ├── favicon.png          # Raster favicon (192×512px, used by manifest)
+    ├── favicon.ico          # Legacy favicon (48×48)
+    ├── og-image.jpg         # Open Graph preview image (1200×630, kept as JPG)
+    ├── propic.webp          # Profile picture (WebP)
     └── ...
 ```
 
@@ -47,18 +53,18 @@ Full-length scrollable portfolio page. Sections in order:
 - **Footer**
 
 ### `bento/index.html` — Bento
-Grid of link cards rendered dynamically from the `bentoData` array in `bento/script.js`. Card types:
-- `github-custom` — fetches live user data from the GitHub REST API and renders GitHub Streak Stats as an inline SVG
-- `solid` — branded gradient card with SVG icon
-- `instagram-manual` — 2×2 photo grid with overlay
+Grid of link cards. The HTML is markup-only; all logic lives in the external `bento/script.js` (browser-cacheable, no inline `<script>` block). Card types:
+- `github-custom` — fetches live user data from the GitHub REST API (cached 1h in `localStorage`) and renders GitHub Streak Stats as an image
+- `solid` — branded gradient card with SVG icon; supports `i18n_key` for translated title/desc
+- `instagram-manual` — 2×2 photo grid with overlay; images in `.webp` format
 
 ### `contacts/index.html` — Contacts
 Minimal contact page designed for NFC/QR use cases (e.g. lost item tags).
-- **Not indexed** (`<meta name="robots" content="noindex, nofollow">`) — accessible only via QR/NFC link, not from search engines.
+- **Not indexed** (`<meta name="robots" content="noindex, nofollow">`) — accessible only via QR/NFC link.
 - Features: WhatsApp deep-link with pre-filled message, Telegram link, tap-to-reveal phone number, vCard download.
 
 ### `404.html` — Error page
-Custom 404 page served automatically by GitHub Pages for any non-existent URL. Matches the site's visual style (animated orbs, gradient typography). Supports i18n via `data-i18n` attributes.
+Custom 404 page served automatically by GitHub Pages for any non-existent URL. Matches the site's visual style (animated orbs, gradient typography). Supports i18n via `data-i18n` attributes. Also excluded from indexing via `noindex, nofollow`.
 
 ---
 
@@ -87,6 +93,13 @@ All pages share a common set of CSS variables, base styles, and reusable compone
 - **`.profile-header`** — centred header with profile picture
 - **`:focus-visible`** — keyboard navigation outline (accent colour)
 
+### Hover & Animation Policy
+All `:hover` transitions and card lift animations are wrapped inside:
+```css
+@media (hover: hover) and (pointer: fine) { ... }
+```
+This prevents the **"sticky hover" bug** on iOS and Android, where tapping a card leaves it permanently elevated or highlighted after the finger lifts. Touch devices don't have a hover state and must never trigger these styles.
+
 ---
 
 ## Internationalisation (`i18n.js`)
@@ -98,7 +111,8 @@ The site auto-detects language from `navigator.language` and defaults to **Engli
 2. On `DOMContentLoaded`, it injects a language toggle button into `.nav-links`, applies translations to the DOM, and sets `document.documentElement.lang`.
 3. Static elements use `data-i18n="key"` (plain text) or `data-i18n-html="key"` (HTML content).
 4. Dynamic card content (bento) uses `window.t('key')` inside the card builder functions.
-5. Clicking the toggle calls `window.toggleLang()`, which re-applies translations and, on the bento page, re-renders the grid.
+5. Clicking the toggle calls `window.toggleLang()`, which re-applies translations and, on the bento page, clears and re-renders the entire grid.
+6. Missing translation keys emit a `console.warn` — the UI always falls back gracefully and never shows `undefined` on screen.
 
 ### Adding or editing a translation
 Open `i18n.js` and edit the string inside the `en` or `it` object (or both). No other file needs to change.
@@ -145,9 +159,15 @@ Every public page (`index.html`, `bento/index.html`) includes:
 - `<link rel="canonical">` — prevents duplicate content issues
 - **JSON-LD structured data** (`@type: Person`) on the home page — helps Google associate social profiles with the site
 
-The `contacts/` page is intentionally excluded from indexing via `<meta name="robots" content="noindex, nofollow">`.
+The `contacts/` page and `404.html` are intentionally excluded from indexing via `<meta name="robots" content="noindex, nofollow">`.
 
-The `404.html` page is also excluded from indexing via the same meta tag.
+### Image format policy
+| Asset | Format | Reason |
+|---|---|---|
+| Profile picture, project images | `.webp` | Smallest size, broad browser support |
+| Logo in navbar/footer | `.svg` | Vector — pixel-perfect at any resolution/DPI |
+| `og:image`, `apple-touch-icon` | `.jpg` / `.png` | WhatsApp, Safari, and some crawlers reject WebP |
+| `favicon.ico` | `.ico` | Legacy browser compatibility |
 
 ---
 
@@ -179,30 +199,63 @@ All pages include `<link rel="manifest" href="/manifest.json">` in `<head>`.
 ### Bento page
 | Feature | How it works |
 |---|---|
-| GitHub live card | `fetch` to GitHub REST API (`/users/:username`) for profile data; streak stats fetched as raw SVG from `nirzak-streak-stats.vercel.app` and injected inline — bypasses any CSS clipping |
-| Card shimmer | CSS `::after` pseudo-element animation triggered on `:hover` |
-| Language re-render | `loadBento()` is called again on language toggle, clearing and rebuilding the grid |
+| GitHub live card | `fetch` to GitHub REST API (`/users/:username`) for profile data; result cached in `localStorage` for 1 hour (with `try/catch` for restrictive browsers) to avoid rate-limiting (HTTP 403 after 60 req/h); streak stats served as an image from `nirzak-streak-stats.vercel.app` |
+| i18n card titles | `makeSolidCard` and instagram cards read `window.t('card.{i18n_key}.title')` at render time; fallback to hardcoded `item.title` if key is missing, never `undefined` |
+| Card shimmer | CSS `::after` pseudo-element animation triggered on `:hover` (desktop only via `@media (hover: hover)`) |
+| Language re-render | `grid.innerHTML = ""` + `loadBento()` called again on language toggle |
+| Security | All dynamically created `<a target="_blank">` elements have `rel="noopener noreferrer"` set via `card.rel` in JS |
 
 ### Contacts page
 | Feature | How it works |
 |---|---|
-| Phone reveal | Toggling `.hidden-info` class between two `.card-content` views; card uses `role="button"` + `tabindex="0"` for keyboard accessibility |
+| Phone reveal | Toggling `.hidden-info` class between two `.card-content` views; card uses `role="button"` + `tabindex="0"` + `onkeydown` for full keyboard accessibility; attributes removed after unlock |
 | vCard download | Programmatically creates a `.vcf` blob and triggers a download via a temporary `<a>` element |
 | WhatsApp pre-fill | Message text is sourced from `window.t('contacts.wa_msg')` so it switches language with the toggle |
 
 ---
 
-## Deployment
+## Security
 
-The site is deployed as a **static GitHub Pages site** with no build step. To update:
+### Tabnabbing protection
+All links with `target="_blank"` include `rel="noopener noreferrer"` — both in static HTML and in dynamically generated elements in `script.js` (`card.rel = "noopener noreferrer"`). This prevents third-party pages from accessing or hijacking the opener tab via `window.opener`.
 
-1. Edit files locally.
-2. `git add`, `git commit`, `git push` to the `main` (or `gh-pages`) branch.
-3. GitHub Pages serves the updated files automatically within a few seconds.
+### Email obfuscation
+Cloudflare's **Scrape Shield / Email Obfuscation** feature is enabled on the domain. Cloudflare automatically rewrites `mailto:` links and email addresses in the HTML, injecting `/cdn-cgi/scripts/email-decode.min.js` to decode them client-side. Spam bots scraping the raw HTML will not see the real addresses. This only works when traffic is proxied through Cloudflare (🟠 orange cloud DNS).
 
-There are no dependencies to install, no bundlers, no environment variables.
+---
 
-GitHub Pages automatically serves `404.html` for any non-existent URL — no configuration required.
+## Setup & Local Development
+
+This project requires **no build step**, bundlers, or package managers.
+
+```bash
+git clone https://github.com/itsjustwhitee/your-repo-name.git
+cd your-repo-name
+```
+
+> **Important:** Do not open `index.html` directly via `file://`. The site uses `fetch()` for external resources (GitHub API, streak stats image), which triggers CORS errors under the `file://` protocol. Always use a local web server. For instance:
+>
+> - **VS Code** — install the [Live Server](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer) extension and click "Go Live"
+> - **Python** — run `python3 -m http.server 8000` and open `http://localhost:8000`
+
+---
+
+## Deployment & Cloudflare Configuration
+
+The site is hosted on **GitHub Pages** with **Cloudflare** as DNS provider, CDN, and security layer.
+
+### GitHub Pages
+- Any `git push` to the `main` branch triggers the default GitHub Pages workflow — changes go live in seconds.
+- The `CNAME` file in the repository root binds the custom domain (`justwhitee.org`) to GitHub's servers.
+- GitHub Pages automatically serves `404.html` for any non-existent URL — no configuration required.
+
+### Cloudflare Settings
+| Setting | Value | Notes |
+|---|---|---|
+| DNS | A records → GitHub Pages IPs (or CNAME → `itsjustwhitee.github.io`) | Proxy enabled |
+| SSL/TLS | Full | GitHub Pages provisions its own Let's Encrypt cert; Cloudflare ensures strict end-to-end encryption |
+| Scrape Shield / Email Obfuscation | Enabled | Protects email addresses from spam bots (see Security section) |
+| Caching | Default (CDN) | WebP images and static assets cached at edge globally |
 
 ---
 
@@ -215,10 +268,11 @@ GitHub Pages automatically serves `404.html` for any non-existent URL — no con
 5. Add any page-specific translation keys to `i18n.js` under a new prefix.
 6. Add a `<style>` block for page-specific CSS (or a separate `style.css` in the folder).
 7. Add the new URL to `sitemap.xml` in the root (unless the page should not be indexed).
+8. Add `rel="noopener noreferrer"` to any `target="_blank"` links.
 
 ## Adding a New Bento Card
 
 1. Add a new entry object to the `bentoData` array in `bento/script.js`.
-2. If the title or description should be translated, use `window.t('card.yourkey')` and add the corresponding keys to `i18n.js` under `card.*`.
+2. If the title or description should be translated, set `i18n_key: "yourkey"` and add `card.yourkey.title` (and optionally `card.yourkey.desc`) to both `en` and `it` in `i18n.js`. The builder falls back to `item.title` if the key is missing — the UI will never break.
 3. If it uses a brand gradient, add the colour pair to the `BRAND` object in `bento/script.js`.
-4. Place any required SVG asset in `bento/assets/`.
+4. Place any required SVG asset in `bento/assets/` and any images as `.webp`.
