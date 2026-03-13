@@ -277,7 +277,11 @@
     // ── PUBLIC TRANSLATOR ────────────────────────────────────────────────────
     window.t = function (key) {
         const lang = T[window.currentLang] || T.en;
-        return lang[key] !== undefined ? lang[key] : (T.en[key] !== undefined ? T.en[key] : key);
+        if (lang[key] !== undefined) return lang[key];
+        if (T.en[key] !== undefined) return T.en[key];
+        
+        console.warn(`Error: Missing translation for key '${key}'`);
+        return key;
     };
 
     // ── APPLY TRANSLATIONS TO STATIC DOM ────────────────────────────────────

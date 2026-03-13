@@ -11,17 +11,19 @@ const BRAND = {
     private_ig: { bgFrom: "#833ab4", bgTo: "#5851db" },
 };
 
+// ─── BENTO DATA ───────────────────────────────────────────────────────────────
+// i18n_key → card.{key}.title / card.{key}.desc in i18n.js
 const bentoData = [
     // ── ROW 1+2: GitHub large + Telegram/PayPal stacked ──────────────────
     {
-        type: "github-custom",
-        size: "large",
+        type: "github-custom", size: "large",
         link: "https://github.com/itsjustwhitee",
         slug: "// github.com/itsjustwhitee",
         username: "itsjustwhitee",
     },
     {
         type: "solid", size: "wide",
+        i18n_key: "telegram",
         title: "Contact Me ✍️",
         desc: "Collaborations? Reach out here or at matteo.fontolan@justwhitee.org",
         svgAsset: "assets/telegram.svg", iconColor: "#fff",
@@ -30,6 +32,7 @@ const bentoData = [
     },
     {
         type: "solid", size: "wide",
+        i18n_key: "paypal",
         title: "Support Me 💰",
         desc: "Buy me a hot chocolate if you feel like it!",
         svgAsset: "assets/paypal.svg", iconColor: "#009cde",
@@ -40,26 +43,28 @@ const bentoData = [
     // ── ROW 3+4: INSTAGRAM ────────────────────────────────────────────────
     {
         type: "instagram-manual", size: "large",
+        i18n_key: "caricature",
         title: "Caricatures & Draws ✏️",
         username: "@justwhitee.caricature",
         images: [
-            "assets/justwhitee.caricature/1.png",
-            "assets/justwhitee.caricature/2.png",
-            "assets/justwhitee.caricature/3.png",
-            "assets/justwhitee.caricature/4.png",
+            "assets/justwhitee.caricature/1.webp",
+            "assets/justwhitee.caricature/2.webp",
+            "assets/justwhitee.caricature/3.webp",
+            "assets/justwhitee.caricature/4.webp",
         ],
         link: "https://www.instagram.com/justwhitee.caricature",
         slug: "// @justwhitee.caricature",
     },
     {
         type: "instagram-manual", size: "large",
+        i18n_key: "studio",
         title: "Graphics & Art 🖱",
         username: "@justwhitee.studio",
         images: [
-            "assets/justwhitee.studio/1.png",
-            "assets/justwhitee.studio/2.png",
-            "assets/justwhitee.studio/3.png",
-            "assets/justwhitee.studio/4.png",
+            "assets/justwhitee.studio/1.webp",
+            "assets/justwhitee.studio/2.webp",
+            "assets/justwhitee.studio/3.webp",
+            "assets/justwhitee.studio/4.webp",
         ],
         link: "https://www.instagram.com/justwhitee.studio",
         slug: "// @justwhitee.studio",
@@ -98,6 +103,7 @@ const bentoData = [
     // ── ROW 6: Amazon + Notion + Me in private ────────────────────────────
     {
         type: "solid", size: "small",
+        i18n_key: "amazon",
         title: "Amazon Wishlist ✨",
         svgAsset: "assets/amazon.svg", iconColor: "#2d2d2d",
         link: "https://www.amazon.it/hz/wishlist/ls/2VEY37Y3KUVK8?ref_=wl_share",
@@ -105,6 +111,7 @@ const bentoData = [
     },
     {
         type: "solid", size: "small",
+        i18n_key: "notion",
         title: "Notes & Resources 🤓",
         svgAsset: "assets/notion.svg", iconColor: "#2d2d2d",
         link: "https://justwhitee.notion.site/Materiali-utili-su-Notion-6d4afc02fd114ee1b65fac5ab8e25201?pvs=4",
@@ -112,6 +119,7 @@ const bentoData = [
     },
     {
         type: "solid", size: "wide",
+        i18n_key: "private_ig",
         title: "Me in private 🙈",
         svgAsset: "assets/instagram.svg", iconColor: "#fff",
         link: "https://www.instagram.com/matteo.ttf",
@@ -119,27 +127,16 @@ const bentoData = [
     },
 ];
 
-// ─── CORNER ICON HELPER ───────────────────────────────────────────────────────
-function getCornerIcon(link) {
-    if (!link) return "";
-    const map = [
-        ["instagram.com", "fa-brands fa-instagram"],
-        ["t.me",          "fa-brands fa-telegram"],
-        ["paypal",        "fa-brands fa-paypal"],
-        ["amazon",        "fa-brands fa-amazon"],
-        ["github.com",    "fa-brands fa-github"],
-        ["notion",        "fa-regular fa-note-sticky"],
-        ["vinted",        "fa-solid fa-tags"],
-        ["ebay",          "fa-brands fa-ebay"],
-        ["subito",        "fa-solid fa-tag"],
-    ];
-    for (const [key, cls] of map) {
-        if (link.includes(key)) return `<i class="${cls}"></i>`;
-    }
-    return '<i class="fa-solid fa-link"></i>';
+// ─── COLOR FILTER HELPER ──────────────────────────────────────────────────────
+function buildColorFilter(hex) {
+    if (!hex || hex === "#fff" || hex === "#ffffff") return "brightness(0) invert(1)";
+    if (hex === "#2d2d2d" || hex === "#333") return "brightness(0)";
+    if (hex === "#009cde") return "brightness(0) invert(1) sepia(1) saturate(3) hue-rotate(175deg)";
+    return "none";
 }
 
 // ─── SOLID CARD BUILDER ───────────────────────────────────────────────────────
+// Supports i18n_key for translated title/desc; falls back to hardcoded values.
 function makeSolidCard(card, item) {
     const b = BRAND[item.brand] || { bgFrom: "#094f4f", bgTo: "#062e2e" };
     card.style.background = `linear-gradient(145deg, ${b.bgFrom} 0%, ${b.bgTo} 100%)`;
@@ -151,28 +148,29 @@ function makeSolidCard(card, item) {
         ? `<img src="${item.svgAsset}" width="${imgSize}" height="${imgSize}" alt="" class="brand-svg" style="filter:${item.iconColor === '#fff' ? 'brightness(0) invert(1)' : buildColorFilter(item.iconColor)}">`
         : "";
 
+    const title = (item.i18n_key && window.t(`card.${item.i18n_key}.title`)) || item.title || "";
+    const desc  = item.desc
+        ? ((item.i18n_key && window.t(`card.${item.i18n_key}.desc`)) || item.desc)
+        : null;
+
     const slugHtml = item.slug ? `<span class="card-slug">${item.slug}</span>` : "";
 
     card.innerHTML = `
         <div class="overlay solid-overlay">
             <div class="solid-icon-wrap">${iconHtml}</div>
             <div class="card-text-group">
-                <h3>${item.title || ""}</h3>
-                ${item.desc ? `<p class="solid-desc">${item.desc}</p>` : ""}
+                <h3>${title}</h3>
+                ${desc ? `<p class="solid-desc">${desc}</p>` : ""}
             </div>
         </div>
         ${slugHtml}
     `;
 }
 
-function buildColorFilter(hex) {
-    if (!hex || hex === "#fff" || hex === "#ffffff") return "brightness(0) invert(1)";
-    if (hex === "#2d2d2d" || hex === "#333") return "brightness(0)";
-    if (hex === "#009cde") return "brightness(0) invert(1) sepia(1) saturate(3) hue-rotate(175deg)";
-    return "none";
-}
-
 // ─── GITHUB CUSTOM CARD ───────────────────────────────────────────────────────
+// Profile data cached in localStorage for 1 hour to avoid API rate limits.
+// Streak stats loaded as an image from nirzak-streak-stats.vercel.app —
+// accurate total contributions, no auth required.
 async function buildGithubCard(card, username) {
     card.innerHTML = `<div class="gh-loading"><i class="fa-brands fa-github gh-spinner"></i></div>`;
 
@@ -184,11 +182,27 @@ async function buildGithubCard(card, username) {
         + `&stroke=1a3a4a`;
 
     try {
-        const userRes = await fetch(`https://api.github.com/users/${username}`);
-        const user    = await userRes.json();
+        const cacheKey = `gh_data_${username}`;
+        let user;
 
-        const joinYear = new Date(user.created_at).getFullYear();
-        const yearsOn  = new Date().getFullYear() - joinYear;
+        try {
+            const cached = localStorage.getItem(cacheKey);
+            if (cached) {
+                const parsed = JSON.parse(cached);
+                if (Date.now() - parsed.timestamp < 3_600_000) user = parsed.data;
+            }
+        } catch (_) { /* localStorage unavailable — ignore */ }
+
+        if (!user) {
+            const res = await fetch(`https://api.github.com/users/${username}`);
+            if (!res.ok) throw new Error("GitHub API error");
+            user = await res.json();
+            try {
+                localStorage.setItem(cacheKey, JSON.stringify({ timestamp: Date.now(), data: user }));
+            } catch (_) { /* storage full — ignore */ }
+        }
+
+        const yearsOn = new Date().getFullYear() - new Date(user.created_at).getFullYear();
 
         card.innerHTML = `
             <div class="gh-card">
@@ -198,7 +212,7 @@ async function buildGithubCard(card, username) {
                         <div class="gh-name">${user.name || username}</div>
                         <div class="gh-handle">@${user.login}</div>
                         ${user.location ? `<div class="gh-location"><i class="fa-solid fa-location-dot"></i> ${user.location}</div>` : ""}
-                        ${user.bio ? `<div class="gh-bio">${user.bio}</div>` : ""}
+                        ${user.bio      ? `<div class="gh-bio">${user.bio}</div>` : ""}
                     </div>
                 </div>
                 <div class="gh-stats">
@@ -232,13 +246,19 @@ async function buildGithubCard(card, username) {
 const grid = document.getElementById("bento-grid");
 
 function loadBento() {
+    grid.innerHTML = ""; // clear before re-render (needed on language toggle)
+
     bentoData.forEach(item => {
         const card = document.createElement(item.link ? "a" : "div");
-        if (item.link) { card.href = item.link; card.target = "_blank"; card.classList.add("card-link"); }
-        card.classList.add("card", item.size);
+        if (item.link) { 
+            card.href = item.link; 
+            card.target = "_blank"; 
+            card.rel = "noopener noreferrer"; 
+            card.classList.add("card-link"); 
+        }
+        card.classList.add("card", "card-base", item.size);
 
         if (item.type === "github-custom") {
-            card.classList.add("card-github");
             card.style.background = "linear-gradient(145deg, #0d2233 0%, #0a1a28 100%)";
             card.style.borderColor = "rgba(48,130,198,0.25)";
             buildGithubCard(card, item.username);
@@ -249,11 +269,12 @@ function loadBento() {
 
         } else if (item.type === "instagram-manual") {
             const photosHtml = item.images.map(src => `<img src="${src}" class="ig-photo" loading="lazy">`).join("");
+            const igTitle = (item.i18n_key && window.t(`card.${item.i18n_key}.title`)) || item.title;
             card.innerHTML = `
                 <div class="ig-grid-container">${photosHtml}</div>
                 <div class="card-corner-icon"><i class="fa-brands fa-instagram"></i></div>
                 <div class="overlay">
-                    <h3>${item.title}</h3>
+                    <h3>${igTitle}</h3>
                     <p>${item.username}</p>
                 </div>
                 ${item.slug ? `<span class="card-slug">${item.slug}</span>` : ""}

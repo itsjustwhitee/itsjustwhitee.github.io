@@ -9,18 +9,16 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
-    <link rel="icon" type="image/svg+xml" href="../assets/logo.svg">
-    <link rel="icon" type="image/png" href="../assets/logo_justwhitee.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="../assets/logo_justwhitee.png">
 
     <title>Bento | Matteo Fontolan — justwhitee</title>
     <meta name="description" content="Explore Matteo Fontolan's (justwhitee) digital world through this bento page.">
     <meta name="keywords" content="Matteo Fontolan, justwhitee, computer, engineering, CUDA, AI, Robotics, University of Bologna, ingegneria, informatica, Università di Bologna, CV, Portfolio, Projects, Skills, Experience, Education, unibo, ing, ingegnere, bento">
     <link rel="canonical" href="https://justwhitee.org/bento/">
 
+    <link rel="icon" type="image/svg+xml" href="../assets/logo.svg">
     <link rel="icon" type="image/png" href="../assets/favicon.png">
     <link rel="shortcut icon" href="../favicon.ico" type="image/x-icon">
-    <link rel="apple-touch-icon" sizes="180x180" href="../assets/logo_justwhitee.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="../assets/favicon.png">
 
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://justwhitee.org/bento/">
@@ -42,7 +40,7 @@
     <!-- NAV -->
     <nav class="site-nav">
         <a href="../" class="nav-logo">
-            <img src="../assets/logo_justwhitee.png" alt="justwhitee">
+            <img src="../assets/logo.svg" alt="justwhitee">
             justwhitee
         </a>
         <ul class="nav-links">
@@ -55,7 +53,7 @@
     <div class="container" style="padding-top: 100px;">
 
         <header class="profile-header">
-            <img src="../assets/propic.jpg" alt="Matteo Fontolan" class="profile-pic">
+            <img src="../assets/propic.webp" alt="Matteo Fontolan" class="profile-pic">
             <p class="header-label" data-i18n="bento.header_label">// justwhitee's bento</p>
             <h1>Matteo <span>Fontolan</span></h1>
             <p class="bio" data-i18n-html="bento.bio">Tech enthusiast 👾 | Computer Engineering (M.Sc. WIP) 🧑‍💻 | Foodie 🍣 | Caricature &amp; Graphic Design for hobby 🖱️</p>
@@ -66,20 +64,20 @@
 
         <footer class="site-footer">
             <div class="footer-inner">
-                <img src="../assets/logo_justwhitee.png" alt="justwhitee logo" class="footer-logo">
+                <img src="../assets/logo.svg" alt="justwhitee logo" class="footer-logo">
                 <p class="footer-name">justwhitee &mdash; Matteo Fontolan</p>
                 <p class="footer-copy" data-i18n-html="bento.footer_copy">
                     &copy; <span id="footer-year"></span> Matteo Fontolan
                     <br/>
                     Creative work (caricatures, illustrations, graphic design) is protected by copyright.
                     Do not reproduce without explicit permission.<br>
-                    Code, repositories and other works/assets are released under <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank">copyleft</a> &mdash;
+                    Code, repositories and other works/assets are released under <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank" rel="noopener noreferrer">copyleft</a> &mdash;
                     because knowledge is worthless if it's not shared.
                 </p>
                 <div class="footer-links">
-                    <a href="https://github.com/itsjustwhitee" target="_blank"><i class="fa-brands fa-github"></i> itsjustwhitee</a>
+                    <a href="https://github.com/itsjustwhitee" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-github"></i> itsjustwhitee</a>
                     <span class="footer-sep">//</span>
-                    <a href="mailto:matteo.fontolan@justwhitee.org" target="_blank"><i class="fa-solid fa-envelope"></i> matteo.fontolan [at] justwhitee.org</a>
+                    <a href="mailto:matteo.fontolan@justwhitee.org" target="_blank" rel="noopener noreferrer"><i class="fa-solid fa-envelope"></i> matteo.fontolan [at] justwhitee.org</a>
                     <span class="footer-sep">//</span>
                     <a href="http://www.linkedin.com/in/justwhitee" target="_blank"><i class="fa-brands fa-linkedin"></i> @justwhitee</a>
                 </div>
@@ -87,261 +85,8 @@
         </footer>
 
     </div>
-
+    <script src="script.js"></script>
     <script>
-    // ─── BRAND DEFINITIONS ───────────────────────────────────────────────────────
-    const BRAND = {
-        telegram:   { bgFrom: "#229ED9", bgTo: "#1575a5" },
-        paypal:     { bgFrom: "#003087", bgTo: "#001a4d" },
-        subito:     { bgFrom: "#f94840", bgTo: "#e93128" },
-        vinted:     { bgFrom: "#00737e", bgTo: "#005c64" },
-        wallapop:   { bgFrom: "#13c1ac", bgTo: "#0a9e8c" },
-        ebay:       { bgFrom: "#0064d3", bgTo: "#003d83" },
-        amazon:     { bgFrom: "#ffbb00", bgTo: "#e68a00" },
-        notion:     { bgFrom: "#ffffff", bgTo: "#bbbbbb" },
-        private_ig: { bgFrom: "#833ab4", bgTo: "#5851db" },
-    };
-
-    const bentoData = [
-        {
-            type: "github-custom", size: "large",
-            link: "https://github.com/itsjustwhitee",
-            slug: "// github.com/itsjustwhitee",
-            username: "itsjustwhitee",
-        },
-        {
-            type: "solid", size: "wide",
-            i18n_key: "telegram",
-            title: "Contact Me ✍️",
-            desc: "Collaborations? Reach out here or at justwhitee.studio@gmail.com",
-            svgAsset: "assets/telegram.svg", iconColor: "#fff",
-            link: "https://t.me/justwhitee",
-            slug: "// t.me/justwhitee", brand: "telegram",
-        },
-        {
-            type: "solid", size: "wide",
-            i18n_key: "paypal",
-            title: "Support Me 💰",
-            desc: "Buy me a hot chocolate if you feel like it!",
-            svgAsset: "assets/paypal.svg", iconColor: "#009cde",
-            link: "https://www.paypal.com/paypalme/justwhitee",
-            slug: "// paypal.me/justwhitee", brand: "paypal",
-        },
-        {
-            type: "instagram-manual", size: "large",
-            i18n_key: "caricature",
-            title: "Caricatures & Draws ✏️",
-            username: "@justwhitee.caricature",
-            images: [
-                "assets/justwhitee.caricature/1.png",
-                "assets/justwhitee.caricature/2.png",
-                "assets/justwhitee.caricature/3.png",
-                "assets/justwhitee.caricature/4.png",
-            ],
-            link: "https://www.instagram.com/justwhitee.caricature",
-            slug: "// @justwhitee.caricature",
-        },
-        {
-            type: "instagram-manual", size: "large",
-            i18n_key: "studio",
-            title: "Graphics & Art 🖱",
-            username: "@justwhitee.studio",
-            images: [
-                "assets/justwhitee.studio/1.png",
-                "assets/justwhitee.studio/2.png",
-                "assets/justwhitee.studio/3.png",
-                "assets/justwhitee.studio/4.png",
-            ],
-            link: "https://www.instagram.com/justwhitee.studio",
-            slug: "// @justwhitee.studio",
-        },
-        {
-            type: "solid", size: "small",
-            title: "Subito",
-            svgAsset: "assets/subito.svg", iconColor: "#fff",
-            link: "https://www.subito.it/utente/115681616",
-            slug: "// subito.it", brand: "subito",
-        },
-        {
-            type: "solid", size: "small",
-            title: "Vinted",
-            svgAsset: "assets/vinted.svg", iconColor: "#fff",
-            link: "https://www.vinted.it/member/98964478-matteottf",
-            slug: "// vinted.it", brand: "vinted",
-        },
-        {
-            type: "solid", size: "small",
-            title: "Wallapop",
-            svgAsset: "assets/wallapop.svg", iconColor: "#fff",
-            link: "https://www.wallapop.com/user/matteof-452229251",
-            slug: "// wallapop.com", brand: "wallapop",
-        },
-        {
-            type: "solid", size: "small",
-            title: "eBay",
-            svgAsset: "assets/ebay.svg", iconColor: "#fff",
-            link: "https://ebay.us/m/cxwlKH",
-            slug: "// ebay.com", brand: "ebay",
-        },
-        {
-            type: "solid", size: "small",
-            i18n_key: "amazon",
-            title: "Amazon Wishlist ✨",
-            svgAsset: "assets/amazon.svg", iconColor: "#2d2d2d",
-            link: "https://www.amazon.it/hz/wishlist/ls/2VEY37Y3KUVK8?ref_=wl_share",
-            slug: "// amazon.it", brand: "amazon",
-        },
-        {
-            type: "solid", size: "small",
-            i18n_key: "notion",
-            title: "Notes & Resources 🤓",
-            svgAsset: "assets/notion.svg", iconColor: "#2d2d2d",
-            link: "https://justwhitee.notion.site/Materiali-utili-su-Notion-6d4afc02fd114ee1b65fac5ab8e25201?pvs=4",
-            slug: "// notion.site", brand: "notion",
-        },
-        {
-            type: "solid", size: "wide",
-            i18n_key: "private_ig",
-            title: "Me in private 🙈",
-            svgAsset: "assets/instagram.svg", iconColor: "#fff",
-            link: "https://www.instagram.com/matteo.ttf",
-            slug: "// @matteo.ttf", brand: "private_ig",
-        },
-    ];
-
-    function buildColorFilter(hex) {
-        if (!hex || hex === "#fff" || hex === "#ffffff") return "brightness(0) invert(1)";
-        if (hex === "#2d2d2d" || hex === "#333") return "brightness(0)";
-        if (hex === "#009cde") return "brightness(0) invert(1) sepia(1) saturate(3) hue-rotate(175deg)";
-        return "none";
-    }
-
-    function makeSolidCard(card, item) {
-        const b = BRAND[item.brand] || { bgFrom: "#094f4f", bgTo: "#062e2e" };
-        card.style.background = `linear-gradient(145deg, ${b.bgFrom} 0%, ${b.bgTo} 100%)`;
-        card.style.borderColor = "rgba(255,255,255,0.09)";
-        const isSmall = item.size === "small";
-        const imgSize = isSmall ? 32 : 40;
-        const iconHtml = item.svgAsset
-            ? `<img src="${item.svgAsset}" width="${imgSize}" height="${imgSize}" alt="" class="brand-svg" style="filter:${item.iconColor === '#fff' ? 'brightness(0) invert(1)' : buildColorFilter(item.iconColor)}">`
-            : "";
-        const slugHtml = item.slug ? `<span class="card-slug">${item.slug}</span>` : "";
-        // Use translation if available, fall back to original value
-        const title = (item.i18n_key && window.t('card.' + item.i18n_key + '.title')) || item.title || "";
-        const desc  = item.desc
-            ? ((item.i18n_key && window.t('card.' + item.i18n_key + '.desc')) || item.desc)
-            : null;
-        card.innerHTML = `
-            <div class="overlay solid-overlay">
-                <div class="solid-icon-wrap">${iconHtml}</div>
-                <div class="card-text-group">
-                    <h3>${title}</h3>
-                    ${desc ? `<p class="solid-desc">${desc}</p>` : ""}
-                </div>
-            </div>
-            ${slugHtml}
-        `;
-    }
-
-    async function buildGithubCard(card, username) {
-        card.innerHTML = `<div class="gh-loading"><i class="fa-brands fa-github gh-spinner"></i></div>`;
-        try {
-            const [userRes, eventsRes] = await Promise.all([
-                fetch(`https://api.github.com/users/${username}`),
-                fetch(`https://api.github.com/users/${username}/events/public?per_page=100`),
-            ]);
-            const user   = await userRes.json();
-            const events = await eventsRes.json();
-            const year = new Date().getFullYear();
-            let commits = 0;
-            const days = {};
-            if (Array.isArray(events)) {
-                events.forEach(e => {
-                    if (e.type === "PushEvent") {
-                        const d = e.created_at?.slice(0, 10);
-                        const n = e.payload?.commits?.length || 0;
-                        if (e.created_at?.startsWith(year)) commits += n;
-                        if (d) days[d] = (days[d] || 0) + n;
-                    }
-                });
-            }
-            const sorted = Object.entries(days).sort(([a],[b]) => a.localeCompare(b)).slice(-28);
-            const maxVal = Math.max(1, ...sorted.map(([,v]) => v));
-            const barsHtml = sorted.map(([date, val]) => {
-                const h = Math.max(4, Math.round((val / maxVal) * 52));
-                return `<div class="gh-bar" style="height:${h}px" title="${date}: ${val} commits"></div>`;
-            }).join("");
-            const joinYear = new Date(user.created_at).getFullYear();
-            const yearsOn  = new Date().getFullYear() - joinYear;
-            card.innerHTML = `
-                <div class="gh-card">
-                    <div class="gh-header">
-                        <img src="${user.avatar_url}" class="gh-avatar" alt="avatar">
-                        <div class="gh-user-info">
-                            <div class="gh-name">${user.name || username}</div>
-                            <div class="gh-handle">@${user.login}</div>
-                            ${user.location ? `<div class="gh-location"><i class="fa-solid fa-location-dot"></i> ${user.location}</div>` : ""}
-                            ${user.bio ? `<div class="gh-bio">${user.bio}</div>` : ""}
-                        </div>
-                    </div>
-                    <div class="gh-stats">
-                        <div class="gh-stat"><span class="gh-stat-val">${user.public_repos}</span><span class="gh-stat-lbl">repos</span></div>
-                        <div class="gh-stat"><span class="gh-stat-val">${user.followers}</span><span class="gh-stat-lbl">followers</span></div>
-                        <div class="gh-stat"><span class="gh-stat-val">${yearsOn}y</span><span class="gh-stat-lbl">on github</span></div>
-                        <div class="gh-stat"><span class="gh-stat-val">${commits}+</span><span class="gh-stat-lbl">commits ${year}</span></div>
-                    </div>
-                    <div class="gh-graph">
-                        <div class="gh-bars">${barsHtml || '<span class="gh-no-data">no recent push activity</span>'}</div>
-                        <div class="gh-graph-label">last 28 days of pushes</div>
-                    </div>
-                </div>
-                <div class="card-corner-icon"><i class="fa-brands fa-github"></i></div>
-            `;
-        } catch (err) {
-            card.innerHTML = `
-                <div class="gh-error">
-                    <i class="fa-brands fa-github" style="font-size:2rem;opacity:.4"></i>
-                    <p>Could not load GitHub data</p>
-                </div>
-                <div class="card-corner-icon"><i class="fa-brands fa-github"></i></div>
-            `;
-        }
-    }
-
-    const grid = document.getElementById("bento-grid");
-
-    function loadBento() {
-        bentoData.forEach(item => {
-            const card = document.createElement(item.link ? "a" : "div");
-            if (item.link) { card.href = item.link; card.target = "_blank"; card.classList.add("card-link"); }
-            card.classList.add("card", "card-base", item.size);
-
-            if (item.type === "github-custom") {
-                card.style.background = "linear-gradient(145deg, #0d2233 0%, #0a1a28 100%)";
-                card.style.borderColor = "rgba(48,130,198,0.25)";
-                buildGithubCard(card, item.username);
-                if (item.slug) card.insertAdjacentHTML("beforeend", `<span class="card-slug">${item.slug}</span>`);
-            } else if (item.type === "solid") {
-                makeSolidCard(card, item);
-            } else if (item.type === "instagram-manual") {
-                const photosHtml = item.images.map(src => `<img src="${src}" class="ig-photo" loading="lazy">`).join("");
-                const igTitle = (item.i18n_key && window.t('card.' + item.i18n_key + '.title')) || item.title;
-                card.innerHTML = `
-                    <div class="ig-grid-container">${photosHtml}</div>
-                    <div class="card-corner-icon"><i class="fa-brands fa-instagram"></i></div>
-                    <div class="overlay">
-                        <h3>${igTitle}</h3>
-                        <p>${item.username}</p>
-                    </div>
-                    ${item.slug ? `<span class="card-slug">${item.slug}</span>` : ""}
-                `;
-            }
-            grid.appendChild(card);
-        });
-    }
-
-    document.addEventListener("DOMContentLoaded", loadBento);
-
     document.getElementById('footer-year').textContent = new Date().getFullYear();
     </script>
 </body>
