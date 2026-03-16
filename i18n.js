@@ -151,7 +151,7 @@
             // ── CV ────────────────────────────────────────────────────────────
             'cv.header_label': '// curriculum vitae',
             'cv.title':        'Matteo <span>Fontolan</span>',
-            'cv.subtitle':     'Computer Engineering · AI · Robotics',
+            'cv.subtitle':     'Computer Engineering and more...',
             'cv.fallback':     "Your browser doesn't support inline PDFs.<br><a href=\"../assets/cvMatteoFontolan.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">Open the PDF directly</a>.",
             'cv.btn_download': 'Download CV',
             'cv.btn_open':     'Open in new tab',
@@ -179,9 +179,9 @@
             'about.title':   'Geek appassionato,<br><span class="accent">ingegnere pratico</span>',
             'about.badge':   'voto triennale',
             'about.h3':      'Da Corbola a...',
-            'about.p1':      "Sono uno studente di Ingegneria Informatica all'Università di Bologna (Alma Mater Studiorum), attualmente alla Magistrale, ma vengo da Corbola, un piccolo e tranquillo paesino (davvero!) in provincia di Rovigo (Veneto).",
+            'about.p1':      "Sono uno studente di Ingegneria Informatica all'Università di Bologna (Alma Mater Studiorum), attualmente in Magistrale, ma vengo da Corbola, un piccolo e tranquillo paesino (davvero!) in provincia di Rovigo (Veneto).",
             'about.p2':      "Amo capire come funzionano davvero le cose e mi considero una persona pratica. Il mio percorso mi ha portato dalla progettazione di sistemi di sicurezza real-time per robot industriali all'ottimizzazione di algoritmi paralleli su GPU.",
-            'about.p3_html': "Quando non fisso un terminale, probabilmente sto mangiando sushi 🍣, disegnando caricature o perfezionando un layout di graphic design 🖱️.<br> Credo che <em>la conoscenza non valga nulla se non viene condivisa</em>.",
+            'about.p3_html': "Quando non fisso un terminale, probabilmente sto mangiando sushi🍣, disegnando caricature o perfezionando qualche layout🖱️.<br>Credo che <em>la conoscenza non valga nulla se non viene condivisa</em>.",
 
             // ── Home: projects ───────────────────────────────────────────────
             'projects.label':         '// 02 — progetti',
@@ -207,7 +207,7 @@
 
             // ── Home: skills ─────────────────────────────────────────────────
             'skills.label': '// 03 — competenze',
-            'skills.title': 'Tech <span class="accent"></span>',
+            'skills.title': 'Tech <span class="accent">stack</span>',
             'skills.sub':   'Una selezione mirata di tecnologie che ho imparato a padroneggiare.',
 
             // ── Home: experience & education ─────────────────────────────────
@@ -267,8 +267,8 @@
 
             // ── 404 ──────────────────────────────────────────────────────────
             'notfound.label': '// 404 — pagina non trovata',
-            'notfound.title': 'Questa pagina non esiste.',
-            'notfound.desc':  'Il link che hai seguito è rotto, scaduto o non è mai esistito.<br>Forse stavi cercando qualcosa di diverso?',
+            'notfound.title': 'Questa pagina non esiste o é stata spostata.',
+            'notfound.desc':  'Il link che hai seguito è corrotto, scaduto o non è mai esistito.<br>Forse stavi cercando qualcosa di diverso?',
             'notfound.btn':   'Torna alla home',
 
             // ── Contacts ─────────────────────────────────────────────────────
@@ -289,7 +289,7 @@
             // ── CV ────────────────────────────────────────────────────────────
             'cv.header_label': '// curriculum vitae',
             'cv.title':        'Matteo <span>Fontolan</span>',
-            'cv.subtitle':     'Ingegneria Informatica · AI · Robotica',
+            'cv.subtitle':     'Ingegneria Informatica e molto altro...',
             'cv.fallback':     "Il tuo browser non supporta i PDF incorporati.<br><a href=\"../assets/cvMatteoFontolan.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">Apri il PDF direttamente</a>.",
             'cv.btn_download': 'Scarica il CV',
             'cv.btn_open':     'Apri in una nuova scheda',
