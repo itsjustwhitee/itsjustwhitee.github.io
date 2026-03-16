@@ -10,6 +10,7 @@ A static personal website hosted on **GitHub Pages** with Cloudflare as CDN and 
 /
 ├── index.html              # Home page
 ├── shared.css              # Global design system
+├── components.js           # Shared nav & footer injector (loaded before i18n.js)
 ├── i18n.js                 # Internationalisation engine (EN/IT)
 ├── 404.html                # Custom 404 error page
 ├── manifest.json           # Web App Manifest (PWA metadata)
@@ -205,6 +206,7 @@ All pages include `<link rel="manifest" href="/manifest.json">` in `<head>`.
 | Giant logo parallax | CSS transform on scroll via `window.addEventListener('scroll')` |
 | Mouse parallax orbs | Two fixed `.parallax-orb` divs offset via `mousemove` |
 | Nav active state | Section `offsetTop` tracking on scroll |
+| Section nav (vertical dots) | Fixed right-side pill nav; active dot tracks whichever section centre is closest to viewport centre via `scroll` + `requestAnimationFrame`; hover expands pill with label; click flashes label for 600ms then collapses |
 | Fan animation (RackController card) | `requestAnimationFrame` loop; speed increases on hover |
 | Eye tracking (EdgeCV4Safety card) | SVG loaded via `fetch`; `#pupil-focus-group` translated on `mousemove` |
 | Cookie crumbs (HashCrackerz card) | `setInterval` spawns absolutely-positioned `div.crumb` elements with CSS animation on hover |
@@ -225,6 +227,35 @@ All pages include `<link rel="manifest" href="/manifest.json">` in `<head>`.
 | vCard download | Programmatically creates a `.vcf` blob and triggers a download via a temporary `<a>` element |
 | WhatsApp pre-fill | Message text is sourced from `window.t('contacts.wa_msg')` so it switches language with the toggle |
 
+
+---
+
+## Shared Components (`components.js`)
+
+`components.js` lives at the site root and must be loaded **before** `i18n.js` on every page. It registers a `DOMContentLoaded` handler that injects the shared nav and footer into placeholder elements.
+
+### How it works
+1. Reads `document.currentScript.src` to compute `rootUrl` — the absolute path to the site root. This makes all asset paths work under `file://`, Live Server, and production without any hardcoded paths.
+2. Builds the nav from a `NAV_LINKS` array and injects it into `<nav id="site-nav" data-active="...">`.
+3. Builds a unified full footer (logo, name, copyright copy, GitHub/email/LinkedIn links) and injects it into `<footer id="site-footer" data-copy-key="...">`.
+4. Because it runs before `i18n.js`'s handler, `.nav-links` already exists when `i18n.js` appends the language toggle.
+
+### Page markup
+Each page needs two placeholder elements:
+```html
+<nav id="site-nav" class="site-nav" data-active="bento"></nav>
+...
+<footer id="site-footer" class="site-footer" data-copy-key="bento.footer_copy"></footer>
+```
+
+`data-active` controls which nav link gets the `.active` class. Valid values: `home`, `bento`, `cv`, `contacts`, `""` (404).
+
+### Adding a new nav link
+Edit the `NAV_LINKS` array at the top of `components.js` — no HTML changes required across pages.
+
+### Email addresses in the footer
+The footer email is a plain `mailto:` string inside `components.js` (not in static HTML). Cloudflare's email obfuscation only rewrites static HTML, so the address is never mangled during deployment.
+
 ---
 
 ## Security
@@ -233,7 +264,7 @@ All pages include `<link rel="manifest" href="/manifest.json">` in `<head>`.
 All links with `target="_blank"` include `rel="noopener noreferrer"` — both in static HTML and in dynamically generated elements in `script.js` (`card.rel = "noopener noreferrer"`). This prevents third-party pages from accessing or hijacking the opener tab via `window.opener`.
 
 ### Email obfuscation
-Cloudflare's **Scrape Shield / Email Obfuscation** feature is enabled on the domain. Cloudflare automatically rewrites `mailto:` links and email addresses in the HTML, injecting `/cdn-cgi/scripts/email-decode.min.js` to decode them client-side. Spam bots scraping the raw HTML will not see the real addresses. This only works when traffic is proxied through Cloudflare (🟠 orange cloud DNS).
+Cloudflare's **Scrape Shield / Email Obfuscation** feature is enabled on the domain and rewrites `mailto:` links found in static HTML. To prevent mangling, the contact email in the footer is injected by `components.js` at runtime (not present in the raw HTML), so Cloudflare never sees it. If you add any `mailto:` links directly to HTML files, be aware they will be rewritten by Cloudflare on every deploy — either move them into JS or disable the feature for that page.
 
 ---
 
@@ -277,11 +308,13 @@ The site is hosted on **GitHub Pages** with **Cloudflare** as DNS provider, CDN,
 1. Create a new folder (e.g. `mypage/`) with an `index.html`.
 2. Link `../shared.css` and `../i18n.js` in `<head>`.
 3. Add `<link rel="manifest" href="/manifest.json">` and `<meta name="theme-color" content="#00bbc9">` in `<head>`.
-4. Copy the `.site-nav` block from an existing page; add a nav link to it across all pages.
-5. Add any page-specific translation keys to `i18n.js` under a new prefix.
-6. Add a `<style>` block for page-specific CSS (or a separate `style.css` in the folder).
-7. Add the new URL to `sitemap.xml` in the root (unless the page should not be indexed).
-8. Add `rel="noopener noreferrer"` to any `target="_blank"` links.
+4. Add `<nav id="site-nav" class="site-nav" data-active="mypage"></nav>` where the navbar should appear.
+5. Add `<footer id="site-footer" class="site-footer" data-copy-key="home.footer_copy"></footer>` where the footer should appear.
+6. Add the new page key to `NAV_LINKS` in `components.js` if it should appear in the navbar.
+7. Add any page-specific translation keys to `i18n.js` under a new prefix.
+8. Add a `<style>` block for page-specific CSS (or a separate `style.css` in the folder).
+9. Add the new URL to `sitemap.xml` in the root (unless the page should not be indexed).
+10. Add `rel="noopener noreferrer"` to any `target="_blank"` links.
 
 ## Adding a New Bento Card
 

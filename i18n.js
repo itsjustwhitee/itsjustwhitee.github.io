@@ -31,7 +31,7 @@
             // ── Home: hero ───────────────────────────────────────────────────
             'hero.eyebrow':      '// hello world · itsjustwhitee',
             'hero.role_tag':     'MSc Computer Engineering · Università di Bologna',
-            'hero.desc':         "I build things at the intersection of silicon and code, from Edge AI systems to IoT controllers to parallel GPU algorithms. I'm a firm believer that you don't truly 'own' a system until you've porked around under the hood too see how it actually works.",
+            'hero.desc':         "I build things at the intersection of silicon and code, from Edge AI systems to IoT controllers to parallel GPU algorithms. I'm a firm believer that you don't truly 'own' a system until you've poked around under the hood too see how it actually works.",
             'hero.btn_projects': 'View Projects',
             'hero.btn_cv':       'Curriculum',
             'hero.scroll':       'scroll',
@@ -47,7 +47,7 @@
 
             // ── Home: projects ───────────────────────────────────────────────
             'projects.label':         '// 02 — projects',
-            'projects.title':         'Things I\'ve <span class="accent">.</span>',
+            'projects.title':         'My <span class="accent">projects</span>',
             'projects.sub':           'Selected work from university courses, internships, and personal curiosity.',
             'projects.contrib_label': 'with',
 
@@ -114,7 +114,7 @@
             // ── Bento ────────────────────────────────────────────────────────
             'bento.header_label': "// justwhitee's bento",
             'bento.bio':          'Tech enthusiast 👾 | Computer Engineering (M.Sc. WIP) 🧑‍💻 | Foodie 🍣 | Caricature &amp; Graphic Design for hobby 🖱️',
-            'bento.cta':          'So, how can I help you? 😁 Feel free to ask! 💡',
+            'bento.cta':          'Let\'s work together, or just chat about tech.💡 Reach out! Feel free to ask! ',
             'bento.footer_copy':  '&copy; YEAR Matteo Fontolan<br>Creative work (caricatures, illustrations, graphic design) is protected by copyright. Do not reproduce without explicit permission.<br>Code, repositories and other works/assets are released under <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank">copyleft</a> &mdash; because knowledge is worthless if it\'s not shared.',
 
             'card.telegram.title':   'Contact Me ✍️',
@@ -185,8 +185,8 @@
 
             // ── Home: projects ───────────────────────────────────────────────
             'projects.label':         '// 02 — progetti',
-            'projects.title':         'Soluzioni che ho <span class="accent">progettato</span>',
-            'projects.sub':           'Lavori selezionati da corsi universitari, tirocini e curiosità personale.',
+            'projects.title':         'I miei <span class="accent">progetti</span>',
+            'projects.sub':           'Progetti selezionati da corsi universitari, tirocini e curiosità personale.',
             'projects.contrib_label': 'con',
 
             'proj.edgecv.badge':      'Tirocinio · Tesi',
@@ -252,7 +252,7 @@
             // ── Bento ────────────────────────────────────────────────────────
             'bento.header_label': '// justwhitee\'s bento',
             'bento.bio':          'Appassionato di tech 👾 | Ingegneria Informatica (Magistrale WIP) 🧑‍💻 | Foodie 🍣 | Caricature &amp; Graphic Design per hobby 🖱️',
-            'bento.cta':          'Come posso esserti utile? 😁 Chiedi pure! 💡',
+            'bento.cta':          'Collaboriamo o parliamo di tech. Contattami!💡',
             'bento.footer_copy':  '&copy; YEAR Matteo Fontolan<br>Le opere creative (caricature, illustrazioni, graphic design) sono protette da copyright. Non riprodurre senza permesso esplicito.<br>Codice, repository e altri lavori/asset sono rilasciati sotto <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank">copyleft</a> &mdash; perché la conoscenza non vale nulla se non viene condivisa.',
 
             'card.telegram.title':   'Contattami ✍️',
