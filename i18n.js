@@ -267,7 +267,7 @@
 
             // ── 404 ──────────────────────────────────────────────────────────
             'notfound.label': '// 404 — pagina non trovata',
-            'notfound.title': 'Questa pagina non esiste o é stata spostata.',
+            'notfound.title': 'Questa pagina non esiste.',
             'notfound.desc':  'Il link che hai seguito è corrotto, scaduto o non è mai esistito.<br>Forse stavi cercando qualcosa di diverso?',
             'notfound.btn':   'Torna alla home',
 
