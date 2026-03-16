@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CV | Matteo Fontolan — justwhitee</title>
+    <meta name="description" content="Curriculum Vitae of Matteo Fontolan (justwhitee) — Computer Engineering, AI, Robotics.">
+    <link rel="canonical" href="https://justwhitee.org/cv/">
+
+    <link rel="stylesheet" href="../shared.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+
+    <link rel="icon" type="image/svg+xml" href="../assets/logo.svg">
+    <link rel="icon" type="image/png" href="../assets/favicon.png">
+    <link rel="shortcut icon" href="../favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" sizes="180x180" href="../assets/favicon.png">
+
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#00bbc9">
+
+    <!-- i18n must load before DOMContentLoaded fires -->
+    <script src="../i18n.js"></script>
+
+    <style>
+        /* ── PDF CONTAINER ───────────────────────────────────────────── */
+        .pdf-container {
+            border-radius: var(--radius);
+            overflow: hidden;
+            border: 1px solid rgba(9,134,143,0.2);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+            background: #1a2a2a;
+            /* Aspect-ratio based height so it scales on mobile */
+            width: 100%;
+            position: relative;
+        }
+        .pdf-container iframe {
+            display: block;
+            width: 100%;
+            height: 80vh;
+            min-height: 500px;
+            border: none;
+        }
+
+        /* ── FALLBACK MESSAGE ────────────────────────────────────────── */
+        .pdf-fallback {
+            display: none; /* shown via <noscript> or browser fallback only */
+            padding: 48px 24px;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            line-height: 1.7;
+        }
+
+        /* ── ACTION ROW ──────────────────────────────────────────────── */
+        .cv-actions {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 28px;
+        }
+
+        /* ── PAGE HEADER ─────────────────────────────────────────────── */
+        .cv-header {
+            text-align: center;
+            margin-bottom: 36px;
+        }
+        .cv-header h1 {
+            font-family: 'Syne', sans-serif;
+            font-size: clamp(1.8rem, 5vw, 2.6rem);
+            font-weight: 800;
+            color: #fff;
+            line-height: 1.1;
+            margin-bottom: 10px;
+        }
+        .cv-header h1 span { color: var(--accent-bright); }
+        .cv-header p {
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        @media (max-width: 600px) {
+            .pdf-container iframe { height: 60vh; min-height: 380px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAV -->
+    <nav class="site-nav">
+        <a href="../" class="nav-logo">
+            <img src="../assets/logo.svg" alt="justwhitee">
+            justwhitee
+        </a>
+        <ul class="nav-links">
+            <li><a href="../">// home</a></li>
+            <li><a href="../bento/">// bento</a></li>
+            <li><a href="./" class="active">// cv</a></li>
+            <!-- language toggle injected here by i18n.js -->
+        </ul>
+    </nav>
+
+    <div class="container" style="padding-top: 100px;">
+
+        <!-- PAGE HEADER -->
+        <header class="cv-header">
+            <p class="header-label" data-i18n="cv.header_label">// curriculum vitae</p>
+            <h1 data-i18n-html="cv.title">Matteo <span>Fontolan</span></h1>
+            <p data-i18n="cv.subtitle">Computer Engineering · AI · Robotics</p>
+        </header>
+
+        <!-- PDF VIEWER -->
+        <div class="pdf-container">
+            <iframe
+                src="../assets/cvMatteoFontolan.pdf"
+                title="Curriculum Vitae — Matteo Fontolan"
+                loading="lazy">
+                <div class="pdf-fallback">
+                    <p data-i18n-html="cv.fallback">
+                        Your browser doesn't support inline PDFs.<br>
+                        <a href="../assets/cvMatteoFontolan.pdf" target="_blank" rel="noopener noreferrer">Open the PDF directly</a>.
+                    </p>
+                </div>
+            </iframe>
+        </div>
+
+        <!-- ACTIONS -->
+        <div class="cv-actions">
+            <a href="../assets/cvMatteoFontolan.pdf" download class="btn-pill btn-primary">
+                <i class="fa-solid fa-download"></i>
+                <span data-i18n="cv.btn_download">Download CV</span>
+            </a>
+            <a href="../assets/cvMatteoFontolan.pdf" target="_blank" rel="noopener noreferrer" class="btn-pill btn-ghost">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                <span data-i18n="cv.btn_open">Open in new tab</span>
+            </a>
+        </div>
+
+        <!-- FOOTER -->
+        <footer class="site-footer">
+            <div class="footer-inner">
+                <img src="../assets/logo.svg" alt="justwhitee logo" class="footer-logo">
+                <p class="footer-name">justwhitee &mdash; Matteo Fontolan</p>
+                <a href="../" class="footer-back">
+                    <i class="fa-solid fa-arrow-left"></i>
+                    <span data-i18n="cv.footer_back">back to home</span>
+                </a>
+            </div>
+        </footer>
+
+    </div>
+
+</body>
+</html>

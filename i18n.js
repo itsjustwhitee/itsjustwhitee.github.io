@@ -26,6 +26,7 @@
             'nav.projects': '// projects',
             'nav.skills':   '// skills',
             'nav.bento':    '// bento',
+            'nav.cv':       '// cv',
 
             // ── Home: hero ───────────────────────────────────────────────────
             'hero.eyebrow':      '// hello world · itsjustwhitee',
@@ -145,6 +146,15 @@
             'contacts.btn.save':     'Save Contact',
             'contacts.footer_back':  '← back to bento',
             'contacts.wa_msg':       'Hi Matteo, I found something of yours! 👋',
+
+            // ── CV ────────────────────────────────────────────────────────────
+            'cv.header_label': '// curriculum vitae',
+            'cv.title':        'Matteo <span>Fontolan</span>',
+            'cv.subtitle':     'Computer Engineering',
+            'cv.fallback':     "Your browser doesn't support inline PDFs.<br><a href=\"../assets/cvMatteoFontolan.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">Open the PDF directly</a>.",
+            'cv.btn_download': 'Download CV',
+            'cv.btn_open':     'Open in new tab',
+            'cv.footer_back':  'back to home',
         },
         it: {
             // ── Home: nav ────────────────────────────────────────────────────
@@ -152,6 +162,7 @@
             'nav.projects': '// projects',
             'nav.skills':   '// skills',
             'nav.bento':    '// bento',
+            'nav.cv':       '// cv',
 
             // ── Home: hero ───────────────────────────────────────────────────
             'hero.eyebrow':      '// hello world · itsjustwhitee',
@@ -271,6 +282,15 @@
             'contacts.btn.save':     'Salva Contatto',
             'contacts.footer_back':  '← torna al bento',
             'contacts.wa_msg':       'Ciao Matteo, ho trovato il tuo oggetto! 👋',
+
+            // ── CV ────────────────────────────────────────────────────────────
+            'cv.header_label': '// curriculum vitae',
+            'cv.title':        'Matteo <span>Fontolan</span>',
+            'cv.subtitle':     'Ingegneria Informatica',
+            'cv.fallback':     "Il tuo browser non supporta i PDF incorporati.<br><a href=\"../assets/cvMatteoFontolan.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">Apri il PDF direttamente</a>.",
+            'cv.btn_download': 'Scarica il CV',
+            'cv.btn_open':     'Apri in una nuova scheda',
+            'cv.footer_back':  'torna alla home',
         }
     };
 

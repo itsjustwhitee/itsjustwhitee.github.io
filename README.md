@@ -24,6 +24,9 @@ A static personal website hosted on **GitHub Pages** with Cloudflare as CDN and 
 │   ├── style.css           # Bento-specific styles
 │   └── assets/             # Brand SVGs and .webp images for bento cards
 │
+├── cv/
+│   └── index.html          # CV page — embedded PDF viewer with download
+│
 ├── contacts/
 │   └── index.html          # Contacts page (noindex — QR/NFC only)
 │
@@ -36,7 +39,7 @@ A static personal website hosted on **GitHub Pages** with Cloudflare as CDN and 
     └── ...
 ```
 
-> **Note:** There is no `bento/sitemap.xml`. A single `sitemap.xml` at the root covers all pages including `/bento/`. Do not add a secondary sitemap in subfolders.
+> **Note:** There is no `bento/sitemap.xml`. A single `sitemap.xml` at the root covers all indexed pages: `/`, `/bento/`, and `/cv/`. Do not add secondary sitemaps in subfolders.
 
 ---
 
@@ -57,6 +60,15 @@ Grid of link cards. The HTML is markup-only; all logic lives in the external `be
 - `github-custom` — fetches live user data from the GitHub REST API (cached 1h in `localStorage`) and renders GitHub Streak Stats as an image
 - `solid` — branded gradient card with SVG icon; supports `i18n_key` for translated title/desc
 - `instagram-manual` — 2×2 photo grid with overlay; images in `.webp` format
+
+
+### `cv/index.html` — CV
+Dedicated page for the Curriculum Vitae.
+- Embeds `assets/cvMatteoFontolan.pdf` in a full-width `<iframe>` (80vh, responsive).
+- Two action buttons: **Download CV** (forces download via `download` attribute) and **Open in new tab** (standard link).
+- Falls back gracefully if the browser does not support inline PDFs: a translated link is shown inside `<iframe>`.
+- Fully i18n'd via `cv.*` keys; the page title, subtitle, button labels, and footer link all switch language.
+- Linked from the home page hero button and the nav on all pages.
 
 ### `contacts/index.html` — Contacts
 Minimal contact page designed for NFC/QR use cases (e.g. lost item tags).
@@ -138,6 +150,7 @@ Keys follow a `section.element` pattern:
 | `bento.*` | Bento page header and footer |
 | `card.*` | Bento card titles and descriptions |
 | `contacts.*` | Contacts page |
+| `cv.*` | CV page |
 | `notfound.*` | 404 page |
 
 ### What is NOT in `i18n.js`
@@ -159,7 +172,7 @@ Every public page (`index.html`, `bento/index.html`) includes:
 - `<link rel="canonical">` — prevents duplicate content issues
 - **JSON-LD structured data** (`@type: Person`) on the home page — helps Google associate social profiles with the site
 
-The `contacts/` page and `404.html` are intentionally excluded from indexing via `<meta name="robots" content="noindex, nofollow">`.
+The `contacts/` page and `404.html` are intentionally excluded from indexing via `<meta name="robots" content="noindex, nofollow">`. The `cv/` page is indexed and included in `sitemap.xml`.
 
 ### Image format policy
 | Asset | Format | Reason |

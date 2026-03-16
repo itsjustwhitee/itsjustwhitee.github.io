@@ -477,6 +477,7 @@
             <li><a href="#projects" data-i18n="nav.projects">// projects</a></li>
             <li><a href="#skills" data-i18n="nav.skills">// skills</a></li>
             <li><a href="bento/" data-i18n="nav.bento">// bento</a></li>
+            <li><a href="cv/" data-i18n="nav.cv">// cv</a></li>
             <!-- language toggle injected here by i18n.js -->
         </ul>
     </nav>
@@ -499,7 +500,7 @@
             <a href="#projects" class="btn-pill btn-primary">
                 <i class="fa-solid fa-folder-open"></i> <span data-i18n="hero.btn_projects">View Projects</span>
             </a>
-            <a href="assets/cvMatteoFontolan.pdf" target="_blank" rel="noopener noreferrer" class="btn-pill btn-cv">
+            <a href="cv/" class="btn-pill btn-cv">
                 <i class="fa-solid fa-file-lines"></i> <span data-i18n="hero.btn_cv">Curriculum</span>
             </a>
             <a href="bento/" class="btn-pill btn-bento">
@@ -535,7 +536,7 @@
                 <div class="about-links">
                     <a href="http://www.linkedin.com/in/justwhitee" target="_blank"  rel="noopener noreferrer" class="btn-pill btn-ghost"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
                     <a href="https://github.com/itsjustwhitee" target="_blank" rel="noopener noreferrer" class="btn-pill btn-ghost"><i class="fa-brands fa-github"></i> GitHub</a>
-                    <a href="mailto:matteo.fontolan@justwhitee.org" target="_blank" rel="noopener noreferrer" class="btn-pill btn-ghost"><i class="fa-solid fa-envelope"></i> Email</a>
+                    <a href="/cdn-cgi/l/email-protection#325f534646575d1c545d5c465d5e535c7258474146455a5b4657571c5d4055" target="_blank" rel="noopener noreferrer" class="btn-pill btn-ghost"><i class="fa-solid fa-envelope"></i> Email</a>
                 </div>
             </div>
         </div>
@@ -797,7 +798,7 @@
             <h2 data-i18n-html="cta.title">Want to <span class="accent">work together?</span></h2>
             <p data-i18n="cta.desc">I'm open to internships, collaborations, and interesting projects. If you have an idea or just want to chat tech, I'm always up for it.</p>
             <div class="cta-links">
-                <a href="mailto:matteo.fontolan@justwhitee.org" class="btn-pill btn-primary">
+                <a href="/cdn-cgi/l/email-protection#7b161a0f0f1e14551d14150f14171a153b110e080f0c13120f1e1e5514091c" class="btn-pill btn-primary">
                     <i class="fa-solid fa-envelope"></i> Email
                 </a>
                 <a href="https://t.me/justwhitee" target="_blank" rel="noopener noreferrer" class="btn-pill btn-ghost">
@@ -826,14 +827,14 @@
             <div class="footer-links">
                 <a href="https://github.com/itsjustwhitee" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-github"></i> itsjustwhitee</a>
                 <span class="footer-sep">//</span>
-                <a href="mailto:matteo.fontolan@justwhitee.org" target="_blank" rel="noopener noreferrer"><i class="fa-solid fa-envelope"></i><span class="email-obf" data-u="matteo.fontolan" data-d="justwhitee.org"></span></a>
+                <a href="/cdn-cgi/l/email-protection#701d110404151f5e161f1e041f1c111e301a0503040718190415155e1f0217" target="_blank" rel="noopener noreferrer"><i class="fa-solid fa-envelope"></i><span class="email-obf" data-u="matteo.fontolan" data-d="justwhitee.org"></span></a>
                 <span class="footer-sep">//</span>
                 <a href="http://www.linkedin.com/in/justwhitee" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-linkedin"></i> @justwhitee</a>
             </div>
         </div>
     </footer>
 
-    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
     document.getElementById('footer-year').textContent = new Date().getFullYear();
 
     // Scroll reveal — bidirectional (in on scroll down, out on scroll up)
@@ -1029,14 +1030,4 @@
                 clearInterval(intervalId);
                 intervalId = null;
             }
-        });
-    }
-
-    document.querySelectorAll('.email-obf').forEach(el => {
-        const addr = el.dataset.u + '@' + el.dataset.d;
-        el.textContent = addr;
-        if (el.closest('a')) el.closest('a').href = 'mailto:' + addr;
-    });
-    </script>
-</body>
-</html>
+      
