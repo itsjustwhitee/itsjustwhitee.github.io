@@ -52,6 +52,7 @@
     </script>
 
     <!-- i18n must load before DOMContentLoaded fires -->
+    <script src="./components.js"></script>
     <script src="i18n.js"></script>
 
     <style>
@@ -459,28 +460,153 @@
         .hero-tag  { font-size: 0.65rem; padding: 6px 12px; }
         .section   { padding: 44px 14px; }
     }
+    
+    /* ── SECTION NAV (expanding pills) ─────────────────────────────────────── */
+    #section-nav {
+        position: fixed;
+        right: 18px;
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: 90;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 12px;
+        pointer-events: none;
+    }
+
+    .snav-dot {
+        pointer-events: all;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        height: 14px;
+        /* width: max-content lets the pill shrink to text + dot naturally */
+        width: max-content;
+        max-width: 14px;       /* collapsed — only the dot visible */
+        overflow: hidden;
+        border-radius: 999px;
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        text-decoration: none;
+        transition:
+            max-width    0.45s cubic-bezier(0.23, 1, 0.32, 1),
+            height       0.3s  cubic-bezier(0.23, 1, 0.32, 1),
+            background   0.3s  ease,
+            border-color 0.3s  ease,
+            border-width 0.3s  ease,
+            box-shadow   0.3s  ease;
+    }
+
+    /* Label — always in DOM, hidden until expanded */
+    .snav-dot::before {
+        content: attr(data-label);
+        flex-shrink: 0;
+        padding: 0 7px 0 11px;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.58rem;
+        letter-spacing: 0.08em;
+        color: var(--accent-bright);
+        white-space: nowrap;
+        opacity: 0;
+        transition: opacity 0.25s ease 0.1s;
+        pointer-events: none;
+    }
+
+    /* Dot circle — right side, always visible */
+    .snav-dot::after {
+        content: '';
+        flex-shrink: 0;
+        width: 5px;
+        height: 5px;
+        border-radius: 50%;
+        background: rgba(255,255,255,0.35);
+        margin-right: 4px;
+        transition: background 0.3s ease, width 0.3s ease, height 0.3s ease, box-shadow 0.3s ease, margin-right 0.3s ease;
+    }
+
+    /* ── ACTIVE — bigger teal dot, no label, subtle border on pill ── */
+    .snav-dot.active {
+        max-width: 20px;
+        background: rgba(0,187,201,0.08);
+        border: 1.5px solid rgba(0,187,201,0.45);
+        height: 20px;
+    }
+    .snav-dot.active::after {
+        width: 8px;
+        height: 8px;
+        background: var(--accent-bright);
+        box-shadow: 0 0 6px rgba(0,187,201,0.6);
+        margin-right: 5px;
+    }
+
+    /* ── HOVER (mouse only) — expand pill, show label ── */
+    .snav-dot:hover {
+        max-width: 140px;      /* large enough; actual width = content */
+        background: rgba(0,187,201,0.12);
+        border: 1.5px solid rgba(0,187,201,0.4);
+        height: 20px;
+    }
+    .snav-dot:hover::before { opacity: 1; }
+    .snav-dot:hover::after  {
+        width: 7px;
+        height: 7px;
+        background: var(--accent-bright);
+        margin-right: 5px;
+    }
+
+    /* ── FLASH (brief label on click, via JS) — same as hover ── */
+    .snav-dot.flash {
+        max-width: 140px;
+        background: rgba(0,187,201,0.12);
+        border: 1.5px solid rgba(0,187,201,0.4);
+        height: 20px;
+    }
+    .snav-dot.flash::before { opacity: 1; }
+    .snav-dot.flash::after  {
+        width: 7px;
+        height: 7px;
+        background: var(--accent-bright);
+        margin-right: 5px;
+    }
+
+    /* Tablet */
+    @media (max-width: 768px) {
+        #section-nav { right: 10px; gap: 10px; }
+        .snav-dot         { height: 12px; max-width: 12px; }
+        .snav-dot::after  { width: 4px; height: 4px; }
+        .snav-dot.active  { height: 17px; max-width: 17px; }
+        .snav-dot.active::after { width: 6px; height: 6px; }
+        .snav-dot:hover, .snav-dot.flash { max-width: 130px; height: 18px; }
+    }
+
+    /* Mobile — hide entirely */
+    @media (max-width: 480px) {
+        #section-nav { display: none; }
+    }
+
+
     </style>
 </head>
-<body>
+<body data-page="home">
 
     <div class="parallax-orb orb1" id="orb1"></div>
     <div class="parallax-orb orb2" id="orb2"></div>
 
     <!-- ── NAV ──────────────────────────────────────────────────────────── -->
-    <nav class="site-nav">
-        <a href="." class="nav-logo">
-            <img src="assets/logo.svg" alt="justwhitee logo">
-            justwhitee
-        </a>
-        <ul class="nav-links">
-            <li><a href="#about" data-i18n="nav.about">// about</a></li>
-            <li><a href="#projects" data-i18n="nav.projects">// projects</a></li>
-            <li><a href="#skills" data-i18n="nav.skills">// skills</a></li>
-            <li><a href="bento/" data-i18n="nav.bento">// bento</a></li>
-            <li><a href="cv/" data-i18n="nav.cv">// cv</a></li>
-            <!-- language toggle injected here by i18n.js -->
-        </ul>
+    
+    <!-- SECTION NAV (vertical dots) — home only -->
+    <nav id="section-nav" aria-label="Page sections">
+        <a href="#hero"       class="snav-dot" data-label="// hello"    aria-label="Hero"></a>
+        <a href="#about"      class="snav-dot" data-label="// about"    aria-label="About"></a>
+        <a href="#projects"   class="snav-dot" data-label="// projects" aria-label="Projects"></a>
+        <a href="#skills"     class="snav-dot" data-label="// skills"   aria-label="Skills"></a>
+        <a href="#experience" class="snav-dot" data-label="// exp"      aria-label="Experience"></a>
+        <a href="#cta"        class="snav-dot" data-label="// contact"  aria-label="Contact"></a>
     </nav>
+
+    <nav id="site-nav" class="site-nav" data-active="home"></nav>
 
     <!-- ── HERO ─────────────────────────────────────────────────────────── -->
     <section id="hero">
@@ -536,7 +662,7 @@
                 <div class="about-links">
                     <a href="http://www.linkedin.com/in/justwhitee" target="_blank"  rel="noopener noreferrer" class="btn-pill btn-ghost"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
                     <a href="https://github.com/itsjustwhitee" target="_blank" rel="noopener noreferrer" class="btn-pill btn-ghost"><i class="fa-brands fa-github"></i> GitHub</a>
-                    <a href="mailto:matteo.fontolan@justwhitee.org" target="_blank" rel="noopener noreferrer" class="btn-pill btn-ghost"><i class="fa-solid fa-envelope"></i> Email</a>
+                    <a href="/cdn-cgi/l/email-protection#ec818d98988983c28a83829883808d82ac86999f989b8485988989c2839e8b" target="_blank" rel="noopener noreferrer" class="btn-pill btn-ghost"><i class="fa-solid fa-envelope"></i> Email</a>
                 </div>
             </div>
         </div>
@@ -798,7 +924,7 @@
             <h2 data-i18n-html="cta.title">Want to <span class="accent">work together?</span></h2>
             <p data-i18n="cta.desc">I'm open to internships, collaborations, and interesting projects. If you have an idea or just want to chat tech, I'm always up for it.</p>
             <div class="cta-links">
-                <a href="mailto:matteo.fontolan@justwhitee.org" class="btn-pill btn-primary">
+                <a href="/cdn-cgi/l/email-protection#107d716464757f3e767f7e647f7c717e507a6563646778796475753e7f6277" class="btn-pill btn-primary">
                     <i class="fa-solid fa-envelope"></i> Email
                 </a>
                 <a href="https://t.me/justwhitee" target="_blank" rel="noopener noreferrer" class="btn-pill btn-ghost">
@@ -815,28 +941,7 @@
     </section>
 
     <!-- ── FOOTER ─────────────────────────────────────────────────────────── -->
-    <footer class="site-footer">
-        <div class="footer-inner">
-            <img src="assets/logo.svg" alt="justwhitee logo" class="footer-logo">
-            <p class="footer-name">justwhitee &mdash; Matteo Fontolan</p>
-            <p class="footer-copy" data-i18n-html="home.footer_copy">
-                &copy; <span id="footer-year"></span> Matteo Fontolan<br>
-                Creative work (caricatures, illustrations, graphic design) is protected by copyright. Do not reproduce without explicit permission.<br>
-                Code and repositories are released under <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank" rel="noopener noreferrer">copyleft</a> — because knowledge is worthless if it's not shared.
-            </p>
-            <div class="footer-links">
-                <a href="https://github.com/itsjustwhitee" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-github"></i> itsjustwhitee</a>
-                <span class="footer-sep">//</span>
-                <a href="mailto:matteo.fontolan@justwhitee.org" target="_blank" rel="noopener noreferrer"><i class="fa-solid fa-envelope"></i>matteo.fontolan[at]justwhitee.org</a>
-                <span class="footer-sep">//</span>
-                <a href="http://www.linkedin.com/in/justwhitee" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-linkedin"></i> @justwhitee</a>
-            </div>
-        </div>
-    </footer>
-
-    <script>
-    document.getElementById('footer-year').textContent = new Date().getFullYear();
-
+    <footer id="site-footer" class="site-footer" data-footer="full" data-copy-key="home.footer_copy"></footer><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
     // Scroll reveal — bidirectional (in on scroll down, out on scroll up)
     // Guard: ignore "exit" callbacks for the first 800ms (initial load quirk on file://)
     const revealStart = Date.now();
@@ -1023,7 +1128,7 @@
             setTimeout(() => { crumb.remove(); }, duration * 1000);
         }
         crackerCard.addEventListener('mouseenter', () => {
-            if (!intervalId) intervalId = setInterval(createCrumb, 60); 
+            if (!intervalId) intervalId = setInterval(createCrumb, 60);
         });
         crackerCard.addEventListener('mouseleave', () => {
             if (intervalId) {
@@ -1032,6 +1137,63 @@
             }
         });
     }
+
+    // ── SECTION NAV ──────────────────────────────────────────────────────────
+    (function () {
+        var dots = Array.from(document.querySelectorAll('.snav-dot'));
+        if (!dots.length) return;
+
+        // Click: scroll + brief flash (label visible for 600ms, then hides)
+        dots.forEach(function (dot) {
+            dot.addEventListener('click', function (e) {
+                e.preventDefault();
+                var target = document.querySelector(dot.getAttribute('href'));
+                if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                dot.classList.add('flash');
+                setTimeout(function () { dot.classList.remove('flash'); }, 600);
+            });
+        });
+
+        // Active tracking — section whose center is closest to viewport center
+        var sections = dots.map(function (dot) {
+            return document.querySelector(dot.getAttribute('href'));
+        });
+
+        var current = 0;
+        function setActive(idx) {
+            if (idx === current) return;
+            dots[current] && dots[current].classList.remove('active');
+            dots[idx]     && dots[idx].classList.add('active');
+            current = idx;
+        }
+        dots[0] && dots[0].classList.add('active');
+
+        function updateActive() {
+            var mid    = window.innerHeight / 2;
+            var best   = -1;
+            var bestDist = Infinity;
+            sections.forEach(function (sec, i) {
+                if (!sec) return;
+                var rect = sec.getBoundingClientRect();
+                var secMid = rect.top + rect.height / 2;
+                var dist = Math.abs(secMid - mid);
+                if (dist < bestDist) { bestDist = dist; best = i; }
+            });
+            if (best !== -1) setActive(best);
+        }
+
+        // Throttle scroll events (~60fps)
+        var ticking = false;
+        window.addEventListener('scroll', function () {
+            if (!ticking) {
+                requestAnimationFrame(function () { updateActive(); ticking = false; });
+                ticking = true;
+            }
+        }, { passive: true });
+
+        updateActive(); // set on load
+    })();
+
     </script>
 </body>
 </html>

@@ -21,6 +21,7 @@
     <meta name="theme-color" content="#00bbc9">
 
     <!-- i18n must load before DOMContentLoaded fires -->
+    <script src="../components.js"></script>
     <script src="../i18n.js"></script>
 
     <style>
@@ -87,21 +88,10 @@
         }
     </style>
 </head>
-<body>
+<body data-page="cv">
 
     <!-- NAV -->
-    <nav class="site-nav">
-        <a href="../" class="nav-logo">
-            <img src="../assets/logo.svg" alt="justwhitee">
-            justwhitee
-        </a>
-        <ul class="nav-links">
-            <li><a href="../">// home</a></li>
-            <li><a href="../bento/">// bento</a></li>
-            <li><a href="./" class="active">// cv</a></li>
-            <!-- language toggle injected here by i18n.js -->
-        </ul>
-    </nav>
+    <nav id="site-nav" class="site-nav" data-active="cv"></nav>
 
     <div class="container" style="padding-top: 100px;">
 
@@ -140,16 +130,7 @@
         </div>
 
         <!-- FOOTER -->
-        <footer class="site-footer">
-            <div class="footer-inner">
-                <img src="../assets/logo.svg" alt="justwhitee logo" class="footer-logo">
-                <p class="footer-name">justwhitee &mdash; Matteo Fontolan</p>
-                <a href="../" class="footer-back">
-                    <i class="fa-solid fa-arrow-left"></i>
-                    <span data-i18n="cv.footer_back">back to home</span>
-                </a>
-            </div>
-        </footer>
+        <footer id="site-footer" class="site-footer" data-footer="full" data-copy-key="cv.footer_copy"></footer>
 
     </div>
 

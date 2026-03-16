@@ -12,6 +12,7 @@
     <link rel="icon" type="image/png" href="../assets/favicon.png">
     <link rel="apple-touch-icon" sizes="180x180" href="../assets/favicon.png">
     <!-- i18n must load before DOMContentLoaded fires -->
+    <script src="../components.js"></script>
     <script src="../i18n.js"></script>
 
     <style>
@@ -124,21 +125,10 @@
     .hidden-info { display: none; }
     </style>
 </head>
-<body>
+<body data-page="contacts">
 
     <!-- NAV -->
-    <nav class="site-nav">
-        <a href="../" class="nav-logo">
-            <img src="../assets/logo.svg" alt="justwhitee">
-            justwhitee
-        </a>
-        <ul class="nav-links">
-            <li><a href="../">// home</a></li>
-            <li><a href="../bento/">// bento</a></li>
-            <li><a href="../cv/">// cv</a></li>
-            <!-- language toggle injected here by i18n.js -->
-        </ul>
-    </nav>
+    <nav id="site-nav" class="site-nav" data-active="contacts"></nav>
 
     <div class="container" style="padding-top: 100px;">
 
@@ -228,15 +218,7 @@
         </main>
 
         <!-- FOOTER -->
-        <footer class="site-footer">
-            <div class="footer-inner">
-                <img src="../assets/logo.svg" alt="justwhitee logo" class="footer-logo">
-                <p class="footer-name">justwhitee &mdash; Matteo Fontolan</p>
-                <a href="../bento/" class="footer-back" data-i18n="contacts.footer_back">
-                    <i class="fa-solid fa-arrow-left"></i> torna al bento
-                </a>
-            </div>
-        </footer>
+        <footer id="site-footer" class="site-footer" data-footer="full" data-copy-key="contacts.footer_copy"></footer>
 
     </div>
 

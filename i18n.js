@@ -145,16 +145,18 @@
             'contacts.btn.call':     'Call',
             'contacts.btn.save':     'Save Contact',
             'contacts.footer_back':  '← back to bento',
+            'contacts.footer_copy': '&copy; YEAR Matteo Fontolan<br>Creative work (caricatures, illustrations, graphic design) is protected by copyright. Do not reproduce without explicit permission.<br>Code and repositories are released under <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank">copyleft</a> &mdash; because knowledge is worthless if it\'s not shared.',
             'contacts.wa_msg':       'Hi Matteo, I found something of yours! 👋',
 
             // ── CV ────────────────────────────────────────────────────────────
             'cv.header_label': '// curriculum vitae',
             'cv.title':        'Matteo <span>Fontolan</span>',
-            'cv.subtitle':     'Computer Engineering',
+            'cv.subtitle':     'Computer Engineering · AI · Robotics',
             'cv.fallback':     "Your browser doesn't support inline PDFs.<br><a href=\"../assets/cvMatteoFontolan.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">Open the PDF directly</a>.",
             'cv.btn_download': 'Download CV',
             'cv.btn_open':     'Open in new tab',
             'cv.footer_back':  'back to home',
+            'cv.footer_copy': '&copy; YEAR Matteo Fontolan<br>Creative work (caricatures, illustrations, graphic design) is protected by copyright. Do not reproduce without explicit permission.<br>Code and repositories are released under <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank">copyleft</a> &mdash; because knowledge is worthless if it\'s not shared.',
         },
         it: {
             // ── Home: nav ────────────────────────────────────────────────────
@@ -248,7 +250,7 @@
             'home.footer_copy': '&copy; YEAR Matteo Fontolan<br>Le opere creative (caricature, illustrazioni, graphic design) sono protette da copyright. Non riprodurre senza permesso esplicito.<br>Codice e repository sono rilasciati sotto <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank">copyleft</a> — perché la conoscenza non vale nulla se non viene condivisa.',
 
             // ── Bento ────────────────────────────────────────────────────────
-            'bento.header_label': '// bento di justwhitee',
+            'bento.header_label': '// justwhitee\'s bento',
             'bento.bio':          'Appassionato di tech 👾 | Ingegneria Informatica (Magistrale WIP) 🧑‍💻 | Foodie 🍣 | Caricature &amp; Graphic Design per hobby 🖱️',
             'bento.cta':          'Come posso esserti utile? 😁 Chiedi pure! 💡',
             'bento.footer_copy':  '&copy; YEAR Matteo Fontolan<br>Le opere creative (caricature, illustrazioni, graphic design) sono protette da copyright. Non riprodurre senza permesso esplicito.<br>Codice, repository e altri lavori/asset sono rilasciati sotto <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank">copyleft</a> &mdash; perché la conoscenza non vale nulla se non viene condivisa.',
@@ -281,16 +283,18 @@
             'contacts.btn.call':     'Chiama',
             'contacts.btn.save':     'Salva Contatto',
             'contacts.footer_back':  '← torna al bento',
+            'contacts.footer_copy': '&copy; YEAR Matteo Fontolan<br>Le opere creative (caricature, illustrazioni, graphic design) sono protette da copyright. Non riprodurre senza permesso esplicito.<br>Codice e repository sono rilasciati sotto <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank">copyleft</a> &mdash; perché la conoscenza non vale nulla se non viene condivisa.',
             'contacts.wa_msg':       'Ciao Matteo, ho trovato il tuo oggetto! 👋',
 
             // ── CV ────────────────────────────────────────────────────────────
             'cv.header_label': '// curriculum vitae',
             'cv.title':        'Matteo <span>Fontolan</span>',
-            'cv.subtitle':     'Ingegneria Informatica',
+            'cv.subtitle':     'Ingegneria Informatica · AI · Robotica',
             'cv.fallback':     "Il tuo browser non supporta i PDF incorporati.<br><a href=\"../assets/cvMatteoFontolan.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">Apri il PDF direttamente</a>.",
             'cv.btn_download': 'Scarica il CV',
             'cv.btn_open':     'Apri in una nuova scheda',
             'cv.footer_back':  'torna alla home',
+            'cv.footer_copy': '&copy; YEAR Matteo Fontolan<br>Le opere creative (caricature, illustrazioni, graphic design) sono protette da copyright. Non riprodurre senza permesso esplicito.<br>Codice e repository sono rilasciati sotto <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank">copyleft</a> &mdash; perché la conoscenza non vale nulla se non viene condivisa.',
         }
     };
 

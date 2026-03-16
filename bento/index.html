@@ -33,23 +33,13 @@
     <meta name="theme-color" content="#00bbc9">
 
     <!-- i18n must load before DOMContentLoaded fires -->
+    <script src="../components.js"></script>
     <script src="../i18n.js"></script>
 </head>
-<body>
+<body data-page="bento">
 
     <!-- NAV -->
-    <nav class="site-nav">
-        <a href="../" class="nav-logo">
-            <img src="../assets/logo.svg" alt="justwhitee">
-            justwhitee
-        </a>
-        <ul class="nav-links">
-            <li><a href="../">// home</a></li>
-            <li><a href="./" class="active">// bento</a></li>
-            <li><a href="../cv/">// cv</a></li>
-            <!-- language toggle injected here by i18n.js -->
-        </ul>
-    </nav>
+    <nav id="site-nav" class="site-nav" data-active="bento"></nav>
 
     <div class="container" style="padding-top: 100px;">
 
@@ -63,32 +53,9 @@
 
         <main class="bento-grid" id="bento-grid"></main>
 
-        <footer class="site-footer">
-            <div class="footer-inner">
-                <img src="../assets/logo.svg" alt="justwhitee logo" class="footer-logo">
-                <p class="footer-name">justwhitee &mdash; Matteo Fontolan</p>
-                <p class="footer-copy" data-i18n-html="bento.footer_copy">
-                    &copy; <span id="footer-year"></span> Matteo Fontolan
-                    <br/>
-                    Creative work (caricatures, illustrations, graphic design) is protected by copyright.
-                    Do not reproduce without explicit permission.<br>
-                    Code, repositories and other works/assets are released under <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank" rel="noopener noreferrer">copyleft</a> &mdash;
-                    because knowledge is worthless if it's not shared.
-                </p>
-                <div class="footer-links">
-                    <a href="https://github.com/itsjustwhitee" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-github"></i> itsjustwhitee</a>
-                    <span class="footer-sep">//</span>
-                    <a href="mailto:matteo.fontolan@justwhitee.org" target="_blank" rel="noopener noreferrer"><i class="fa-solid fa-envelope"></i> matteo.fontolan [at] justwhitee.org</a>
-                    <span class="footer-sep">//</span>
-                    <a href="http://www.linkedin.com/in/justwhitee" target="_blank"><i class="fa-brands fa-linkedin"></i> @justwhitee</a>
-                </div>
-            </div>
-        </footer>
+        <footer id="site-footer" class="site-footer" data-footer="full" data-copy-key="bento.footer_copy"></footer>
 
     </div>
     <script src="script.js"></script>
-    <script>
-    document.getElementById('footer-year').textContent = new Date().getFullYear();
-    </script>
 </body>
 </html>

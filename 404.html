@@ -15,6 +15,7 @@
     <link rel="manifest" href="/manifest.json">
     <meta name="theme-color" content="#00bbc9">
     <!-- i18n must load before DOMContentLoaded fires -->
+    <script src="./components.js"></script>
     <script src="i18n.js"></script>
 
     <style>
@@ -119,19 +120,10 @@
         .nf-hint span { color: rgba(0,187,201,0.35); }
     </style>
 </head>
-<body>
+<body data-page="">
 
     <!-- NAV -->
-    <nav class="site-nav">
-        <a href="/" class="nav-logo">
-            <img src="assets/favicon.png" alt="justwhitee">
-            justwhitee
-        </a>
-        <ul class="nav-links">
-            <li><a href="/">// home</a></li>
-            <!-- language toggle injected here by i18n.js -->
-        </ul>
-    </nav>
+    <nav id="site-nav" class="site-nav" data-active=""></nav>
 
     <!-- BACKGROUND ORBS -->
     <div class="orb orb-1"></div>
@@ -152,8 +144,9 @@
                 <span data-i18n="notfound.btn">Back to home</span>
             </a>
         </div>
-        <p class="nf-hint">justwhitee &mdash; <span>justwhitee.org</span></p>
-    </div>
+        <footer id="site-footer" class="site-footer" data-footer="full" data-copy-key="home.footer_copy"></footer>
+
+</div>
 
 </body>
 </html>
