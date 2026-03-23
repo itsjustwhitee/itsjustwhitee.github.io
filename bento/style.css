@@ -234,50 +234,60 @@ body::before {
 .gh-spinner { font-size: 2.5rem; animation: ghSpin 1.5s linear infinite; }
 @keyframes ghSpin { to { transform: rotate(360deg); } }
 
+/* ── CARD LAYOUT ── */
 .gh-card {
     display: flex; flex-direction: column;
-    width: 100%; height: 100%; padding: 24px 26px; gap: 16px;
+    width: 100%; height: 100%;
+    padding: 20px 22px 16px;
+    gap: 10px;
+    overflow: hidden;
+    box-sizing: border-box;
 }
 
-.gh-header { display: flex; gap: 16px; align-items: center; }
+/* ── HEADER: avatar + user info ── */
+.gh-header { display: flex; gap: 14px; align-items: flex-start; }
 
 .gh-avatar {
-    width: 56px; height: 56px; border-radius: 50%;
-    border: 2px solid rgba(48,130,198,0.5);
+    width: 52px; height: 52px; border-radius: 50%;
+    border: 2px solid rgba(0,187,201,0.45);
     flex-shrink: 0;
 }
 
-.gh-user-info { display: flex; flex-direction: column; gap: 3px; }
-.gh-name   { font-family: 'Syne', sans-serif; font-size: 1.05rem; font-weight: 700; color: #fff; }
-.gh-handle { font-size: 0.72rem; color: rgba(48,130,198,0.9); }
-.gh-location { font-size: 0.68rem; color: rgba(255,255,255,0.4); margin-top: 2px; }
-.gh-location i { margin-right: 4px; }
+.gh-user-info { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.gh-name     { font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 700; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.gh-handle   { font-size: 0.7rem; color: rgba(0,187,201,0.85); }
+.gh-location { font-size: 0.65rem; color: rgba(255,255,255,0.38); margin-top: 1px; }
+.gh-location i { margin-right: 3px; }
+.gh-bio      { font-size: 0.65rem; color: rgba(255,255,255,0.5); margin-top: 3px; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 
+/* ── STATS ROW: 4 pill counters ── */
 .gh-stats {
     display: grid; grid-template-columns: repeat(4, 1fr);
-    gap: 8px;
+    gap: 6px; flex-shrink: 0;
 }
 .gh-stat {
     display: flex; flex-direction: column; align-items: center;
-    background: rgba(255,255,255,0.05); border-radius: 12px;
-    padding: 8px 4px; border: 1px solid rgba(255,255,255,0.07);
+    background: rgba(0,187,201,0.06);
+    border-radius: 10px; padding: 6px 4px;
+    border: 1px solid rgba(0,187,201,0.12);
 }
-.gh-stat-val { font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 700; color: #5af; }
-.gh-stat-lbl { font-size: 0.58rem; color: rgba(255,255,255,0.4); margin-top: 2px; text-align: center; }
+.gh-stat-val { font-family: 'Syne', sans-serif; font-size: 0.92rem; font-weight: 700; color: var(--accent-bright); }
+.gh-stat-lbl { font-size: 0.54rem; color: rgba(255,255,255,0.38); margin-top: 1px; text-align: center; line-height: 1.3; }
 
-.gh-graph { display: flex; flex-direction: column; flex: 1; gap: 6px; }
-.gh-bars {
-    display: flex; align-items: flex-end; gap: 3px;
-    height: 56px; flex: 1;
+/* ── STREAK IMAGE ── */
+.gh-streak {
+    width: 100%;
+    flex: 1;           /* fills remaining space after header + stats */
+    min-height: 0;     /* allow flex child to shrink below content size */
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden;
 }
-.gh-bar {
-    flex: 1; min-width: 4px;
-    background: rgba(48,130,198,0.55);
-    border-radius: 3px 3px 0 0;
-    transition: background 0.2s ease;
+.gh-stat-img {
+    width: 100%; height: 100%;
+    object-fit: contain;
+    display: block;
+    mix-blend-mode: lighten;
 }
-.gh-graph-label { font-size: 0.58rem; color: rgba(255,255,255,0.25); text-align: right; }
-.gh-no-data { font-size: 0.68rem; color: rgba(255,255,255,0.25); align-self: center; }
 
 /* ══════════════════════════════════════════════════════════════════════════
    RESPONSIVE
@@ -335,10 +345,13 @@ body::before {
     .card.small .solid-icon-wrap img { width: 20px; height: 20px; }
 
     /* GitHub card internals — compact for 2:1 box */
-    .card-github .gh-card  { padding: 14px 16px; gap: 8px; }
-    .card-github .gh-header { gap: 12px; }
-    .card-github .gh-avatar { width: 40px; height: 40px; }
-    .card-github .gh-name   { font-size: 0.88rem; }
+    .card-github .gh-card        { padding: 14px 16px; gap: 8px; }
+    .card-github .gh-header      { gap: 10px; }
+    .card-github .gh-avatar      { width: 40px; height: 40px; }
+    .card-github .gh-name        { font-size: 0.88rem; }
+    .card-github .gh-stat-val    { font-size: 0.75rem; }
+    .card-github .gh-stat-lbl    { font-size: 0.5rem; }
+    .card-github .gh-stat        { padding: 5px 3px; }
     .card-github .gh-handle { font-size: 0.65rem; }
     .card-github .gh-location { display: none; }
     .card-github .gh-stats  { grid-template-columns: repeat(4, 1fr); gap: 5px; }

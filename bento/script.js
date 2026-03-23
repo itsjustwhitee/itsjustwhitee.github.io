@@ -169,17 +169,29 @@ function makeSolidCard(card, item) {
 
 // ─── GITHUB CUSTOM CARD ───────────────────────────────────────────────────────
 // Profile data cached in localStorage for 1 hour to avoid API rate limits.
-// Streak stats loaded as an image from nirzak-streak-stats.vercel.app —
-// accurate total contributions, no auth required.
+// Stats images from github-readme-stats.vercel.app and streak-stats.demolab.com.
 async function buildGithubCard(card, username) {
     card.innerHTML = `<div class="gh-loading"><i class="fa-brands fa-github gh-spinner"></i></div>`;
 
-    const streakUrl = `https://nirzak-streak-stats.vercel.app/?user=${username}`
+    // Shared colour palette matching site theme
+    const C = {
+        bg:      "0d223300",   // transparent
+        title:   "00bbc9",
+        text:    "e0f7fa",
+        icons:   "00bbc9",
+        border:  "1a3a4a",
+        ring:    "00bbc9",
+        fire:    "00bbc9",
+        label:   "00bbc9",
+        nums:    "ffffff",
+        dates:   "5a8a8a",
+    };
+
+    const streakUrl = `https://streak-stats.demolab.com/?user=${username}`
         + `&theme=transparent&hide_border=true`
-        + `&ring=00bbc9&fire=00bbc9&currStreakLabel=00bbc9`
-        + `&sideLabels=aaaaaa&dates=555555`
-        + `&sideNums=ffffff&currStreakNum=ffffff`
-        + `&stroke=1a3a4a`;
+        + `&ring=${C.ring}&fire=${C.fire}&currStreakLabel=${C.label}`
+        + `&sideLabels=7aacac&dates=${C.dates}`
+        + `&sideNums=${C.nums}&currStreakNum=${C.nums}`;
 
     try {
         const cacheKey = `gh_data_${username}`;
@@ -203,9 +215,11 @@ async function buildGithubCard(card, username) {
         }
 
         const yearsOn = new Date().getFullYear() - new Date(user.created_at).getFullYear();
+        const joinYear = new Date(user.created_at).getFullYear();
 
         card.innerHTML = `
             <div class="gh-card">
+
                 <div class="gh-header">
                     <img src="${user.avatar_url}" class="gh-avatar" alt="avatar">
                     <div class="gh-user-info">
@@ -215,19 +229,34 @@ async function buildGithubCard(card, username) {
                         ${user.bio      ? `<div class="gh-bio">${user.bio}</div>` : ""}
                     </div>
                 </div>
+
                 <div class="gh-stats">
-                    <div class="gh-stat"><span class="gh-stat-val">${user.public_repos}</span><span class="gh-stat-lbl">repos</span></div>
-                    <div class="gh-stat"><span class="gh-stat-val">${user.followers}</span><span class="gh-stat-lbl">followers</span></div>
-                    <div class="gh-stat"><span class="gh-stat-val">${yearsOn}y</span><span class="gh-stat-lbl">on github</span></div>
+                    <div class="gh-stat">
+                        <span class="gh-stat-val">${user.public_repos}</span>
+                        <span class="gh-stat-lbl">repos</span>
+                    </div>
+                    <div class="gh-stat">
+                        <span class="gh-stat-val">${user.followers}</span>
+                        <span class="gh-stat-lbl">followers</span>
+                    </div>
+                    <div class="gh-stat">
+                        <span class="gh-stat-val">${user.following}</span>
+                        <span class="gh-stat-lbl">following</span>
+                    </div>
+                    <div class="gh-stat">
+                        <span class="gh-stat-val">${yearsOn}y</span>
+                        <span class="gh-stat-lbl">since ${joinYear}</span>
+                    </div>
                 </div>
-                <div class="gh-streak" style="margin-top:12px; width:100%; text-align:center;">
+
+                <div class="gh-streak">
                     <img src="${streakUrl}"
-                         alt="GitHub streak stats"
-                         class="gh-streak-img"
-                         style="width:100%; max-width:420px; height:auto; display:block; margin:0 auto;"
+                         alt="GitHub streak"
+                         class="gh-stat-img"
                          loading="lazy"
-                         onerror="this.parentElement.style.display='none'">
+                         onerror="this.closest('.gh-streak').style.display='none'">
                 </div>
+
             </div>
             <div class="card-corner-icon"><i class="fa-brands fa-github"></i></div>
         `;
