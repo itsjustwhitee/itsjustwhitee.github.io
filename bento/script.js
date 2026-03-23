@@ -274,8 +274,10 @@ async function buildGithubCard(card, username) {
 // ─── MAIN RENDERER ────────────────────────────────────────────────────────────
 const grid = document.getElementById("bento-grid");
 
-function loadBento() {
+async function loadBento() {
     grid.innerHTML = ""; // clear before re-render (needed on language toggle)
+
+    const ghPromises = []; // collect async github builds to await before reveal
 
     bentoData.forEach(item => {
         const card = document.createElement(item.link ? "a" : "div");
@@ -285,12 +287,13 @@ function loadBento() {
             card.rel = "noopener noreferrer"; 
             card.classList.add("card-link"); 
         }
-        card.classList.add("card", "card-base", item.size);
+        card.classList.add("card", "card-base", "reveal", item.size);
 
         if (item.type === "github-custom") {
             card.style.background = "linear-gradient(145deg, #0d2233 0%, #0a1a28 100%)";
             card.style.borderColor = "rgba(48,130,198,0.25)";
-            buildGithubCard(card, item.username);
+            // Collect the promise so we can await it before starting the reveal
+            ghPromises.push(buildGithubCard(card, item.username));
             if (item.slug) card.insertAdjacentHTML("beforeend", `<span class="card-slug">${item.slug}</span>`);
 
         } else if (item.type === "solid") {
@@ -312,6 +315,61 @@ function loadBento() {
 
         grid.appendChild(card);
     });
+
+    // Wait for all GitHub cards to finish rendering, then give the browser one
+    // frame to paint the complete DOM before starting the reveal observer.
+    // This prevents the "double-flash" where the spinner animates in first,
+    // then the fetched content pops in as a second visual hit.
+    await Promise.allSettled(ghPromises);
+    requestAnimationFrame(() => _initReveal());
+}
+
+// ─── SCROLL REVEAL OBSERVER ───────────────────────────────────────────────────
+// Identical to the homepage system: bidirectional reveal + per-batch stagger.
+// Called via requestAnimationFrame after all card DOM (including async GitHub
+// fetch) is fully painted, so the observer never fires on incomplete content.
+//
+// Stagger is per-batch: cards entering the viewport in the same scroll event
+// get delays 0/60/120ms etc. Cards already past the fold don't accumulate
+// delay from cards above them that are off-screen.
+let _revealObs = null;
+const _revealStart = Date.now();
+
+function _initReveal() {
+    if (_revealObs) _revealObs.disconnect();
+
+    let _batchCounter  = 0;
+    let _batchResetTimer = null;
+
+    _revealObs = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const delay = Math.min(_batchCounter * 40, 160);
+                _batchCounter++;
+
+                // setTimeout(0) groups all entries delivered in the same callback
+                // tick, then resets for the next scroll event
+                if (_batchResetTimer) clearTimeout(_batchResetTimer);
+                _batchResetTimer = setTimeout(() => { _batchCounter = 0; }, 0);
+
+                entry.target.style.transitionDelay = delay + 'ms';
+                entry.target.classList.add('visible');
+            } else if (Date.now() - _revealStart > 800) {
+                entry.target.style.transitionDelay = '0ms';
+                entry.target.classList.remove('visible');
+            }
+        });
+    }, { threshold: 0.05, rootMargin: '0px 0px -20px 0px' });
+
+    document.querySelectorAll('.reveal').forEach(el => _revealObs.observe(el));
+
+    // Hard fallback: forza visible dopo 2s se ancora nascosto
+    setTimeout(() => {
+        document.querySelectorAll('.reveal:not(.visible)').forEach(el => {
+            el.style.transitionDelay = '0ms';
+            el.classList.add('visible');
+        });
+    }, 2000);
 }
 
 document.addEventListener("DOMContentLoaded", loadBento);

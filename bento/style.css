@@ -81,28 +81,8 @@ body::before {
     display: flex;
     border: 1px solid rgba(9,134,143,0.2);
     transition: transform 0.35s cubic-bezier(0.175,0.885,0.32,1.275),
-                box-shadow 0.35s ease, border-color 0.35s ease, filter 0.35s ease;
-    animation: fadeUp 0.5s ease both;
-}
-
-.card:nth-child(1)  { animation-delay: 0.05s; }
-.card:nth-child(2)  { animation-delay: 0.10s; }
-.card:nth-child(3)  { animation-delay: 0.15s; }
-.card:nth-child(4)  { animation-delay: 0.20s; }
-.card:nth-child(5)  { animation-delay: 0.25s; }
-.card:nth-child(6)  { animation-delay: 0.30s; }
-.card:nth-child(7)  { animation-delay: 0.35s; }
-.card:nth-child(8)  { animation-delay: 0.40s; }
-.card:nth-child(9)  { animation-delay: 0.45s; }
-.card:nth-child(10) { animation-delay: 0.50s; }
-.card:nth-child(11) { animation-delay: 0.55s; }
-.card:nth-child(12) { animation-delay: 0.60s; }
-.card:nth-child(13) { animation-delay: 0.65s; }
-.card:nth-child(14) { animation-delay: 0.70s; }
-
-@keyframes fadeUp {
-    from { opacity: 0; transform: translateY(24px); }
-    to   { opacity: 1; transform: translateY(0); }
+                box-shadow 0.35s ease, border-color 0.35s ease, filter 0.35s ease,
+                opacity 0.7s ease; /* needed so reveal transition plays correctly */
 }
 @media (hover: hover) and (pointer: fine) {
     .card:hover {
@@ -277,8 +257,8 @@ body::before {
 /* ── STREAK IMAGE ── */
 .gh-streak {
     width: 100%;
-    flex: 1;           /* fills remaining space after header + stats */
-    min-height: 0;     /* allow flex child to shrink below content size */
+    flex: 1;
+    min-height: 0;
     display: flex; align-items: center; justify-content: center;
     overflow: hidden;
 }
@@ -345,21 +325,17 @@ body::before {
     .card.small .solid-icon-wrap img { width: 20px; height: 20px; }
 
     /* GitHub card internals — compact for 2:1 box */
-    .card-github .gh-card        { padding: 14px 16px; gap: 8px; }
-    .card-github .gh-header      { gap: 10px; }
-    .card-github .gh-avatar      { width: 40px; height: 40px; }
-    .card-github .gh-name        { font-size: 0.88rem; }
-    .card-github .gh-stat-val    { font-size: 0.75rem; }
-    .card-github .gh-stat-lbl    { font-size: 0.5rem; }
-    .card-github .gh-stat        { padding: 5px 3px; }
-    .card-github .gh-handle { font-size: 0.65rem; }
+    .card-github .gh-card     { padding: 12px 14px; gap: 8px; }
+    .card-github .gh-header   { gap: 10px; }
+    .card-github .gh-avatar   { width: 38px; height: 38px; }
+    .card-github .gh-name     { font-size: 0.85rem; }
+    .card-github .gh-handle   { font-size: 0.62rem; }
     .card-github .gh-location { display: none; }
-    .card-github .gh-stats  { grid-template-columns: repeat(4, 1fr); gap: 5px; }
-    .card-github .gh-stat   { padding: 5px 2px; }
-    .card-github .gh-stat-val { font-size: 0.82rem; }
-    .card-github .gh-stat-lbl { font-size: 0.52rem; }
-    .card-github .gh-bars   { height: 32px; }
-    .card-github .gh-graph-label { font-size: 0.52rem; }
+    .card-github .gh-bio      { display: none; }
+    .card-github .gh-stats    { gap: 4px; }
+    .card-github .gh-stat     { padding: 4px 2px; }
+    .card-github .gh-stat-val { font-size: 0.75rem; }
+    .card-github .gh-stat-lbl { font-size: 0.5rem; }
 
     /* Footer */
     .site-footer { margin-top: 40px; }

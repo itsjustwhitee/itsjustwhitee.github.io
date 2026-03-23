@@ -20,9 +20,9 @@ A static personal website hosted on **GitHub Pages** with Cloudflare as CDN and 
 ├── CNAME                   # Custom domain binding for GitHub Pages
 │
 ├── bento/
-│   ├── index.html          # Bento page (HTML only — no inline scripts)
-│   ├── script.js           # All bento card logic (external, browser-cacheable)
-│   ├── style.css           # Bento-specific styles
+│   ├── index.html          # Bento page — header fadeUp, parallax orbs, mouse tracking
+│   ├── script.js           # All bento card logic (async renderer, scroll reveal, GitHub fetch)
+│   ├── style.css           # Bento-specific styles (grid layout, card variants, responsive)
 │   └── assets/             # Brand SVGs and .webp images for bento cards
 │
 ├── cv/
@@ -57,10 +57,12 @@ Full-length scrollable portfolio page. Sections in order:
 - **Footer**
 
 ### `bento/index.html` — Bento
-Grid of link cards. The HTML is markup-only; all logic lives in the external `bento/script.js` (browser-cacheable, no inline `<script>` block). Card types:
+Grid of link cards. Card logic lives in `bento/script.js` (async renderer, scroll reveal observer, GitHub fetch). Card types:
 - `github-custom` — fetches live user data from the GitHub REST API (cached 1h in `localStorage`) and renders GitHub Streak Stats as an image
 - `solid` — branded gradient card with SVG icon; supports `i18n_key` for translated title/desc
 - `instagram-manual` — 2×2 photo grid with overlay; images in `.webp` format
+
+**Entry animation:** the header uses staggered `fadeUp` (photo → label → h1 → bio → cta). Cards use the shared `.reveal` + `IntersectionObserver` system — the observer is only activated after all card DOM (including the async GitHub fetch) is fully painted, preventing a double-flash where the spinner would animate in first and the fetched content would pop in separately.
 
 
 ### `cv/index.html` — CV
@@ -75,6 +77,7 @@ Dedicated page for the Curriculum Vitae.
 Minimal contact page designed for NFC/QR use cases (e.g. lost item tags).
 - **Not indexed** (`<meta name="robots" content="noindex, nofollow">`) — accessible only via QR/NFC link.
 - Features: WhatsApp deep-link with pre-filled message, Telegram link, tap-to-reveal phone number, vCard download.
+- **Entry animation:** header uses staggered `fadeUp`; action cards use `.reveal` + `IntersectionObserver` with 100ms sibling stagger. Parallax orbs match homepage style.
 
 ### `404.html` — Error page
 Custom 404 page served automatically by GitHub Pages for any non-existent URL. Matches the site's visual style (animated orbs, gradient typography). Supports i18n via `data-i18n` attributes. Also excluded from indexing via `noindex, nofollow`.
@@ -214,15 +217,22 @@ All pages include `<link rel="manifest" href="/manifest.json">` in `<head>`.
 ### Bento page
 | Feature | How it works |
 |---|---|
-| GitHub live card | `fetch` to GitHub REST API (`/users/:username`) for profile data; result cached in `localStorage` for 1 hour (with `try/catch` for restrictive browsers) to avoid rate-limiting (HTTP 403 after 60 req/h); streak stats served as an image from `nirzak-streak-stats.vercel.app` |
+| Header entry animation | Staggered `fadeUp` on profile pic, label, h1, bio, cta (delays 0.1s–0.7s) |
+| Card scroll reveal | `.reveal` + `IntersectionObserver`; observer starts only after `Promise.allSettled` on all GitHub fetches + one `requestAnimationFrame`, so every card is fully rendered before any animation fires |
+| Sibling stagger | Each card's `transitionDelay` is set to `index × 60ms` (capped at 320ms) at observe time |
+| Mouse parallax orbs | Two fixed `#orb1`/`#orb2` divs offset via `mousemove` + `requestAnimationFrame` (throttled) |
+| GitHub live card | `fetch` to GitHub REST API (`/users/:username`) for profile data; result cached in `localStorage` for 1 hour (with `try/catch` for restrictive browsers) to avoid rate-limiting (HTTP 403 after 60 req/h); streak stats served as an image from `streak-stats.demolab.com` |
 | i18n card titles | `makeSolidCard` and instagram cards read `window.t('card.{i18n_key}.title')` at render time; fallback to hardcoded `item.title` if key is missing, never `undefined` |
 | Card shimmer | CSS `::after` pseudo-element animation triggered on `:hover` (desktop only via `@media (hover: hover)`) |
-| Language re-render | `grid.innerHTML = ""` + `loadBento()` called again on language toggle |
+| Language re-render | `grid.innerHTML = ""` + `loadBento()` called again on language toggle; reveal observer is reconnected after the new render completes |
 | Security | All dynamically created `<a target="_blank">` elements have `rel="noopener noreferrer"` set via `card.rel` in JS |
 
 ### Contacts page
 | Feature | How it works |
 |---|---|
+| Header entry animation | Staggered `fadeUp` (same pattern as bento) |
+| Card scroll reveal | `.reveal` + `IntersectionObserver` with 100ms sibling stagger |
+| Mouse parallax orbs | Same implementation as homepage and bento |
 | Phone reveal | Toggling `.hidden-info` class between two `.card-content` views; card uses `role="button"` + `tabindex="0"` + `onkeydown` for full keyboard accessibility; attributes removed after unlock |
 | vCard download | Programmatically creates a `.vcf` blob and triggers a download via a temporary `<a>` element |
 | WhatsApp pre-fill | Message text is sourced from `window.t('contacts.wa_msg')` so it switches language with the toggle |
