@@ -352,7 +352,25 @@
     .tl-item::before { content: ''; position: absolute; left: -36px; top: 7px; width: 9px; height: 9px; border-radius: 50%; background: var(--accent-bright); box-shadow: 0 0 10px rgba(0,187,201,0.5); }
     .tl-period  { font-size: 0.61rem; letter-spacing: 0.12em; color: var(--accent-bright); opacity: 0.7; margin-bottom: 5px; text-transform: uppercase; }
     .tl-role    { font-family: 'Syne', sans-serif; font-size: 0.98rem; font-weight: 800; color: #fff; margin-bottom: 3px; }
-    .tl-company { font-size: 0.71rem; color: var(--text-muted); margin-bottom: 10px; }
+    .tl-company { font-size: 0.71rem; color: var(--text-muted); margin-bottom: 10px; display: flex; align-items: center; gap: 5px; flex-wrap: wrap; }
+    .tl-company-link {
+        color: var(--text-muted);
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        transition: color 0.2s ease;
+    }
+    .tl-company-link:hover { color: var(--accent-bright); }
+    .tl-company-logo {
+        width: 13px; height: 13px;
+        border-radius: 3px;
+        object-fit: contain;
+        opacity: 0.65;
+        flex-shrink: 0;
+        transition: opacity 0.2s ease;
+    }
+    .tl-company-link:hover .tl-company-logo { opacity: 1; }
     .tl-desc    { font-size: 0.77rem; color: var(--text-bio); line-height: 1.75; }
     .edu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
     .edu-card { background: linear-gradient(145deg, #0d2f2f 0%, #081c1c 100%); border: 1px solid rgba(9,134,143,0.18); border-radius: var(--radius-sm); padding: 20px 18px; transition: border-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease; }
@@ -899,15 +917,33 @@
                 <p class="exp-col-label" data-i18n="exp.col_work">Work</p>
                 <div class="timeline">
                     <div class="tl-item">
+                        <p class="tl-period" data-i18n="exp.eyecan.period">may 2026 — now</p>
+                        <p class="tl-role" data-i18n="exp.eyecan.role">Analyst Programmer / AI Integration Engineer</p>
+                        <p class="tl-company">
+                            <a href="https://eyecan.ai" target="_blank" rel="noopener noreferrer" class="tl-company-link">
+                                <img src="https://www.google.com/s2/favicons?domain=eyecan.ai&sz=32" class="tl-company-logo" alt="" loading="lazy">
+                                <span data-i18n="exp.eyecan.company">eyecan</span>
+                            </a>
+                            <span data-i18n="exp.eyecan.location">· Bologna, IT</span>
+                        </p>
+                        <p class="tl-desc" data-i18n="exp.eyecan.desc">Practical implementation of ideas: software development, integration of AI models, and direct hands-on management of hardware components.</p>
+                    </div>
+                    <div class="tl-item">
                         <p class="tl-period" data-i18n="exp.tutor.period">may 2025 — now</p>
                         <p class="tl-role" data-i18n="exp.tutor.role">Didactic Tutor</p>
-                        <p class="tl-company" data-i18n="exp.tutor.company"> Ferrara, IT</p>
+                        <p class="tl-company"><span data-i18n="exp.tutor.company">· Ferrara, IT</span></p>
                         <p class="tl-desc" data-i18n="exp.tutor.desc">Academic support for upper secondary students in Computer Science and Mathematics, with a focus on logic and problem solving.</p>
                     </div>
                     <div class="tl-item">
                         <p class="tl-period" data-i18n="exp.birex.period">apr 2025 — ott 2025</p>
                         <p class="tl-role" data-i18n="exp.birex.role">Computer Vision Engineer Intern</p>
-                        <p class="tl-company" data-i18n="exp.birex.company">BI-REX Competence Center · Bologna, IT</p>
+                        <p class="tl-company">
+                            <a href="https://bi-rex.it" target="_blank" rel="noopener noreferrer" class="tl-company-link">
+                                <img src="https://www.google.com/s2/favicons?domain=bi-rex.it&sz=32" class="tl-company-logo" alt="" loading="lazy">
+                                <span data-i18n="exp.birex.company">BI-REX Competence Center</span>
+                            </a>
+                            <span data-i18n="exp.birex.location">· Bologna, IT</span>
+                        </p>
                         <p class="tl-desc" data-i18n="exp.birex.desc">Development of the EdgeCV4Safety framework on the industrial pilot line: optimized computer vision pipelines integrated with collaborative robotics UR.</p>
                     </div>
                 </div>

@@ -78,14 +78,21 @@
             'exp.col_work': 'Work',
             'exp.col_edu':  'Education',
 
+            'exp.eyecan.period':  'may 2026 — now',
+            'exp.eyecan.role':    'Analyst Programmer / AI Integration Engineer',
+            'exp.eyecan.company': 'EyeCan',
+            'exp.eyecan.location': '· Bologna, IT',
+            'exp.eyecan.desc':    'Practical implementation of ideas: software development, integration of AI models, and direct hands-on management of hardware components.',
+
             'exp.tutor.period':  'may 2025 — now',
             'exp.tutor.role':    'Didactic Tutor',
-            'exp.tutor.company': 'Ferrara, IT',
+            'exp.tutor.location': 'Ferrara, IT',
             'exp.tutor.desc':    'Academic support for upper secondary students in Computer Science and Mathematics, with a focus on logic and problem solving.',
 
             'exp.birex.period':  'apr 2025 — oct 2025',
             'exp.birex.role':    'Computer Vision Engineer Intern',
-            'exp.birex.company': 'BI-REX Competence Center · Bologna, IT',
+            'exp.birex.company': 'BI-REX Competence Center',
+            'exp.birex.location': '· Bologna, IT',
             'exp.birex.desc':    'Development of the EdgeCV4Safety framework on the industrial pilot line: optimized computer vision pipelines integrated with collaborative robotics UR.',
 
             'edu.msc.period': 'oct 2025 — in progress',
@@ -216,14 +223,21 @@
             'exp.col_work': 'Lavoro',
             'exp.col_edu':  'Formazione',
 
+            'exp.eyecan.period':  'mag 2026 — oggi',
+            'exp.eyecan.role':    'Analista Programmatore / AI Integration Engineer',
+            'exp.eyecan.company': 'EyeCan',
+            'exp.eyecan.location': '· Bologna, IT',
+            'exp.eyecan.desc':    'Implementazione concreta delle idee: sviluppo del software, integrazione di modelli di intelligenza artificiale e gestione diretta dei componenti hardware.',
+
             'exp.tutor.period':  'mag 2025 — oggi',
             'exp.tutor.role':    'Tutor Didattico',
-            'exp.tutor.company': 'Ferrara, IT',
+            'exp.tutor.location': 'Ferrara, IT',
             'exp.tutor.desc':    'Supporto accademico per studenti delle scuole superiori in Informatica e Matematica, con focus su logica e problem solving.',
 
             'exp.birex.period':  'apr 2025 — ott 2025',
             'exp.birex.role':    'Computer Vision Engineer Intern',
-            'exp.birex.company': 'BI-REX Competence Center · Bologna, IT',
+            'exp.birex.company': 'BI-REX Competence Center',
+            'exp.birex.location': '· Bologna, IT',
             'exp.birex.desc':    'Sviluppo del framework EdgeCV4Safety sulla linea pilota industriale: pipeline di computer vision ottimizzate integrate con la robotica collaborativa UR.',
 
             'edu.msc.period': 'ott 2025 — in corso',
