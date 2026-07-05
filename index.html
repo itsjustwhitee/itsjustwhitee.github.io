@@ -123,10 +123,10 @@
         opacity: 0; animation: fadeUp 0.7s ease 0.8s forwards;
     }
     .hero-ctas .btn-pill { padding: 11px 22px; font-size: 0.78rem; }
-    .btn-cv    { background: rgba(255,255,255,0.08); color: #fff; border: 1px solid rgba(255,255,255,0.2); }
-    .btn-cv:hover { background: rgba(255,255,255,0.15); }
-    .btn-bento { background: rgba(9,134,143,0.18); color: var(--accent-bright); border: 1px solid rgba(0,187,201,0.28); }
-    .btn-bento:hover { background: rgba(9,134,143,0.32); border-color: rgba(0,187,201,0.6); }
+    .btn-cv    { background: rgba(255,255,255,0.08); color: #fff; border: 1px solid rgba(255,255,255,0.2); transition: background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease, transform 0.2s ease; }
+    .btn-cv:hover { background: rgba(255,255,255,0.18); border-color: rgba(255,255,255,0.4); box-shadow: 0 0 8px rgba(255,255,255,0.12); }
+    .btn-bento { background: rgba(9,134,143,0.18); color: var(--accent-bright); border: 1px solid rgba(0,187,201,0.28); transition: background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease, transform 0.2s ease; }
+    .btn-bento:hover { background: rgba(9,134,143,0.32); border-color: rgba(0,187,201,0.6); box-shadow: 0 0 8px rgba(0,187,201,0.2); }
 
     .hero-logo-giant {
         position: fixed; right: 0; top: 50%;
@@ -256,19 +256,13 @@
     .projects-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
     .project-card {
         position: relative;
-        background: linear-gradient(145deg, #0d2f2f 0%, #081c1c 100%);
-        border: 1px solid rgba(9,134,143,0.2);
+        background: #0b2b2d;
+        border: 1px solid rgba(9,134,143,0.4);
         border-radius: var(--radius); padding: 0; overflow: hidden;
         transition: transform 0.4s cubic-bezier(0.175,0.885,0.32,1.275),
                     box-shadow 0.4s ease, border-color 0.4s ease;
     }
-    .project-card::before {
-        content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
-        background: linear-gradient(to right, var(--accent-bright), transparent);
-        opacity: 0; transition: opacity 0.35s ease;
-    }
-    .project-card:hover { transform: translateY(-7px); border-color: rgba(0,187,201,0.4); box-shadow: 0 28px 60px rgba(0,0,0,0.55), 0 0 22px rgba(9,134,143,0.15); }
-    .project-card:hover::before { opacity: 1; }
+    .project-card:hover { transform: translateY(-7px); border-color: rgba(0,187,201,0.65); box-shadow: 0 28px 60px rgba(0,0,0,0.55), 0 0 26px rgba(0,187,201,0.25); }
     .project-img-wrap { overflow: hidden; background: rgba(9,134,143,0.08); display: flex; align-items: center; justify-content: center; }
     .project-img {
         width: 100%; height: 160px; object-fit: contain; display: block; padding: 16px;
@@ -311,34 +305,34 @@
     .contrib-label { font-size: 0.56rem; color: var(--text-muted); letter-spacing: 0.08em; text-transform: uppercase; }
     .contrib-chip { font-size: 0.57rem; padding: 2px 9px; border-radius: 999px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); color: rgba(255,255,255,0.5); }
     .project-stats { display: flex; flex-direction: column; gap: 10px; margin-top: 16px; }
-    .stat-box { background: rgba(9,134,143,0.1); border: 1px solid rgba(9,134,143,0.2); border-radius: 12px; padding: 12px 14px; }
+    .stat-box { background: #0b2b2d; border: 1px solid rgba(9,134,143,0.4); border-radius: 12px; padding: 12px 14px; }
     .stat-box-label { font-size: 0.56rem; text-transform: uppercase; letter-spacing: 0.15em; color: var(--accent-bright); margin-bottom: 4px; }
     .stat-box-value { font-family: 'Syne', sans-serif; font-size: 1.5rem; font-weight: 800; color: #fff; }
     .stat-box-desc  { font-size: 0.67rem; color: var(--text-muted); margin-top: 2px; line-height: 1.4; }
 
     /* ── SKILLS ──────────────────────────────────────────────────────────── */
     .skills-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
-    .skill-group { border-radius: var(--radius-sm); padding: 24px 22px; border: 1px solid rgba(9,134,143,0.18); transition: border-color 0.3s ease, transform 0.3s ease; }
+    .skill-group { border-radius: var(--radius-sm); padding: 24px 22px; border: 1px solid rgba(9,134,143,0.4); transition: border-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease; }
     .skill-group:hover { transform: translateY(-3px); }
-    .skill-group:nth-child(1) { background: linear-gradient(145deg, rgba(0,187,201,0.18) 0%, rgba(0,187,201,0.06) 100%); border-color: rgba(0,187,201,0.22); }
-    .skill-group:nth-child(1):hover { border-color: rgba(0,187,201,0.5); }
-    .skill-group:nth-child(2) { background: linear-gradient(145deg, rgba(255,210,60,0.18) 0%, rgba(255,210,60,0.05) 100%); border-color: rgba(255,210,60,0.2); }
-    .skill-group:nth-child(2):hover { border-color: rgba(255,210,60,0.45); }
-    .skill-group:nth-child(3) { background: linear-gradient(145deg, rgba(90,181,245,0.18) 0%, rgba(90,181,245,0.05) 100%); border-color: rgba(90,181,245,0.2); }
-    .skill-group:nth-child(3):hover { border-color: rgba(90,181,245,0.45); }
-    .skill-group:nth-child(4) { background: linear-gradient(145deg, rgba(192,122,240,0.18) 0%, rgba(192,122,240,0.05) 100%); border-color: rgba(192,122,240,0.2); }
-    .skill-group:nth-child(4):hover { border-color: rgba(192,122,240,0.45); }
-    .skill-group:nth-child(5) { background: linear-gradient(145deg, rgba(240,160,90,0.18) 0%, rgba(240,160,90,0.05) 100%); border-color: rgba(240,160,90,0.2); }
-    .skill-group:nth-child(5):hover { border-color: rgba(240,160,90,0.45); }
-    .skill-group:nth-child(6) { background: linear-gradient(145deg, rgba(90,240,160,0.18) 0%, rgba(90,240,160,0.05) 100%); border-color: rgba(90,240,160,0.18); }
-    .skill-group:nth-child(6):hover { border-color: rgba(90,240,160,0.42); }
+    .skill-group:nth-child(1) { background: rgba(0,187,201,0.32); border-color: rgba(0,187,201,0.5); }
+    .skill-group:nth-child(1):hover { border-color: rgba(0,187,201,0.75); box-shadow: 0 0 20px rgba(0,187,201,0.25); }
+    .skill-group:nth-child(2) { background: rgba(255,187,0,0.32); border-color: rgba(255, 187, 0, 0.678); }
+    .skill-group:nth-child(2):hover { border-color: rgb(255, 187, 0); box-shadow: 0 0 20px rgba(255,187,0,0.25); }
+    .skill-group:nth-child(3) { background: rgba(41,126,224,0.32); border-color: rgba(41,126,224,0.5); }
+    .skill-group:nth-child(3):hover { border-color: rgba(41,126,224,0.75); box-shadow: 0 0 20px rgba(41,126,224,0.25); }
+    .skill-group:nth-child(4) { background: rgba(41,224,133,0.32); border-color: rgba(41,224,133,0.5); }
+    .skill-group:nth-child(4):hover { border-color: rgba(41,224,133,0.75); box-shadow: 0 0 20px rgba(41,224,133,0.25); }
+    .skill-group:nth-child(5) { background: rgba(224,41,56,0.32); border-color: rgba(224,41,56,0.5); }
+    .skill-group:nth-child(5):hover { border-color: rgba(224,41,56,0.75); box-shadow: 0 0 20px rgba(224,41,56,0.25); }
+    .skill-group:nth-child(6) { background: rgba(238,43,140,0.32); border-color: rgba(238,43,140,0.705); }
+    .skill-group:nth-child(6):hover { border-color: rgba(238,43,140,0.75); box-shadow: 0 0 20px rgba(238,43,140,0.25); }
     .skill-group-label { font-size: 0.59rem; letter-spacing: 0.25em; text-transform: uppercase; margin-bottom: 16px; opacity: 0.85; }
     .skill-group:nth-child(1) .skill-group-label { color: var(--accent-bright); }
-    .skill-group:nth-child(2) .skill-group-label { color: #ffd060; }
-    .skill-group:nth-child(3) .skill-group-label { color: #5ab5f5; }
-    .skill-group:nth-child(4) .skill-group-label { color: #c07af0; }
-    .skill-group:nth-child(5) .skill-group-label { color: #f0a05a; }
-    .skill-group:nth-child(6) .skill-group-label { color: #5af0a0; }
+    .skill-group:nth-child(2) .skill-group-label { color: #ffbb00; }
+    .skill-group:nth-child(3) .skill-group-label { color: #297ee0; }
+    .skill-group:nth-child(4) .skill-group-label { color: #29e085; }
+    .skill-group:nth-child(5) .skill-group-label { color: #e02938; }
+    .skill-group:nth-child(6) .skill-group-label { color: #ee2b8c; }
     .skill-pills { display: flex; flex-wrap: wrap; gap: 6px; }
     .skill-pill { font-size: 0.67rem; padding: 5px 11px; border-radius: 8px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); color: var(--text-body); transition: background 0.2s, border-color 0.2s, transform 0.2s; }
     .skill-pill:hover { background: rgba(255,255,255,0.13); transform: scale(1.05); }
@@ -373,8 +367,8 @@
     .tl-company-link:hover .tl-company-logo { opacity: 1; }
     .tl-desc    { font-size: 0.77rem; color: var(--text-bio); line-height: 1.75; }
     .edu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-    .edu-card { background: linear-gradient(145deg, #0d2f2f 0%, #081c1c 100%); border: 1px solid rgba(9,134,143,0.18); border-radius: var(--radius-sm); padding: 20px 18px; transition: border-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease; }
-    .edu-card:hover { border-color: rgba(0,187,201,0.35); transform: translateY(-4px); box-shadow: 0 12px 32px rgba(0,0,0,0.35), 0 0 14px rgba(0,187,201,0.08); }
+    .edu-card { background: #0b2b2d; border: 1px solid rgba(9,134,143,0.4); border-radius: var(--radius-sm); padding: 20px 18px; transition: border-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease; }
+    .edu-card:hover { border-color: rgba(0,187,201,0.65); transform: translateY(-4px); box-shadow: 0 12px 32px rgba(0,0,0,0.35), 0 0 20px rgba(0,187,201,0.25); }
     .edu-period { font-size: 0.59rem; color: var(--accent-bright); opacity: 0.7; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 7px; }
     .edu-degree { font-family: 'Syne', sans-serif; font-size: 0.9rem; font-weight: 800; color: #fff; margin-bottom: 3px; }
     .edu-school { font-size: 0.7rem; color: var(--text-muted); margin-bottom: 8px; }
@@ -845,7 +839,7 @@
 
         <div class="skills-grid">
             <div class="skill-group reveal">
-                <p class="skill-group-label">// performance &amp; low-level</p>
+                <p class="skill-group-label">// ⚙️ performance &amp; low-level</p>
                 <div class="skill-pills">
                     <span class="skill-pill">C / C++</span>
                     <span class="skill-pill">CUDA</span>
@@ -853,52 +847,52 @@
                     <span class="skill-pill">OpenMP</span>
                     <span class="skill-pill">Go</span>
                     <span class="skill-pill">Bash</span>
-                </div>
-            </div>
-
-            <div class="skill-group reveal">
-                <p class="skill-group-label">// ai &amp; computer vision</p>
-                <div class="skill-pills">
-                    <span class="skill-pill">Python</span>
-                    <span class="skill-pill">Torch</span>
-                    <span class="skill-pill">TensorRT</span>
-                    <span class="skill-pill">ONNX Runtime</span>
-                    <span class="skill-pill">YOLO</span>
-                    <span class="skill-pill">Depth Anything</span>
-                    <span class="skill-pill">UniDepth</span>
-                </div>
-            </div>
-
-            <div class="skill-group reveal">
-                <p class="skill-group-label">// systems &amp; robotics</p>
-                <div class="skill-pills">
-                    <span class="skill-pill">Linux / Unix</span>
-                    <span class="skill-pill">Proxmox</span>
-                    <span class="skill-pill">Docker</span>
-                    <span class="skill-pill">Ansible / Vagrant</span>
                     <span class="skill-pill">ESP32</span>
                 </div>
             </div>
 
             <div class="skill-group reveal">
-                <p class="skill-group-label">// backend &amp; protocols</p>
+                <p class="skill-group-label">// 👁️ ai &amp; computer vision</p>
                 <div class="skill-pills">
-                    <span class="skill-pill">Java</span>
-                    <span class="skill-pill">SQL</span>
-                    <span class="skill-pill">Git</span>
-                    <span class="skill-pill">Nginx</span>
-                    <span class="skill-pill">Node.js</span>
+                    <span class="skill-pill">Python</span>
+                    <span class="skill-pill">Torch</span>
+                    <span class="skill-pill">TensorRT</span>
+                    <span class="skill-pill">ONNX Runtime</span>
+                    <span class="skill-pill">Agents</span>
                 </div>
             </div>
 
             <div class="skill-group reveal">
-                <p class="skill-group-label">// design &amp; publishing</p>
+                <p class="skill-group-label">// 🧰 infra &amp; devops</p>
                 <div class="skill-pills">
-                    <span class="skill-pill">HTML / CSS</span>
+                    <span class="skill-pill">Linux / Unix</span>
+                    <span class="skill-pill">Proxmox</span>
+                    <span class="skill-pill">Docker</span>
+                    <span class="skill-pill">Kubernetes</span>
+                    <span class="skill-pill">Ansible / Vagrant</span>
+                </div>
+            </div>
+
+            <div class="skill-group reveal">
+                <p class="skill-group-label">// 🌐 web &amp; backend</p>
+                <div class="skill-pills">
+                    <span class="skill-pill">Java</span>
+                    <span class="skill-pill">Node.js</span>
                     <span class="skill-pill">JavaScript</span>
+                    <span class="skill-pill">HTML / CSS</span>
+                    <span class="skill-pill">SQL</span>
+                    <span class="skill-pill">Git</span>
+                </div>
+            </div>
+
+            <div class="skill-group reveal">
+                <p class="skill-group-label">// 🎨 design &amp; publishing</p>
+                <div class="skill-pills">
                     <span class="skill-pill">Typst</span>
                     <span class="skill-pill">LaTeX</span>
                     <span class="skill-pill">Figma</span>
+                    <span class="skill-pill">Blender</span>
+                    <span class="skill-pill">Affinity</span>
                 </div>
             </div>
         </div>
