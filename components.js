@@ -400,6 +400,50 @@
         });
     }
 
+    // ── EASTER EGG: TYPED SEQUENCES ───────────────────────────────────────────
+    // Type any of these anywhere on the page (like a Konami code):
+    //   "justwhitee" → screen glow + toast
+    //   ":qa"        → vim-style "quit all", closes every open fun-fact window
+    function initTypedSequences() {
+        var sequences = [
+            { word: 'justwhitee', pos: 0, action: triggerSecretWord },
+            { word: ':qa',        pos: 0, action: closeAllEggWindows }
+        ];
+        document.addEventListener('keydown', function (e) {
+            if (e.key.length !== 1) return; // ignore Shift/Arrow/Enter/etc.
+            var ch = e.key.toLowerCase();
+            sequences.forEach(function (seq) {
+                var word = seq.word.toLowerCase();
+                seq.pos = (ch === word[seq.pos]) ? seq.pos + 1 : (ch === word[0] ? 1 : 0);
+                if (seq.pos === word.length) {
+                    seq.pos = 0;
+                    seq.action();
+                }
+            });
+        });
+    }
+    function closeAllEggWindows() {
+        document.querySelectorAll('.egg-window').forEach(function (w) { w.remove(); });
+        saveEggWindows([]); // only clears open windows — the request counter (and its
+                             // progress toward the next flood) is untouched on purpose
+    }
+    function triggerSecretWord() {
+        document.body.classList.add('konami-active');
+        setTimeout(function () { document.body.classList.remove('konami-active'); }, 2600);
+
+        var msg = window.currentLang === 'it'
+            ? '🕵️ hai scovato la parola magica — bravo detective, ma qui non c\'è nessun tesoro nascosto.'
+            : '🕵️ you found the magic word — nice detective work, but there\'s no hidden treasure here.';
+        var toast = document.createElement('div');
+        toast.className = 'konami-toast';
+        toast.textContent = msg;
+        document.body.appendChild(toast);
+        requestAnimationFrame(function () { toast.classList.add('show'); });
+        setTimeout(function () {
+            toast.classList.remove('show');
+            setTimeout(function () { toast.remove(); }, 400);
+        }, 3200);
+    }
 
     // ── INIT ──────────────────────────────────────────────────────────────────
     document.addEventListener('DOMContentLoaded', function () {
@@ -411,6 +455,7 @@
         initFunFactTriggers();
         clearEggStateOnHardRefresh();
         restoreEggWindows();
+        initTypedSequences();
     });
 
     logConsoleEasterEgg();
