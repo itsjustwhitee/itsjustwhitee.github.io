@@ -132,6 +132,30 @@
         return revealObs;
     };
 
+    // ── EASTER EGG: CONSOLE MESSAGE ──────────────────────────────────────────
+    // Art is fetched from assets/ascii-logo.txt, so editing that file is enough
+    // to update it. Note: fetch() can't read local files when the site is
+    // opened via file:// (double-clicking index.html) rather than served over
+    // http(s) — in that case the art just doesn't log, the rest still does.
+    function logConsoleEasterEgg() {
+        var logoStyle = 'color:#00bbc9;font-family:monospace;font-size:6px;line-height:6px;';
+        var accent    = 'color:#00bbc9;font-family:monospace;font-weight:bold;font-size:12px;';
+        var text      = 'color:#f0feff;font-family:monospace;font-size:12px;';
+        var muted     = 'color:#7fa8a8;font-family:monospace;font-size:11px;';
+
+        fetch(r('assets/ascii-logo.txt'))
+            .then(function (res) { return res.ok ? res.text() : null; })
+            .catch(function () { return null; })
+            .then(function (art) {
+                if (art) console.log('%c' + art, logoStyle);
+                console.log('%c// itsjustwhitee · Matteo Fontolan', accent);
+                console.log('%c// hello, fellow curious dev 👋', text);
+                console.log('%c// if you like poking at the internals of things, we should talk:', muted);
+                console.log('%c// matteo.fontolan@justwhitee.org', accent);
+            });
+    }
+
+
     // ── INIT ──────────────────────────────────────────────────────────────────
     document.addEventListener('DOMContentLoaded', function () {
         var nav    = document.getElementById('site-nav');
@@ -140,5 +164,7 @@
         if (footer) buildFooter(footer);
         initParallaxOrbs();
     });
+
+    logConsoleEasterEgg();
 
 })();
