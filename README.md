@@ -266,6 +266,9 @@ Edit the `NAV_LINKS` array at the top of `components.js` — no HTML changes req
 ### Email addresses in the footer
 The footer email is a plain `mailto:` string inside `components.js` (not in static HTML). Cloudflare's email obfuscation only rewrites static HTML, so the address is never mangled during deployment.
 
+### Easter eggs 🥚
+There are a handful of hidden easter eggs sprinkled around the site — a console message, a couple of click-based triggers, a typed sequence or two. Deliberately undocumented here beyond that. Good hunting! If you're the one maintaining this and genuinely need to find them again, they're all in `components.js` under the `EASTER EGG` comment markers.
+
 ---
 
 ## Security
