@@ -95,6 +95,11 @@
         line-height: 0.95; color: #fff;
         opacity: 0; animation: fadeUp 0.7s ease 0.35s forwards;
         margin-bottom: 24px;
+        /* #hero is a flex container with align-items:flex-start, so children
+           shrink-to-fit their content by default — without this, a long
+           unbreakable word can size the box past the viewport on narrow phones. */
+        max-width: 100%;
+        overflow-wrap: break-word;
     }
     .hero-name .accent { color: var(--accent-bright); }
     .hero-role-tags {
@@ -417,6 +422,7 @@
         .project-card.featured .project-img-wrap { height: auto; }
         .project-card.featured .project-img { height: 200px; min-height: unset; padding: 16px; }
         .skills-grid { grid-template-columns: 1fr 1fr; }
+        .skill-group:nth-child(5) { grid-column: 1 / -1; }
         .exp-edu-grid { grid-template-columns: 1fr; gap: 40px; }
         .edu-grid { grid-template-columns: 1fr 1fr; }
         .edu-card[style*="grid-column"] { grid-column: span 2 !important; }
@@ -492,7 +498,7 @@
 
     /* ── SMALL MOBILE ≤400px ─────────────────────────────────────────────── */
     @media (max-width: 400px) {
-        .hero-name { font-size: clamp(2.2rem, 15vw, 2.9rem); }
+        .hero-name { font-size: clamp(2.2rem, 15vw, 2.4rem); }
         .hero-tag  { font-size: 0.65rem; padding: 6px 12px; }
         .section   { padding: 44px 14px; }
     }
