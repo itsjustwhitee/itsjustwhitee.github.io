@@ -70,12 +70,75 @@
             '</div>';
     }
 
+    // ── MOUSE PARALLAX ORBS ─────────────────────────────────────────────────
+    // Shared by every page that has #orb1/#orb2 in its markup (home, bento,
+    // contacts). No-op (never attaches the listener) on pages without them.
+    function initParallaxOrbs() {
+        var orb1 = document.getElementById('orb1');
+        var orb2 = document.getElementById('orb2');
+        if (!orb1 && !orb2) return;
+
+        var ticking = false;
+        window.addEventListener('mousemove', function (e) {
+            if (ticking) return;
+            ticking = true;
+            requestAnimationFrame(function () {
+                var x = e.clientX / window.innerWidth;
+                var y = e.clientY / window.innerHeight;
+                if (orb1) orb1.style.transform = 'translate(' + (x * 30) + 'px, ' + (y * 30) + 'px)';
+                if (orb2) orb2.style.transform = 'translate(' + (-x * 20) + 'px, ' + (-y * 20) + 'px)';
+                ticking = false;
+            });
+        }, { passive: true });
+    }
+
+    // ── SCROLL REVEAL ────────────────────────────────────────────────────────
+    // Bidirectional (in on scroll down, out on scroll up) reveal for `.reveal`
+    // elements, staggered by sibling index. Used by home + contacts, each with
+    // its own step/cap. (bento/script.js has its own batch-based variant since
+    // its cards can be added to the DOM asynchronously after this runs.)
+    window.initScrollReveal = function (opts) {
+        opts = opts || {};
+        var delayStep  = opts.delayStep  || 80;
+        var delayCap   = opts.delayCap   || 280;
+        var revealStart = Date.now();
+
+        var revealObs = new IntersectionObserver(function (entries) {
+            entries.forEach(function (entry) {
+                if (entry.isIntersecting) {
+                    var siblings = [].slice.call(entry.target.parentElement.querySelectorAll('.reveal'));
+                    var idx      = siblings.indexOf(entry.target);
+                    var delay    = Math.min(idx * delayStep, delayCap);
+                    entry.target.style.transitionDelay = delay + 'ms';
+                    entry.target.classList.add('visible');
+                } else if (Date.now() - revealStart > 800) {
+                    // Only hide after the page has settled — avoids flash-of-invisible on load
+                    entry.target.style.transitionDelay = '0ms';
+                    entry.target.classList.remove('visible');
+                }
+            });
+        }, { threshold: 0.05, rootMargin: '0px 0px -20px 0px' });
+
+        document.querySelectorAll('.reveal').forEach(function (el) { revealObs.observe(el); });
+
+        // Hard fallback: anything still hidden after 2s gets force-shown
+        setTimeout(function () {
+            document.querySelectorAll('.reveal:not(.visible)').forEach(function (el) {
+                el.style.transitionDelay = '0ms';
+                el.classList.add('visible');
+            });
+        }, 2000);
+
+        return revealObs;
+    };
+
     // ── INIT ──────────────────────────────────────────────────────────────────
     document.addEventListener('DOMContentLoaded', function () {
         var nav    = document.getElementById('site-nav');
         var footer = document.getElementById('site-footer');
         if (nav)    buildNav(nav);
         if (footer) buildFooter(footer);
+        initParallaxOrbs();
     });
 
 })();

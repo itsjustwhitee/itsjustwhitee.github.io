@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Matteo Fontolan — Contatti</title>
+    <title>Matteo Fontolan - Contatti</title>
     <link rel="stylesheet" href="../shared.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -19,16 +19,6 @@
     body { padding: 60px 20px; }
 
     .container { max-width: 620px; }
-
-    /* Contacts-specific profile header sizing */
-    .profile-pic { width: 200px; height: 200px; }
-
-    /* ── PARALLAX ORBS ───────────────────────────────────────────────── */
-    .parallax-orb {
-        position: fixed; border-radius: 50%;
-        pointer-events: none; z-index: 0;
-        filter: blur(90px); will-change: transform;
-    }
 
     /* ── CONTACT GRID ────────────────────────────────────────────────── */
     .contact-grid {
@@ -64,8 +54,8 @@
     @media (hover: hover) and (pointer: fine) {
         .action-card:hover {
             transform: translateY(-5px) scale(1.02);
-            border-color: rgba(0,187,201,0.4);
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5), 0 0 18px rgba(9,134,143,0.18);
+            border-color: rgba(var(--accent-bright-rgb),0.4);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5), 0 0 18px rgba(var(--accent-rgb),0.18);
             filter: brightness(1.07);
         }
         .action-card:hover::after { animation: shimmer 0.65s ease forwards; }
@@ -136,8 +126,8 @@
 <body data-page="contacts">
 
     <!-- PARALLAX ORBS -->
-    <div id="orb1" class="parallax-orb" style="width:550px;height:550px;background:radial-gradient(circle,rgba(0,187,201,0.06) 0%,transparent 70%);top:-80px;right:-80px;"></div>
-    <div id="orb2" class="parallax-orb" style="width:420px;height:420px;background:radial-gradient(circle,rgba(9,79,79,0.1) 0%,transparent 70%);bottom:30%;left:-80px;"></div>
+    <div id="orb1" class="parallax-orb orb1"></div>
+    <div id="orb2" class="parallax-orb orb2"></div>
 
     <!-- NAV -->
     <nav id="site-nav" class="site-nav" data-active="contacts"></nav>
@@ -239,44 +229,8 @@
     </div>
 
     <script>
-    // ── SCROLL REVEAL ─────────────────────────────────────────────────────
-    const _revealStart = Date.now();
-    const _revealObs = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                const siblings = [...entry.target.parentElement.querySelectorAll('.reveal')];
-                const idx      = siblings.indexOf(entry.target);
-                const delay    = Math.min(idx * 100, 300);
-                entry.target.style.transitionDelay = delay + 'ms';
-                entry.target.classList.add('visible');
-            } else if (Date.now() - _revealStart > 800) {
-                entry.target.style.transitionDelay = '0ms';
-                entry.target.classList.remove('visible');
-            }
-        });
-    }, { threshold: 0.05, rootMargin: '0px 0px -20px 0px' });
-    document.querySelectorAll('.reveal').forEach(el => _revealObs.observe(el));
-    setTimeout(() => {
-        document.querySelectorAll('.reveal:not(.visible)').forEach(el => {
-            el.style.transitionDelay = '0ms';
-            el.classList.add('visible');
-        });
-    }, 2000);
-
-    // ── MOUSE PARALLAX ORBS ───────────────────────────────────────────────
-    const _orb1 = document.getElementById('orb1');
-    const _orb2 = document.getElementById('orb2');
-    let _ticking = false;
-    window.addEventListener('mousemove', e => {
-        if (_ticking) return; _ticking = true;
-        requestAnimationFrame(() => {
-            const x = e.clientX / window.innerWidth;
-            const y = e.clientY / window.innerHeight;
-            if (_orb1) _orb1.style.transform = `translate(${x * 30}px, ${y * 30}px)`;
-            if (_orb2) _orb2.style.transform = `translate(${-x * 20}px, ${-y * 20}px)`;
-            _ticking = false;
-        });
-    }, { passive: true });
+    // Scroll reveal + mouse parallax orbs — shared implementation lives in components.js
+    window.initScrollReveal({ delayStep: 100, delayCap: 300 });
 
     // ── CONTACTS LOGIC ────────────────────────────────────────────────────
     const prefisso = "39";
@@ -323,7 +277,6 @@
             `FN:${nome} ${cognome}`,
             `TEL;TYPE=CELL:${numeroVisuale}`,
             `EMAIL:${email}`,
-            `EMAIL:${email2}`,
             `URL:${bento}`,
             `URL;TYPE=linkedin:${linkedin}`,
             `URL;TYPE=instagram:${instagram}`,

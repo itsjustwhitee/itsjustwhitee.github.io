@@ -1,3 +1,6 @@
+(function () {
+    'use strict';
+
 // ─── BRAND DEFINITIONS ───────────────────────────────────────────────────────
 const BRAND = {
     telegram:   { bgFrom: "#229ED9", bgTo: "#1575a5" },
@@ -373,3 +376,8 @@ function _initReveal() {
 }
 
 document.addEventListener("DOMContentLoaded", loadBento);
+
+    // Exposed for i18n.js's toggleLang(), which re-renders the grid on language switch
+    window.loadBento = loadBento;
+
+})();

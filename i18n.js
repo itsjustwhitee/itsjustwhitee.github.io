@@ -86,7 +86,8 @@
 
             'exp.tutor.period':  'may 2025 — now',
             'exp.tutor.role':    'Didactic Tutor',
-            'exp.tutor.location': 'Ferrara, IT',
+            'exp.tutor.company': 'Freelance',
+            'exp.tutor.location': '· Ferrara, IT',
             'exp.tutor.desc':    'Academic support for upper secondary students in Computer Science and Mathematics, with a focus on logic and problem solving.',
 
             'exp.birex.period':  'apr 2025 — oct 2025',
@@ -231,7 +232,8 @@
 
             'exp.tutor.period':  'mag 2025 — oggi',
             'exp.tutor.role':    'Tutor Didattico',
-            'exp.tutor.location': 'Ferrara, IT',
+            'exp.tutor.company': 'Privato',
+            'exp.tutor.location': '· Ferrara, IT',
             'exp.tutor.desc':    'Supporto accademico per studenti delle scuole superiori in Informatica e Matematica, con focus su logica e problem solving.',
 
             'exp.birex.period':  'apr 2025 — ott 2025',
@@ -322,6 +324,17 @@
         return key;
     };
 
+    // ── LANG TOGGLE BUTTON STATE ─────────────────────────────────────────────
+    // Single source of truth for the toggle's label + accessible name, so the
+    // visible text and the aria-label can never drift out of sync.
+    function updateLangToggleButton(btn) {
+        const nextLang = window.currentLang === 'it' ? 'EN' : 'IT';
+        btn.textContent = nextLang;
+        btn.setAttribute('aria-label', nextLang === 'EN'
+            ? 'Switch language to English'
+            : 'Cambia lingua in italiano');
+    }
+
     // ── APPLY TRANSLATIONS TO STATIC DOM ────────────────────────────────────
     function applyTranslations() {
         document.querySelectorAll('[data-i18n]').forEach(function (el) {
@@ -334,7 +347,7 @@
         });
         document.documentElement.lang = window.currentLang;
         const btn = document.getElementById('jw-lang-toggle');
-        if (btn) btn.textContent = window.currentLang === 'it' ? 'EN' : 'IT';
+        if (btn) updateLangToggleButton(btn);
     }
 
     // ── PUBLIC: TOGGLE ───────────────────────────────────────────────────────
@@ -356,8 +369,9 @@
         const li  = document.createElement('li');
         const btn = document.createElement('button');
         btn.id          = 'jw-lang-toggle';
-        btn.textContent = window.currentLang === 'it' ? 'EN' : 'IT';
+        btn.type        = 'button';
         btn.title       = 'Switch language / Cambia lingua';
+        updateLangToggleButton(btn);
         btn.setAttribute('onclick', 'toggleLang()');
         btn.style.cssText = [
             'background:none',

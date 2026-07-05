@@ -13,9 +13,11 @@
     --text-body:     #f0feff;
     --accent:        #09868f;
     --accent-bright: #00bbc9;
+    --accent-rgb:        9,134,143;
+    --accent-bright-rgb: 0,187,201;
     --radius:        28px;
     --radius-sm:     18px;
-    --grid-dot:      rgba(9,134,143,0.04);
+    --grid-dot:      rgba(var(--accent-rgb),0.04);
 }
 
 /* ── RESET & BASE ───────────────────────────────────────────────────────── */
@@ -90,7 +92,7 @@ a { color: inherit; text-decoration: none; }
 .card-base {
     position: relative;
     border-radius: var(--radius);
-    border: 1px solid rgba(9,134,143,0.2);
+    border: 1px solid rgba(var(--accent-rgb),0.2);
     overflow: hidden; color: #fff; text-decoration: none;
     transition:
         transform 0.35s cubic-bezier(0.175,0.885,0.32,1.275),
@@ -99,8 +101,8 @@ a { color: inherit; text-decoration: none; }
 @media (hover: hover) and (pointer: fine) {
     .card-base:hover {
         transform: translateY(-5px) scale(1.02);
-        border-color: rgba(0,187,201,0.4);
-        box-shadow: 0 20px 50px rgba(0,0,0,0.5), 0 0 18px rgba(9,134,143,0.18);
+        border-color: rgba(var(--accent-bright-rgb),0.4);
+        box-shadow: 0 20px 50px rgba(0,0,0,0.5), 0 0 18px rgba(var(--accent-rgb),0.18);
         filter: brightness(1.07);
     }
     .card-base:hover::after { animation: shimmer 0.65s ease forwards; }
@@ -108,7 +110,7 @@ a { color: inherit; text-decoration: none; }
     .card-base:hover .card-slug { color: rgba(255,255,255,0.55); }
     .footer-logo:hover {
         opacity: 1;
-        filter: drop-shadow(0 2px 16px rgba(0,187,201,0.35));
+        filter: drop-shadow(0 2px 16px rgba(var(--accent-bright-rgb),0.35));
     }
     .footer-copy a:hover { color: var(--accent-bright); }
     .footer-links a:hover { color: var(--accent-bright); }
@@ -161,14 +163,14 @@ a { color: inherit; text-decoration: none; }
 /* ── SITE FOOTER ─────────────────────────────────────────────────────────── */
 .site-footer {
     margin-top: 64px; padding: 40px 0 32px;
-    border-top: 1px solid rgba(9,134,143,0.18);
+    border-top: 1px solid rgba(var(--accent-rgb),0.18);
     text-align: center;
 }
 .footer-inner { display: flex; flex-direction: column; align-items: center; gap: 18px; }
 .footer-logo {
     width: 72px; height: 72px; object-fit: contain;
     opacity: 0.75;
-    filter: drop-shadow(0 2px 8px rgba(0,187,201,0.15));
+    filter: drop-shadow(0 2px 8px rgba(var(--accent-bright-rgb),0.15));
     transition: opacity 0.3s ease, filter 0.3s ease;
 }
 .footer-name {
@@ -180,34 +182,51 @@ a { color: inherit; text-decoration: none; }
     font-size: 0.65rem; color: rgba(255,255,255,0.22);
     line-height: 1.7; max-width: 520px;
 }
-.footer-copy a { color: rgba(0,187,201,0.55); transition: color 0.2s ease; }
+.footer-copy a { color: rgba(var(--accent-bright-rgb),0.55); transition: color 0.2s ease; }
 .footer-links {
     display: flex; align-items: center;
     justify-content: center; gap: 12px; flex-wrap: wrap;
 }
 .footer-links a {
-    font-size: 0.67rem; color: rgba(0,187,201,0.5);
+    font-size: 0.67rem; color: rgba(var(--accent-bright-rgb),0.5);
     transition: color 0.2s ease;
     display: flex; align-items: center; gap: 5px;
 }
 .footer-sep { font-size: 0.55rem; color: rgba(255,255,255,0.12); }
 .footer-back {
-    font-size: 0.65rem; color: rgba(0,187,201,0.5);
+    font-size: 0.65rem; color: rgba(var(--accent-bright-rgb),0.5);
     display: inline-flex; align-items: center; gap: 6px;
     transition: color 0.2s ease;
 }
 
 /* ── NAV BAR ─────────────────────────────────────────────────────────────── */
+/* The blur/tint lives on ::before, extended past the nav's own height and
+   faded out with a mask — so it trails off gradually into the page instead
+   of cutting off at a hard edge. Cheap: same single blur as before, the
+   mask is just an alpha gradient on top of it. */
 .site-nav {
     position: fixed; top: 0; left: 0; right: 0;
     z-index: 100;
     display: flex; align-items: center; justify-content: space-between;
     padding: 0 32px; height: 58px;
+}
+.site-nav::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: -90px;
     background: rgba(11,20,20,0.82);
     backdrop-filter: blur(14px);
     -webkit-backdrop-filter: blur(14px);
-    border-bottom: 1px solid rgba(9,134,143,0.12);
-    transition: background 0.3s ease;
+    -webkit-mask-image: linear-gradient(to bottom,
+        #000 0%, #000 15%,
+        rgba(0,0,0,0.7) 40%, rgba(0,0,0,0.35) 65%,
+        rgba(0,0,0,0.08) 85%, transparent 100%);
+    mask-image: linear-gradient(to bottom,
+        #000 0%, #000 15%,
+        rgba(0,0,0,0.7) 40%, rgba(0,0,0,0.35) 65%,
+        rgba(0,0,0,0.08) 85%, transparent 100%);
+    pointer-events: none;
+    z-index: -1;
 }
 .nav-logo {
     display: flex; align-items: center; gap: 10px;
@@ -241,12 +260,15 @@ a { color: inherit; text-decoration: none; }
     font-size: 0.72rem; font-weight: 700;
     font-family: 'JetBrains Mono', monospace;
     cursor: pointer; border: none; text-decoration: none;
-    transition: filter 0.2s ease, transform 0.2s ease;
+    /* Full list lives here so variants (.btn-primary/.btn-ghost/page-specific ones)
+       never need to redeclare it just to add a background/border-color/box-shadow hover */
+    transition: background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease,
+                filter 0.2s ease, transform 0.2s ease;
 }
 
-.btn-primary { background: var(--accent-bright); color: #0b1414; transition: filter 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease; }
-.btn-primary:hover { box-shadow: 0 0 8px rgba(0,187,201,0.2); }
-.btn-ghost   { background: rgba(255,255,255,0.12); color: #fff; border: 1px solid rgba(255,255,255,0.22); transition: background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease, transform 0.2s ease; }
+.btn-primary { background: var(--accent-bright); color: #0b1414; }
+.btn-primary:hover { box-shadow: 0 0 8px rgba(var(--accent-bright-rgb),0.2); }
+.btn-ghost   { background: rgba(255,255,255,0.12); color: #fff; border: 1px solid rgba(255,255,255,0.22); }
 .btn-ghost:hover { background: rgba(255,255,255,0.22); border-color: rgba(255,255,255,0.45); box-shadow: 0 0 8px rgba(255,255,255,0.12); }
 
 /* ── FOCUS ACCESSIBILITY ─────────────────────────────────────────────────── */
@@ -255,6 +277,11 @@ a { color: inherit; text-decoration: none; }
     outline-offset: 3px;
     border-radius: 4px;
 }
+
+/* ── PARALLAX ORBS ───────────────────────────────────────────────────────── */
+.parallax-orb { position: fixed; border-radius: 50%; pointer-events: none; z-index: 0; filter: blur(90px); will-change: transform; }
+.orb1 { width: 550px; height: 550px; background: radial-gradient(circle, rgba(var(--accent-bright-rgb),0.06) 0%, transparent 70%); top: -80px; right: -80px; }
+.orb2 { width: 420px; height: 420px; background: radial-gradient(circle, rgba(9,79,79,0.1) 0%, transparent 70%); bottom: 30%; left: -80px; }
 
 /* ── SCROLL REVEAL ───────────────────────────────────────────────────────── */
 .reveal {
