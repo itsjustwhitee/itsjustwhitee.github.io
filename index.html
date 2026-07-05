@@ -421,6 +421,10 @@
         }
         .project-card.featured .project-img-wrap { height: auto; }
         .project-card.featured .project-img { height: 200px; min-height: unset; padding: 16px; }
+        /* Non-featured cards: fixed 160px image height read as near-empty once the card spans the full mobile width — square it up instead */
+        .project-card:not(.featured) .project-img-wrap { aspect-ratio: 1 / 1; height: auto; }
+        .project-card:not(.featured) .project-img { height: 100%; }
+        .project-card:not(.featured) .project-img-placeholder { height: 100%; }
         .skills-grid { grid-template-columns: 1fr 1fr; }
         .skill-group:nth-child(5) { grid-column: 1 / -1; }
         .exp-edu-grid { grid-template-columns: 1fr; gap: 40px; }
