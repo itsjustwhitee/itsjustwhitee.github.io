@@ -20,6 +20,27 @@
     --grid-dot:      rgba(var(--accent-rgb),0.04);
 }
 
+/* ── BREAKPOINT SCALE ───────────────────────────────────────────────────────
+   CSS custom properties can't be used inside @media conditions, so this is a
+   convention, not an enforced token — but every `max-width` in the project
+   should be one of these two tiers, not a one-off value:
+
+     Nav chrome (site-nav, section-nav dots, footer link wrap):
+       768px — tablet: shrink logo/link sizing
+       480px — phone:  shrink further, stack footer links
+
+     Content layout (grids, section padding, type scale):
+       900px — tablet: collapse multi-column grids to single column
+       600px — phone:  tighten section padding, gaps, font sizes
+       400px — small phone: one more pass on hero/title sizing
+
+   Nav collapses earlier (768/480) than content reflows (900/600/400) because
+   the nav bar runs out of horizontal room before the page grid does — that's
+   intentional, not drift. See shared.css's own nav rules and index.html's
+   #section-nav rules for the nav tier; index.html/bento/style.css/cv for the
+   content tier.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
 /* ── RESET & BASE ───────────────────────────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
