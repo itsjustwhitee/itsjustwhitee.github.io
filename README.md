@@ -19,6 +19,12 @@ A static personal website hosted on **GitHub Pages** with Cloudflare as CDN and 
 ├── favicon.ico             # Favicon (48×48)
 ├── CNAME                   # Custom domain binding for GitHub Pages
 │
+├── partials/
+│   └── shared-head.html    # Single source of truth for the shared <head> boilerplate (see below)
+├── scripts/
+│   ├── sync-head.js        # Syncs partials/shared-head.html into every page
+│   └── generate-og-image.js # Screenshots the hero for assets/og-image.jpg (run by CI)
+│
 ├── bento/
 │   ├── index.html          # Bento page — header fadeUp, parallax orbs, mouse tracking
 │   ├── script.js           # All bento card logic (async renderer, scroll reveal, GitHub fetch)
@@ -41,6 +47,28 @@ A static personal website hosted on **GitHub Pages** with Cloudflare as CDN and 
 ```
 
 > **Note:** There is no `bento/sitemap.xml`. A single `sitemap.xml` at the root covers all indexed pages: `/`, `/bento/`, and `/cv/`. Do not add secondary sitemaps in subfolders.
+
+---
+
+## Shared `<head>` (no build step, still no duplication)
+
+There's deliberately no bundler/SSG in this project (see intro), so each page is still a complete, independent HTML file. But the boilerplate every page needs — charset/viewport meta, `shared.css`, Font Awesome, Google Fonts, favicons/manifest/theme-color, and the `components.js`/`i18n.js` script tags — is no longer hand-copied 5 times. It lives once in [`partials/shared-head.html`](partials/shared-head.html) and gets synced into each page between a marker pair:
+
+```html
+<!-- SHARED-HEAD:START -->
+... synced content, don't hand-edit ...
+<!-- SHARED-HEAD:END -->
+```
+
+**To change anything in that shared block:** edit `partials/shared-head.html`, then run:
+
+```bash
+node scripts/sync-head.js
+```
+
+This rewrites the block in `index.html`, `404.html`, `bento/index.html`, `contacts/index.html`, and `cv/index.html` in place (title, description, og/twitter tags, canonical, and any page-specific `<style>`/stylesheet stay outside the markers — those are genuinely page-specific and aren't touched). [`.github/workflows/check-head-sync.yml`](.github/workflows/check-head-sync.yml) runs `node scripts/sync-head.js --check` on every push/PR and fails if a page drifts out of sync (e.g. someone hand-edited the block directly instead of going through the partial), so this can't silently rot.
+
+`{{ROOT}}` in the partial is replaced with each page's relative path back to the site root (`./` for root-level pages, `../` for one-level-deep pages) — **except `404.html`, which always gets absolute `/`-rooted paths.** That one's not optional: GitHub Pages serves `404.html`'s content for any unmatched URL while the browser keeps showing the original broken URL, so relative paths on that page resolve against wherever the 404 was triggered from, not the site root. (This used to be broken — `components.js`/`i18n.js` were loaded with relative paths on `404.html`, so the nav/footer/language toggle silently failed to initialize on any 404 one level or deeper, e.g. `/bento/typo`. Fixed as part of adding this system.)
 
 ---
 
@@ -325,8 +353,8 @@ The site is hosted on **GitHub Pages** with **Cloudflare** as DNS provider, CDN,
 ## Adding a New Page
 
 1. Create a new folder (e.g. `mypage/`) with an `index.html`.
-2. Link `../shared.css` and `../i18n.js` in `<head>`.
-3. Add `<link rel="manifest" href="/manifest.json">` and `<meta name="theme-color" content="#00bbc9">` in `<head>`.
+2. Add `<!-- SHARED-HEAD:START -->`/`<!-- SHARED-HEAD:END -->` markers in `<head>`, add `mypage` to the `PAGES` list in `scripts/sync-head.js` (with `root: '../'`), then run `node scripts/sync-head.js` to fill the block in. See "Shared `<head>`" above.
+3. Add page-specific `<title>`/description/canonical/og/twitter tags right after the markers.
 4. Add `<nav id="site-nav" class="site-nav" data-active="mypage"></nav>` where the navbar should appear.
 5. Add `<footer id="site-footer" class="site-footer" data-copy-key="home.footer_copy"></footer>` where the footer should appear.
 6. Add the new page key to `NAV_LINKS` in `components.js` if it should appear in the navbar.
