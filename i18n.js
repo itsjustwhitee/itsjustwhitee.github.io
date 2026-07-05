@@ -31,28 +31,28 @@
             // ── Home: hero ───────────────────────────────────────────────────
             'hero.eyebrow':      '// hello world · itsjustwhitee',
             'hero.role_tag':     'MSc Computer Engineering · Università di Bologna',
-            'hero.desc':         "I build things at the intersection of silicon and code, from Edge AI systems to IoT controllers to parallel GPU algorithms. I'm a firm believer that you don't truly 'own' a system until you've poked around under the hood too see how it actually works.",
+            'hero.desc':         "I work on projects that mix hardware and software — I like getting my hands dirty (and often frustrated) with Edge and IoT systems, and every now and then GPUs too. I'm convinced you never really know something until you understand exactly how it works underneath.",
             'hero.btn_projects': 'View Projects',
             'hero.btn_cv':       'Curriculum',
             'hero.scroll':       'scroll',
 
             // ── Home: about ──────────────────────────────────────────────────
             'about.label':   '// 01 — about me',
-            'about.title':   'Passionate geek,<br><span class="accent">practical engineer</span>',
+            'about.title':   'Engineer on paper,<br><span class="accent">tinkerer at heart</span>',
             'about.badge':   'BSc grade',
-            'about.h3':      'From Corbola to...',
-            'about.p1':      "I'm a Computer Engineering student at the University of Bologna (Alma Mater Studiorum), currently pursuing my Master's Degree after graduating, but I'm originally from Corbola, a small quiet town (really?) in the Rovigo province (Veneto).",
-            'about.p2':      "I love digging into how things actually work and I define myself as a practical person. My journey has taken me from designing real-time safety systems for industrial robots to optimizing parallel algorithms on GPUs.",
+            'about.h3':      'From nowhere to... (who knows?)',
+            'about.p1':      "I'm a Computer Engineering student at the University of Bologna (Alma Mater Studiorum), currently pursuing my Master's Degree, but I originally come from a small, quiet town (really!) in Veneto.",
+            'about.p2':      "I like understanding how things actually work, and that curiosity is basically what got me here: from real-time systems to IoT, to AI, and much more.",
             'about.p3_html': "When I'm not staring at a terminal, I'm likely eating sushi 🍣, or drawing caricatures or overthinking a graphic design layout 🖱️.<br> I believe <em>knowledge is worthless if it's not shared</em>.",
 
             // ── Home: projects ───────────────────────────────────────────────
             'projects.label':         '// 02 — projects',
             'projects.title':         'My <span class="accent">projects</span>',
-            'projects.sub':           'Selected work from university courses, internships, and personal curiosity.',
+            'projects.sub':           'Selected work from university courses, internships, and personal experiments.',
             'projects.contrib_label': 'with',
 
             'proj.edgecv.badge':      'Internship · Thesis',
-            'proj.edgecv.tagline':    'AI-Driven Contextual Safety System for Industry 5.0',
+            'proj.edgecv.tagline':    '🛡️ AI-Driven Contextual Safety System for Industry 5.0',
             'proj.edgecv.desc':       'Modular Computer Vision system replacing physical safety barriers. Deployed on NVIDIA Jetson AGX Orin: YOLO + UniDepth/DepthAnything over ONNX Runtime, robot control via RTDE, real-time proximity awareness for Universal Robots.',
             'proj.edgecv.stat1_lbl':  'Inference',
             'proj.edgecv.stat1_desc': 'on Jetson AGX Orin via TensorRT',
@@ -60,17 +60,17 @@
             'proj.edgecv.stat2_desc': 'Super-repo with Git Submodules — strict decoupling of Vision and Robot Control components.',
 
             'proj.hash.badge':   'MSc Course',
-            'proj.hash.tagline': 'Multi-Platform SHA-256 Parallel Cracking Suite',
+            'proj.hash.tagline': '🔓 Multi-Platform SHA-256 Parallel Cracking Suite',
             'proj.hash.desc':    'High-performance SHA-256 cracker comparing NVIDIA CUDA, AMD ROCm/HIP, and multi-core CPU via OpenMP. Kernel optimizations include constant memory, loop unrolling, and dynamic work scheduling.',
 
             'proj.rack.badge':   'Personal',
-            'proj.rack.tagline': 'Smart Cooling &amp; IoT Ecosystem',
+            'proj.rack.tagline': '❄️ Smart Cooling &amp; IoT Ecosystem',
             'proj.rack.desc':    'Custom cooling system for a DIY network rack on ESP32-S3. Decoupled: C++ REST firmware + Nginx/Docker frontend. Dynamic PWM fan control, OLED night-mode display, real-time web dashboard.',
 
             // ── Home: skills ─────────────────────────────────────────────────
             'skills.label': '// 03 — skills',
             'skills.title': 'Tech <span class="accent">stack.</span>',
-            'skills.sub':   'A focused collection of technologies I learned to wield.',
+            'skills.sub':   "A focused collection of technologies I've learned to use.",
 
             // ── Home: experience & education ─────────────────────────────────
             'exp.label':    '// 04 — experience &amp; education',
@@ -116,13 +116,13 @@
             'cta.desc':  "I'm open to internships, collaborations, and interesting projects. If you have an idea or just want to chat tech, I'm always up for it.",
 
             // ── Home: footer ─────────────────────────────────────────────────
-            'home.footer_copy': '&copy; YEAR Matteo Fontolan<br>Creative work (caricatures, illustrations, graphic design) is protected by copyright. Do not reproduce without explicit permission.<br>Code and repositories are released under <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank">copyleft</a> — because knowledge is worthless if it\'s not shared.',
+            'home.footer_copy': '&copy; YEAR Matteo Fontolan<br>Caricatures, illustrations and graphic design are copyrighted — ask before reusing them.<br>Code and repositories are <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank">copyleft</a> (unless stated otherwise) — knowledge is meant to be shared.',
 
             // ── Bento ────────────────────────────────────────────────────────
             'bento.header_label': "// justwhitee's bento",
             'bento.bio':          'Tech enthusiast 👾 | Computer Engineering (M.Sc. WIP) 🧑‍💻 | Foodie 🍣 | Caricature &amp; Graphic Design for hobby 🖱️',
-            'bento.cta':          'Let\'s work together, or just chat about tech.💡 Reach out! Feel free to ask! ',
-            'bento.footer_copy':  '&copy; YEAR Matteo Fontolan<br>Creative work (caricatures, illustrations, graphic design) is protected by copyright. Do not reproduce without explicit permission.<br>Code, repositories and other works/assets are released under <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank">copyleft</a> &mdash; because knowledge is worthless if it\'s not shared.',
+            'bento.cta':          'Let\'s work together, or just chat about tech. Reach out!💡',
+            'bento.footer_copy':  '&copy; YEAR Matteo Fontolan<br>Caricatures, illustrations and graphic design are copyrighted — ask before reusing them.<br>Code, repositories and other works/assets are <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank">copyleft</a> (unless stated otherwise) — knowledge is meant to be shared.',
 
             'card.telegram.title':   'Contact Me ✍️',
             'card.telegram.desc':    'Collaborations? Reach out here or at matteo.fontolan@justwhitee.org',
@@ -152,7 +152,7 @@
             'contacts.btn.call':     'Call',
             'contacts.btn.save':     'Save Contact',
             'contacts.footer_back':  '← back to bento',
-            'contacts.footer_copy': '&copy; YEAR Matteo Fontolan<br>Creative work (caricatures, illustrations, graphic design) is protected by copyright. Do not reproduce without explicit permission.<br>Code and repositories are released under <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank">copyleft</a> &mdash; because knowledge is worthless if it\'s not shared.',
+            'contacts.footer_copy': '&copy; YEAR Matteo Fontolan<br>Caricatures, illustrations and graphic design are copyrighted — ask before reusing them.<br>Code and repositories are <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank">copyleft</a> (unless stated otherwise) — knowledge is meant to be shared.',
             'contacts.wa_msg':       'Hi Matteo, I found something of yours! 👋',
 
             // ── CV ────────────────────────────────────────────────────────────
@@ -163,7 +163,7 @@
             'cv.btn_download': 'Download CV',
             'cv.btn_open':     'Open in new tab',
             'cv.footer_back':  'back to home',
-            'cv.footer_copy': '&copy; YEAR Matteo Fontolan<br>Creative work (caricatures, illustrations, graphic design) is protected by copyright. Do not reproduce without explicit permission.<br>Code and repositories are released under <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank">copyleft</a> &mdash; because knowledge is worthless if it\'s not shared.',
+            'cv.footer_copy': '&copy; YEAR Matteo Fontolan<br>Caricatures, illustrations and graphic design are copyrighted — ask before reusing them.<br>Code and repositories are <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank">copyleft</a> (unless stated otherwise) — knowledge is meant to be shared.',
         },
         it: {
             // ── Home: nav ────────────────────────────────────────────────────
@@ -176,28 +176,28 @@
             // ── Home: hero ───────────────────────────────────────────────────
             'hero.eyebrow':      '// hello world · itsjustwhitee',
             'hero.role_tag':     'Ing. Informatica Magistrale · Università di Bologna',
-            'hero.desc':         "Sviluppo progetti all'intersezione tra software e hardware: dai sistemi Edge AI ai controller IoT fino agli algoritmi GPU paralleli. Sono convinto che non si conosca davvero un sistema finché non si capisce esattamente come funziona all'interno.",
+            'hero.desc':         "Mi occupo di progetti che coinvolgono sia hardware che software: mi piace sporcarmi le mani e litigare con sistemi Edge e IoT (e ogni tanto anche con le GPU). Sono convinto che non si conosca davvero qualcosa finché non si capisce esattamente come funziona all'interno.",
             'hero.btn_projects': 'Vai ai Progetti',
             'hero.btn_cv':       'Curriculum',
             'hero.scroll':       'scorri',
 
             // ── Home: about ──────────────────────────────────────────────────
             'about.label':   '// 01 — chi sono',
-            'about.title':   'Geek appassionato,<br><span class="accent">ingegnere pratico</span>',
+            'about.title':   'Ingegnere sulla carta,<br><span class="accent">smanettone dentro</span>',
             'about.badge':   'voto triennale',
-            'about.h3':      'Da Corbola a...',
-            'about.p1':      "Sono uno studente di Ingegneria Informatica all'Università di Bologna (Alma Mater Studiorum), attualmente in Magistrale, ma vengo da Corbola, un piccolo e tranquillo paesino (davvero!) in provincia di Rovigo (Veneto).",
-            'about.p2':      "Amo capire come funzionano davvero le cose e mi considero una persona pratica. Il mio percorso mi ha portato dalla progettazione di sistemi di sicurezza real-time per robot industriali all'ottimizzazione di algoritmi paralleli su GPU.",
+            'about.h3':      'Dal nulla a... (Chissà?)',
+            'about.p1':      "Sono uno studente di Ingegneria Informatica all'Università di Bologna (Alma Mater Studiorum), attualmente in Magistrale, ma vengo da un piccolo e tranquillo paesino (davvero!) del Veneto.",
+            'about.p2':      "Mi piace capire come funzionano davvero le cose, e alla fine è quello che mi ha portato a lavorare un po' su tutto: dai sistemi real-time all'IoT, all'IA a molto altro ancora.",
             'about.p3_html': "Quando non fisso un terminale, probabilmente sto mangiando sushi🍣, disegnando caricature o perfezionando qualche layout🖱️.<br>Credo che <em>la conoscenza non valga nulla se non viene condivisa</em>.",
 
             // ── Home: projects ───────────────────────────────────────────────
             'projects.label':         '// 02 — progetti',
             'projects.title':         'I miei <span class="accent">progetti</span>',
-            'projects.sub':           'Progetti selezionati da corsi universitari, tirocini e curiosità personale.',
+            'projects.sub':           'Progetti selezionati da corsi universitari, tirocini ed esperimenti personali.',
             'projects.contrib_label': 'con',
 
             'proj.edgecv.badge':      'Tirocinio · Tesi',
-            'proj.edgecv.tagline':    'Sistema di Sicurezza Contestuale AI-Driven per Industry 5.0',
+            'proj.edgecv.tagline':    '🛡️ Sistema di Sicurezza Contestuale AI-Driven per Industry 5.0',
             'proj.edgecv.desc':       'Sistema modulare di Computer Vision per sostituire le barriere di sicurezza fisiche. Implementato su NVIDIA Jetson AGX Orin: YOLO + UniDepth/DepthAnything via ONNX Runtime, controllo robot via RTDE, rilevamento prossimità in tempo reale per Universal Robots.',
             'proj.edgecv.stat1_lbl':  'Inferenza',
             'proj.edgecv.stat1_desc': 'su Jetson AGX Orin via TensorRT',
@@ -205,17 +205,17 @@
             'proj.edgecv.stat2_desc': 'Super-repo con Git Submodules — disaccoppiamento rigoroso dei componenti Vision e Controller.',
 
             'proj.hash.badge':   'Corso Magistrale',
-            'proj.hash.tagline': 'Suite Multi-Piattaforma per Cracking SHA-256 Parallelo',
+            'proj.hash.tagline': '🔓 Suite Multi-Piattaforma per Cracking SHA-256 Parallelo',
             'proj.hash.desc':    'Cracker SHA-256 ad alte prestazioni che confronta NVIDIA CUDA, AMD ROCm/HIP e CPU multi-core via OpenMP. Ottimizzazioni kernel: constant memory, loop unrolling e scheduling dinamico del lavoro.',
 
             'proj.rack.badge':   'Personale',
-            'proj.rack.tagline': 'Raffreddamento Intelligente &amp; Ecosistema IoT',
+            'proj.rack.tagline': '❄️ Raffreddamento Intelligente &amp; Ecosistema IoT',
             'proj.rack.desc':    'Sistema di raffreddamento personalizzato per un rack di rete DIY su ESP32-S3. Architettura disaccoppiata: firmware C++ REST + frontend Nginx/Docker. Controllo PWM dinamico delle ventole, display OLED night-mode, dashboard web in tempo reale.',
 
             // ── Home: skills ─────────────────────────────────────────────────
             'skills.label': '// 03 — competenze',
             'skills.title': 'Tech <span class="accent">stack</span>',
-            'skills.sub':   'Una selezione mirata di tecnologie che ho imparato a padroneggiare.',
+            'skills.sub':   'Una selezione mirata di tecnologie che ho imparato a usare.',
 
             // ── Home: experience & education ─────────────────────────────────
             'exp.label':    '// 04 — esperienza &amp; formazione',
@@ -258,16 +258,16 @@
             // ── Home: CTA ────────────────────────────────────────────────────
             'cta.label': '// connettiamoci',
             'cta.title': 'Vuoi <span class="accent">collaborare?</span>',
-            'cta.desc':  "Sono aperto a tirocini, collaborazioni e progetti interessanti. Se hai un'idea o vuoi semplicemente parlare di tech, sono sempre disponibile.",
+            'cta.desc':  "Sono aperto a tirocini, collaborazioni e progetti interessanti. Se hai un'idea o vuoi semplicemente parlare di tech, sono sempre disponibile 👀",
 
             // ── Home: footer ─────────────────────────────────────────────────
-            'home.footer_copy': '&copy; YEAR Matteo Fontolan<br>Le opere creative (caricature, illustrazioni, graphic design) sono protette da copyright. Non riprodurre senza permesso esplicito.<br>Codice e repository sono rilasciati sotto <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank">copyleft</a> — perché la conoscenza non vale nulla se non viene condivisa.',
+            'home.footer_copy': '&copy; YEAR Matteo Fontolan<br>Caricature, illustrazioni e grafica sono protette da copyright. Non riprodurre senza permesso esplicito.<br>Codice e repository sono <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank">copyleft</a> (salvo diversa indicazione) — la conoscenza va condivisa.',
 
             // ── Bento ────────────────────────────────────────────────────────
             'bento.header_label': '// justwhitee\'s bento',
             'bento.bio':          'Appassionato di tech 👾 | Ingegneria Informatica (Magistrale WIP) 🧑‍💻 | Foodie 🍣 | Caricature &amp; Graphic Design per hobby 🖱️',
             'bento.cta':          'Collaboriamo o parliamo di tech. Contattami!💡',
-            'bento.footer_copy':  '&copy; YEAR Matteo Fontolan<br>Le opere creative (caricature, illustrazioni, graphic design) sono protette da copyright. Non riprodurre senza permesso esplicito.<br>Codice, repository e altri lavori/asset sono rilasciati sotto <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank">copyleft</a> &mdash; perché la conoscenza non vale nulla se non viene condivisa.',
+            'bento.footer_copy':  '&copy; YEAR Matteo Fontolan<br>Caricature, illustrazioni e grafica sono protette da copyright. Non riprodurre senza permesso esplicito.<br>Codice, repository e altri lavori/asset sono <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank">copyleft</a> (salvo diversa indicazione) — la conoscenza va condivisa.',
 
             'card.telegram.title':   'Contattami ✍️',
             'card.telegram.desc':    'Collaborazioni? Scrivimi qui o a matteo.fontolan@justwhitee.org',
@@ -297,7 +297,7 @@
             'contacts.btn.call':     'Chiama',
             'contacts.btn.save':     'Salva Contatto',
             'contacts.footer_back':  '← torna al bento',
-            'contacts.footer_copy': '&copy; YEAR Matteo Fontolan<br>Le opere creative (caricature, illustrazioni, graphic design) sono protette da copyright. Non riprodurre senza permesso esplicito.<br>Codice e repository sono rilasciati sotto <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank">copyleft</a> &mdash; perché la conoscenza non vale nulla se non viene condivisa.',
+            'contacts.footer_copy': '&copy; YEAR Matteo Fontolan<br>Caricature, illustrazioni e grafica sono protette da copyright. Non riprodurre senza permesso esplicito.<br>Codice e repository sono <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank">copyleft</a> (salvo diversa indicazione) — la conoscenza va condivisa.',
             'contacts.wa_msg':       'Ciao Matteo, ho trovato il tuo oggetto! 👋',
 
             // ── CV ────────────────────────────────────────────────────────────
@@ -308,7 +308,7 @@
             'cv.btn_download': 'Scarica il CV',
             'cv.btn_open':     'Apri in una nuova scheda',
             'cv.footer_back':  'torna alla home',
-            'cv.footer_copy': '&copy; YEAR Matteo Fontolan<br>Le opere creative (caricature, illustrazioni, graphic design) sono protette da copyright. Non riprodurre senza permesso esplicito.<br>Codice e repository sono rilasciati sotto <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank">copyleft</a> &mdash; perché la conoscenza non vale nulla se non viene condivisa.',
+            'cv.footer_copy': '&copy; YEAR Matteo Fontolan<br>Caricature, illustrazioni e grafica sono protette da copyright. Non riprodurre senza permesso esplicito.<br>Codice e repository sono <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank">copyleft</a> (salvo diversa indicazione) — la conoscenza va condivisa.',
         }
     };
 
