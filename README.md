@@ -186,6 +186,9 @@ The `contacts/` page and `404.html` are intentionally excluded from indexing via
 | `og:image`, `apple-touch-icon` | `.jpg` / `.png` | WhatsApp, Safari, and some crawlers reject WebP |
 | `favicon.ico` | `.ico` | Legacy browser compatibility |
 
+### OG image auto-generation
+`assets/og-image.jpg` is not hand-maintained — it's a Playwright screenshot of the homepage hero (1200×630, English), regenerated automatically by [`.github/workflows/og-image.yml`](.github/workflows/og-image.yml) whenever `index.html`, `shared.css`, `i18n.js`, `components.js`, `assets/logo.svg`, or `assets/propic.webp` change on `main` (or on demand via the Actions tab → "Run workflow"). The workflow serves the site locally, screenshots it, and commits the result back (`[skip ci]`) only if the image actually changed. To capture a different crop or section, edit the `playwright screenshot` step in that workflow.
+
 ---
 
 ## Web App Manifest (`manifest.json`)
