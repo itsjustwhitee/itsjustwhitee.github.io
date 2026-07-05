@@ -187,7 +187,7 @@ The `contacts/` page and `404.html` are intentionally excluded from indexing via
 | `favicon.ico` | `.ico` | Legacy browser compatibility |
 
 ### OG image auto-generation
-`assets/og-image.jpg` is not hand-maintained — it's a Playwright screenshot of the homepage hero (1200×630, English), regenerated automatically by [`.github/workflows/og-image.yml`](.github/workflows/og-image.yml) whenever `index.html`, `shared.css`, `i18n.js`, `components.js`, `assets/logo.svg`, or `assets/propic.webp` change on `main` (or on demand via the Actions tab → "Run workflow"). The workflow serves the site locally, screenshots it, and commits the result back (`[skip ci]`) only if the image actually changed. To capture a different crop or section, edit the `playwright screenshot` step in that workflow.
+`assets/og-image.jpg` is not hand-maintained — it's a Playwright screenshot of the homepage hero (English), regenerated automatically by [`.github/workflows/og-image.yml`](.github/workflows/og-image.yml) whenever `index.html`, `shared.css`, `i18n.js`, `components.js`, `assets/logo.svg`, or `assets/propic.webp` change on `main` (or on demand via the Actions tab → "Run workflow"). The workflow serves the site locally and runs [`scripts/generate-og-image.js`](scripts/generate-og-image.js), which captures the 1200×630 viewport at `deviceScaleFactor: 2` and a 105% page zoom (crisper text, fewer empty margins than a plain 1x capture) and saves at JPEG quality 100. It commits the result back (`[skip ci]`) only if the image actually changed. To change the crop, zoom, or quality, edit that script directly.
 
 ---
 

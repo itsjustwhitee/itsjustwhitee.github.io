@@ -31,8 +31,10 @@ jobs:
         with:
           node-version: 20
 
-      - name: Install Playwright (Chromium)
-        run: npx --yes playwright install --with-deps chromium
+      - name: Install Playwright
+        run: |
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium
 
       - name: Serve site
         run: python3 -m http.server 8080 &
@@ -41,13 +43,7 @@ jobs:
         run: npx --yes wait-on http://localhost:8080/index.html
 
       - name: Capture homepage hero as OG image
-        run: >
-          npx --yes playwright screenshot
-          --viewport-size=1200,630
-          --lang=en-US
-          --wait-for-timeout=1500
-          http://localhost:8080/index.html
-          assets/og-image.jpg
+        run: node scripts/generate-og-image.js http://localhost:8080/index.html assets/og-image.jpg
 
       - name: Commit updated image if changed
         run: |
