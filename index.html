@@ -437,10 +437,10 @@
         /* Hero */
         #hero { padding: 84px 18px 56px; min-height: auto; }
         .hero-eyebrow { font-size: 0.6rem; letter-spacing: 0.18em; margin-bottom: 14px; }
-        .hero-name { font-size: clamp(2.6rem, 13vw, 3.8rem); margin-bottom: 18px; }
+        .hero-name { font-size: clamp(2.3rem, 11vw, 3.4rem); margin-bottom: 18px; }
         .hero-role-tags { margin-bottom: 20px; }
         .hero-tag { font-size: 0.72rem; padding: 7px 14px; }
-        .hero-desc { font-size: 0.82rem; margin-bottom: 28px; max-width: 100%; }
+        .hero-desc { font-size: 0.9rem; margin-bottom: 28px; max-width: 100%; }
         
         .hero-ctas { flex-direction: row; flex-wrap: wrap; align-items: center; gap: 9px; }
         .hero-ctas .btn-pill { justify-content: center; padding: 10px 14px; font-size: 0.76rem; }
@@ -450,6 +450,10 @@
         .section { padding: 56px 18px; }
         .section-header { margin-bottom: 32px; }
         .section-divider { width: calc(100% - 36px); margin: 0 18px; }
+        /* Titles were clamping to their floor on narrow screens, dwarfing the body copy below — fix to a flatter mobile-only size */
+        .section-title { font-size: 1.6rem; }
+        .section-sub { font-size: 0.88rem; }
+        .section-label { font-size: 0.72rem; }
 
         /* About */
         .about-pic-wrap { max-width: 200px; }
@@ -459,29 +463,35 @@
         }
         .about-pic-badge span { font-size: 1.1rem; }
         .about-text h3 { font-size: 1.05rem; }
+        .about-text p { font-size: 0.9rem; }
         .about-links { gap: 8px; }
         .about-links .btn-pill { flex: 1 1 auto; justify-content: center; min-width: 0; }
 
         /* Projects */
         .projects-grid { gap: 14px; }
         .project-body { padding: 18px 16px 16px; }
-        .project-card h3 { font-size: 1rem; }
+        .project-card h3 { font-size: 1.05rem; }
+        .project-card .tagline { font-size: 0.8rem; }
+        .project-card .proj-desc { font-size: 0.85rem; }
         .project-footer { flex-direction: column; align-items: flex-start; gap: 8px; }
         .project-stats { gap: 8px; }
         .stat-box-value { font-size: 1.2rem; }
         /* Keep tags readable */
         .project-tags { gap: 5px; }
-        .tag { font-size: 0.54rem; }
+        .tag { font-size: 0.6rem; }
 
         /* Skills */
         .skills-grid { grid-template-columns: 1fr; gap: 10px; }
         .skill-group { padding: 16px 14px; }
+        .skill-pill { font-size: 0.74rem; }
 
         /* Experience */
         .exp-edu-grid { gap: 28px; }
         .timeline { padding-left: 22px; }
         .tl-item { margin-bottom: 28px; }
         .tl-item::before { left: -26px; width: 8px; height: 8px; }
+        .tl-desc { font-size: 0.85rem; }
+        .tl-company { font-size: 0.78rem; }
         .edu-grid { grid-template-columns: 1fr; gap: 10px; }
         .edu-card[style*="grid-column"] { grid-column: span 1 !important; }
         .edu-card { padding: 14px 14px; }
@@ -502,9 +512,10 @@
 
     /* ── SMALL MOBILE ≤400px ─────────────────────────────────────────────── */
     @media (max-width: 400px) {
-        .hero-name { font-size: clamp(2.2rem, 15vw, 2.4rem); }
+        .hero-name { font-size: clamp(2rem, 13vw, 2.2rem); }
         .hero-tag  { font-size: 0.65rem; padding: 6px 12px; }
         .section   { padding: 44px 14px; }
+        .section-title { font-size: 1.45rem; }
     }
     
     /* ── SECTION NAV (expanding pills) ─────────────────────────────────────── */
