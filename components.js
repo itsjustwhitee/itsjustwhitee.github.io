@@ -23,6 +23,12 @@
 
     function r(rel) { return rootUrl + rel; }
 
+    // ── REDUCED MOTION ───────────────────────────────────────────────────────
+    // CSS animations/transitions are neutralized globally via shared.css; this
+    // flag lets JS-driven continuous motion (parallax, spin loops, particle
+    // effects) opt out the same way. Computed once, reused by every page.
+    window.prefersReducedMotion = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+
     // ── NAV ───────────────────────────────────────────────────────────────────
     var NAV_LINKS = [
         { key: 'home',  href: r(''),        label: '// home',  i18n: null        },
@@ -77,6 +83,7 @@
         var orb1 = document.getElementById('orb1');
         var orb2 = document.getElementById('orb2');
         if (!orb1 && !orb2) return;
+        if (window.prefersReducedMotion) return;
 
         var ticking = false;
         window.addEventListener('mousemove', function (e) {

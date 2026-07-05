@@ -116,6 +116,9 @@ All `:hover` transitions and card lift animations are wrapped inside:
 ```
 This prevents the **"sticky hover" bug** on iOS and Android, where tapping a card leaves it permanently elevated or highlighted after the finger lifts. Touch devices don't have a hover state and must never trigger these styles.
 
+### Reduced motion
+`shared.css` neutralizes all CSS animations/transitions site-wide under `@media (prefers-reduced-motion: reduce)` (the standard `animation-duration/transition-duration: 0.01ms !important` pattern), and `components.js` computes `window.prefersReducedMotion` once so JS-driven continuous motion opts out the same way: the mouse parallax orbs, the RackController fan spin loop, the EdgeCV4Safety eye-tracking, the HashCrackerz crumb particles, the homepage giant-logo scroll parallax, and the section-nav's smooth-scroll (falls back to an instant jump) all check this flag before starting. The `.reveal` scroll-in system is unaffected either way — content still always ends up visible (via the IntersectionObserver, or the 2s hard-fallback in `initScrollReveal`), just without the animated fade/slide.
+
 ---
 
 ## Internationalisation (`i18n.js`)

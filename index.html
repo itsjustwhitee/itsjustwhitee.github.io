@@ -1031,7 +1031,7 @@
     // Giant logo scroll parallax
     const logoGiant = document.getElementById('logo-giant');
     const heroSection = document.getElementById('hero');
-    if (logoGiant) {
+    if (logoGiant && !window.prefersReducedMotion) {
         setTimeout(() => {
             logoGiant.style.transition = 'transform 1s cubic-bezier(0.25,0.46,0.45,0.94), opacity 1s ease';
             logoGiant.style.opacity = '0.18';
@@ -1065,7 +1065,7 @@
     // ── FLUID FAN ROTATION - RACKCONTROLLER ──
     const fanWrapper = document.getElementById('rack-fan-wrapper');
 
-    if (fanWrapper) {
+    if (fanWrapper && !window.prefersReducedMotion) {
         const projectCard = fanWrapper.closest('.project-card');
         const BASE_SPEED = 0.7;  
         const MAX_SPEED  = 1.8; 
@@ -1100,7 +1100,7 @@
 
     function initEyeTracking(edgeSvg) {
         const pupilGroup = document.getElementById('pupil-focus-group');
-        if (!pupilGroup) return;
+        if (!pupilGroup || window.prefersReducedMotion) return;
 
         window.addEventListener('mousemove', (e) => {
             const rect = edgeSvg.getBoundingClientRect();
@@ -1127,7 +1127,7 @@
     const crackerCard = document.getElementById('hashcrackerz-card');
     const crackerImg = crackerCard ? crackerCard.querySelector('.project-img') : null;
     const imgWrap = crackerCard ? crackerCard.querySelector('.project-img-wrap') : null;
-    if (crackerCard && crackerImg && imgWrap) {
+    if (crackerCard && crackerImg && imgWrap && !window.prefersReducedMotion) {
         let intervalId = null;
         let edgePoints = null; // [{xPct,yPct}, ...] real silhouette-edge pixels of the cookie art, lazily computed once
 
@@ -1242,7 +1242,7 @@
             dot.addEventListener('click', function (e) {
                 e.preventDefault();
                 var target = document.querySelector(dot.getAttribute('href'));
-                if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                if (target) target.scrollIntoView({ behavior: window.prefersReducedMotion ? 'auto' : 'smooth', block: 'start' });
                 dot.classList.add('flash');
                 setTimeout(function () { dot.classList.remove('flash'); }, 600);
             });

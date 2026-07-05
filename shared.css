@@ -39,6 +39,20 @@ body::before {
     background-size: 40px 40px;
     pointer-events: none; z-index: 0;
 }
+/* ── REDUCED MOTION ─────────────────────────────────────────────────────── */
+/* Neutralizes CSS animations/transitions site-wide for users who've asked
+   the OS to reduce motion. JS-driven continuous motion (parallax orbs, the
+   fan spin loop, crumb particles, the giant logo scroll parallax) checks
+   window.prefersReducedMotion (set in components.js) and opts out the same way. */
+@media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
 .container {
     max-width: 1200px;
     margin: 0 auto;
