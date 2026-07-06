@@ -191,7 +191,7 @@
           en: '🔋 as soon as I touch the bed I instantly shut down (I go charging)' },
         { it: '🤪 non sono un gran chiacchierone, ma a sparare cavolate sono imbattibile.',
           en: '🤪 I\'m not much of a chatterbox, but I\'m unbeatable when it comes to spouting nonsense.' },
-        { it: '🎮 quando ho un attimo libero gioco ai videogiochi o smanettare su qualcosa.',
+        { it: '🎮 quando ho un attimo libero gioco ai videogiochi o smanetto su qualcosa.',
           en: '🎮 when I have a free moment I play video games or tinker with something.' }
     ];
     var FUN_FACTS_A = FUN_FACTS.filter(function (_, i) { return i % 2 === 0; });
