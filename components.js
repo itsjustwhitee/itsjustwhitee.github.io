@@ -179,12 +179,20 @@
           en: '🌾 wheat is my sworn arch-enemy... I\'m celiac, so no glutinous food for me.' },
         { it: '📍 vengo da Corbola, un paesino così piccolo che se sbatti le palpebre te lo perdi.',
           en: '📍 I\'m from Corbola, a town so small you\'ll miss it if you blink.' },
-        { it: '💻 niente computer fino ai 12-13 anni, era off limits in casa. Alle superiori ho costruito il mio primo PC (con po\' d\'aiuto); poi all\'uni è esploso tutto: primo PC da solo + il mio homelab.',
-          en: '💻 no computers allowed until I was 12-13. In high school I built my first PC (with some help); then at university it all exploded: first PC built solo + my homelab.' },
+        { it: '💻 niente computer fino ai 12-13 anni, era off limits in casa. Alle superiori ho costruito il mio primo PC (con po\' d\'aiuto), poi ho costruito il mio primo PC interamente da solo e il mio server homelab.',
+          en: '💻 no computers allowed until I was 12-13. In high school I built my first PC (with some help), then I built my first PC entirely by myself and my homelab.' },
         { it: '🏊 sott\'acqua respiro come un sasso.',
           en: '🏊 underwater I breathe like a rock.' },
         { it: '🛋️ sono pigro a livelli olimpionici, se esistesse una medaglia, l\'avrei già vinta procrastinando.',
-          en: '🛋️ I\'m lazy at an Olympic level, if there were a medal for it, I\'d have won it procrastinating.' }
+          en: '🛋️ I\'m lazy at an Olympic level, if there were a medal for it, I\'d have won it procrastinating.' },
+        { it: '👂 ascolterei per ore chi parla con passione di un argomento (soprattutto se non lo conosco, ma mi interessa!)',
+          en: '👂 I\'d listen for hours to someone talking passionately about a topic (especially if I don\'t know much about it but find it interesting!)' },
+        { it: '🔋 appena tocco il letto mi spengo istantaneamente (vado in carica)',
+          en: '🔋 as soon as I touch the bed I instantly shut down (I go charging)' },
+        { it: '🤪 non sono un gran chiacchierone, ma a sparare cavolate sono imbattibile.',
+          en: '🤪 I\'m not much of a chatterbox, but I\'m unbeatable when it comes to spouting nonsense.' },
+        { it: '🎮 quando ho un attimo libero gioco ai videogiochi o smanettare su qualcosa.',
+          en: '🎮 when I have a free moment I play video games or tinker with something.' }
     ];
     var FUN_FACTS_A = FUN_FACTS.filter(function (_, i) { return i % 2 === 0; });
     var FUN_FACTS_B = FUN_FACTS.filter(function (_, i) { return i % 2 !== 0; });
