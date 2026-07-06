@@ -1,6 +1,6 @@
-# Personal Website — Internal Documentation
+# [Personal Website](https://itsjustwhitee.github.io) - Internal Documentation
 
-A static personal website hosted on **GitHub Pages** with Cloudflare as CDN and DNS provider. No build tools, no frameworks — just vanilla HTML, CSS, and JavaScript.
+A static personal website hosted on **GitHub Pages** with Cloudflare as CDN and DNS provider. No build tools, no frameworks - just vanilla HTML, CSS, and JavaScript.
 
 ---
 
@@ -26,16 +26,16 @@ A static personal website hosted on **GitHub Pages** with Cloudflare as CDN and 
 │   └── generate-og-image.js # Screenshots the hero for assets/og-image.jpg (run by CI)
 │
 ├── bento/
-│   ├── index.html          # Bento page — header fadeUp, parallax orbs, mouse tracking
+│   ├── index.html          # Bento page - header fadeUp, parallax orbs, mouse tracking
 │   ├── script.js           # All bento card logic (async renderer, scroll reveal, GitHub fetch)
 │   ├── style.css           # Bento-specific styles (grid layout, card variants, responsive)
 │   └── assets/             # Brand SVGs and .webp images for bento cards
 │
 ├── cv/
-│   └── index.html          # CV page — embedded PDF viewer with download
+│   └── index.html          # CV page - embedded PDF viewer with download
 │
 ├── contacts/
-│   └── index.html          # Contacts page (noindex — QR/NFC only)
+│   └── index.html          # Contacts page (noindex - QR/NFC only)
 │
 └── assets/                 # Global assets
     ├── logo.svg             # Vector logo (used in navbar and footer)
@@ -52,7 +52,7 @@ A static personal website hosted on **GitHub Pages** with Cloudflare as CDN and 
 
 ## Shared `<head>` (no build step, still no duplication)
 
-There's deliberately no bundler/SSG in this project (see intro), so each page is still a complete, independent HTML file. But the boilerplate every page needs — charset/viewport meta, `shared.css`, Font Awesome, Google Fonts, favicons/manifest/theme-color, and the `components.js`/`i18n.js` script tags — is no longer hand-copied 5 times. It lives once in [`partials/shared-head.html`](partials/shared-head.html) and gets synced into each page between a marker pair:
+There's deliberately no bundler/SSG in this project (see intro), so each page is still a complete, independent HTML file. But the boilerplate every page needs - charset/viewport meta, `shared.css`, Font Awesome, Google Fonts, favicons/manifest/theme-color, and the `components.js`/`i18n.js` script tags - is no longer hand-copied 5 times. It lives once in [`partials/shared-head.html`](partials/shared-head.html) and gets synced into each page between a marker pair:
 
 ```html
 <!-- SHARED-HEAD:START -->
@@ -66,34 +66,34 @@ There's deliberately no bundler/SSG in this project (see intro), so each page is
 node scripts/sync-head.js
 ```
 
-This rewrites the block in `index.html`, `404.html`, `bento/index.html`, `contacts/index.html`, and `cv/index.html` in place (title, description, og/twitter tags, canonical, and any page-specific `<style>`/stylesheet stay outside the markers — those are genuinely page-specific and aren't touched). [`.github/workflows/check-head-sync.yml`](.github/workflows/check-head-sync.yml) runs `node scripts/sync-head.js --check` on every push/PR and fails if a page drifts out of sync (e.g. someone hand-edited the block directly instead of going through the partial), so this can't silently rot.
+This rewrites the block in `index.html`, `404.html`, `bento/index.html`, `contacts/index.html`, and `cv/index.html` in place (title, description, og/twitter tags, canonical, and any page-specific `<style>`/stylesheet stay outside the markers - those are genuinely page-specific and aren't touched). [`.github/workflows/check-head-sync.yml`](.github/workflows/check-head-sync.yml) runs `node scripts/sync-head.js --check` on every push/PR and fails if a page drifts out of sync (e.g. someone hand-edited the block directly instead of going through the partial), so this can't silently rot.
 
-`{{ROOT}}` in the partial is replaced with each page's relative path back to the site root (`./` for root-level pages, `../` for one-level-deep pages) — **except `404.html`, which always gets absolute `/`-rooted paths.** That one's not optional: GitHub Pages serves `404.html`'s content for any unmatched URL while the browser keeps showing the original broken URL, so relative paths on that page resolve against wherever the 404 was triggered from, not the site root. (This used to be broken — `components.js`/`i18n.js` were loaded with relative paths on `404.html`, so the nav/footer/language toggle silently failed to initialize on any 404 one level or deeper, e.g. `/bento/typo`. Fixed as part of adding this system.)
+`{{ROOT}}` in the partial is replaced with each page's relative path back to the site root (`./` for root-level pages, `../` for one-level-deep pages) - **except `404.html`, which always gets absolute `/`-rooted paths.** That one's not optional: GitHub Pages serves `404.html`'s content for any unmatched URL while the browser keeps showing the original broken URL, so relative paths on that page resolve against wherever the 404 was triggered from, not the site root. (This used to be broken - `components.js`/`i18n.js` were loaded with relative paths on `404.html`, so the nav/footer/language toggle silently failed to initialize on any 404 one level or deeper, e.g. `/bento/typo`. Fixed as part of adding this system.)
 
 ---
 
 ## Pages
 
-### `index.html` — Home
+### `index.html` - Home
 Full-length scrollable portfolio page. Sections in order:
-- **Hero** — name, role tag, description, CTA buttons
-- **About** — photo, bio paragraphs, social links
-- **Projects** — project cards (featured + regular); each card has interactive micro-animations
-- **Skills** — grouped tech stack pills
-- **Experience & Education** — timeline + edu grid
-- **CTA** — contact call-to-action
+- **Hero** - name, role tag, description, CTA buttons
+- **About** - photo, bio paragraphs, social links
+- **Projects** - project cards (featured + regular); each card has interactive micro-animations
+- **Skills** - grouped tech stack pills
+- **Experience & Education** - timeline + edu grid
+- **CTA** - contact call-to-action
 - **Footer**
 
-### `bento/index.html` — Bento
+### `bento/index.html` - Bento
 Grid of link cards. Card logic lives in `bento/script.js` (async renderer, scroll reveal observer, GitHub fetch). Card types:
-- `github-custom` — fetches live user data from the GitHub REST API (cached 1h in `localStorage`) and renders GitHub Streak Stats as an image
-- `solid` — branded gradient card with SVG icon; supports `i18n_key` for translated title/desc
-- `instagram-manual` — 2×2 photo grid with overlay; images in `.webp` format
+- `github-custom` - fetches live user data from the GitHub REST API (cached 1h in `localStorage`) and renders GitHub Streak Stats as an image
+- `solid` - branded gradient card with SVG icon; supports `i18n_key` for translated title/desc
+- `instagram-manual` - 2×2 photo grid with overlay; images in `.webp` format
 
-**Entry animation:** the header uses staggered `fadeUp` (photo → label → h1 → bio → cta). Cards use the shared `.reveal` + `IntersectionObserver` system — the observer is only activated after all card DOM (including the async GitHub fetch) is fully painted, preventing a double-flash where the spinner would animate in first and the fetched content would pop in separately.
+**Entry animation:** the header uses staggered `fadeUp` (photo → label → h1 → bio → cta). Cards use the shared `.reveal` + `IntersectionObserver` system - the observer is only activated after all card DOM (including the async GitHub fetch) is fully painted, preventing a double-flash where the spinner would animate in first and the fetched content would pop in separately.
 
 
-### `cv/index.html` — CV
+### `cv/index.html` - CV
 Dedicated page for the Curriculum Vitae.
 - Embeds `assets/cvMatteoFontolan.pdf` in a full-width `<iframe>` (80vh, responsive).
 - Two action buttons: **Download CV** (forces download via `download` attribute) and **Open in new tab** (standard link).
@@ -101,13 +101,13 @@ Dedicated page for the Curriculum Vitae.
 - Fully i18n'd via `cv.*` keys; the page title, subtitle, button labels, and footer link all switch language.
 - Linked from the home page hero button and the nav on all pages.
 
-### `contacts/index.html` — Contacts
+### `contacts/index.html` - Contacts
 Minimal contact page designed for NFC/QR use cases (e.g. lost item tags).
-- **Not indexed** (`<meta name="robots" content="noindex, nofollow">`) — accessible only via QR/NFC link.
+- **Not indexed** (`<meta name="robots" content="noindex, nofollow">`) - accessible only via QR/NFC link.
 - Features: WhatsApp deep-link with pre-filled message, Telegram link, tap-to-reveal phone number, vCard download.
 - **Entry animation:** header uses staggered `fadeUp`; action cards use `.reveal` + `IntersectionObserver` with 100ms sibling stagger. Parallax orbs match homepage style.
 
-### `404.html` — Error page
+### `404.html` - Error page
 Custom 404 page served automatically by GitHub Pages for any non-existent URL. Matches the site's visual style (animated orbs, gradient typography). Supports i18n via `data-i18n` attributes. Also excluded from indexing via `noindex, nofollow`.
 
 ---
@@ -127,15 +127,15 @@ All pages share a common set of CSS variables, base styles, and reusable compone
 | `--radius` / `--radius-sm` | Border radius scale |
 
 ### Shared Components
-- **`.site-nav`** — fixed top navbar with blur backdrop
-- **`.card-base`** — base card style (border, hover lift, shimmer animation)
-- **`.card-slug`** — bottom-right URL label on cards
-- **`.card-corner-icon`** — top-right icon on cards
-- **`.btn-pill`** — rounded button; variants: `.btn-primary`, `.btn-ghost`
-- **`.reveal`** — scroll-triggered fade-up animation (managed by IntersectionObserver in each page's script)
-- **`.site-footer`** — shared footer layout
-- **`.profile-header`** — centred header with profile picture
-- **`:focus-visible`** — keyboard navigation outline (accent colour)
+- **`.site-nav`** - fixed top navbar with blur backdrop
+- **`.card-base`** - base card style (border, hover lift, shimmer animation)
+- **`.card-slug`** - bottom-right URL label on cards
+- **`.card-corner-icon`** - top-right icon on cards
+- **`.btn-pill`** - rounded button; variants: `.btn-primary`, `.btn-ghost`
+- **`.reveal`** - scroll-triggered fade-up animation (managed by IntersectionObserver in each page's script)
+- **`.site-footer`** - shared footer layout
+- **`.profile-header`** - centred header with profile picture
+- **`:focus-visible`** - keyboard navigation outline (accent colour)
 
 ### Hover & Animation Policy
 All `:hover` transitions and card lift animations are wrapped inside:
@@ -145,7 +145,7 @@ All `:hover` transitions and card lift animations are wrapped inside:
 This prevents the **"sticky hover" bug** on iOS and Android, where tapping a card leaves it permanently elevated or highlighted after the finger lifts. Touch devices don't have a hover state and must never trigger these styles.
 
 ### Reduced motion
-`shared.css` neutralizes all CSS animations/transitions site-wide under `@media (prefers-reduced-motion: reduce)` (the standard `animation-duration/transition-duration: 0.01ms !important` pattern), and `components.js` computes `window.prefersReducedMotion` once so JS-driven continuous motion opts out the same way: the mouse parallax orbs, the RackController fan spin loop, the EdgeCV4Safety eye-tracking, the HashCrackerz crumb particles, the homepage giant-logo scroll parallax, and the section-nav's smooth-scroll (falls back to an instant jump) all check this flag before starting. The `.reveal` scroll-in system is unaffected either way — content still always ends up visible (via the IntersectionObserver, or the 2s hard-fallback in `initScrollReveal`), just without the animated fade/slide.
+`shared.css` neutralizes all CSS animations/transitions site-wide under `@media (prefers-reduced-motion: reduce)` (the standard `animation-duration/transition-duration: 0.01ms !important` pattern), and `components.js` computes `window.prefersReducedMotion` once so JS-driven continuous motion opts out the same way: the mouse parallax orbs, the RackController fan spin loop, the EdgeCV4Safety eye-tracking, the HashCrackerz crumb particles, the homepage giant-logo scroll parallax, and the section-nav's smooth-scroll (falls back to an instant jump) all check this flag before starting. The `.reveal` scroll-in system is unaffected either way - content still always ends up visible (via the IntersectionObserver, or the 2s hard-fallback in `initScrollReveal`), just without the animated fade/slide.
 
 ---
 
@@ -159,7 +159,7 @@ The site auto-detects language from `navigator.language` and defaults to **Engli
 3. Static elements use `data-i18n="key"` (plain text) or `data-i18n-html="key"` (HTML content).
 4. Dynamic card content (bento) uses `window.t('key')` inside the card builder functions.
 5. Clicking the toggle calls `window.toggleLang()`, which re-applies translations and, on the bento page, clears and re-renders the entire grid.
-6. Missing translation keys emit a `console.warn` — the UI always falls back gracefully and never shows `undefined` on screen.
+6. Missing translation keys emit a `console.warn` - the UI always falls back gracefully and never shows `undefined` on screen.
 
 ### Adding or editing a translation
 Open `i18n.js` and edit the string inside the `en` or `it` object (or both). No other file needs to change.
@@ -201,11 +201,11 @@ The following are hardcoded in HTML and must be edited there directly:
 ## SEO & Metadata
 
 Every public page (`index.html`, `bento/index.html`) includes:
-- `<meta name="description">` — page description for search engines
-- **Open Graph** tags (`og:title`, `og:description`, `og:image`, `og:url`) — controls link previews on WhatsApp, Telegram, LinkedIn, etc.
-- **Twitter Card** tags — controls previews on X/Twitter
-- `<link rel="canonical">` — prevents duplicate content issues
-- **JSON-LD structured data** (`@type: Person`) on the home page — helps Google associate social profiles with the site
+- `<meta name="description">` - page description for search engines
+- **Open Graph** tags (`og:title`, `og:description`, `og:image`, `og:url`) - controls link previews on WhatsApp, Telegram, LinkedIn, etc.
+- **Twitter Card** tags - controls previews on X/Twitter
+- `<link rel="canonical">` - prevents duplicate content issues
+- **JSON-LD structured data** (`@type: Person`) on the home page - helps Google associate social profiles with the site
 
 The `contacts/` page and `404.html` are intentionally excluded from indexing via `<meta name="robots" content="noindex, nofollow">`. The `cv/` page is indexed and included in `sitemap.xml`.
 
@@ -213,19 +213,19 @@ The `contacts/` page and `404.html` are intentionally excluded from indexing via
 | Asset | Format | Reason |
 |---|---|---|
 | Profile picture, project images | `.webp` | Smallest size, broad browser support |
-| Logo in navbar/footer | `.svg` | Vector — pixel-perfect at any resolution/DPI |
+| Logo in navbar/footer | `.svg` | Vector - pixel-perfect at any resolution/DPI |
 | `og:image`, `apple-touch-icon` | `.jpg` / `.png` | WhatsApp, Safari, and some crawlers reject WebP |
 | `favicon.ico` | `.ico` | Legacy browser compatibility |
 
 ### OG image auto-generation
-`assets/og-image.jpg` is not hand-maintained — it's a Playwright screenshot of the homepage hero (English), regenerated automatically by [`.github/workflows/og-image.yml`](.github/workflows/og-image.yml) whenever `index.html`, `shared.css`, `i18n.js`, `components.js`, `assets/logo.svg`, or `assets/propic.webp` change on `main` (or on demand via the Actions tab → "Run workflow"). The workflow serves the site locally and runs [`scripts/generate-og-image.js`](scripts/generate-og-image.js), which captures the 1200×630 viewport at `deviceScaleFactor: 2` and a 105% page zoom (crisper text, fewer empty margins than a plain 1x capture) and saves at JPEG quality 100. It commits the result back (`[skip ci]`) only if the image actually changed. To change the crop, zoom, or quality, edit that script directly.
+`assets/og-image.jpg` is not hand-maintained - it's a Playwright screenshot of the homepage hero (English), regenerated automatically by [`.github/workflows/og-image.yml`](.github/workflows/og-image.yml) whenever `index.html`, `shared.css`, `i18n.js`, `components.js`, `assets/logo.svg`, or `assets/propic.webp` change on `main` (or on demand via the Actions tab → "Run workflow"). The workflow serves the site locally and runs [`scripts/generate-og-image.js`](scripts/generate-og-image.js), which captures the 1200×630 viewport at `deviceScaleFactor: 2` and a 105% page zoom (crisper text, fewer empty margins than a plain 1x capture) and saves at JPEG quality 100. It commits the result back (`[skip ci]`) only if the image actually changed. To change the crop, zoom, or quality, edit that script directly.
 
 ---
 
 ## Web App Manifest (`manifest.json`)
 
 Enables "Add to Home Screen" on mobile browsers. When installed:
-- App name: `justwhitee — Matteo Fontolan`
+- App name: `justwhitee - Matteo Fontolan`
 - Short name: `justwhitee`
 - Theme colour: `#00bbc9`
 - Icons: `/favicon.ico` (48px) and `/assets/favicon.png` (192px, 512px)
@@ -279,7 +279,7 @@ All pages include `<link rel="manifest" href="/manifest.json">` in `<head>`.
 `components.js` lives at the site root and must be loaded **before** `i18n.js` on every page. It registers a `DOMContentLoaded` handler that injects the shared nav and footer into placeholder elements.
 
 ### How it works
-1. Reads `document.currentScript.src` to compute `rootUrl` — the absolute path to the site root. This makes all asset paths work under `file://`, Live Server, and production without any hardcoded paths.
+1. Reads `document.currentScript.src` to compute `rootUrl` - the absolute path to the site root. This makes all asset paths work under `file://`, Live Server, and production without any hardcoded paths.
 2. Builds the nav from a `NAV_LINKS` array and injects it into `<nav id="site-nav" data-active="...">`.
 3. Builds a unified full footer (logo, name, copyright copy, GitHub/email/LinkedIn links) and injects it into `<footer id="site-footer" data-copy-key="...">`.
 4. Because it runs before `i18n.js`'s handler, `.nav-links` already exists when `i18n.js` appends the language toggle.
@@ -295,23 +295,23 @@ Each page needs two placeholder elements:
 `data-active` controls which nav link gets the `.active` class. Valid values: `home`, `bento`, `cv`, `contacts`, `""` (404).
 
 ### Adding a new nav link
-Edit the `NAV_LINKS` array at the top of `components.js` — no HTML changes required across pages.
+Edit the `NAV_LINKS` array at the top of `components.js` - no HTML changes required across pages.
 
 ### Email addresses in the footer
 The footer email is a plain `mailto:` string inside `components.js` (not in static HTML). Cloudflare's email obfuscation only rewrites static HTML, so the address is never mangled during deployment.
 
 ### Easter eggs 🥚
-There are a handful of hidden easter eggs sprinkled around the site — a console message, a couple of click-based triggers, a typed sequence or two. Deliberately undocumented here beyond that. Good hunting! If you're the one maintaining this and genuinely need to find them again, they're all in `components.js` under the `EASTER EGG` comment markers.
+There are a handful of hidden easter eggs sprinkled around the site - a console message, a couple of click-based triggers, a typed sequence or two. Deliberately undocumented here beyond that. Good hunting! If you're the one maintaining this and genuinely need to find them again, they're all in `components.js` under the `EASTER EGG` comment markers.
 
 ---
 
 ## Security
 
 ### Tabnabbing protection
-All links with `target="_blank"` include `rel="noopener noreferrer"` — both in static HTML and in dynamically generated elements in `script.js` (`card.rel = "noopener noreferrer"`). This prevents third-party pages from accessing or hijacking the opener tab via `window.opener`.
+All links with `target="_blank"` include `rel="noopener noreferrer"` - both in static HTML and in dynamically generated elements in `script.js` (`card.rel = "noopener noreferrer"`). This prevents third-party pages from accessing or hijacking the opener tab via `window.opener`.
 
 ### Email obfuscation
-Cloudflare's **Scrape Shield / Email Obfuscation** feature is enabled on the domain and rewrites `mailto:` links found in static HTML. To prevent mangling, the contact email in the footer is injected by `components.js` at runtime (not present in the raw HTML), so Cloudflare never sees it. If you add any `mailto:` links directly to HTML files, be aware they will be rewritten by Cloudflare on every deploy — either move them into JS or disable the feature for that page.
+Cloudflare's **Scrape Shield / Email Obfuscation** feature is enabled on the domain and rewrites `mailto:` links found in static HTML. To prevent mangling, the contact email in the footer is injected by `components.js` at runtime (not present in the raw HTML), so Cloudflare never sees it. If you add any `mailto:` links directly to HTML files, be aware they will be rewritten by Cloudflare on every deploy - either move them into JS or disable the feature for that page.
 
 ---
 
@@ -326,8 +326,8 @@ cd your-repo-name
 
 > **Important:** Do not open `index.html` directly via `file://`. The site uses `fetch()` for external resources (GitHub API, streak stats image), which triggers CORS errors under the `file://` protocol. Always use a local web server. For instance:
 >
-> - **VS Code** — install the [Live Server](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer) extension and click "Go Live"
-> - **Python** — run `python3 -m http.server 8000` and open `http://localhost:8000`
+> - **VS Code** - install the [Live Server](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer) extension and click "Go Live"
+> - **Python** - run `python3 -m http.server 8000` and open `http://localhost:8000`
 
 ---
 
@@ -336,9 +336,9 @@ cd your-repo-name
 The site is hosted on **GitHub Pages** with **Cloudflare** as DNS provider, CDN, and security layer.
 
 ### GitHub Pages
-- Any `git push` to the `main` branch triggers the default GitHub Pages workflow — changes go live in seconds.
+- Any `git push` to the `main` branch triggers the default GitHub Pages workflow - changes go live in seconds.
 - The `CNAME` file in the repository root binds the custom domain (`justwhitee.org`) to GitHub's servers.
-- GitHub Pages automatically serves `404.html` for any non-existent URL — no configuration required.
+- GitHub Pages automatically serves `404.html` for any non-existent URL - no configuration required.
 
 ### Cloudflare Settings
 | Setting | Value | Notes |
@@ -366,6 +366,6 @@ The site is hosted on **GitHub Pages** with **Cloudflare** as DNS provider, CDN,
 ## Adding a New Bento Card
 
 1. Add a new entry object to the `bentoData` array in `bento/script.js`.
-2. If the title or description should be translated, set `i18n_key: "yourkey"` and add `card.yourkey.title` (and optionally `card.yourkey.desc`) to both `en` and `it` in `i18n.js`. The builder falls back to `item.title` if the key is missing — the UI will never break.
+2. If the title or description should be translated, set `i18n_key: "yourkey"` and add `card.yourkey.title` (and optionally `card.yourkey.desc`) to both `en` and `it` in `i18n.js`. The builder falls back to `item.title` if the key is missing - the UI will never break.
 3. If it uses a brand gradient, add the colour pair to the `BRAND` object in `bento/script.js`.
 4. Place any required SVG asset in `bento/assets/` and any images as `.webp`.
