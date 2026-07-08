@@ -609,10 +609,22 @@
             restartTimer();
             draw();
         }
+        // Board-cell coordinates of the current piece, for mouse hit-testing
+        // (click-to-rotate needs to know whether the click landed on it).
+        function pieceCells() {
+            var cells = [];
+            current.shape.forEach(function (rowArr, r) {
+                rowArr.forEach(function (v, c) {
+                    if (v) cells.push({ row: current.row + r, col: current.col + c });
+                });
+            });
+            return cells;
+        }
 
         reset();
         return {
             move: move, rotate: rotate, hardDrop: hardDrop, restart: reset,
+            pieceCells: pieceCells,
             stop: function () { clearInterval(dropTimer); }
         };
     }
@@ -650,7 +662,7 @@
             '<div class="egg-window-body tetris-body">' +
                 '<canvas class="tetris-canvas" width="' + (TETRIS_COLS * TETRIS_CELL) + '" height="' + (TETRIS_ROWS * TETRIS_CELL) + '"></canvas>' +
                 '<div class="tetris-stats"><span>SCORE<br><b class="tt-score">0</b></span><span>LINES<br><b class="tt-lines">0</b></span><span>LVL<br><b class="tt-level">1</b></span></div>' +
-                '<div class="tetris-hint">← → move · ↑ rotate · ↓/space hard drop · r restart</div>' +
+                '<div class="tetris-hint">← → move · ↑ rotate · ↓/space hard drop · r restart<br>click figure to rotate · click bottom to drop · drag to move</div>' +
                 '<div class="tetris-controls">' +
                     '<button type="button" class="tetris-btn" data-act="left" aria-label="Left">◀</button>' +
                     '<button type="button" class="tetris-btn" data-act="rotate" aria-label="Rotate">⟳</button>' +
@@ -708,15 +720,57 @@
             });
         });
 
+        // Mouse controls: click the falling piece to rotate it, click the lower
+        // part of the board to hard-drop, or press-drag left/right to slide it.
+        var dragging = false, dragMoved = false, dragStartX = 0, dragLastCol = 0;
+        function cellFromEvent(e) {
+            var rect = canvas.getBoundingClientRect();
+            var scaleX = canvas.width / rect.width, scaleY = canvas.height / rect.height;
+            return {
+                col: Math.floor((e.clientX - rect.left) * scaleX / TETRIS_CELL),
+                row: Math.floor((e.clientY - rect.top)  * scaleY / TETRIS_CELL)
+            };
+        }
+        function canvasMouseDown(e) {
+            dragging = true; dragMoved = false;
+            dragStartX = e.clientX;
+            dragLastCol = cellFromEvent(e).col;
+            e.preventDefault();
+        }
+        function windowMouseMove(e) {
+            if (!dragging) return;
+            if (Math.abs(e.clientX - dragStartX) > 4) dragMoved = true;
+            var col = cellFromEvent(e).col;
+            if (col !== dragLastCol) {
+                game.move(0, col - dragLastCol);
+                dragLastCol = col;
+            }
+        }
+        function windowMouseUp(e) {
+            if (!dragging) return;
+            dragging = false;
+            if (dragMoved) return; // was a drag, already handled in windowMouseMove
+            var cell = cellFromEvent(e);
+            var onPiece = game.pieceCells().some(function (p) { return p.row === cell.row && p.col === cell.col; });
+            if (onPiece) game.rotate();
+            else if (cell.row >= TETRIS_ROWS * 0.6) game.hardDrop();
+        }
+        canvas.addEventListener('mousedown', canvasMouseDown);
+        window.addEventListener('mousemove', windowMouseMove);
+        window.addEventListener('mouseup', windowMouseUp);
+
         win.querySelector('.egg-window-close').addEventListener('click', function () { win.remove(); });
         makeEggWindowDraggable(win);
 
         // Whichever way the window closes (its own × or :qa's bulk removal),
-        // stop the drop timer so it doesn't keep ticking against a detached canvas.
+        // stop the drop timer and remove every listener so nothing keeps
+        // running against a detached canvas.
         var observer = new MutationObserver(function () {
             if (!document.body.contains(win)) {
                 game.stop();
                 document.removeEventListener('keydown', keyHandler);
+                window.removeEventListener('mousemove', windowMouseMove);
+                window.removeEventListener('mouseup', windowMouseUp);
                 observer.disconnect();
             }
         });
