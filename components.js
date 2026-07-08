@@ -192,7 +192,11 @@
         { it: '🤪 non sono un gran chiacchierone, ma a sparare cavolate sono imbattibile.',
           en: '🤪 I\'m not much of a chatterbox, but I\'m unbeatable when it comes to spouting nonsense.' },
         { it: '🎮 quando ho un attimo libero gioco ai videogiochi o smanetto su qualcosa.',
-          en: '🎮 when I have a free moment I play video games or tinker with something.' }
+          en: '🎮 when I have a free moment I play video games or tinker with something.' },
+        { it: '😅 sono una persona molto sbadata a volte, tendo a dimenticare le cose in giro, per questo sotto ogni mio oggetto c\'è un QR code 🏷️!',
+          en: '😅 I can be quite scatterbrained sometimes, I tend to leave things lying around, so there\'s a QR code 🏷️ stuck under every one of my belongings!' },
+        { it: 'alle medie e superiori ero molto appassionato di grafica e 3D 🎨... magari hai visto qualche mia copertina su YouTube 📺... 😗',
+          en: 'in middle and high school I was really into graphic design and 3D 🎨... you might have seen one of my YouTube thumbnails 📺 somewhere... 😗' }
     ];
     var FUN_FACTS_A = FUN_FACTS.filter(function (_, i) { return i % 2 === 0; });
     var FUN_FACTS_B = FUN_FACTS.filter(function (_, i) { return i % 2 !== 0; });
