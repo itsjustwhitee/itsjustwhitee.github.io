@@ -262,6 +262,9 @@
         return { x: Math.min(x, maxX), y: Math.min(y, maxY) };
     }
 
+    // `entry` is optional — pass a persisted fun-fact-window entry to have its
+    // dragged position saved to localStorage, or omit it for a plain draggable
+    // window (e.g. the Tetris window) that doesn't need to survive a reload.
     function makeEggWindowDraggable(win, entry) {
         var titlebar = win.querySelector('.egg-window-titlebar');
         var dragging = false, startX = 0, startY = 0, origX = 0, origY = 0;
@@ -281,6 +284,7 @@
         window.addEventListener('mouseup', function () {
             if (!dragging) return;
             dragging = false;
+            if (!entry) return;
             var nx = win.offsetLeft, ny = win.offsetTop;
             saveEggWindows(loadEggWindows().map(function (e) {
                 if (e.id === entry.id) { e.x = nx; e.y = ny; }
@@ -464,6 +468,301 @@
         }, 3200);
     }
 
+    // ── EASTER EGG: TETRIS ──────────────────────────────────────────────────
+    // Reach the bottom of the page and keep scrolling down anyway — an
+    // escalating hint bar fills up, and past the threshold a playable Tetris
+    // window spawns. Singleton (re-triggering just no-ops while one is open).
+    var TETRIS_COLS = 10, TETRIS_ROWS = 20, TETRIS_CELL = 16;
+    var TETROMINOES = {
+        I: { shape: [[1, 1, 1, 1]],           color: '#00bbc9' },
+        O: { shape: [[1, 1], [1, 1]],         color: '#ffd93d' },
+        T: { shape: [[0, 1, 0], [1, 1, 1]],   color: '#c084fc' },
+        S: { shape: [[0, 1, 1], [1, 1, 0]],   color: '#4ade80' },
+        Z: { shape: [[1, 1, 0], [0, 1, 1]],   color: '#f87171' },
+        J: { shape: [[1, 0, 0], [1, 1, 1]],   color: '#60a5fa' },
+        L: { shape: [[0, 0, 1], [1, 1, 1]],   color: '#fb923c' }
+    };
+    var TETRO_KEYS = Object.keys(TETROMINOES);
+
+    function rotateMatrix(m) {
+        var rows = m.length, cols = m[0].length, res = [];
+        for (var c = 0; c < cols; c++) {
+            var row = [];
+            for (var r = rows - 1; r >= 0; r--) row.push(m[r][c]);
+            res.push(row);
+        }
+        return res;
+    }
+
+    function createTetrisGame(canvas, onStateChange) {
+        var ctx = canvas.getContext('2d');
+        var board, current, next, score, lines, level, gameOver, dropInterval, dropTimer;
+
+        function emptyBoard() {
+            var b = [];
+            for (var r = 0; r < TETRIS_ROWS; r++) b.push(new Array(TETRIS_COLS).fill(null));
+            return b;
+        }
+        function randomPiece() {
+            var def = TETROMINOES[TETRO_KEYS[Math.floor(Math.random() * TETRO_KEYS.length)]];
+            return { shape: def.shape, color: def.color, row: 0, col: Math.floor((TETRIS_COLS - def.shape[0].length) / 2) };
+        }
+        function collides(shape, row, col) {
+            for (var r = 0; r < shape.length; r++) {
+                for (var c = 0; c < shape[r].length; c++) {
+                    if (!shape[r][c]) continue;
+                    var br = row + r, bc = col + c;
+                    if (bc < 0 || bc >= TETRIS_COLS || br >= TETRIS_ROWS) return true;
+                    if (br >= 0 && board[br][bc]) return true;
+                }
+            }
+            return false;
+        }
+        function clearLines() {
+            var cleared = 0;
+            for (var r = TETRIS_ROWS - 1; r >= 0; r--) {
+                if (board[r].every(function (cell) { return cell; })) {
+                    board.splice(r, 1);
+                    board.unshift(new Array(TETRIS_COLS).fill(null));
+                    cleared++;
+                    r++; // re-check this index, a new row just shifted into it
+                }
+            }
+            if (cleared) {
+                score += [0, 100, 300, 500, 800][cleared] * level;
+                lines += cleared;
+                level = 1 + Math.floor(lines / 10);
+                dropInterval = Math.max(120, 700 - (level - 1) * 60);
+                restartTimer();
+            }
+        }
+        function lockPiece() {
+            current.shape.forEach(function (rowArr, r) {
+                rowArr.forEach(function (v, c) {
+                    if (v && current.row + r >= 0) board[current.row + r][current.col + c] = current.color;
+                });
+            });
+            clearLines();
+            current = next;
+            next = randomPiece();
+            if (collides(current.shape, current.row, current.col)) {
+                gameOver = true;
+                clearInterval(dropTimer);
+            }
+        }
+        function move(dr, dc) {
+            if (gameOver) return;
+            if (!collides(current.shape, current.row + dr, current.col + dc)) {
+                current.row += dr; current.col += dc;
+            } else if (dr === 1) {
+                lockPiece();
+            }
+            draw();
+        }
+        function rotate() {
+            if (gameOver) return;
+            var rotated = rotateMatrix(current.shape);
+            var kicks = [0, -1, 1, -2, 2];
+            for (var i = 0; i < kicks.length; i++) {
+                if (!collides(rotated, current.row, current.col + kicks[i])) {
+                    current.shape = rotated;
+                    current.col += kicks[i];
+                    break;
+                }
+            }
+            draw();
+        }
+        function hardDrop() {
+            if (gameOver) return;
+            while (!collides(current.shape, current.row + 1, current.col)) current.row++;
+            lockPiece();
+            draw();
+        }
+        function drawCell(c, r, color) {
+            ctx.fillStyle = color;
+            ctx.fillRect(c * TETRIS_CELL, r * TETRIS_CELL, TETRIS_CELL - 1, TETRIS_CELL - 1);
+        }
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (var r = 0; r < TETRIS_ROWS; r++) {
+                for (var c = 0; c < TETRIS_COLS; c++) {
+                    if (board[r][c]) drawCell(c, r, board[r][c]);
+                }
+            }
+            current.shape.forEach(function (rowArr, r) {
+                rowArr.forEach(function (v, c) {
+                    if (v) drawCell(current.col + c, current.row + r, current.color);
+                });
+            });
+            onStateChange({ score: score, lines: lines, level: level, gameOver: gameOver });
+        }
+        function restartTimer() {
+            clearInterval(dropTimer);
+            dropTimer = setInterval(function () { move(1, 0); }, dropInterval);
+        }
+        function reset() {
+            board = emptyBoard();
+            current = randomPiece();
+            next = randomPiece();
+            score = 0; lines = 0; level = 1; gameOver = false;
+            dropInterval = 700;
+            restartTimer();
+            draw();
+        }
+
+        reset();
+        return {
+            move: move, rotate: rotate, hardDrop: hardDrop, restart: reset,
+            stop: function () { clearInterval(dropTimer); }
+        };
+    }
+
+    function spawnTetris() {
+        if (document.getElementById('tetris-window')) return; // singleton
+
+        var win = document.createElement('div');
+        win.className = 'egg-window tetris-window';
+        win.id = 'tetris-window';
+        win.style.left = Math.max(16, Math.round((window.innerWidth - 220) / 2)) + 'px';
+        win.style.top = '70px';
+        win.innerHTML =
+            '<div class="egg-window-titlebar">' +
+                '<span>// tetris.exe</span>' +
+                '<button type="button" class="egg-window-close" aria-label="Close">×</button>' +
+            '</div>' +
+            '<div class="egg-window-body tetris-body">' +
+                '<canvas class="tetris-canvas" width="' + (TETRIS_COLS * TETRIS_CELL) + '" height="' + (TETRIS_ROWS * TETRIS_CELL) + '"></canvas>' +
+                '<div class="tetris-stats"><span>SCORE<br><b class="tt-score">0</b></span><span>LINES<br><b class="tt-lines">0</b></span><span>LVL<br><b class="tt-level">1</b></span></div>' +
+                '<div class="tetris-hint">← → move · ↑ rotate · ↓ drop · space hard drop · r restart</div>' +
+                '<div class="tetris-controls">' +
+                    '<button type="button" class="tetris-btn" data-act="left" aria-label="Left">◀</button>' +
+                    '<button type="button" class="tetris-btn" data-act="rotate" aria-label="Rotate">⟳</button>' +
+                    '<button type="button" class="tetris-btn" data-act="right" aria-label="Right">▶</button>' +
+                    '<button type="button" class="tetris-btn" data-act="down" aria-label="Drop">▼</button>' +
+                '</div>' +
+            '</div>';
+        document.body.appendChild(win);
+
+        var canvas  = win.querySelector('canvas');
+        var scoreEl = win.querySelector('.tt-score');
+        var linesEl = win.querySelector('.tt-lines');
+        var levelEl = win.querySelector('.tt-level');
+        var bodyEl  = win.querySelector('.tetris-body');
+        var gameOverShown = false;
+
+        var game = createTetrisGame(canvas, function (s) {
+            scoreEl.textContent = s.score;
+            linesEl.textContent = s.lines;
+            levelEl.textContent = s.level;
+            if (s.gameOver && !gameOverShown) {
+                gameOverShown = true;
+                var msg = document.createElement('div');
+                msg.className = 'tetris-gameover';
+                msg.textContent = window.currentLang === 'it' ? 'GAME OVER — premi R' : 'GAME OVER — press R';
+                bodyEl.appendChild(msg);
+            }
+        });
+
+        function clearGameOverMsg() {
+            gameOverShown = false;
+            var msg = bodyEl.querySelector('.tetris-gameover');
+            if (msg) msg.remove();
+        }
+        function keyHandler(e) {
+            switch (e.key) {
+                case 'ArrowLeft':  e.preventDefault(); game.move(0, -1); break;
+                case 'ArrowRight': e.preventDefault(); game.move(0, 1); break;
+                case 'ArrowDown':  e.preventDefault(); game.move(1, 0); break;
+                case 'ArrowUp':    e.preventDefault(); game.rotate(); break;
+                case ' ':          e.preventDefault(); game.hardDrop(); break;
+                case 'r': case 'R': clearGameOverMsg(); game.restart(); break;
+            }
+        }
+        document.addEventListener('keydown', keyHandler);
+
+        win.querySelectorAll('.tetris-btn').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                switch (btn.dataset.act) {
+                    case 'left':   game.move(0, -1); break;
+                    case 'right':  game.move(0, 1);  break;
+                    case 'down':   game.move(1, 0);  break;
+                    case 'rotate': game.rotate();     break;
+                }
+            });
+        });
+
+        win.querySelector('.egg-window-close').addEventListener('click', function () { win.remove(); });
+        makeEggWindowDraggable(win);
+
+        // Whichever way the window closes (its own × or :qa's bulk removal),
+        // stop the drop timer so it doesn't keep ticking against a detached canvas.
+        var observer = new MutationObserver(function () {
+            if (!document.body.contains(win)) {
+                game.stop();
+                document.removeEventListener('keydown', keyHandler);
+                observer.disconnect();
+            }
+        });
+        observer.observe(document.body, { childList: true });
+    }
+
+    function initScrollPastEnd() {
+        var THRESHOLD = 480;
+        var accum = 0, hintBar, hintFill, hintLabel, decayTimer = null, touchStartY = null;
+
+        function atBottom() {
+            return window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 4;
+        }
+        function ensureHint() {
+            if (hintBar) return;
+            hintBar = document.createElement('div');
+            hintBar.className = 'scroll-push-hint';
+            hintFill = document.createElement('div');
+            hintFill.className = 'scroll-push-hint-fill';
+            hintBar.appendChild(hintFill);
+            hintLabel = document.createElement('div');
+            hintLabel.className = 'scroll-push-label';
+            hintLabel.textContent = window.currentLang === 'it' ? '// continua a scrollare...' : '// keep scrolling...';
+            document.body.appendChild(hintBar);
+            document.body.appendChild(hintLabel);
+        }
+        function resetHint() {
+            accum = 0;
+            if (hintBar)   { hintBar.remove(); hintBar = null; }
+            if (hintLabel) { hintLabel.remove(); hintLabel = null; }
+        }
+        function bump(delta) {
+            if (document.getElementById('tetris-window')) return;
+            accum += delta;
+            ensureHint();
+            var pct = Math.min(1, accum / THRESHOLD);
+            hintFill.style.width = (pct * 100) + '%';
+            hintLabel.classList.toggle('show', pct > 0.08);
+            clearTimeout(decayTimer);
+            decayTimer = setTimeout(resetHint, 1200);
+            if (accum >= THRESHOLD) {
+                resetHint();
+                spawnTetris();
+            }
+        }
+
+        window.addEventListener('wheel', function (e) {
+            if (e.deltaY > 0 && atBottom()) bump(e.deltaY);
+            else if (!atBottom()) resetHint();
+        }, { passive: true });
+
+        window.addEventListener('touchstart', function (e) {
+            touchStartY = e.touches[0].clientY;
+        }, { passive: true });
+        window.addEventListener('touchmove', function (e) {
+            if (touchStartY === null) return;
+            var dy = touchStartY - e.touches[0].clientY; // positive = finger moving up = scrolling down
+            touchStartY = e.touches[0].clientY;
+            if (dy > 0 && atBottom()) bump(dy * 3);
+            else if (!atBottom()) resetHint();
+        }, { passive: true });
+    }
+
     // ── INIT ──────────────────────────────────────────────────────────────────
     document.addEventListener('DOMContentLoaded', function () {
         var nav    = document.getElementById('site-nav');
@@ -475,6 +774,7 @@
         clearEggStateOnHardRefresh();
         restoreEggWindows();
         initTypedSequences();
+        initScrollPastEnd();
     });
 
     logConsoleEasterEgg();

@@ -327,6 +327,52 @@ a { color: inherit; text-decoration: none; }
 }
 .egg-window-trap-btn:hover { filter: brightness(1.1); }
 
+/* ── TETRIS EASTER EGG ─────────────────────────────────────────────────────
+   Reuses the .egg-window chrome above; this just widens it and adds the
+   game-specific bits (canvas, stats row, mobile touch controls). */
+.tetris-window { width: 216px; }
+.tetris-body { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.tetris-canvas { background: #0a0f0f; border: 1px solid rgba(255,255,255,0.15); display: block; }
+.tetris-stats {
+    display: flex; justify-content: space-between; width: 100%;
+    font-size: 0.56rem; color: var(--text-muted); text-align: center;
+    line-height: 1.6; text-transform: uppercase; letter-spacing: 0.04em;
+}
+.tetris-stats b { display: block; color: var(--accent-bright); font-size: 0.78rem; }
+.tetris-hint { font-size: 0.52rem; color: var(--text-muted); text-align: center; line-height: 1.5; }
+.tetris-gameover { color: #ff6b6b; font-weight: 800; font-size: 0.66rem; text-align: center; }
+.tetris-controls { display: none; gap: 6px; width: 100%; }
+.tetris-btn {
+    flex: 1; background: rgba(255,255,255,0.1); color: var(--text-body);
+    border: 1px solid rgba(255,255,255,0.2); border-radius: 6px;
+    font-size: 0.9rem; padding: 6px 0; cursor: pointer;
+}
+.tetris-btn:active { background: rgba(255,255,255,0.22); }
+/* Touch devices have no keyboard for controls, so show the on-screen d-pad only there */
+@media (pointer: coarse) {
+    .tetris-controls { display: flex; }
+}
+
+/* ── SCROLL-PAST-THE-END HINT ─────────────────────────────────────────────
+   Fixed progress bar + label, shown while the visitor keeps scrolling down
+   after already hitting the bottom of the page (see initScrollPastEnd). */
+.scroll-push-hint {
+    position: fixed; left: 0; right: 0; bottom: 0; height: 3px;
+    background: rgba(255,255,255,0.06); z-index: 9999; pointer-events: none;
+}
+.scroll-push-hint-fill {
+    height: 100%; width: 0%; background: var(--accent-bright);
+    box-shadow: 0 0 8px rgba(var(--accent-bright-rgb),0.6);
+}
+.scroll-push-label {
+    position: fixed; left: 50%; bottom: 10px; transform: translateX(-50%);
+    font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; letter-spacing: 0.08em;
+    color: var(--accent-bright); text-transform: uppercase;
+    opacity: 0; transition: opacity 0.2s ease;
+    pointer-events: none; z-index: 9999;
+}
+.scroll-push-label.show { opacity: 0.85; }
+
 .konami-toast {
     position: fixed; top: 76px; right: 24px;
     max-width: min(320px, calc(100vw - 48px));
