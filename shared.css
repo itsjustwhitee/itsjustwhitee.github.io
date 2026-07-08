@@ -330,7 +330,7 @@ a { color: inherit; text-decoration: none; }
 /* ── TETRIS EASTER EGG ─────────────────────────────────────────────────────
    Reuses the .egg-window chrome above; this just widens it and adds the
    game-specific bits (canvas, stats row, mobile touch controls). */
-.tetris-window { width: 264px; }
+.tetris-window { min-width: 200px; max-width: calc(100vw - 16px); max-height: calc(100vh - 16px); overflow: auto; } /* actual width/height set inline at spawn time, sized to the viewport */
 .tetris-body { display: flex; flex-direction: column; align-items: center; gap: 8px; }
 .tetris-canvas { background: #0a0f0f; border: 1px solid rgba(255,255,255,0.15); display: block; }
 .tetris-stats {

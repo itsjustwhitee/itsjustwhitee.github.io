@@ -617,14 +617,31 @@
         };
     }
 
+    // Fills nearly the whole viewport: cell size is derived from available
+    // screen space (minus room for titlebar/stats/hint/touch-controls chrome)
+    // rather than a fixed pixel value, so the 10x20 board scales up to use it.
+    function computeTetrisCellSize() {
+        var isTouch = window.matchMedia('(pointer: coarse)').matches;
+        var chromeH = 150 + (isTouch ? 60 : 0);
+        var maxBoardH = window.innerHeight * 0.92 - chromeH;
+        var maxBoardW = window.innerWidth * 0.94 - 30;
+        var cell = Math.floor(Math.min(maxBoardH / TETRIS_ROWS, maxBoardW / TETRIS_COLS));
+        return Math.max(14, Math.min(cell, 56));
+    }
+
     function spawnTetris() {
         if (document.getElementById('tetris-window')) return; // singleton
+
+        TETRIS_CELL = computeTetrisCellSize();
+        var winW = TETRIS_COLS * TETRIS_CELL + 26;
+        var winH = TETRIS_ROWS * TETRIS_CELL + 150 + (window.matchMedia('(pointer: coarse)').matches ? 60 : 0);
 
         var win = document.createElement('div');
         win.className = 'egg-window tetris-window';
         win.id = 'tetris-window';
-        win.style.left = Math.max(16, Math.round((window.innerWidth - 220) / 2)) + 'px';
-        win.style.top = '70px';
+        win.style.width = winW + 'px';
+        win.style.left = Math.max(8, Math.round((window.innerWidth - winW) / 2)) + 'px';
+        win.style.top = Math.max(8, Math.round((window.innerHeight - winH) / 2)) + 'px';
         win.innerHTML =
             '<div class="egg-window-titlebar">' +
                 '<span>// tetris.exe</span>' +
@@ -707,7 +724,7 @@
     }
 
     function initScrollPastEnd() {
-        var THRESHOLD = 900;
+        var THRESHOLD = 2200; // ~20+ wheel notches of persistent scrolling
         var accum = 0, hintBar, hintFill, hintLabel, decayTimer = null, touchStartY = null;
 
         function atBottom() {
