@@ -148,7 +148,7 @@ function makeSolidCard(card, item) {
     const isSmall = item.size === "small";
     const imgSize = isSmall ? 32 : 40;
     const iconHtml = item.svgAsset
-        ? `<img src="${item.svgAsset}" width="${imgSize}" height="${imgSize}" alt="" class="brand-svg" style="filter:${item.iconColor === '#fff' ? 'brightness(0) invert(1)' : buildColorFilter(item.iconColor)}">`
+        ? `<img src="${item.svgAsset}" width="${imgSize}" height="${imgSize}" alt="" class="brand-svg" loading="lazy" style="filter:${item.iconColor === '#fff' ? 'brightness(0) invert(1)' : buildColorFilter(item.iconColor)}">`
         : "";
 
     const title = (item.i18n_key && window.t(`card.${item.i18n_key}.title`)) || item.title || "";
@@ -224,7 +224,7 @@ async function buildGithubCard(card, username) {
             <div class="gh-card">
 
                 <div class="gh-header">
-                    <img src="${user.avatar_url}" class="gh-avatar" alt="avatar">
+                    <img src="${user.avatar_url}" class="gh-avatar" alt="avatar" loading="lazy">
                     <div class="gh-user-info">
                         <div class="gh-name">${user.name || username}</div>
                         <div class="gh-handle">@${user.login}</div>
