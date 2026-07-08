@@ -472,7 +472,7 @@
     // Reach the bottom of the page and keep scrolling down anyway — an
     // escalating hint bar fills up, and past the threshold a playable Tetris
     // window spawns. Singleton (re-triggering just no-ops while one is open).
-    var TETRIS_COLS = 10, TETRIS_ROWS = 20, TETRIS_CELL = 16;
+    var TETRIS_COLS = 10, TETRIS_ROWS = 20, TETRIS_CELL = 20;
     var TETROMINOES = {
         I: { shape: [[1, 1, 1, 1]],           color: '#00bbc9' },
         O: { shape: [[1, 1], [1, 1]],         color: '#ffd93d' },
@@ -633,7 +633,7 @@
             '<div class="egg-window-body tetris-body">' +
                 '<canvas class="tetris-canvas" width="' + (TETRIS_COLS * TETRIS_CELL) + '" height="' + (TETRIS_ROWS * TETRIS_CELL) + '"></canvas>' +
                 '<div class="tetris-stats"><span>SCORE<br><b class="tt-score">0</b></span><span>LINES<br><b class="tt-lines">0</b></span><span>LVL<br><b class="tt-level">1</b></span></div>' +
-                '<div class="tetris-hint">← → move · ↑ rotate · ↓ drop · space hard drop · r restart</div>' +
+                '<div class="tetris-hint">← → move · ↑ rotate · ↓/space hard drop · r restart</div>' +
                 '<div class="tetris-controls">' +
                     '<button type="button" class="tetris-btn" data-act="left" aria-label="Left">◀</button>' +
                     '<button type="button" class="tetris-btn" data-act="rotate" aria-label="Rotate">⟳</button>' +
@@ -672,7 +672,7 @@
             switch (e.key) {
                 case 'ArrowLeft':  e.preventDefault(); game.move(0, -1); break;
                 case 'ArrowRight': e.preventDefault(); game.move(0, 1); break;
-                case 'ArrowDown':  e.preventDefault(); game.move(1, 0); break;
+                case 'ArrowDown':  e.preventDefault(); game.hardDrop(); break;
                 case 'ArrowUp':    e.preventDefault(); game.rotate(); break;
                 case ' ':          e.preventDefault(); game.hardDrop(); break;
                 case 'r': case 'R': clearGameOverMsg(); game.restart(); break;
@@ -685,7 +685,7 @@
                 switch (btn.dataset.act) {
                     case 'left':   game.move(0, -1); break;
                     case 'right':  game.move(0, 1);  break;
-                    case 'down':   game.move(1, 0);  break;
+                    case 'down':   game.hardDrop();  break;
                     case 'rotate': game.rotate();     break;
                 }
             });
@@ -707,7 +707,7 @@
     }
 
     function initScrollPastEnd() {
-        var THRESHOLD = 480;
+        var THRESHOLD = 900;
         var accum = 0, hintBar, hintFill, hintLabel, decayTimer = null, touchStartY = null;
 
         function atBottom() {
