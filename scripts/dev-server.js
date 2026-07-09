@@ -65,6 +65,14 @@ const server = http.createServer((req, res) => {
     });
 });
 
+server.on('error', (err) => {
+    if (err.code === 'EADDRINUSE') {
+        console.log(`Port ${PORT} is already in use - dev server is probably already running at http://localhost:${PORT}/`);
+        process.exit(0);
+    }
+    throw err;
+});
+
 server.listen(PORT, () => {
     console.log(`Dev server (GitHub-Pages-like 404 handling) running at http://localhost:${PORT}/`);
 });
