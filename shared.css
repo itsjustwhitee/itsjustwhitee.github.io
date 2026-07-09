@@ -79,7 +79,19 @@ body::before {
    the native CSS View Transitions API, which caused real hangs on this site's
    cross-document navigations when tried. .pt-loading is added to <html>
    before <body> even exists, so the very first paint is already hidden; no
-   flash of the page at full opacity before the fade-in takes over. */
+   flash of the page at full opacity before the fade-in takes over.
+
+   Deliberately opacity-only. A clip-path iris-wipe was tried (see git history)
+   and looked great, but broke click-through on position:fixed descendants
+   (.site-nav) once the page was scrolled - the nav rendered in the correct
+   spot but stopped receiving clicks, because clip-path's clip region is fixed
+   to body's own (document-height-tall) coordinate space while fixed elements
+   stay pinned to the viewport, so the two drift apart as soon as you scroll.
+   transform/filter have the same category of problem (they create a new
+   containing block for fixed descendants outright). Fixing this properly
+   needs the fixed chrome (nav, orbs, hero logo, egg windows) moved outside
+   whatever element gets the fancier effect - not done here to avoid shipping
+   a broken nav in the meantime. */
 body { opacity: 1; transition: opacity 0.2s ease; }
 html.pt-loading body,
 html.pt-leaving body { opacity: 0; }
