@@ -869,7 +869,8 @@
             if (url.href.split('#')[0] === location.href.split('#')[0]) return; // same-document anchor
             e.preventDefault();
             document.documentElement.classList.add('pt-leaving');
-            setTimeout(function () { location.href = a.href; }, 200);
+            // Must match .pt-leaving's transition-duration in shared.css (160ms).
+            setTimeout(function () { location.href = a.href; }, 160);
         });
     }
 

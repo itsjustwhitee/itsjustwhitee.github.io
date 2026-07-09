@@ -92,9 +92,14 @@ body::before {
    needs the fixed chrome (nav, orbs, hero logo, egg windows) moved outside
    whatever element gets the fancier effect - not done here to avoid shipping
    a broken nav in the meantime. */
-body { opacity: 1; transition: opacity 0.2s ease; }
-html.pt-loading body,
-html.pt-leaving body { opacity: 0; }
+/* Entrance (pt-loading removed) decelerates in - Material's "standard
+   decelerate" curve - so arrival reads as a settle, not a snap. Exit
+   (pt-leaving added) accelerates out on its own shorter transition so the
+   click still feels instant, not sluggish; components.js's setTimeout before
+   navigating must match this duration (160ms). */
+body { opacity: 1; transition: opacity 0.26s cubic-bezier(0, 0, 0.2, 1); }
+html.pt-loading body { opacity: 0; transition: none; }
+html.pt-leaving body { opacity: 0; transition: opacity 0.16s cubic-bezier(0.4, 0, 1, 1); }
 
 .container {
     max-width: 1200px;
