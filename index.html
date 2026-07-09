@@ -1073,7 +1073,10 @@
     <!-- ── FOOTER ─────────────────────────────────────────────────────────── -->
     <footer id="site-footer" class="site-footer" data-footer="full" data-copy-key="home.footer_copy"></footer><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
     // Scroll reveal — shared implementation lives in components.js
-    window.initScrollReveal({ delayStep: 80, delayCap: 280 });
+    // initialGrace: 900ms clears hero-eyebrow's own 0.2s-delay/0.6s fadeUp (above, in this
+    // page's <style>) so a section that's already in view at load (short mobile screens)
+    // can't finish revealing before "hello world" does
+    window.initScrollReveal({ delayStep: 80, delayCap: 280, initialGrace: 900 });
 
     // Nav active highlighting
     const sections = document.querySelectorAll('section[id]');

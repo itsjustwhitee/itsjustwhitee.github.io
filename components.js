@@ -23,6 +23,22 @@
 
     function r(rel) { return rootUrl + rel; }
 
+    // ── SCROLL RESTORATION ───────────────────────────────────────────────────
+    // Browsers (mobile especially) restore the previous scroll offset on reload
+    // by default. That fights this site's design: hero has no .reveal entrance
+    // (it's meant to be the first thing seen), while sections below use the
+    // IntersectionObserver reveal in initScrollReveal(). Reload mid-scroll and
+    // the browser drops you straight into a lower section - which immediately
+    // reveals itself since it's in view - while the hero sits invisible above,
+    // unscrolled-to. Set as early as possible (before <body> even exists) so it
+    // takes effect before the browser has a chance to restore anything.
+    if ('scrollRestoration' in history) {
+        history.scrollRestoration = 'manual';
+    }
+    if (!location.hash) {
+        window.scrollTo(0, 0);
+    }
+
     // ── REDUCED MOTION ───────────────────────────────────────────────────────
     // CSS animations/transitions are neutralized globally via shared.css; this
     // flag lets JS-driven continuous motion (parallax, spin loops, particle
@@ -118,9 +134,16 @@
     // its cards can be added to the DOM asynchronously after this runs.)
     window.initScrollReveal = function (opts) {
         opts = opts || {};
-        var delayStep  = opts.delayStep  || 80;
-        var delayCap   = opts.delayCap   || 280;
-        var revealStart = Date.now();
+        var delayStep    = opts.delayStep    || 80;
+        var delayCap     = opts.delayCap     || 280;
+        // Extra delay applied only to reveals already in view at page load (no
+        // scrolling involved) - without it, a section that happens to be
+        // visible on a short mobile screen can finish its 0ms-stagger fade-in
+        // before the hero's own longer, fixed-delay CSS entrance animations
+        // do, making e.g. "01 - about me" visually settle before "hello
+        // world". Reveals triggered by actual later scrolling are unaffected.
+        var initialGrace = opts.initialGrace || 0;
+        var revealStart  = Date.now();
 
         var revealObs = new IntersectionObserver(function (entries) {
             entries.forEach(function (entry) {
@@ -128,6 +151,7 @@
                     var siblings = [].slice.call(entry.target.parentElement.querySelectorAll('.reveal'));
                     var idx      = siblings.indexOf(entry.target);
                     var delay    = Math.min(idx * delayStep, delayCap);
+                    if (Date.now() - revealStart < 100) delay += initialGrace;
                     entry.target.style.transitionDelay = delay + 'ms';
                     entry.target.classList.add('visible');
                 } else if (Date.now() - revealStart > 800) {
