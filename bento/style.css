@@ -78,10 +78,9 @@ body::before {
     .card:hover {
         transform: translateY(-5px) scale(1.025);
         border-color: rgba(var(--accent-bright-rgb),0.4);
-        box-shadow: 0 20px 50px rgba(0,0,0,0.5), 0 0 18px rgba(var(--accent-rgb),0.18);
+        box-shadow: 0 20px 50px rgba(0,0,0,0.5), 0 0 28px rgba(var(--accent-bright-rgb),0.3);
         filter: brightness(1.07);
     }
-    .card:not(.transparent):hover::after { animation: shimmer 0.65s ease forwards; }
     .card:hover .ig-photo { transform: scale(1.05); }
     .card:hover .solid-icon-wrap { transform: scale(1.1); background: rgba(255,255,255,0.2); }
     .card:hover .card-corner-icon { color: rgba(255,255,255,0.9); }
@@ -93,22 +92,6 @@ body::before {
     }
     .footer-copy a:hover { color: var(--accent-bright); }
     .footer-links a:hover { color: var(--accent-bright); }
-}
-
-/* Shimmer — non-transparent cards only */
-.card:not(.transparent)::after {
-    content: '';
-    position: absolute; inset: 0; border-radius: var(--radius);
-    background: linear-gradient(115deg,
-        transparent 0%, rgba(255,255,255,0.04) 40%,
-        rgba(255,255,255,0.09) 50%, rgba(255,255,255,0.04) 60%, transparent 100%);
-    opacity: 0; transform: translateX(-100%);
-    pointer-events: none; z-index: 20;
-}
-@keyframes shimmer {
-    0%  { opacity: 0; transform: translateX(-100%); }
-    20% { opacity: 1; }
-    100%{ opacity: 0; transform: translateX(100%); }
 }
 
 /* ── INSTAGRAM GRID ──────────────────────────────────────────────────────── */
