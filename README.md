@@ -23,7 +23,8 @@ A static personal website hosted on **GitHub Pages** with Cloudflare as CDN and 
 │   └── shared-head.html    # Single source of truth for the shared <head> boilerplate (see below)
 ├── scripts/
 │   ├── sync-head.js        # Syncs partials/shared-head.html into every page
-│   └── generate-og-image.js # Screenshots the hero for assets/og-image.jpg (run by CI)
+│   ├── generate-og-image.js # Screenshots the hero for assets/og-image.jpg (run by CI)
+│   └── dev-server.js       # Local dev server with GitHub-Pages-like 404 handling (see Setup below)
 │
 ├── bento/
 │   ├── index.html          # Bento page - header fadeUp, parallax orbs, mouse tracking
@@ -101,7 +102,7 @@ GitHub Pages' custom 404, styled to match the site (animated orbs, gradient type
 
 ### Shared Components
 - **`.site-nav`** - fixed top navbar with blur backdrop
-- **`.card-base`** - base card style (border, hover lift, shimmer animation)
+- **`.card-base`** - base card style (border, hover lift, glow)
 - **`.card-slug`** / **`.card-corner-icon`** - bottom-right URL label / top-right icon on cards
 - **`.btn-pill`** - rounded button; variants: `.btn-primary`, `.btn-ghost`
 - **`.reveal`** - scroll-triggered fade-up animation (see Interactive Features)
@@ -112,7 +113,10 @@ GitHub Pages' custom 404, styled to match the site (animated orbs, gradient type
 All `:hover` transitions and card lift animations are wrapped in `@media (hover: hover) and (pointer: fine)`. This prevents the **"sticky hover" bug** on iOS/Android, where tapping a card leaves it permanently elevated after the finger lifts - touch devices have no hover state and must never trigger these styles.
 
 ### Reduced motion
-`shared.css` neutralizes all CSS animations/transitions under `@media (prefers-reduced-motion: reduce)`. `components.js` computes `window.prefersReducedMotion` once so JS-driven motion opts out the same way: mouse parallax orbs, the RackController fan spin, EdgeCV4Safety eye-tracking, HashCrackerz crumb particles, the hero's giant-logo scroll parallax, and the section-nav's smooth-scroll (falls back to an instant jump) all check this flag before starting. The `.reveal` system always ends up showing content either way - reduced motion just skips the animated fade/slide.
+`shared.css` neutralizes all CSS animations/transitions under `@media (prefers-reduced-motion: reduce)`. `components.js` computes `window.prefersReducedMotion` once so JS-driven motion opts out the same way: mouse parallax orbs, the RackController fan spin, EdgeCV4Safety eye-tracking, HashCrackerz crumb particles, the hero's giant-logo scroll parallax, the hero logo's corner-trace animation, the page-transition fade, and the section-nav's smooth-scroll (falls back to an instant jump) all check this flag before starting. The `.reveal` system always ends up showing content either way - reduced motion just skips the animated fade/slide.
+
+### Page transitions
+Navigating between pages fades the current page out, then the next one in - `components.js` adds a `pt-loading` class to `<html>` synchronously (before `<body>` even exists, so there's no flash of unstyled content), removes it once the page is ready, and adds `pt-leaving` on any plain left-click to a same-origin, same-tab, same-document link before actually navigating ~200ms later. New-tab links, downloads, modified clicks (ctrl/cmd/shift), external links, and in-page `#anchor` jumps are all left alone. Deliberately opacity-only on `<body>`, not the native CSS View Transitions API or a `transform`/`filter`-based effect - both were tried and broke click-through on `position: fixed` elements (the nav bar specifically) once the page was scrolled, since those properties change the containing block for fixed descendants. See the comment above `.pt-loading`/`.pt-leaving` in `shared.css` for the full story.
 
 ---
 
@@ -183,6 +187,7 @@ Page-specific features:
 | Page | Feature | How it works |
 |---|---|---|
 | Home | Giant logo parallax | Hero logo drifts and fades on scroll |
+| Home | Logo corner-trace | A short blurred segment traces the giant logo's actual silhouette (the two wing paths copied verbatim from `assets/logo.svg`, not a bounding box) once on load, then fades |
 | Home | Section nav dots | Fixed pill nav; active dot tracks whichever section is closest to viewport centre |
 | Home | Fan spin (RackController card) | `requestAnimationFrame` loop, speeds up on hover |
 | Home | Eye tracking (EdgeCV4Safety card) | SVG pupil group follows the cursor |
@@ -235,7 +240,9 @@ git clone https://github.com/itsjustwhitee/your-repo-name.git
 cd your-repo-name
 ```
 
-> Don't open `index.html` via `file://` - `fetch()` calls (GitHub API, streak-stats image) hit CORS errors outside `http(s)`. Serve it instead: VS Code's [Live Server](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer) extension, or `python3 -m http.server 8000`.
+> Don't open `index.html` via `file://` - `fetch()` calls (GitHub API, streak-stats image) hit CORS errors outside `http(s)`. Serve it instead.
+
+Recommended: `node scripts/dev-server.js [port]` (default 8080). It behaves like GitHub Pages rather than a generic static server - unmatched routes get `404.html` with a real 404 status instead of a bare connection error, and it disables all caching so edits always show up on the next reload. Plain alternatives also work fine for quick checks: VS Code's [Live Server](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer) extension, or `python3 -m http.server 8000` (neither replicates the 404 behavior).
 
 ---
 
