@@ -144,6 +144,43 @@
         filter: drop-shadow(0 0 120px rgba(var(--accent-bright-rgb),0.08));
         will-change: transform, opacity;
     }
+    /* A short glowing segment that travels once around the giant logo's own
+       actual silhouette on load — the two wing paths copied verbatim from
+       assets/logo.svg (same viewBox, same transforms), not a bounding-box
+       rect, so the trace hugs the real edge of the mark. Same fixed
+       position/size as .hero-logo-giant so it sits exactly on top of it.
+       pathLength="1" on each <path> lets stroke-dasharray/dashoffset be
+       expressed as a 0-1 fraction of that path's own length instead of
+       hand-computed values — needed since the two paths have different
+       actual lengths. Delay matches the logo's own opacity fade-in
+       (index.html's inline script, setTimeout(...,600)) so the trace starts
+       right as the logo itself starts appearing, not after. */
+    .hero-logo-trace {
+        position: fixed; right: 0; top: 50%;
+        transform: translateY(-50%) translateX(50%);
+        width: clamp(800px, 90vw, 1150px);
+        aspect-ratio: 1;
+        pointer-events: none; z-index: 0;
+    }
+    .hero-logo-trace svg { width: 100%; height: 100%; overflow: visible; }
+    .hero-logo-trace path {
+        fill: none;
+        stroke: var(--accent-bright);
+        stroke-width: 7;
+        stroke-linecap: round;
+        stroke-dasharray: 0.0175 1;
+        opacity: 0;
+        filter: blur(2px) drop-shadow(0 0 14px rgba(var(--accent-bright-rgb),0.7));
+    }
+    @media (prefers-reduced-motion: no-preference) {
+        .hero-logo-trace path { animation: heroLogoTrace 1.3s linear 0.6s 1 both; }
+    }
+    @keyframes heroLogoTrace {
+        0%   { opacity: 0; stroke-dashoffset: 0; }
+        15%  { opacity: 0.6; }
+        72%  { opacity: 0.6; stroke-dashoffset: -0.3; }  /* full brightness through ~1.5s from page load */
+        100% { opacity: 0; stroke-dashoffset: -0.5; }    /* gone by ~1.9s from page load (0.5s earlier than before) */
+    }
     .hero-scroll {
         position: absolute; bottom: 36px; left: 50%;
         transform: translateX(-50%);
@@ -413,7 +450,7 @@
 
     /* ── TABLET ≤900px ───────────────────────────────────────────────────── */
     @media (max-width: 900px) {
-        .hero-logo-giant { display: none; }
+        .hero-logo-giant, .hero-logo-trace { display: none; }
         .about-grid { grid-template-columns: 1fr; }
         .about-pic-wrap { max-width: 280px; margin: 0 auto; }
         .projects-grid { grid-template-columns: 1fr; }
@@ -704,6 +741,18 @@
         </div>
 
         <img src="assets/logo.svg" alt="logo justwhitee svg" class="hero-logo-giant" id="logo-giant" aria-hidden="true">
+        <div class="hero-logo-trace" aria-hidden="true">
+            <svg viewBox="0 0 5000 5000">
+                <g transform="matrix(1.1336,0,0,0.995604,-334.008,-74.9773)">
+                    <g transform="matrix(1.15598,0,0,1.3162,-389.94,-887.124)">
+                        <path pathLength="1" d="M1867.68,3866.39C1743.72,3276.06 1378.94,3021.84 1009.53,2774.08C940.33,2727.66 916.503,2636.57 958.496,2584.06C1092.62,2416.36 1077.88,2351 1062.31,2259.19C1050.29,2188.34 1080.6,2130.98 1211.1,2225.84C1942.69,2757.65 2445.93,3549.39 2449.93,4262.91C2451.28,4424.4 2415.38,4462.37 2321.43,4375.92C2221.55,4284 1985.28,4085.89 1935.16,4010.09C1902.71,3961.01 1879.81,3924.15 1867.68,3866.39ZM3132.45,3866.39C3120.32,3924.15 3097.43,3961.01 3064.98,4010.09C3014.85,4085.89 2778.59,4284 2678.7,4375.92C2584.76,4462.37 2548.86,4424.4 2550.21,4262.91C2554.2,3549.39 3057.45,2757.65 3789.04,2225.84C3919.53,2130.98 3949.85,2188.34 3937.83,2259.19C3922.26,2351 3907.51,2416.36 4041.64,2584.06C4083.63,2636.57 4059.81,2727.66 3990.6,2774.08C3621.2,3021.84 3256.42,3276.06 3132.45,3866.39Z"></path>
+                    </g>
+                    <g transform="matrix(1.15598,0,0,1.3162,-389.94,-887.124)">
+                        <path pathLength="1" d="M943.546,1735.35C1775.38,2448.25 2376.87,3199.5 2492.44,3637.96C2484.5,3630.99 2419.48,3584.64 2398.68,3530.7C2325.15,3340 1769.47,2446.16 929.684,1824.68C932.938,1796.83 950.014,1761.78 943.546,1735.35ZM4056.45,1735.35C4049.99,1761.78 4067.16,1796.83 4070.41,1824.68C3230.63,2446.16 2675.28,3340 2601.75,3530.7C2580.95,3584.64 2515.5,3630.99 2507.56,3637.96C2623.13,3199.5 3224.62,2448.25 4056.45,1735.35Z"></path>
+                    </g>
+                </g>
+            </svg>
+        </div>
         <div class="hero-scroll"><span data-i18n="hero.scroll">scroll</span><div class="scroll-line"></div></div>
     </section>
 
