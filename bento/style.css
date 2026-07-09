@@ -325,69 +325,10 @@ body::before {
 }
 
 /* ── SITE FOOTER ─────────────────────────────────────────────────────────── */
-.site-footer {
-    margin-top: 64px;
-    padding: 40px 0 32px;
-    border-top: 1px solid rgba(var(--accent-rgb),0.18);
-    text-align: center;
-}
-
-.footer-inner {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 18px;
-}
-
-.footer-logo {
-    width: 80px;
-    height: 80px;
-    object-fit: contain;
-    opacity: 0.8;
-    filter: drop-shadow(0 2px 8px rgba(var(--accent-bright-rgb),0.15));
-    transition: opacity 0.3s ease, filter 0.3s ease;
-}
-
-.footer-name {
-    font-family: 'Syne', sans-serif;
-    font-size: 1rem;
-    font-weight: 700;
-    color: rgba(255,255,255,0.75);
-    letter-spacing: 0.02em;
-}
-
-.footer-copy {
-    font-size: 0.65rem;
-    color: rgba(255,255,255,0.25);
-    line-height: 1.7;
-    max-width: 520px;
-}
-
-.footer-copy a {
-    color: rgba(var(--accent-bright-rgb),0.6);
-    text-decoration: none;
-    transition: color 0.2s ease;
-}
-
-.footer-links {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 12px;
-    flex-wrap: wrap;
-}
-
-.footer-links a {
-    font-size: 0.67rem;
-    color: rgba(var(--accent-bright-rgb),0.55);
-    text-decoration: none;
-    transition: color 0.2s ease;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-}
-
-.footer-sep {
-    font-size: 0.55rem;
-    color: rgba(255,255,255,0.15);
-}
+/* .site-footer/.footer-inner/.footer-logo/.footer-name/.footer-copy/.footer-links/
+   .footer-sep all come from shared.css (loaded before this file) - this used to
+   redeclare all of them with slightly bumped-up values (bigger logo, brighter
+   text), making the bento footer silently render differently from every other
+   page for no documented reason. Removed so it just inherits like everywhere
+   else. The one genuine bento-specific override (.site-footer margin-top on
+   mobile) stays above in the ≤900px media query.
