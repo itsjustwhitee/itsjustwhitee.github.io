@@ -225,17 +225,21 @@ a { color: inherit; text-decoration: none; }
     font-size: 0.95rem; font-weight: 700;
     color: rgba(255,255,255,0.65); letter-spacing: 0.02em;
 }
+/* Alpha values below are picked to clear WCAG AA's 4.5:1 contrast minimum for
+   small text against --bg-color (#080f0f) - this is real copyright/contact
+   text and link labels, not decorative. Was 0.22/0.55/0.5, all measured under
+   3:1 against the actual background. */
 .footer-copy {
-    font-size: 0.65rem; color: rgba(255,255,255,0.22);
+    font-size: 0.65rem; color: rgba(255,255,255,0.5);
     line-height: 1.7; max-width: 520px;
 }
-.footer-copy a { color: rgba(var(--accent-bright-rgb),0.55); transition: color 0.2s ease; }
+.footer-copy a { color: rgba(var(--accent-bright-rgb),0.75); transition: color 0.2s ease; }
 .footer-links {
     display: flex; align-items: center;
     justify-content: center; gap: 12px; flex-wrap: wrap;
 }
 .footer-links a {
-    font-size: 0.67rem; color: rgba(var(--accent-bright-rgb),0.5);
+    font-size: 0.67rem; color: rgba(var(--accent-bright-rgb),0.75);
     transition: color 0.2s ease;
     display: flex; align-items: center; gap: 5px;
 }
