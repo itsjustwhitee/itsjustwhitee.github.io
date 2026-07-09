@@ -473,6 +473,11 @@
 
     /* ── MOBILE ≤600px ───────────────────────────────────────────────────── */
     @media (max-width: 600px) {
+        /* Single source of truth for the three project-card logo boxes below -
+           was six independent 260px literals that had already drifted out of
+           sync once during tuning; now there's exactly one number to change. */
+        :root { --mobile-logo-size: 260px; }
+
         /* Hero */
         #hero { padding: 84px 18px 56px; min-height: auto; }
         .hero-eyebrow { font-size: 0.6rem; letter-spacing: 0.18em; margin-bottom: 14px; }
@@ -510,17 +515,17 @@
         .projects-grid { gap: 14px; }
         .project-body { padding: 18px 16px 16px; }
         /* Non-featured logos (HashCrackerz/RackController) were filling an aspect-ratio 1:1 box the full card width (~300px+) - shrink to a compact fixed height instead of scaling with card width */
-        .project-card:not(.featured) .project-img-wrap { aspect-ratio: unset; height: 260px; }
+        .project-card:not(.featured) .project-img-wrap { aspect-ratio: unset; height: var(--mobile-logo-size); }
         .project-card:not(.featured) .project-img { height: 100%; padding: 14px; }
-        .project-card:not(.featured) .project-img-placeholder { height: 260px; font-size: 1.8rem; }
+        .project-card:not(.featured) .project-img-placeholder { height: var(--mobile-logo-size); font-size: 1.8rem; }
         /* Featured (EdgeCV4Safety): #edgecv-container svg's own `max-height:100%` rule (higher
            specificity, id-based) is what actually sizes it, but that's a no-op against an
            `auto`-height parent - give the wrap a definite height so max-height has something
            to cap against, matching the other two logos above */
-        .project-card.featured .project-img-wrap { height: 260px; }
-        .project-card.featured .project-img-placeholder { height: 260px; min-height: unset; font-size: 1.8rem; }
-        /* #edgecv-container's own min-height:250px (id selector) otherwise clamps it back up past the 260px above */
-        #edgecv-container { min-height: 260px; }
+        .project-card.featured .project-img-wrap { height: var(--mobile-logo-size); }
+        .project-card.featured .project-img-placeholder { height: var(--mobile-logo-size); min-height: unset; font-size: 1.8rem; }
+        /* #edgecv-container's own min-height:250px (id selector) otherwise clamps it back up past --mobile-logo-size above - both now derive from the same variable so they can't drift apart again */
+        #edgecv-container { min-height: var(--mobile-logo-size); }
         .project-card h3 { font-size: 1.05rem; }
         .project-card .tagline { font-size: 0.8rem; }
         .project-card .proj-desc { font-size: 0.85rem; }

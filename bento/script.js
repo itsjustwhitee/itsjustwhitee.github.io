@@ -304,9 +304,10 @@ async function loadBento() {
         card.classList.add("card", "card-base", "reveal", item.size);
 
         if (item.type === "github-custom") {
+            const ghBorderRgb = "48,130,198";
             card.style.background = "linear-gradient(145deg, #0d2233 0%, #0a1a28 100%)";
-            card.style.borderColor = "rgba(48,130,198,0.25)";
-            card.style.setProperty("--glow-rgb", "48,130,198");
+            card.style.borderColor = `rgba(${ghBorderRgb},0.25)`;
+            card.style.setProperty("--glow-rgb", ghBorderRgb);
             // Collect the promise so we can await it before starting the reveal
             ghPromises.push(buildGithubCard(card, item.username));
             if (item.slug) card.insertAdjacentHTML("beforeend", `<span class="card-slug">${item.slug}</span>`);
