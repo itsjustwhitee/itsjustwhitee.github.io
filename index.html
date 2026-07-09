@@ -131,8 +131,11 @@
         opacity: 0; animation: fadeUp 0.7s ease 0.8s forwards;
     }
     .hero-ctas .btn-pill { padding: 11px 22px; font-size: 0.78rem; }
-    .btn-cv    { background: rgba(255,255,255,0.08); color: #fff; border: 1px solid rgba(255,255,255,0.2); }
-    .btn-cv:hover { background: rgba(255,255,255,0.18); border-color: rgba(255,255,255,0.4); box-shadow: 0 0 8px rgba(255,255,255,0.12); }
+    /* Applied alongside .btn-ghost in the markup - only overrides the two
+       properties that actually differ (slightly lower alpha), instead of
+       redeclaring the whole rule (color, box-shadow, etc. were identical). */
+    .btn-cv { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.2); }
+    .btn-cv:hover { background: rgba(255,255,255,0.18); border-color: rgba(255,255,255,0.4); }
     .btn-bento { background: rgba(var(--accent-rgb),0.18); color: var(--accent-bright); border: 1px solid rgba(var(--accent-bright-rgb),0.28); }
     .btn-bento:hover { background: rgba(var(--accent-rgb),0.32); border-color: rgba(var(--accent-bright-rgb),0.6); box-shadow: 0 0 8px rgba(var(--accent-bright-rgb),0.2); }
 
@@ -752,7 +755,7 @@
             <a href="bento/" class="btn-pill btn-bento">
                 <img src="assets/bento.webp" alt="bento icon" width="15" height="15" style="object-fit:contain;opacity:0.9;vertical-align:middle;" aria-hidden="true"> Bento
             </a>
-            <a href="cv/" class="btn-pill btn-cv">
+            <a href="cv/" class="btn-pill btn-ghost btn-cv">
                 <i class="fa-solid fa-file-lines"></i> <span data-i18n="hero.btn_cv">Curriculum</span>
             </a>
         </div>
