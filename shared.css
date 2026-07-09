@@ -17,7 +17,7 @@
     --accent-bright-rgb: 0,187,201;
     --radius:        28px;
     --radius-sm:     18px;
-    --grid-dot:      rgba(var(--accent-rgb),0.04);
+    --grid-dot:      rgba(var(--accent-rgb),0.1);
 }
 
 /* ── BREAKPOINT SCALE ───────────────────────────────────────────────────────

@@ -11,15 +11,9 @@ body {
     overflow-x: hidden;
 }
 
-body::before {
-    content: '';
-    position: fixed; inset: 0;
-    background-image:
-        linear-gradient(rgba(var(--accent-rgb),0.04) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(var(--accent-rgb),0.04) 1px, transparent 1px);
-    background-size: 40px 40px;
-    pointer-events: none; z-index: 0;
-}
+/* body::before (the background dot-grid) comes from shared.css via --grid-dot -
+   this used to hardcode the same pattern independently, another instance of
+   the drift-prone duplication found elsewhere this session. */
 
 .container { max-width: 1200px; margin: 0 auto; position: relative; z-index: 1; }
 
