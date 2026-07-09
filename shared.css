@@ -9,7 +9,7 @@
     --card-bg:       #094f4f;
     --text-white:    #ffffff;
     --text-muted:    rgba(255,255,255,0.55);
-    --text-bio:      #bdd6d7;
+    --text-bio:      #e5ebeb;
     --text-body:     #f0feff;
     --accent:        #09868f;
     --accent-bright: #00bbc9;
@@ -17,7 +17,7 @@
     --accent-bright-rgb: 0,187,201;
     --radius:        28px;
     --radius-sm:     18px;
-    --grid-dot:      rgba(var(--accent-rgb),0.1);
+    --grid-dot:      rgba(var(--accent-rgb),0.03);
 }
 
 /* ── BREAKPOINT SCALE ───────────────────────────────────────────────────────
