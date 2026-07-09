@@ -130,7 +130,17 @@ const bentoData = [
     },
 ];
 
-// ─── COLOR FILTER HELPER ──────────────────────────────────────────────────────
+// ─── COLOR HELPERS ────────────────────────────────────────────────────────────
+// Hover glow (bento/style.css `--glow-rgb`) is derived from each card's own
+// brand color instead of the site's fixed accent, so e.g. Amazon glows yellow
+// and Telegram glows blue rather than every card glowing the same teal.
+function hexToRgb(hex) {
+    hex = hex.replace('#', '');
+    if (hex.length === 3) hex = hex.split('').map(function (c) { return c + c; }).join('');
+    var num = parseInt(hex, 16);
+    return ((num >> 16) & 255) + ',' + ((num >> 8) & 255) + ',' + (num & 255);
+}
+
 function buildColorFilter(hex) {
     if (!hex || hex === "#fff" || hex === "#ffffff") return "brightness(0) invert(1)";
     if (hex === "#2d2d2d" || hex === "#333") return "brightness(0)";
@@ -144,6 +154,7 @@ function makeSolidCard(card, item) {
     const b = BRAND[item.brand] || { bgFrom: "#094f4f", bgTo: "#062e2e" };
     card.style.background = `linear-gradient(145deg, ${b.bgFrom} 0%, ${b.bgTo} 100%)`;
     card.style.borderColor = "rgba(255,255,255,0.09)";
+    card.style.setProperty("--glow-rgb", hexToRgb(b.bgFrom));
 
     const isSmall = item.size === "small";
     const imgSize = isSmall ? 32 : 40;
@@ -295,6 +306,7 @@ async function loadBento() {
         if (item.type === "github-custom") {
             card.style.background = "linear-gradient(145deg, #0d2233 0%, #0a1a28 100%)";
             card.style.borderColor = "rgba(48,130,198,0.25)";
+            card.style.setProperty("--glow-rgb", "48,130,198");
             // Collect the promise so we can await it before starting the reveal
             ghPromises.push(buildGithubCard(card, item.username));
             if (item.slug) card.insertAdjacentHTML("beforeend", `<span class="card-slug">${item.slug}</span>`);
