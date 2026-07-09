@@ -814,7 +814,7 @@
     }
 
     function initScrollPastEnd() {
-        var THRESHOLD = 2200; // ~20+ wheel notches of persistent scrolling
+        var THRESHOLD = 66000; // ~600+ wheel notches of persistent scrolling (10x the 6600 3x-bump, 30x the original 2200)
         var accum = 0, hintBar, hintFill, hintLabel, decayTimer = null, touchStartY = null;
 
         function atBottom() {
