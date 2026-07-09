@@ -188,7 +188,7 @@
         position: absolute; bottom: 36px; left: 50%;
         transform: translateX(-50%);
         font-size: 0.6rem; letter-spacing: 0.22em; text-transform: uppercase;
-        color: rgba(255,255,255,0.2);
+        color: rgba(255,255,255,0.35);
         display: flex; flex-direction: column; align-items: center; gap: 8px;
         opacity: 0; animation: fadeUp 0.7s ease 1.4s forwards;
     }
@@ -391,9 +391,13 @@
     .skill-group-label { font-size: 0.59rem; letter-spacing: 0.25em; text-transform: uppercase; margin-bottom: 16px; opacity: 0.85; }
     .skill-group:nth-child(1) .skill-group-label { color: var(--accent-bright); }
     .skill-group:nth-child(2) .skill-group-label { color: #ffbb00; }
-    .skill-group:nth-child(3) .skill-group-label { color: #297ee0; }
+    /* nth-child(3)/(5) lightened from #297ee0/#e02938 - the originals measured
+       under 3:1 against their own tinted card background once this label's
+       own 0.85 opacity is factored in; these clear 4.5:1 while staying
+       recognizably blue/red. */
+    .skill-group:nth-child(3) .skill-group-label { color: #7fb2ec; }
     .skill-group:nth-child(4) .skill-group-label { color: #29e085; }
-    .skill-group:nth-child(5) .skill-group-label { color: #e02938; }
+    .skill-group:nth-child(5) .skill-group-label { color: #ee8992; }
     .skill-pills { display: flex; flex-wrap: wrap; gap: 6px; }
     .skill-pill { font-size: 0.67rem; padding: 5px 11px; border-radius: 8px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); color: var(--text-body); transition: background 0.2s, border-color 0.2s, transform 0.2s; }
     .skill-pill:hover { background: rgba(255,255,255,0.13); transform: scale(1.05); }

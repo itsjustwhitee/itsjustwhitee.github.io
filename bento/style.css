@@ -86,7 +86,7 @@ body::before {
     .card:hover .ig-photo { transform: scale(1.05); }
     .card:hover .solid-icon-wrap { transform: scale(1.1); background: rgba(255,255,255,0.2); }
     .card:hover .card-corner-icon { color: rgba(255,255,255,0.9); }
-    .card:hover .card-slug { color: rgba(255,255,255,0.58); }
+    .card:hover .card-slug { color: rgba(255,255,255,0.85); }
     .gh-bar:hover { background: rgba(90,170,255,0.85); }
     .footer-logo:hover {
         opacity: 1;
@@ -170,14 +170,9 @@ body::before {
     transition: color 0.3s ease;
 }
 
-/* ── SLUG ────────────────────────────────────────────────────────────────── */
-.card-slug {
-    position: absolute; bottom: 13px; right: 16px;
-    font-size: 0.57rem; letter-spacing: 0.1em;
-    color: rgba(255,255,255,0.28);
-    font-family: 'JetBrains Mono', monospace;
-    z-index: 5; pointer-events: none; transition: color 0.3s ease;
-}
+/* .card-slug comes from shared.css (0.65 alpha, tuned for 4.5:1+ against both
+   --card-bg and --bg-color) - this used to redeclare it at 0.28, another
+   footer-style drift that also happened to fail contrast even worse. */
 
 /* ── GITHUB CUSTOM CARD ──────────────────────────────────────────────────── */
 .gh-loading, .gh-error {
