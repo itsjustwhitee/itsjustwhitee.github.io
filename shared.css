@@ -74,6 +74,16 @@ body::before {
     }
 }
 
+/* ── PAGE TRANSITIONS ───────────────────────────────────────────────────── */
+/* Hand-rolled fade between pages (components.js toggles these classes) — not
+   the native CSS View Transitions API, which caused real hangs on this site's
+   cross-document navigations when tried. .pt-loading is added to <html>
+   before <body> even exists, so the very first paint is already hidden; no
+   flash of the page at full opacity before the fade-in takes over. */
+body { opacity: 1; transition: opacity 0.2s ease; }
+html.pt-loading body,
+html.pt-leaving body { opacity: 0; }
+
 .container {
     max-width: 1200px;
     margin: 0 auto;

@@ -29,6 +29,18 @@
     // effects) opt out the same way. Computed once, reused by every page.
     window.prefersReducedMotion = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
 
+    // ── PAGE TRANSITIONS ─────────────────────────────────────────────────────
+    // Hand-rolled fade (not the native CSS View Transitions API — that caused
+    // real hangs on cross-document navigation when tried). Marks <html> hidden
+    // immediately, before <body> even exists, so there's no flash of unstyled
+    // content; initPageTransitions() (called on DOMContentLoaded, below) fades
+    // it back in and wires up the fade-out-before-navigating behavior. Skipped
+    // entirely for reduced-motion users — document.body.classList never getting
+    // toggled just means the page displays normally.
+    if (!window.prefersReducedMotion) {
+        document.documentElement.classList.add('pt-loading');
+    }
+
     // ── NAV ───────────────────────────────────────────────────────────────────
     var NAV_LINKS = [
         { key: 'home',  href: r(''),        label: '// home',  i18n: null        },
@@ -834,6 +846,33 @@
         }, { passive: true });
     }
 
+    function initPageTransitions() {
+        if (window.prefersReducedMotion) return; // never hidden in the first place — nothing to reveal
+
+        // Reveal: drop the class that's kept the page invisible since parse time.
+        requestAnimationFrame(function () {
+            document.documentElement.classList.remove('pt-loading');
+        });
+
+        // Fade out before actually leaving, on any plain left-click to a
+        // same-origin, same-tab, same-page-document link (i.e. a real page
+        // navigation — not a new tab, a download, a mailto:, or an in-page
+        // #anchor jump, all of which are left completely alone).
+        document.addEventListener('click', function (e) {
+            if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+            var a = e.target.closest('a[href]');
+            if (!a || a.hasAttribute('download')) return;
+            if (a.target && a.target !== '_self') return;
+            var url;
+            try { url = new URL(a.href, location.href); } catch (err) { return; }
+            if (url.origin !== location.origin) return;
+            if (url.href.split('#')[0] === location.href.split('#')[0]) return; // same-document anchor
+            e.preventDefault();
+            document.documentElement.classList.add('pt-leaving');
+            setTimeout(function () { location.href = a.href; }, 200);
+        });
+    }
+
     // ── INIT ──────────────────────────────────────────────────────────────────
     document.addEventListener('DOMContentLoaded', function () {
         var nav    = document.getElementById('site-nav');
@@ -846,6 +885,7 @@
         restoreEggWindows();
         initTypedSequences();
         initScrollPastEnd();
+        initPageTransitions();
     });
 
     logConsoleEasterEgg();
