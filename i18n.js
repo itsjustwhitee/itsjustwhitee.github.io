@@ -67,6 +67,10 @@
             'proj.rack.tagline': '❄️ Smart Cooling &amp; IoT Ecosystem',
             'proj.rack.desc':    'Custom cooling system for a DIY network rack on ESP32-S3. Decoupled: C++ REST firmware + Nginx/Docker frontend. Dynamic PWM fan control, OLED night-mode display, real-time web dashboard.',
 
+            'proj.slice.badge':   'Personal',
+            'proj.slice.tagline': '🧾 Split Shared Receipts, Down to the Cent',
+            'proj.slice.desc':    'Mobile-first PWA for splitting a shared receipt (photo, PDF, or manual entry) among multiple people, item by item. Fully static and offline-capable: OCR and parsing run client-side, no backend, no accounts.',
+
             // ── Home: skills ─────────────────────────────────────────────────
             'skills.label': '// 03 — skills',
             'skills.title': 'Tech <span class="accent">stack.</span>',
@@ -212,6 +216,10 @@
             'proj.rack.badge':   'Personale',
             'proj.rack.tagline': '❄️ Raffreddamento Intelligente &amp; Ecosistema IoT',
             'proj.rack.desc':    'Sistema di raffreddamento personalizzato per un rack di rete DIY su ESP32-S3. Architettura disaccoppiata: firmware C++ REST + frontend Nginx/Docker. Controllo PWM dinamico delle ventole, display OLED night-mode, dashboard web in tempo reale.',
+
+            'proj.slice.badge':   'Personale',
+            'proj.slice.tagline': '🧾 Dividi Scontrini Condivisi, Fino al Centesimo',
+            'proj.slice.desc':    'PWA mobile-first per dividere uno scontrino condiviso (foto, PDF o inserimento manuale) tra più persone, articolo per articolo. Completamente statica e offline: OCR e parsing lato client, nessun backend, nessun account.',
 
             // ── Home: skills ─────────────────────────────────────────────────
             'skills.label': '// 03 — competenze',
