@@ -38,7 +38,7 @@ const projects = [
             { labelI18nKey: 'stat1_lbl', labelText: 'Inference', value: '~5 FPS', descI18nKey: 'stat1_desc', descText: 'on Jetson AGX Orin via TensorRT' },
             { labelI18nKey: 'stat2_lbl', labelText: 'Architecture', descI18nKey: 'stat2_desc', descText: 'Super-repo with Git Submodules — strict decoupling of Vision and Robot Control components.' },
         ],
-        image: { mode: 'svg-inject', visualId: 'edgecv-container', fetchSrc: 'assets/projects/edgecv4safety.svg', placeholderEmoji: '🤖' },
+        image: { mode: 'svg-inject', visualId: 'edgecv-container', fetchSrc: '/assets/projects/edgecv4safety.svg', placeholderEmoji: '🤖' },
     },
     {
         slug: 'hashcrackerz',
@@ -56,7 +56,7 @@ const projects = [
             { icon: 'fa-brands fa-github', label: 'GitHub', url: 'https://github.com/HashCrackerz', trailing: 'arrow-right' },
         ],
         contributors: ['Andrea Vitale'],
-        image: { mode: 'img', src: 'assets/projects/hashcrackerz.webp', alt: 'HashCrackerz project logo', placeholderEmoji: '⚡' },
+        image: { mode: 'img', src: '/assets/projects/hashcrackerz.webp', alt: 'HashCrackerz project logo', placeholderEmoji: '⚡' },
     },
     {
         slug: 'rackcontroller',
@@ -74,7 +74,7 @@ const projects = [
         links: [
             { icon: 'fa-brands fa-github', label: 'GitHub', url: 'https://github.com/itsjustwhitee/RackController', trailing: 'arrow-right' },
         ],
-        image: { mode: 'spin-wrapper', visualId: 'rack-fan-wrapper', src: 'assets/projects/rackcontroller.svg', alt: 'RackController project logo', placeholderEmoji: '🖥️' },
+        image: { mode: 'spin-wrapper', visualId: 'rack-fan-wrapper', src: '/assets/projects/rackcontroller.svg', alt: 'RackController project logo', placeholderEmoji: '🖥️' },
     },
     {
         slug: 'sliceceipt',
@@ -92,7 +92,7 @@ const projects = [
             { icon: 'fa-brands fa-github', label: 'GitHub', url: 'https://github.com/itsjustwhitee/slice-ceipt', trailing: 'arrow-right' },
             { label: 'Live', url: 'https://slice-ceipt.justwhitee.org', trailing: 'external' },
         ],
-        image: { mode: 'svg-inject', visualId: 'sliceceipt-container', fetchSrc: 'assets/projects/sliceceipt.svg', placeholderEmoji: '🧾' },
+        image: { mode: 'svg-inject', visualId: 'sliceceipt-container', fetchSrc: '/assets/projects/sliceceipt.svg', placeholderEmoji: '🧾' },
     },
     {
         slug: 'justwhitee-notes',
@@ -110,7 +110,7 @@ const projects = [
             { icon: 'fa-solid fa-cube', label: 'Typst Universe', url: 'https://typst.app/universe/package/justwhitee-notes/', trailing: 'arrow-right' },
             { label: 'Example', url: 'https://github.com/itsjustwhitee/ICCBD-notes', trailing: 'external' },
         ],
-        image: { mode: 'img', src: 'assets/projects/justwhitee-notes.svg', alt: 'Typst logo', placeholderEmoji: '📝' },
+        image: { mode: 'img', src: '/assets/projects/justwhitee-notes.svg', alt: 'Typst logo', placeholderEmoji: '📝' },
     },
 ];
 
