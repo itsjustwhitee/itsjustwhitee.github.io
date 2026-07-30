@@ -61,16 +61,16 @@ const bentoData = [
     {
         type: "instagram-manual", size: "large",
         i18n_key: "studio",
-        title: "Graphics & Art 🖱",
-        username: "@justwhitee.studio",
+        title: "Tech & Creative Stuff 🖱",
+        username: "@justwhitee.lab",
         images: [
-            "assets/justwhitee.studio/1.webp",
-            "assets/justwhitee.studio/2.webp",
-            "assets/justwhitee.studio/3.webp",
-            "assets/justwhitee.studio/4.webp",
+            "assets/justwhitee.lab/1.webp",
+            "assets/justwhitee.lab/2.webp",
+            "assets/justwhitee.lab/3.webp",
+            "assets/justwhitee.lab/4.webp",
         ],
-        link: "https://www.instagram.com/justwhitee.studio",
-        slug: "// @justwhitee.studio",
+        link: "https://www.instagram.com/justwhitee.lab",
+        slug: "// @justwhitee.lab",
     },
 
     // ── ROW 5: SHOPS (4 × small) ──────────────────────────────────────────

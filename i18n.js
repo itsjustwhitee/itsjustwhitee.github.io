@@ -71,6 +71,10 @@
             'proj.slice.tagline': '🧾 Split Shared Receipts, Down to the Cent',
             'proj.slice.desc':    'Mobile-first PWA for splitting a shared receipt (photo, PDF, or manual entry) among multiple people, item by item. Fully static and offline-capable: OCR and parsing run client-side, no backend, no accounts.',
 
+            'proj.notes.badge':   'Open Source',
+            'proj.notes.tagline': '📝 A Modern Typst Template for University Notes',
+            'proj.notes.desc':    'Typst template for clean lecture notes: styled cover page, automatic table of contents, callouts and inline annotations. Published on Typst Universe, used in several course-note repos including ICCBD-notes.',
+
             // ── Home: skills ─────────────────────────────────────────────────
             'skills.label': '// 03 — skills',
             'skills.title': 'Tech <span class="accent">stack.</span>',
@@ -137,7 +141,7 @@
             'card.notion.title':     'Notes & Resources 🤓',
             'card.private_ig.title': 'Me in private 🙈',
             'card.caricature.title': 'Caricatures & Draws ✏️',
-            'card.studio.title':     'Graphics & Art 🖱',
+            'card.studio.title':     'Tech & Creative Stuff 🖱',
 
             // ── 404 ──────────────────────────────────────────────────────────
             'notfound.label': '// 404 — page not found',
@@ -221,6 +225,10 @@
             'proj.slice.tagline': '🧾 Dividi Scontrini Condivisi, Fino al Centesimo',
             'proj.slice.desc':    'PWA mobile-first per dividere uno scontrino condiviso (foto, PDF o inserimento manuale) tra più persone, articolo per articolo. Completamente statica e offline: OCR e parsing lato client, nessun backend, nessun account.',
 
+            'proj.notes.badge':   'Open Source',
+            'proj.notes.tagline': '📝 Un Template Typst Moderno per Appunti Universitari',
+            'proj.notes.desc':    'Template Typst per appunti puliti e ordinati: copertina personalizzata, indice automatico, callout e annotazioni inline. Pubblicato su Typst Universe, usato in diversi repository di appunti tra cui ICCBD-notes.',
+
             // ── Home: skills ─────────────────────────────────────────────────
             'skills.label': '// 03 — competenze',
             'skills.title': 'Tech <span class="accent">stack</span>',
@@ -287,7 +295,7 @@
             'card.notion.title':     'Appunti & Risorse 🤓',
             'card.private_ig.title': 'Io in privato 🙈',
             'card.caricature.title': 'Caricature & Disegni ✏️',
-            'card.studio.title':     'Grafica & Arte 🖱',
+            'card.studio.title':     'Tech & Roba Creativa 🖱',
 
             // ── 404 ──────────────────────────────────────────────────────────
             'notfound.label': '// 404 — pagina non trovata',
