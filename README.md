@@ -14,7 +14,7 @@ A static personal website hosted on **GitHub Pages** with Cloudflare as CDN and 
 ├── i18n.js                 # Internationalisation engine (EN/IT)
 ├── 404.html                # Custom 404 error page
 ├── manifest.json           # Web App Manifest (PWA metadata)
-├── sitemap.xml             # Single sitemap for all pages (covers / and /bento/)
+├── sitemap.xml             # Single sitemap for all pages (covers /, /bento/, /cv/, and /projects/)
 ├── robots.txt              # Crawler rules
 ├── favicon.ico             # Favicon (48×48)
 ├── CNAME                   # Custom domain binding for GitHub Pages
@@ -23,8 +23,15 @@ A static personal website hosted on **GitHub Pages** with Cloudflare as CDN and 
 │   └── shared-head.html    # Single source of truth for the shared <head> boilerplate (see below)
 ├── scripts/
 │   ├── sync-head.js        # Syncs partials/shared-head.html into every page
+│   ├── sync-projects.js    # Generates project cards (home subset + full list) from projects/data.js
 │   ├── generate-og-image.js # Screenshots the hero for assets/og-image.jpg (run by CI)
 │   └── dev-server.js       # Local dev server with GitHub-Pages-like 404 handling (see Setup below)
+│
+├── projects/
+│   ├── data.js              # Single source of truth for every project (pin/date/tags/links/…)
+│   ├── index.html           # Full project list page
+│   ├── style.css            # Project-card grid styles, shared with index.html's #projects section
+│   └── script.js            # Per-project logo animations, shared with index.html
 │
 ├── bento/
 │   ├── index.html          # Bento page - header fadeUp, parallax orbs, mouse tracking
@@ -47,7 +54,7 @@ A static personal website hosted on **GitHub Pages** with Cloudflare as CDN and 
     └── ...
 ```
 
-> There is no `bento/sitemap.xml`. A single `sitemap.xml` at the root covers `/`, `/bento/`, and `/cv/`. Don't add secondary sitemaps in subfolders.
+> There is no `bento/sitemap.xml` or `projects/sitemap.xml`. A single `sitemap.xml` at the root covers `/`, `/bento/`, `/cv/`, and `/projects/`. Don't add secondary sitemaps in subfolders.
 
 ---
 
@@ -72,7 +79,10 @@ Page-specific tags (title, description, canonical, og/twitter, per-page styleshe
 ## Pages
 
 ### `index.html` - Home
-Full-length scrollable portfolio: Hero → About → Projects → Skills → Experience & Education → CTA → Footer. Each project card (EdgeCV4Safety, HashCrackerz, RackController) has its own interactive micro-animation - see Interactive Features below.
+Full-length scrollable portfolio: Hero → About → Projects → Skills → Experience & Education → CTA → Footer. The Projects section shows a bounded, pinned+recency-curated subset (see "Adding a New Project" below) with a link to the full list; each card has its own interactive micro-animation - see Interactive Features below.
+
+### `projects/index.html` - Projects
+Full list of every project, generated the same way as home's subset (see "Adding a New Project" below). Same card styles and logo animations as the home page's Projects section, via the shared `projects/style.css` / `projects/script.js`.
 
 ### `bento/index.html` - Bento
 Grid of link cards rendered by `bento/script.js`. Card types: `github-custom` (live GitHub API data + streak-stats image, cached 1h), `solid` (branded gradient + SVG icon, i18n-able), `instagram-manual` (2×2 photo grid). Header uses a staggered `fadeUp`; cards only reveal once every async fetch has settled, so the loading spinner and the fetched content never double-flash. Hover glow (`--glow-rgb` in `bento/style.css`) is derived per-card from the same brand color already driving its background gradient (via `hexToRgb()` in `bento/script.js`), not a fixed site-wide accent - cards with no defined brand color (the Instagram photo-grid cards) fall back to the site's default accent glow.
@@ -113,7 +123,7 @@ GitHub Pages' custom 404, styled to match the site (animated orbs, gradient type
 All `:hover` transitions and card lift animations are wrapped in `@media (hover: hover) and (pointer: fine)`. This prevents the **"sticky hover" bug** on iOS/Android, where tapping a card leaves it permanently elevated after the finger lifts - touch devices have no hover state and must never trigger these styles.
 
 ### Reduced motion
-`shared.css` neutralizes all CSS animations/transitions under `@media (prefers-reduced-motion: reduce)`. `components.js` computes `window.prefersReducedMotion` once so JS-driven motion opts out the same way: mouse parallax orbs, the RackController fan spin, EdgeCV4Safety eye-tracking, HashCrackerz crumb particles, the hero's giant-logo scroll parallax, the hero logo's corner-trace animation, the page-transition fade, and the section-nav's smooth-scroll (falls back to an instant jump) all check this flag before starting. The `.reveal` system always ends up showing content either way - reduced motion just skips the animated fade/slide.
+`shared.css` neutralizes all CSS animations/transitions under `@media (prefers-reduced-motion: reduce)`. `components.js` computes `window.prefersReducedMotion` once so JS-driven motion opts out the same way: mouse parallax orbs, the RackController fan spin, EdgeCV4Safety eye-tracking, and HashCrackerz crumb particles (the latter three now live in `projects/script.js`, shared between home and `/projects/`), the hero's giant-logo scroll parallax, the hero logo's corner-trace animation, the page-transition fade, and the section-nav's smooth-scroll (falls back to an instant jump) all check this flag before starting. The `.reveal` system always ends up showing content either way - reduced motion just skips the animated fade/slide.
 
 ### Page transitions
 Navigating between pages fades the current page out, then the next one in - `components.js` adds a `pt-loading` class to `<html>` synchronously (before `<body>` even exists, so there's no flash of unstyled content), removes it once the page is ready, and adds `pt-leaving` on any plain left-click to a same-origin, same-tab, same-document link before actually navigating ~160ms later. New-tab links, downloads, modified clicks (ctrl/cmd/shift), external links, and in-page `#anchor` jumps are all left alone. Deliberately opacity-only on `<body>`, not the native CSS View Transitions API or a `transform`/`filter`-based effect - both were tried and broke click-through on `position: fixed` elements (the nav bar specifically) once the page was scrolled, since those properties change the containing block for fixed descendants. See the comment above `.pt-loading`/`.pt-leaving` in `shared.css` for the full story.
@@ -193,9 +203,9 @@ Page-specific features:
 | Home | Giant logo parallax | Hero logo drifts and fades on scroll |
 | Home | Logo corner-trace | A short blurred segment traces the giant logo's actual silhouette (the two wing paths copied verbatim from `assets/logo.svg`, not a bounding box) once on load, then fades |
 | Home | Section nav dots | Fixed pill nav; active dot tracks whichever section is closest to viewport centre |
-| Home | Fan spin (RackController card) | `requestAnimationFrame` loop, speeds up on hover |
-| Home | Eye tracking (EdgeCV4Safety card) | SVG pupil group follows the cursor |
-| Home | Crumb particles (HashCrackerz card) | Spawned on hover, positioned from the artwork's actual alpha-channel edges so they fall from the visible cookie outline |
+| Home / Projects | Fan spin (RackController card) | `requestAnimationFrame` loop, speeds up on hover — `projects/script.js` |
+| Home / Projects | Eye tracking (EdgeCV4Safety card) | SVG pupil group follows the cursor — `projects/script.js` |
+| Home / Projects | Crumb particles (HashCrackerz card) | Spawned on hover, positioned from the artwork's actual alpha-channel edges so they fall from the visible cookie outline — `projects/script.js` |
 | Bento | GitHub live card | Fetches `/users/:username`, cached 1h in `localStorage` to stay under the 60 req/h rate limit |
 | Bento | Sibling stagger | Reveal `transitionDelay` set to `index × 60ms` (capped at 320ms) |
 | Contacts | Phone reveal | Keyboard-accessible tap-to-reveal (`role="button"`, `tabindex`, `onkeydown`) |
@@ -215,7 +225,7 @@ Must load **before** `i18n.js` on every page. On `DOMContentLoaded` it injects t
 <footer id="site-footer" class="site-footer" data-copy-key="bento.footer_copy"></footer>
 ```
 
-- `data-active` sets which nav link gets `.active`: `home`, `bento`, `cv`, `contacts`, or `""` (404).
+- `data-active` sets which nav link gets `.active`: `home`, `projects`, `bento`, `cv`, `contacts`, or `""` (404).
 - Add a nav link by editing the `NAV_LINKS` array - no per-page HTML changes needed.
 - The footer email is injected here rather than written in static HTML, so Cloudflare's email obfuscation can't mangle it (see Security below).
 - `window.prefersReducedMotion`, `initParallaxOrbs()`, and `window.initScrollReveal()` also live here (see Reduced Motion / Interactive Features above).
@@ -278,6 +288,14 @@ Hosted on **GitHub Pages**, with **Cloudflare** as DNS/CDN/security layer.
 7. Add a `<style>` block for page-specific CSS (or a separate `style.css`).
 8. Add the new URL to `sitemap.xml` (unless it shouldn't be indexed).
 9. Add `rel="noopener noreferrer"` to any `target="_blank"` links.
+
+## Adding a New Project
+
+1. Add a new entry object to the `projects` array in `projects/data.js` — see the field reference in the comment at the top of that file. Set `pinned`/`featured`/`date` as appropriate; the home page always shows every pinned project plus the most recent non-pinned ones, capped at `HOME_COUNT`.
+2. For a translated badge/tagline/description, add `proj.<i18nKey>.badge` / `.tagline` / `.desc` (and `.stat1_lbl`/`.stat1_desc`/etc. if there are stat boxes) to both `en` and `it` in `i18n.js`, matching the `i18nKey` used in the data entry. The `badgeText`/`taglineText`/`descText` fields in `projects/data.js` only need the English fallback — i18n.js is the source of truth for both languages at runtime.
+3. If the logo needs a custom animation beyond a plain `<img>` (see `image.mode` in `projects/data.js`'s header comment), write it in `projects/script.js`, targeting the project's `slug`-derived id(s) — the generator only knows how to emit the container, never what happens inside it.
+4. Place any image asset in `assets/projects/`; `.webp` for raster, `.svg` for vector (see Image format policy above).
+5. Run `node scripts/sync-projects.js` to regenerate both `index.html` and `projects/index.html`. `check-projects-sync.yml` fails CI if this step is forgotten.
 
 ## Adding a New Bento Card
 
