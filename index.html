@@ -832,9 +832,8 @@
         </div>
 
         <div class="projects-grid">
-
-            <!-- EdgeCV4Safety FEATURED -->
-            <div class="project-card featured reveal">
+<!-- PROJECTS:START -->
+            <div class="project-card reveal" id="edgecv4safety-card">
                 <div class="project-img-wrap">
                     <div class="project-img-wrap" id="edgecv-container"></div>
                     <div class="project-img-placeholder" style="display:none;">🤖</div>
@@ -845,7 +844,7 @@
                         <span class="project-year">apr–oct 2025</span>
                     </div>
                     <h3>EdgeCV4Safety</h3>
-                    <p class="tagline" data-i18n="proj.edgecv.tagline">AI-Driven Contextual Safety System for Industry 5.0</p>
+                    <p class="tagline" data-i18n="proj.edgecv.tagline">🛡️ AI-Driven Contextual Safety System for Industry 5.0</p>
                     <p class="proj-desc" data-i18n="proj.edgecv.desc">Modular Computer Vision system replacing physical safety barriers. Deployed on NVIDIA Jetson AGX Orin: YOLO + UniDepth/DepthAnything over ONNX Runtime, robot control via RTDE, real-time proximity awareness for Universal Robots.</p>
                     <div class="project-stats">
                         <div class="stat-box">
@@ -859,14 +858,10 @@
                         </div>
                     </div>
                     <div class="project-tags">
-                        <span class="tag">Python</span><span class="tag">ONNX</span><span class="tag">CUDA/TensorRT</span>
-                        <span class="tag">YOLO</span><span class="tag">UniDepth</span><span class="tag">DepthAnything</span>
-                        <span class="tag">RTDE</span><span class="tag">Docker</span><span class="tag">Aravis</span>
+                        <span class="tag">Python</span><span class="tag">ONNX</span><span class="tag">CUDA/TensorRT</span><span class="tag">YOLO</span><span class="tag">UniDepth</span><span class="tag">DepthAnything</span><span class="tag">RTDE</span><span class="tag">Docker</span><span class="tag">Aravis</span>
                     </div>
                     <div class="project-footer">
-                        <a href="https://github.com/EdgeCV4Safety/EdgeCV4Safety" target="_blank" rel="noopener noreferrer" class="project-link">
-                            <i class="fa-brands fa-github"></i> GitHub <i class="fa-solid fa-arrow-right" style="font-size:0.58rem;"></i>
-                        </a>
+                        <a href="https://github.com/EdgeCV4Safety/EdgeCV4Safety" target="_blank" rel="noopener noreferrer" class="project-link"><i class="fa-brands fa-github"></i> GitHub <i class="fa-solid fa-arrow-right" style="font-size:0.58rem;"></i></a>
                         <div class="project-contributors">
                             <span class="contrib-label" data-i18n="projects.contrib_label">with</span>
                             <div class="contrib-names">
@@ -878,72 +873,7 @@
                 </div>
             </div>
 
-            <!-- HashCrackerz -->
-            <div class="project-card reveal" id="hashcrackerz-card">
-                <div class="project-img-wrap">
-                    <img src="assets/projects/hashcrackerz.webp"
-                         onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"
-                         alt="HashCrackerz project logo" class="project-img" loading="lazy">
-                    <div class="project-img-placeholder" style="display:none;">⚡</div>
-                </div>
-                <div class="project-body">
-                    <div class="project-meta">
-                        <span class="project-badge" data-i18n="proj.hash.badge">MSc Course</span>
-                        <span class="project-year">dec 2025 – feb 2026</span>
-                    </div>
-                    <h3>HashCrackerz</h3>
-                    <p class="tagline" data-i18n="proj.hash.tagline">Multi-Platform SHA-256 Parallel Cracking Suite</p>
-                    <p class="proj-desc" data-i18n="proj.hash.desc">High-performance SHA-256 cracker comparing NVIDIA CUDA, AMD ROCm/HIP, and multi-core CPU via OpenMP. Kernel optimizations include constant memory, loop unrolling, and dynamic work scheduling.</p>
-                    <div class="project-tags">
-                        <span class="tag">C++</span><span class="tag">CUDA</span><span class="tag">ROCm/HIP</span>
-                        <span class="tag">OpenMP</span><span class="tag">OpenSSL</span>
-                    </div>
-                    <div class="project-footer">
-                        <a href="https://github.com/HashCrackerz" target="_blank" rel="noopener noreferrer" class="project-link">
-                            <i class="fa-brands fa-github"></i> GitHub <i class="fa-solid fa-arrow-right" style="font-size:0.58rem;"></i>
-                        </a>
-                        <div class="project-contributors">
-                            <span class="contrib-label" data-i18n="projects.contrib_label">with</span>
-                            <div class="contrib-names">
-                                <span class="contrib-chip">Andrea Vitale</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- RackController -->
-            <div class="project-card reveal">
-                <div class="project-img-wrap">
-                    <div class="rack-spin-wrapper" id="rack-fan-wrapper">
-                        <img src="assets/projects/rackcontroller.svg"
-                            onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"
-                            alt="RackController project logo" class="project-img" loading="lazy">
-                    </div>
-                    <div class="project-img-placeholder" style="display:none;">🖥️</div>
-                </div>
-                <div class="project-body">
-                    <div class="project-meta">
-                        <span class="project-badge" data-i18n="proj.rack.badge">Personal</span>
-                        <span class="project-year">jan – feb 2026</span>
-                    </div>
-                    <h3>RackController v3.0</h3>
-                    <p class="tagline" data-i18n-html="proj.rack.tagline">Smart Cooling &amp; IoT Ecosystem</p>
-                    <p class="proj-desc" data-i18n="proj.rack.desc">Custom cooling system for a DIY network rack on ESP32-S3. Decoupled: C++ REST firmware + Nginx/Docker frontend. Dynamic PWM fan control, OLED night-mode display, real-time web dashboard.</p>
-                    <div class="project-tags">
-                        <span class="tag">C++</span><span class="tag">ESP32-S3</span><span class="tag">Docker</span>
-                        <span class="tag">Nginx</span><span class="tag">HTML/JS</span><span class="tag">JSON</span>
-                    </div>
-                    <div class="project-footer">
-                        <a href="https://github.com/itsjustwhitee/RackController" target="_blank" rel="noopener noreferrer" class="project-link">
-                            <i class="fa-brands fa-github"></i> GitHub <i class="fa-solid fa-arrow-right" style="font-size:0.58rem;"></i>
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- SliceCeipt -->
-            <div class="project-card reveal">
+            <div class="project-card reveal" id="sliceceipt-card">
                 <div class="project-img-wrap">
                     <div class="project-img-wrap" id="sliceceipt-container"></div>
                     <div class="project-img-placeholder" style="display:none;">🧾</div>
@@ -957,26 +887,18 @@
                     <p class="tagline" data-i18n="proj.slice.tagline">🧾 Split Shared Receipts, Down to the Cent</p>
                     <p class="proj-desc" data-i18n="proj.slice.desc">Mobile-first PWA for splitting a shared receipt (photo, PDF, or manual entry) among multiple people, item by item. Fully static and offline-capable: OCR and parsing run client-side, no backend, no accounts.</p>
                     <div class="project-tags">
-                        <span class="tag">SvelteKit</span><span class="tag">TypeScript</span>
-                        <span class="tag">Vite PWA</span><span class="tag">Vitest</span>
+                        <span class="tag">SvelteKit</span><span class="tag">TypeScript</span><span class="tag">Vite PWA</span><span class="tag">Vitest</span>
                     </div>
                     <div class="project-footer">
-                        <a href="https://github.com/itsjustwhitee/slice-ceipt" target="_blank" rel="noopener noreferrer" class="project-link">
-                            <i class="fa-brands fa-github"></i> GitHub <i class="fa-solid fa-arrow-right" style="font-size:0.58rem;"></i>
-                        </a>
-                        <a href="https://slice-ceipt.justwhitee.org" target="_blank" rel="noopener noreferrer" class="project-link">
-                            Live <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:0.55rem;"></i>
-                        </a>
+                        <a href="https://github.com/itsjustwhitee/slice-ceipt" target="_blank" rel="noopener noreferrer" class="project-link"><i class="fa-brands fa-github"></i> GitHub <i class="fa-solid fa-arrow-right" style="font-size:0.58rem;"></i></a>
+                        <a href="https://slice-ceipt.justwhitee.org" target="_blank" rel="noopener noreferrer" class="project-link">Live <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:0.55rem;"></i></a>
                     </div>
                 </div>
             </div>
 
-            <!-- justwhitee-notes -->
-            <div class="project-card reveal">
+            <div class="project-card reveal" id="justwhitee-notes-card">
                 <div class="project-img-wrap">
-                    <img src="assets/projects/justwhitee-notes.svg"
-                         onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"
-                         alt="Typst logo" class="project-img" loading="lazy">
+                    <img src="assets/projects/justwhitee-notes.svg" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" alt="Typst logo" class="project-img" loading="lazy">
                     <div class="project-img-placeholder" style="display:none;">📝</div>
                 </div>
                 <div class="project-body">
@@ -988,20 +910,43 @@
                     <p class="tagline" data-i18n="proj.notes.tagline">📝 A Modern Typst Template for University Notes</p>
                     <p class="proj-desc" data-i18n="proj.notes.desc">Typst template for clean lecture notes: styled cover page, automatic table of contents, callouts and inline annotations. Published on Typst Universe, used in several course-note repos including ICCBD-notes.</p>
                     <div class="project-tags">
-                        <span class="tag">Typst</span><span class="tag">Template</span>
-                        <span class="tag">Typography</span><span class="tag">AGPL-3.0</span>
+                        <span class="tag">Typst</span><span class="tag">Template</span><span class="tag">Typography</span><span class="tag">AGPL-3.0</span>
                     </div>
                     <div class="project-footer">
-                        <a href="https://typst.app/universe/package/justwhitee-notes/" target="_blank" rel="noopener noreferrer" class="project-link">
-                            <i class="fa-solid fa-cube"></i> Typst Universe <i class="fa-solid fa-arrow-right" style="font-size:0.58rem;"></i>
-                        </a>
-                        <a href="https://github.com/itsjustwhitee/ICCBD-notes" target="_blank" rel="noopener noreferrer" class="project-link">
-                            Example <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:0.55rem;"></i>
-                        </a>
+                        <a href="https://typst.app/universe/package/justwhitee-notes/" target="_blank" rel="noopener noreferrer" class="project-link"><i class="fa-solid fa-cube"></i> Typst Universe <i class="fa-solid fa-arrow-right" style="font-size:0.58rem;"></i></a>
+                        <a href="https://github.com/itsjustwhitee/ICCBD-notes" target="_blank" rel="noopener noreferrer" class="project-link">Example <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:0.55rem;"></i></a>
                     </div>
                 </div>
             </div>
 
+            <div class="project-card reveal" id="hashcrackerz-card">
+                <div class="project-img-wrap">
+                    <img src="assets/projects/hashcrackerz.webp" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" alt="HashCrackerz project logo" class="project-img" loading="lazy">
+                    <div class="project-img-placeholder" style="display:none;">⚡</div>
+                </div>
+                <div class="project-body">
+                    <div class="project-meta">
+                        <span class="project-badge" data-i18n="proj.hash.badge">MSc Course</span>
+                        <span class="project-year">dec 2025 – feb 2026</span>
+                    </div>
+                    <h3>HashCrackerz</h3>
+                    <p class="tagline" data-i18n="proj.hash.tagline">🔓 Multi-Platform SHA-256 Parallel Cracking Suite</p>
+                    <p class="proj-desc" data-i18n="proj.hash.desc">High-performance SHA-256 cracker comparing NVIDIA CUDA, AMD ROCm/HIP, and multi-core CPU via OpenMP. Kernel optimizations include constant memory, loop unrolling, and dynamic work scheduling.</p>
+                    <div class="project-tags">
+                        <span class="tag">C++</span><span class="tag">CUDA</span><span class="tag">ROCm/HIP</span><span class="tag">OpenMP</span><span class="tag">OpenSSL</span>
+                    </div>
+                    <div class="project-footer">
+                        <a href="https://github.com/HashCrackerz" target="_blank" rel="noopener noreferrer" class="project-link"><i class="fa-brands fa-github"></i> GitHub <i class="fa-solid fa-arrow-right" style="font-size:0.58rem;"></i></a>
+                        <div class="project-contributors">
+                            <span class="contrib-label" data-i18n="projects.contrib_label">with</span>
+                            <div class="contrib-names">
+                                <span class="contrib-chip">Andrea Vitale</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- PROJECTS:END -->
         </div>
     </section>
 

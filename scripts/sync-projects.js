@@ -135,4 +135,49 @@ module.exports = {
     selectHomeProjects: selectHomeProjects,
     renderCard: renderCard,
     render: render,
+    main: main,
 };
+
+function main() {
+    const checkOnly = process.argv.includes('--check');
+    let drifted = [];
+
+    const fullList = projects.slice().sort(byDateDesc);
+    const homeList = selectHomeProjects(projects, HOME_COUNT);
+
+    TARGETS.forEach(function (target) {
+        const filePath = path.join(ROOT_DIR, target.file);
+        const original = fs.readFileSync(filePath, 'utf8');
+        const startIdx = original.indexOf(START);
+        const endIdx = original.indexOf(END);
+        if (startIdx === -1 || endIdx === -1) {
+            console.error('Missing PROJECTS markers in ' + target.file);
+            process.exitCode = 1;
+            return;
+        }
+        const rendered = render(target.full ? fullList : homeList, target.full);
+        const before = original.slice(0, startIdx + START.length);
+        const after = original.slice(endIdx);
+        const updated = before + '\n' + rendered + '\n            ' + after;
+
+        if (updated !== original) {
+            drifted.push(target.file);
+            if (!checkOnly) fs.writeFileSync(filePath, updated);
+        }
+    });
+
+    if (checkOnly) {
+        if (drifted.length) {
+            console.error('Out of sync with projects/data.js:', drifted.join(', '));
+            console.error('Run `node scripts/sync-projects.js` and commit the result.');
+            process.exit(1);
+        }
+        console.log('All pages in sync with projects/data.js.');
+    } else {
+        console.log(drifted.length ? 'Synced: ' + drifted.join(', ') : 'Already in sync.');
+    }
+}
+
+if (require.main === module) {
+    main();
+}
