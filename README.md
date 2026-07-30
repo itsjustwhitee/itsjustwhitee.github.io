@@ -28,10 +28,10 @@ A static personal website hosted on **GitHub Pages** with Cloudflare as CDN and 
 │   └── dev-server.js       # Local dev server with GitHub-Pages-like 404 handling (see Setup below)
 │
 ├── projects/
-│   ├── data.js              # Single source of truth for every project (pin/date/tags/links/…)
-│   ├── index.html           # Full project list page
-│   ├── style.css            # Project-card grid styles, shared with index.html's #projects section
-│   └── script.js            # Per-project logo animations, shared with index.html
+│   ├── data.js             # Single source of truth for every project (pin/date/tags/links/…)
+│   ├── index.html          # Full project list page
+│   ├── style.css           # Project-card grid styles, shared with index.html's #projects section
+│   └── script.js           # Per-project logo animations, shared with index.html
 │
 ├── bento/
 │   ├── index.html          # Bento page - header fadeUp, parallax orbs, mouse tracking

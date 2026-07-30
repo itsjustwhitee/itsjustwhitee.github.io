@@ -71,7 +71,7 @@ function renderImage(project) {
     }
     if (img.mode === 'svg-inject') {
         return '<div class="project-img-wrap">\n' +
-            '                    <div class="project-img-wrap" id="' + img.visualId + '"></div>\n' +
+            '                    <div class="project-img-wrap" id="' + img.visualId + '" data-svg-src="' + img.fetchSrc + '"></div>\n' +
             '                    ' + ph + '\n' +
             '                </div>';
     }

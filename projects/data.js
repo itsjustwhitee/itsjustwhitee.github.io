@@ -15,6 +15,11 @@
 //
 // Every card also gets id="${slug}-card" from the generator (used today by
 // HashCrackerz's hover-crumb effect, free for any future project to hook).
+//
+// CAUTION: title/tags/descText/alt/url/etc. are interpolated into the
+// generated HTML as raw strings — scripts/sync-projects.js does not escape
+// them. A literal `&` or `<` in any text field must be hand-escaped
+// (`&amp;`, `&lt;`) yourself, same as rackcontroller.taglineText below.
 
 const projects = [
     {

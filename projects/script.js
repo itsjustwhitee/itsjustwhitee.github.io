@@ -8,6 +8,7 @@
    script, so the DOM already exists — no DOMContentLoaded wrapper needed.
    ═══════════════════════════════════════════════════════════════════════ */
 
+(function () {
 // ── FLUID FAN ROTATION - RACKCONTROLLER ──
 const fanWrapper = document.getElementById('rack-fan-wrapper');
 
@@ -33,7 +34,7 @@ if (fanWrapper && !window.prefersReducedMotion) {
 const edgeContainer = document.getElementById('edgecv-container');
 
 if (edgeContainer) {
-    fetch('/assets/projects/edgecv4safety.svg')
+    fetch(edgeContainer.dataset.svgSrc)
         .then(response => response.text())
         .then(svgCode => {
             edgeContainer.innerHTML = svgCode;
@@ -47,7 +48,7 @@ if (edgeContainer) {
 const sliceContainer = document.getElementById('sliceceipt-container');
 
 if (sliceContainer) {
-    fetch('/assets/projects/sliceceipt.svg')
+    fetch(sliceContainer.dataset.svgSrc)
         .then(response => response.text())
         .then(svgCode => {
             sliceContainer.innerHTML = svgCode;
@@ -190,3 +191,4 @@ if (crackerCard && crackerImg && imgWrap && !window.prefersReducedMotion) {
         }
     });
 }
+})();
