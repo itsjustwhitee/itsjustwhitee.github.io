@@ -30,7 +30,23 @@ function selectHomeProjects(list, homeCount) {
     const pinned = list.filter(function (p) { return p.pinned; });
     const rest = list.filter(function (p) { return !p.pinned; }).sort(byDateDesc);
     if (pinned.length >= homeCount) return pinned.slice(0, homeCount);
-    return pinned.concat(rest.slice(0, homeCount - pinned.length));
+
+    const filled = rest.slice(0, homeCount - pinned.length);
+
+    // A featured card spans the full grid row (both columns) on home too, so
+    // an odd count of non-featured cards leaves one stranded alone in the
+    // last row. Trim the least-recent filler card to keep the rest pairing
+    // up evenly whenever a featured card is in the mix. Only ever trims a
+    // recency-filled card, never a pinned one — pins are deliberate choices.
+    const hasFeatured = pinned.concat(filled).some(function (p) { return p.featured; });
+    const nonFeaturedCount = pinned.concat(filled).filter(function (p) { return !p.featured; }).length;
+    if (hasFeatured && nonFeaturedCount % 2 === 1) {
+        for (let i = filled.length - 1; i >= 0; i--) {
+            if (!filled[i].featured) { filled.splice(i, 1); break; }
+        }
+    }
+
+    return pinned.concat(filled);
 }
 
 function renderLinks(links) {
