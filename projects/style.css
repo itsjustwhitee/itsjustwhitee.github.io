@@ -96,49 +96,61 @@
    on hover, "ypst" appears letter by letter right beside it, as if being
    handwritten, so the pair reads as the full "Typst" name.
 
-   The previous attempt made ::after a flex SIBLING of the <img> inside
-   .project-img-wrap's row — broke because .project-img has width:100% (it
-   normally fills the whole wide wrap and relies on object-fit:contain to
-   center the glyph within that), so as a flex item it claimed nearly the
-   full row as its flex-basis and shoved the revealed text out to the far
-   right edge instead of sitting snugly beside the glyph.
+   .typst-reveal is a genuine flex CHILD of .project-img-wrap (which is
+   already display:flex from the base .project-img-wrap rule), sitting next
+   to the <img>. That's only safe because .project-img is width:auto below
+   (an earlier attempt left it at the base rule's width:100%, which claimed
+   nearly the full row as flex-basis and shoved the revealed text off to the
+   far edge) — with both children sized to their own content,
+   justify-content:center on the wrap centers the (t + ypst) PAIR as a unit,
+   not just the "t" alone, and stays correct as "ypst" grows in.
 
-   Fix: give the glyph its own intrinsic width here (object-fit:contain was
-   already only height-constrained in practice, so this doesn't change how
-   big the "t" renders — just what its own box measures), so the wrap's
-   justify-content:center centers the glyph alone, exactly like every other
-   project's default glyph. The revealed letters are a separate absolutely-
-   positioned overlay anchored just right of center — out of flow entirely,
-   so they can never distort the glyph's own layout again.
-
-   Per-letter spans + staggered transition-delay (set inline by
+   At rest .typst-reveal is collapsed to max-width:0 (so the "t" alone still
+   sits dead-center, matching every other card's default look); on hover it
+   grows to reveal its content, which is what re-centers the pair as a
+   whole. Per-letter spans + staggered transition-delay (set inline by
    projects/script.js, since CSS can't stagger characters from a single
    `content` string) are what makes it read as "written" rather than a
    single fade/wipe. */
-#justwhitee-notes-card .project-img-wrap { position: relative; }
 /* width:auto alone still rendered the glyph near the full 128px content
    height (160px wrap minus the base rule's 16px padding) - much bolder than
    the other cards' logos (e.g. SliceCeipt's), and way oversized next to
    "ypst" at a normal text size. transform:scale() shrinks the rendered
-   glyph without touching its layout box, so centering math elsewhere is
-   unaffected. */
+   glyph without touching its layout box, so the flex centering math above
+   is unaffected. */
 #justwhitee-notes-card .project-img { width: auto; transform: scale(0.7); }
 .typst-reveal {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(9px, -50%);
     display: flex;
-    pointer-events: none;
+    align-items: center;
+    max-width: 0;
+    overflow: hidden;
+    margin-left: 0;
+    transition: max-width 0.5s ease, margin-left 0.5s ease;
+}
+#justwhitee-notes-card:hover .typst-reveal {
+    max-width: 240px;
+    margin-left: 10px;
+    /* The t.svg asset has built-in transparent padding around the drawn
+       glyph (measured ~30px each side even after scale(0.7)), symmetric
+       within its own box - but "ypst"'s text spans hug their box tightly
+       with no such padding. Box-to-box centering (justify-content:center
+       on the wrap) is already exactly symmetric, so the leftover visual
+       imbalance is purely that mismatch: extra dead space behind the "t"
+       that "ypst" has no equivalent of. Padding it out on the right side
+       gives the group's box the same left/right ink-to-edge relationship
+       the "t" already has on its own, balancing it without touching the
+       image asset or the rest-state layout. */
+    padding-right: 50px;
 }
 .typst-letter {
     display: inline-block;
     font-family: 'Syne', sans-serif;
     font-weight: 800;
     font-style: italic;
-    font-size: 1.55rem;
+    font-size: 2.1rem;
     color: #fff;
     opacity: 0;
+    white-space: nowrap;
     transform: translateY(8px) rotate(var(--tilt, 0deg));
     transition: opacity 0.3s ease, transform 0.3s ease;
 }
