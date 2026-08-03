@@ -116,12 +116,18 @@
    `content` string) are what makes it read as "written" rather than a
    single fade/wipe. */
 #justwhitee-notes-card .project-img-wrap { position: relative; }
-#justwhitee-notes-card .project-img { width: auto; }
+/* width:auto alone still rendered the glyph near the full 128px content
+   height (160px wrap minus the base rule's 16px padding) - much bolder than
+   the other cards' logos (e.g. SliceCeipt's), and way oversized next to
+   "ypst" at a normal text size. transform:scale() shrinks the rendered
+   glyph without touching its layout box, so centering math elsewhere is
+   unaffected. */
+#justwhitee-notes-card .project-img { width: auto; transform: scale(0.7); }
 .typst-reveal {
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(14px, -50%);
+    transform: translate(9px, -50%);
     display: flex;
     pointer-events: none;
 }
@@ -130,7 +136,7 @@
     font-family: 'Syne', sans-serif;
     font-weight: 800;
     font-style: italic;
-    font-size: 2.1rem;
+    font-size: 1.55rem;
     color: #fff;
     opacity: 0;
     transform: translateY(8px) rotate(var(--tilt, 0deg));
