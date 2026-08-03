@@ -93,32 +93,52 @@
 .project-card:hover #sliceceipt-front { transform: translate(34px, 26px) rotate(4deg); }
 
 /* justwhitee-notes: the logo is just a lowercase "t" (Typst's wordmark glyph) —
-   on hover, "ypst" grows in right next to it as if being handwritten, so the
-   pair reads as the full "Typst" name. ::after generates as a flex sibling of
-   the <img> inside .project-img-wrap's flex row, so justify-content:center
-   keeps the (t + ypst) pair centered as a unit as the text grows in — the "t"
-   drifts slightly left instead of staying pinned while text pops in beside it.
-   max-width (not width) is what's animated: the end width is unknown/variable,
-   and max-width is the standard trick for animating to an "auto" size — paired
-   with overflow:hidden + white-space:nowrap, it also clips the string exactly
-   at its growing edge, which is what sells the "being written" reveal. */
-#justwhitee-notes-card .project-img-wrap::after {
-    content: 'ypst';
-    display: block;
-    max-width: 0;
-    overflow: hidden;
-    white-space: nowrap;
+   on hover, "ypst" appears letter by letter right beside it, as if being
+   handwritten, so the pair reads as the full "Typst" name.
+
+   The previous attempt made ::after a flex SIBLING of the <img> inside
+   .project-img-wrap's row — broke because .project-img has width:100% (it
+   normally fills the whole wide wrap and relies on object-fit:contain to
+   center the glyph within that), so as a flex item it claimed nearly the
+   full row as its flex-basis and shoved the revealed text out to the far
+   right edge instead of sitting snugly beside the glyph.
+
+   Fix: give the glyph its own intrinsic width here (object-fit:contain was
+   already only height-constrained in practice, so this doesn't change how
+   big the "t" renders — just what its own box measures), so the wrap's
+   justify-content:center centers the glyph alone, exactly like every other
+   project's default glyph. The revealed letters are a separate absolutely-
+   positioned overlay anchored just right of center — out of flow entirely,
+   so they can never distort the glyph's own layout again.
+
+   Per-letter spans + staggered transition-delay (set inline by
+   projects/script.js, since CSS can't stagger characters from a single
+   `content` string) are what makes it read as "written" rather than a
+   single fade/wipe. */
+#justwhitee-notes-card .project-img-wrap { position: relative; }
+#justwhitee-notes-card .project-img { width: auto; }
+.typst-reveal {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(14px, -50%);
+    display: flex;
+    pointer-events: none;
+}
+.typst-letter {
+    display: inline-block;
     font-family: 'Syne', sans-serif;
     font-weight: 800;
     font-style: italic;
     font-size: 2.1rem;
     color: #fff;
-    margin-left: 0;
-    transition: max-width 0.7s ease, margin-left 0.7s ease;
+    opacity: 0;
+    transform: translateY(8px) rotate(var(--tilt, 0deg));
+    transition: opacity 0.3s ease, transform 0.3s ease;
 }
-#justwhitee-notes-card:hover .project-img-wrap::after {
-    max-width: 160px;
-    margin-left: 6px;
+#justwhitee-notes-card:hover .typst-letter {
+    opacity: 1;
+    transform: translateY(0) rotate(0deg);
 }
 
 /* align-items:start — without it, grid's default `stretch` makes every card in a

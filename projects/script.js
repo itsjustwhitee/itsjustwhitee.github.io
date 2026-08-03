@@ -191,4 +191,25 @@ if (crackerCard && crackerImg && imgWrap && !window.prefersReducedMotion) {
         }
     });
 }
+
+// ── TYPST WORDMARK REVEAL - JUSTWHITEE-NOTES ──
+// The logo is just a lowercase "t" (Typst's own wordmark glyph) - on hover,
+// "ypst" appears one letter at a time beside it so the pair reads as the
+// full name. Built here as spans (not a CSS `content` string) because CSS
+// alone can't stagger individual characters from one string.
+const typstWrap = document.querySelector('#justwhitee-notes-card .project-img-wrap');
+if (typstWrap) {
+    const reveal = document.createElement('span');
+    reveal.className = 'typst-reveal';
+    const tilts = [-4, 3, -3, 4];
+    'ypst'.split('').forEach((ch, i) => {
+        const letter = document.createElement('span');
+        letter.className = 'typst-letter';
+        letter.textContent = ch;
+        letter.style.setProperty('--tilt', tilts[i] + 'deg');
+        letter.style.transitionDelay = (i * 70) + 'ms';
+        reveal.appendChild(letter);
+    });
+    typstWrap.appendChild(reveal);
+}
 })();
