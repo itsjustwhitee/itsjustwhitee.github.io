@@ -115,10 +115,17 @@
 /* width:auto alone still rendered the glyph near the full 128px content
    height (160px wrap minus the base rule's 16px padding) - much bolder than
    the other cards' logos (e.g. SliceCeipt's), and way oversized next to
-   "ypst" at a normal text size. transform:scale() shrinks the rendered
-   glyph without touching its layout box, so the flex centering math above
-   is unaffected. */
-#justwhitee-notes-card .project-img { width: auto; transform: scale(0.7); }
+   "ypst" at a normal text size.
+
+   height (not transform:scale) is what actually shrinks it: transform only
+   resizes the painted pixels, not the element's own layout box, so the
+   flex gap to .typst-reveal was being measured against the ORIGINAL
+   (pre-shrink) box - the glyph looked small but still pushed its neighbor
+   away as if it weren't, which is what made "t" and "ypst" read as too far
+   apart. Shrinking the real box via height fixes the gap and the ink
+   padding/centering math both at once, since the sibling's margin now
+   measures from the glyph's true (small) edge. */
+#justwhitee-notes-card .project-img { width: auto; height: 112px; }
 .typst-reveal {
     display: flex;
     align-items: center;
@@ -128,19 +135,8 @@
     transition: max-width 0.5s ease, margin-left 0.5s ease;
 }
 #justwhitee-notes-card:hover .typst-reveal {
-    max-width: 240px;
-    margin-left: 10px;
-    /* The t.svg asset has built-in transparent padding around the drawn
-       glyph (measured ~30px each side even after scale(0.7)), symmetric
-       within its own box - but "ypst"'s text spans hug their box tightly
-       with no such padding. Box-to-box centering (justify-content:center
-       on the wrap) is already exactly symmetric, so the leftover visual
-       imbalance is purely that mismatch: extra dead space behind the "t"
-       that "ypst" has no equivalent of. Padding it out on the right side
-       gives the group's box the same left/right ink-to-edge relationship
-       the "t" already has on its own, balancing it without touching the
-       image asset or the rest-state layout. */
-    padding-right: 50px;
+    max-width: 200px;
+    margin-left: 6px;
 }
 .typst-letter {
     display: inline-block;
