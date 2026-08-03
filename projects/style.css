@@ -125,7 +125,11 @@
    apart. Shrinking the real box via height fixes the gap and the ink
    padding/centering math both at once, since the sibling's margin now
    measures from the glyph's true (small) edge. */
-#justwhitee-notes-card .project-img { width: auto; height: 112px; }
+/* padding:0 overrides the base .project-img rule's 16px padding, which was
+   adding dead space between the glyph's ink and its own box edge on top of
+   everything above - the actual remaining cause once the SVG's own padding
+   and the transform-vs-layout-box issue were both already fixed. */
+#justwhitee-notes-card .project-img { width: auto; height: 112px; padding: 0; }
 .typst-reveal {
     display: flex;
     align-items: center;
@@ -136,7 +140,7 @@
 }
 #justwhitee-notes-card:hover .typst-reveal {
     max-width: 200px;
-    margin-left: 6px;
+    margin-left: -4px;
 }
 .typst-letter {
     display: inline-block;
