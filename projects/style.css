@@ -129,7 +129,19 @@
    adding dead space between the glyph's ink and its own box edge on top of
    everything above - the actual remaining cause once the SVG's own padding
    and the transform-vs-layout-box issue were both already fixed. */
-#justwhitee-notes-card .project-img { width: auto; height: 112px; padding: 0; }
+/* .project-img-wrap has no explicit height anywhere in the base rules - it
+   shrink-wraps its tallest child. Every other card gets a 160px wrap "for
+   free" only because their <img>/<svg> uses the base .project-img rule's
+   own height:160px. Overriding THIS card's img to a shorter height (for the
+   flex-gap math above) shrunk its wrap right along with it - 112px instead
+   of 160px - which is what actually made the "t" look oversized (it was
+   filling ~95% of its own now-much-shorter box) and threw the whole card's
+   height out of line with its neighbors in the grid. Pinning the wrap back
+   to 160px here keeps this card's row height consistent with every other
+   card; the now-90px-tall glyph just centers within the extra space,
+   exactly like a smaller flex item naturally would. */
+#justwhitee-notes-card .project-img-wrap { height: 160px; }
+#justwhitee-notes-card .project-img { width: auto; height: 90px; padding: 0; }
 .typst-reveal {
     display: flex;
     align-items: center;
