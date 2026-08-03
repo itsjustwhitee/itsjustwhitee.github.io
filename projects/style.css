@@ -92,7 +92,33 @@
 .project-card:hover #sliceceipt-back  { transform: translate(-34px, -26px) rotate(-4deg); }
 .project-card:hover #sliceceipt-front { transform: translate(34px, 26px) rotate(4deg); }
 
-.projects-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+/* justwhitee-notes: the logo is just a lowercase "t" (Typst's wordmark glyph) —
+   reveal the full name on hover so it doesn't read as an unlabeled letter. */
+#justwhitee-notes-card .project-img-wrap { position: relative; }
+#justwhitee-notes-card .project-img-wrap::after {
+    content: 'Typst';
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1.6rem;
+    color: #fff;
+    background: rgba(11,43,45,0.92);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+}
+#justwhitee-notes-card:hover .project-img-wrap::after { opacity: 1; }
+
+/* align-items:start — without it, grid's default `stretch` makes every card in a
+   row match the row's tallest sibling (e.g. EdgeCV4Safety's stat-boxes making a
+   neighboring simple card's box balloon with empty space below its own content).
+   Home's pinned+recent selection can pair any two cards, so this can't be solved
+   by curating card order the way the original hand-authored layout did. */
+.projects-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: start; }
 .project-card {
     position: relative;
     background: #0b2b2d;
