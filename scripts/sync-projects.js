@@ -95,12 +95,13 @@ function renderContributors(project) {
         '\n                        </div>';
 }
 
-function renderCard(project, isFullList) {
-    // The home page always uses the uniform (non-featured) card style,
-    // regardless of a project's `featured` flag — the 2-column large-card
-    // treatment is reserved for the full /projects/ list, so the home grid
-    // looks consistent no matter which project is pinned/recent that day.
-    const featuredClass = (project.featured && isFullList) ? ' featured' : '';
+function renderCard(project) {
+    // `featured` gets the 2-column large-card treatment on every page it
+    // appears on, home included — a "big" card (extra stat-boxes, longer
+    // copy) stretching its shorter row-mates to match its own height (even
+    // with align-items:start, the row itself is still as tall as its
+    // tallest cell) reads as more broken than one asymmetric last row.
+    const featuredClass = project.featured ? ' featured' : '';
     const badgeClass = project.badgeVariant ? ' ' + project.badgeVariant : '';
     const taglineAttr = project.taglineHtml ? 'data-i18n-html' : 'data-i18n';
 
@@ -126,8 +127,8 @@ function renderCard(project, isFullList) {
         '            </div>';
 }
 
-function render(list, isFullList) {
-    return list.map(function (p) { return renderCard(p, isFullList); }).join('\n\n');
+function render(list) {
+    return list.map(renderCard).join('\n\n');
 }
 
 module.exports = {
@@ -155,7 +156,7 @@ function main() {
             process.exitCode = 1;
             return;
         }
-        const rendered = render(target.full ? fullList : homeList, target.full);
+        const rendered = render(target.full ? fullList : homeList);
         const before = original.slice(0, startIdx + START.length);
         const after = original.slice(endIdx);
         const updated = before + '\n' + rendered + '\n            ' + after;
