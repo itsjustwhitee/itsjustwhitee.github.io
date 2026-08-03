@@ -28,6 +28,7 @@ const PAGES = [
     { file: 'bento/index.html', root: '../' },
     { file: 'contacts/index.html', root: '../' },
     { file: 'cv/index.html', root: '../' },
+    { file: 'projects/index.html', root: '../' },
 ];
 
 function render(root) {

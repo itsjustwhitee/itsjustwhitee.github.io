@@ -50,6 +50,7 @@
             'projects.title':         'My <span class="accent">projects</span>',
             'projects.sub':           'Selected work from university courses, internships, and personal experiments.',
             'projects.contrib_label': 'with',
+            'projects.view_all':      'View all projects',
 
             'proj.edgecv.badge':      'Internship · Thesis',
             'proj.edgecv.tagline':    '🛡️ AI-Driven Contextual Safety System for Industry 5.0',
@@ -204,6 +205,7 @@
             'projects.title':         'I miei <span class="accent">progetti</span>',
             'projects.sub':           'Progetti selezionati da corsi universitari, tirocini ed esperimenti personali.',
             'projects.contrib_label': 'con',
+            'projects.view_all':      'Vedi tutti i progetti',
 
             'proj.edgecv.badge':      'Tirocinio · Tesi',
             'proj.edgecv.tagline':    '🛡️ Sistema di Sicurezza Contestuale AI-Driven per Industry 5.0',

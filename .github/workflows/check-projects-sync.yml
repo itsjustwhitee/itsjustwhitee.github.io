@@ -1,0 +1,21 @@
+name: Check projects sync
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Verify index.html and projects/index.html match projects/data.js
+        run: node scripts/sync-projects.js --check

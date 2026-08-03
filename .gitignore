@@ -22,3 +22,7 @@ build/
 out/
 
 .claude
+CLAUDE.md
+
+# --- Superpowers planning artifacts (specs/plans, not project docs) ---
+docs/superpowers/

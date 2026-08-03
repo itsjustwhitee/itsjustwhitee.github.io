@@ -1,0 +1,300 @@
+/* ═══════════════════════════════════════════════════════════════════════
+   projects/style.css — justwhitee · Matteo Fontolan
+   Project-card grid styles, shared by index.html (home, pinned+recent
+   subset) and projects/index.html (full list). Extracted verbatim from
+   index.html's former inline <style> block — see git history if you need
+   the exact prior line numbers.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+/* ── PROJECTS ────────────────────────────────────────────────────────── */
+/* HashCrackerz */
+#hashcrackerz-card .project-img-wrap {
+    position: relative;
+    overflow: hidden;
+}
+#hashcrackerz-card:hover .project-img {
+    animation: crackerVibrate 0.1s linear infinite;
+}
+@keyframes crackerVibrate {
+    0%   { transform: translate(0,0) scale(1.04) rotate(0deg); filter: blur(0px); }
+    20%  { transform: translate(-3px,-2px) scale(1.04) rotate(-1.5deg); filter: blur(1.1px); }
+    40%  { transform: translate(3px,1px) scale(1.04) rotate(1.5deg); filter: blur(1.1px); }
+    60%  { transform: translate(-2px,2px) scale(1.04) rotate(-1deg); filter: blur(1.1px); }
+    80%  { transform: translate(2px,-1px) scale(1.04) rotate(1deg); filter: blur(1.1px); }
+    100% { transform: translate(0,0) scale(1.04) rotate(0deg); filter: blur(0px); }
+}
+.crumb {
+    position: absolute !important;
+    border: 1.5px solid #1a0f00;
+    border-radius: 40%;
+    pointer-events: none;
+    z-index: 100;
+    top: 0; left: 0;
+}
+@keyframes crumbFall {
+    0% {
+        transform: translate(0, 0) scale(1) rotate(0deg);
+        opacity: 1;
+    }
+    15% {
+        transform: translate(calc(var(--dx) * 0.15), -10px) scale(1.05) rotate(calc(var(--rot) * 0.1));
+        opacity: 1;
+    }
+    75% {
+        opacity: 1;
+    }
+    100% {
+        transform: translate(var(--dx), 150px) rotate(var(--rot));
+        opacity: 0;
+    }
+}
+
+/* EdgeCV4Safety */
+#edgecv-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 250px;
+}
+
+#edgecv-container svg {
+    width: 100%;
+    height: auto;
+    max-height: 100%;
+    display: block;
+}
+#pupil-focus-group {
+    transition: transform 0.1s ease-out;
+    will-change: transform;
+}
+/* Rack Controller */
+.rack-spin-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+}
+
+/* SliceCeipt */
+#sliceceipt-container {
+    width: 100%; height: 100%;
+    display: flex; align-items: center; justify-content: center;
+}
+#sliceceipt-container svg { padding: 35px; }
+#sliceceipt-back, #sliceceipt-front {
+    transform-box: fill-box;
+    transform-origin: center;
+    transition: transform 0.45s cubic-bezier(0.175,0.885,0.32,1.275);
+}
+.project-card:hover #sliceceipt-back  { transform: translate(-34px, -26px) rotate(-4deg); }
+.project-card:hover #sliceceipt-front { transform: translate(34px, 26px) rotate(4deg); }
+
+/* justwhitee-notes: the logo is just a lowercase "t" (Typst's wordmark glyph) —
+   on hover, "ypst" appears letter by letter right beside it, as if being
+   handwritten, so the pair reads as the full "Typst" name.
+
+   .typst-reveal is a genuine flex CHILD of .project-img-wrap (which is
+   already display:flex from the base .project-img-wrap rule), sitting next
+   to the <img>. That's only safe because .project-img is width:auto below
+   (an earlier attempt left it at the base rule's width:100%, which claimed
+   nearly the full row as flex-basis and shoved the revealed text off to the
+   far edge) — with both children sized to their own content,
+   justify-content:center on the wrap centers the (t + ypst) PAIR as a unit,
+   not just the "t" alone, and stays correct as "ypst" grows in.
+
+   At rest .typst-reveal is collapsed to max-width:0 (so the "t" alone still
+   sits dead-center, matching every other card's default look); on hover it
+   grows to reveal its content, which is what re-centers the pair as a
+   whole. Per-letter spans + staggered transition-delay (set inline by
+   projects/script.js, since CSS can't stagger characters from a single
+   `content` string) are what makes it read as "written" rather than a
+   single fade/wipe. */
+/* width:auto alone still rendered the glyph near the full 128px content
+   height (160px wrap minus the base rule's 16px padding) - much bolder than
+   the other cards' logos (e.g. SliceCeipt's), and way oversized next to
+   "ypst" at a normal text size.
+
+   height (not transform:scale) is what actually shrinks it: transform only
+   resizes the painted pixels, not the element's own layout box, so the
+   flex gap to .typst-reveal was being measured against the ORIGINAL
+   (pre-shrink) box - the glyph looked small but still pushed its neighbor
+   away as if it weren't, which is what made "t" and "ypst" read as too far
+   apart. Shrinking the real box via height fixes the gap and the ink
+   padding/centering math both at once, since the sibling's margin now
+   measures from the glyph's true (small) edge. */
+/* padding:0 overrides the base .project-img rule's 16px padding, which was
+   adding dead space between the glyph's ink and its own box edge on top of
+   everything above - the actual remaining cause once the SVG's own padding
+   and the transform-vs-layout-box issue were both already fixed. */
+/* .project-img-wrap has no explicit height anywhere in the base rules - it
+   shrink-wraps its tallest child. Every other card gets a 160px wrap "for
+   free" only because their <img>/<svg> uses the base .project-img rule's
+   own height:160px. Overriding THIS card's img to a shorter height (for the
+   flex-gap math above) shrunk its wrap right along with it - 112px instead
+   of 160px - which is what actually made the "t" look oversized (it was
+   filling ~95% of its own now-much-shorter box) and threw the whole card's
+   height out of line with its neighbors in the grid. Pinning the wrap back
+   to 160px here keeps this card's row height consistent with every other
+   card; the now-90px-tall glyph just centers within the extra space,
+   exactly like a smaller flex item naturally would. */
+#justwhitee-notes-card .project-img-wrap { height: 160px; }
+#justwhitee-notes-card .project-img { width: auto; height: 90px; padding: 0; }
+.typst-reveal {
+    display: flex;
+    align-items: center;
+    max-width: 0;
+    overflow: hidden;
+    margin-left: 0;
+    transition: max-width 0.5s ease, margin-left 0.5s ease;
+}
+#justwhitee-notes-card:hover .typst-reveal {
+    max-width: 200px;
+    margin-left: -4px;
+}
+.typst-letter {
+    display: inline-block;
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-style: italic;
+    font-size: 2.1rem;
+    color: #fff;
+    opacity: 0;
+    white-space: nowrap;
+    transform: translateY(8px) rotate(var(--tilt, 0deg));
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+#justwhitee-notes-card:hover .typst-letter {
+    opacity: 1;
+    transform: translateY(0) rotate(0deg);
+}
+
+/* align-items:start — without it, grid's default `stretch` makes every card in a
+   row match the row's tallest sibling (e.g. EdgeCV4Safety's stat-boxes making a
+   neighboring simple card's box balloon with empty space below its own content).
+   Home's pinned+recent selection can pair any two cards, so this can't be solved
+   by curating card order the way the original hand-authored layout did. */
+.projects-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: start; }
+.project-card {
+    position: relative;
+    background: #0b2b2d;
+    border: 1px solid rgba(var(--accent-rgb),0.4);
+    border-radius: var(--radius); padding: 0; overflow: hidden;
+    transition: transform 0.4s cubic-bezier(0.175,0.885,0.32,1.275),
+                box-shadow 0.4s ease, border-color 0.4s ease;
+}
+.project-card:hover { transform: translateY(-7px); border-color: rgba(var(--accent-bright-rgb),0.65); box-shadow: 0 28px 60px rgba(0,0,0,0.55), 0 0 26px rgba(var(--accent-bright-rgb),0.25); }
+.project-img-wrap { overflow: hidden; background: rgba(var(--accent-rgb),0.08); display: flex; align-items: center; justify-content: center; }
+.project-img {
+    width: 100%; height: 160px; object-fit: contain; display: block; padding: 16px;
+    transition: transform 0.5s ease, filter 0.5s ease;
+    filter: brightness(0.92);
+}
+.project-card:hover .project-img { transform: scale(1.04); filter: brightness(1); }
+.project-img-placeholder {
+    width: 100%; height: 190px;
+    background: linear-gradient(135deg, rgba(var(--accent-rgb),0.2) 0%, rgba(0,0,0,0.35) 100%);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 3rem; opacity: 0.35;
+}
+.project-body { padding: 26px 26px 22px; }
+.project-card.featured {
+    grid-column: span 2;
+    display: grid; grid-template-columns: 1fr 1fr;
+}
+.project-card.featured .project-img-wrap { height: 100%; }
+.project-card.featured .project-img { height: 100%; min-height: 280px; padding: 24px; }
+.project-card.featured .project-img-placeholder { height: 100%; min-height: 280px; }
+.project-card.featured .project-body { padding: 32px 30px 28px; }
+.project-meta { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; flex-wrap: wrap; }
+.project-badge {
+    font-size: 0.56rem; letter-spacing: 0.14em; text-transform: uppercase;
+    padding: 4px 10px; border-radius: 999px;
+    background: rgba(var(--accent-bright-rgb),0.12); border: 1px solid rgba(var(--accent-bright-rgb),0.25); color: var(--accent-bright);
+}
+.project-badge.intern { background: rgba(255,168,0,0.1); border-color: rgba(255,168,0,0.25); color: #ffa800; }
+.project-year { font-size: 0.59rem; color: var(--text-muted); letter-spacing: 0.1em; }
+.project-card h3 { font-family: 'Syne', sans-serif; font-size: 1.1rem; font-weight: 800; color: #fff; line-height: 1.25; margin-bottom: 8px; }
+.project-card .tagline { font-size: 0.72rem; color: var(--accent-bright); margin-bottom: 12px; font-style: italic; opacity: 0.8; }
+.project-card .proj-desc { font-size: 0.78rem; color: var(--text-bio); line-height: 1.75; }
+.project-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 16px; }
+.tag { font-size: 0.56rem; padding: 3px 9px; border-radius: 6px; background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.1); color: rgba(255,255,255,0.5); letter-spacing: 0.05em; }
+.project-footer { display: flex; align-items: center; justify-content: space-between; margin-top: 18px; flex-wrap: wrap; gap: 10px; }
+.project-link { display: inline-flex; align-items: center; gap: 6px; font-size: 0.68rem; color: var(--accent-bright); transition: gap 0.2s; text-decoration: none; }
+.project-link:hover { gap: 10px; }
+.project-contributors { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.contrib-label { font-size: 0.56rem; color: var(--text-muted); letter-spacing: 0.08em; text-transform: uppercase; }
+.contrib-chip { font-size: 0.57rem; padding: 2px 9px; border-radius: 999px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); color: rgba(255,255,255,0.5); }
+.project-stats { display: flex; flex-direction: column; gap: 10px; margin-top: 16px; }
+.stat-box { background: #0b2b2d; border: 1px solid rgba(var(--accent-rgb),0.4); border-radius: 12px; padding: 12px 14px; }
+.stat-box-label { font-size: 0.56rem; text-transform: uppercase; letter-spacing: 0.15em; color: var(--accent-bright); margin-bottom: 4px; }
+.stat-box-value { font-family: 'Syne', sans-serif; font-size: 1.5rem; font-weight: 800; color: #fff; }
+.stat-box-desc  { font-size: 0.67rem; color: var(--text-muted); margin-top: 2px; line-height: 1.4; }
+
+/* ── VIEW-ALL CTA (home page only) ──────────────────────────────────── */
+.projects-view-all { text-align: center; margin-top: 40px; }
+
+/* ── /projects/ PAGE HEADER & WRAPPER ───────────────────────────────── */
+.projects-page { max-width: 1100px; margin: 0 auto; padding: 100px 28px 60px; }
+.projects-header { text-align: center; margin-bottom: 48px; }
+.projects-header h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(1.8rem, 5vw, 2.6rem);
+    font-weight: 800;
+    color: #fff;
+    line-height: 1.1;
+    margin-bottom: 10px;
+}
+.projects-header h1 .accent { color: var(--accent-bright); }
+.projects-header p { font-size: 0.82rem; color: var(--text-muted); line-height: 1.6; max-width: 560px; margin: 0 auto; }
+
+/* ── TABLET ≤900px ───────────────────────────────────────────────────── */
+@media (max-width: 900px) {
+    .projects-grid { grid-template-columns: 1fr; }
+    .project-card.featured {
+        grid-column: span 1;
+        display: flex; flex-direction: column;
+    }
+    .project-card.featured .project-img-wrap { height: auto; }
+    .project-card.featured .project-img { height: 200px; min-height: unset; padding: 16px; }
+    /* Non-featured cards: fixed 160px image height read as near-empty once the card spans the full mobile width — square it up instead */
+    .project-card:not(.featured) .project-img-wrap { aspect-ratio: 1 / 1; height: auto; }
+    .project-card:not(.featured) .project-img { height: 100%; }
+    .project-card:not(.featured) .project-img-placeholder { height: 100%; }
+}
+
+/* ── MOBILE ≤600px ───────────────────────────────────────────────────── */
+@media (max-width: 600px) {
+    /* Single source of truth for the three project-card logo boxes below -
+       was six independent 260px literals that had already drifted out of
+       sync once during tuning; now there's exactly one number to change. */
+    :root { --mobile-logo-size: 260px; }
+
+    .projects-page { padding: 56px 18px 40px; }
+
+    .projects-grid { gap: 14px; }
+    .project-body { padding: 18px 16px 16px; }
+    /* Non-featured logos (HashCrackerz/RackController) were filling an aspect-ratio 1:1 box the full card width (~300px+) - shrink to a compact fixed height instead of scaling with card width */
+    .project-card:not(.featured) .project-img-wrap { aspect-ratio: unset; height: var(--mobile-logo-size); }
+    .project-card:not(.featured) .project-img { height: 100%; padding: 14px; }
+    .project-card:not(.featured) .project-img-placeholder { height: var(--mobile-logo-size); font-size: 1.8rem; }
+    /* Featured (EdgeCV4Safety): #edgecv-container svg's own `max-height:100%` rule (higher
+       specificity, id-based) is what actually sizes it, but that's a no-op against an
+       `auto`-height parent - give the wrap a definite height so max-height has something
+       to cap against, matching the other two logos above */
+    .project-card.featured .project-img-wrap { height: var(--mobile-logo-size); }
+    .project-card.featured .project-img-placeholder { height: var(--mobile-logo-size); min-height: unset; font-size: 1.8rem; }
+    /* #edgecv-container's own min-height:250px (id selector) otherwise clamps it back up past --mobile-logo-size above - both now derive from the same variable so they can't drift apart again */
+    #edgecv-container { min-height: var(--mobile-logo-size); }
+    .project-card h3 { font-size: 1.05rem; }
+    .project-card .tagline { font-size: 0.8rem; }
+    .project-card .proj-desc { font-size: 0.85rem; }
+    .project-footer { flex-direction: column; align-items: flex-start; gap: 8px; }
+    .project-stats { gap: 8px; }
+    .stat-box-value { font-size: 1.2rem; }
+    /* Keep tags readable */
+    .project-tags { gap: 5px; }
+    .tag { font-size: 0.6rem; }
+}
