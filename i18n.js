@@ -52,7 +52,7 @@
             'projects.contrib_label': 'with',
             'projects.view_all':      'View all projects',
             'projects.page_label':    '// projects',
-            'projects.page_sub':      "Everything I've built: university coursework, internships, and personal experiments — from GPU kernels and embedded firmware to browser-based tools. The home page only shows a few highlights; this is the full list.",
+            'projects.page_sub':      "Everything I've built: university coursework, internships, and personal experiments. The home page only shows a few highlights; this is the full list.",
 
             'proj.edgecv.badge':      'Internship · Thesis',
             'proj.edgecv.tagline':    '🛡️ AI-Driven Contextual Safety System for Industry 5.0',
@@ -209,7 +209,7 @@
             'projects.contrib_label': 'con',
             'projects.view_all':      'Vedi tutti i progetti',
             'projects.page_label':    '// progetti',
-            'projects.page_sub':      "Tutto quello che ho costruito: corsi universitari, tirocini ed esperimenti personali — dai kernel GPU al firmware embedded fino agli strumenti da browser. La home mostra solo alcuni punti salienti, qui trovi la lista completa.",
+            'projects.page_sub':      "Tutto quello che ho costruito: corsi universitari, tirocini ed esperimenti personali. La home mostra solo alcuni punti salienti, qui trovi la lista completa.",
 
             'proj.edgecv.badge':      'Tirocinio · Tesi',
             'proj.edgecv.tagline':    '🛡️ Sistema di Sicurezza Contestuale AI-Driven per Industry 5.0',
