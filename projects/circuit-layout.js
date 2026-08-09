@@ -219,9 +219,61 @@ function generateUntraveledNetwork(occupancy, columns, maxRow, rng, traceCount, 
     return traces;
 }
 
+function generate(opts) {
+    const rng = makeRng(opts.seed != null ? opts.seed : Math.floor(Math.random() * 2147483647));
+    const columns = opts.columns;
+    const rowsPerProject = opts.rowsPerProject || 8;
+    const projectCount = opts.projectCount;
+
+    const nodes = placeNodes(projectCount, columns, rowsPerProject, rng);
+    const maxRow = nodes[nodes.length - 1].row + rowsPerProject;
+    const occupancy = new Map();
+
+    const segments = [];
+    for (let i = 0; i < nodes.length - 1; i++) {
+        const rawPath = routeOrthogonal(occupancy, nodes[i], nodes[i + 1], rng, columns, maxRow);
+        segments.push({ corners: reduceToCorners(rawPath), traveled: true, kind: 'main' });
+
+        if (rng() < 0.35 && rawPath.length > 6) {
+            const startIdx = Math.floor(rawPath.length * 0.25);
+            const endIdx = Math.floor(rawPath.length * 0.75);
+            const altPath = routeOrthogonal(occupancy, rawPath[startIdx], rawPath[endIdx], rng, columns, maxRow);
+            if (altPath.length > 2) segments.push({ corners: reduceToCorners(altPath), traveled: true, kind: 'fork' });
+        }
+    }
+
+    const decorativeSpots = [];
+    const deadEndCount = randInt(rng, projectCount, projectCount * 2);
+    for (let i = 0; i < deadEndCount; i++) {
+        const seg = segments[randInt(rng, 0, segments.length - 1)];
+        const point = seg.corners[randInt(rng, 0, seg.corners.length - 1)];
+        const branch = growRandomWalk(occupancy, point, rng, columns, maxRow, 3, 6);
+        if (branch) {
+            segments.push({ corners: reduceToCorners(branch), traveled: true, kind: 'deadend' });
+            decorativeSpots.push(branch[branch.length - 1]);
+        }
+    }
+
+    const untraveledPaths = generateUntraveledNetwork(occupancy, columns, maxRow, rng, projectCount * 2, 4, 10);
+    const untraveled = untraveledPaths.map(function (path) { return { corners: reduceToCorners(path), traveled: false }; });
+    untraveled.forEach(function (t) {
+        if (rng() < 0.4) decorativeSpots.push(t.corners[randInt(rng, 0, t.corners.length - 1)]);
+    });
+
+    const vias = [];
+    occupancy.forEach(function (entry, key) {
+        if (entry.via) {
+            const parts = key.split(',');
+            vias.push({ row: Number(parts[0]), col: Number(parts[1]) });
+        }
+    });
+
+    return { columns, rows: maxRow + 1, rowsPerProject, nodes, segments, untraveled, decorativeSpots, vias };
+}
+
 return {
     makeRng, randInt, placeNodes,
     routeOrthogonal, reduceToCorners, chamferCorners, pointsToPathD, cellKey, canStep, markStep,
-    growRandomWalk, generateUntraveledNetwork,
+    growRandomWalk, generateUntraveledNetwork, generate,
 };
 });
