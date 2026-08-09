@@ -23,6 +23,7 @@
     <script src="../i18n.js"></script>
     <!-- SHARED-HEAD:END -->
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="circuit.css">
 
     <title>Projects | Matteo Fontolan - justwhitee</title>
     <meta name="description" content="Every project Matteo Fontolan (justwhitee) has built: internships, university courses, and personal experiments.">
@@ -49,6 +50,8 @@
             <h1 data-i18n-html="projects.title">My <span class="accent">projects</span></h1>
             <p data-i18n="projects.page_sub">Everything I've built: university coursework, internships, and personal experiments — from GPU kernels and embedded firmware to browser-based tools. The home page only shows a few highlights; this is the full list.</p>
         </header>
+
+        <div class="circuit-stage" id="circuit-stage"></div>
 
         <div class="projects-grid">
 <!-- PROJECTS:START -->
@@ -197,9 +200,16 @@
     </div>
 
     <script src="script.js"></script>
+    <script src="circuit-layout.js"></script>
+    <script src="circuit-symbols.js"></script>
+    <script src="circuit.js"></script>
     <script>
-    // Scroll reveal — shared implementation lives in components.js
-    window.initScrollReveal({ delayStep: 100, delayCap: 300 });
+    // Scroll reveal — shared implementation lives in components.js. Skipped
+    // once the circuit takes over (Circuit.init hides .projects-grid), since
+    // its cards are no longer the visible/scrolled content.
+    if (!document.querySelector('.projects-grid.circuit-active')) {
+        window.initScrollReveal({ delayStep: 100, delayCap: 300 });
+    }
     </script>
 </body>
 </html>

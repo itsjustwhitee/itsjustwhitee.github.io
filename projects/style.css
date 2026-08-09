@@ -269,6 +269,9 @@
     .project-card:not(.featured) .project-img-placeholder { height: 100%; }
 }
 
+/* ── CIRCUIT (projects/circuit.js) ──────────────────────────────────── */
+.projects-grid.circuit-active { display: none; }
+
 /* ── MOBILE ≤600px ───────────────────────────────────────────────────── */
 @media (max-width: 600px) {
     /* Single source of truth for the three project-card logo boxes below -

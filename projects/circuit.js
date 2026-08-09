@@ -95,4 +95,52 @@ function render(container, board, cellSize) {
 window.Circuit = window.Circuit || {};
 window.Circuit.render = render;
 
+function collectProjects() {
+    const grid = document.querySelector('.projects-grid');
+    if (!grid) return null;
+    const cards = Array.prototype.slice.call(grid.querySelectorAll('.project-card'));
+    const projects = cards.map(function (cardEl) {
+        return { slug: cardEl.id.replace(/-card$/, ''), dateStr: cardEl.getAttribute('data-date') || '0000-00', cardEl: cardEl };
+    });
+    projects.sort(function (a, b) { return a.dateStr < b.dateStr ? -1 : a.dateStr > b.dateStr ? 1 : 0; });
+    return { grid: grid, projects: projects };
+}
+
+function columnsForWidth(width) {
+    if (width < 480) return 7;
+    if (width < 900) return 10;
+    return 13;
+}
+
+function init() {
+    const stage = document.getElementById('circuit-stage');
+    const collected = collectProjects();
+    if (!stage || !collected || !collected.projects.length) return; // no-JS/degraded path: grid stays visible as-is
+
+    const columns = columnsForWidth(window.innerWidth);
+    const board = window.CircuitLayout.generate({
+        projectCount: collected.projects.length,
+        columns: columns,
+        rowsPerProject: 8,
+        seed: Math.floor(Math.random() * 2147483647),
+    });
+
+    const cellSize = window.innerWidth < 480 ? 26 : 32;
+    const rendered = render(stage, board, cellSize);
+
+    window.CIRCUIT_PROJECTS = collected.projects;
+    window.CIRCUIT_BOARD = board;
+    window.CIRCUIT_RENDERED = rendered;
+
+    collected.grid.classList.add('circuit-active');
+}
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+} else {
+    init();
+}
+
+window.Circuit.init = init;
+
 })();
