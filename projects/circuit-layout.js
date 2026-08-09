@@ -319,15 +319,21 @@ function growRandomWalk(occupancy, from, rng, columns, maxRow, minLen, maxLen) {
     for (const d of shuffled(STEP_DIRS, rng)) {
         const path = [{ row: from.row, col: from.col }];
         let cur = { row: from.row, col: from.col };
-        let ok = true;
         for (let i = 0; i < len; i++) {
             const nr = Math.max(0, Math.min(maxRow, cur.row + d.row));
             const nc = Math.max(0, Math.min(columns - 1, cur.col + d.col));
-            if ((nr === cur.row && nc === cur.col) || !canStep(occupancy, nr, nc, d.dir)) { ok = false; break; }
+            if (nr === cur.row && nc === cur.col) break; // hit the board edge — stop here
+            const entry = occupancy.get(cellKey(nr, nc));
+            if (entry && entry.dirs.has(d.dir)) break; // same-lane overlap — stop without taking this step
             cur = { row: nr, col: nc };
             path.push({ row: cur.row, col: cur.col });
+            // Touching a different trace: join it with this one step (flags
+            // a via) and stop growing, rather than crossing through it and
+            // continuing — branches read as organically grown until they
+            // hit something, not free to crisscross the whole board.
+            if (entry) break;
         }
-        if (ok && path.length > 1) {
+        if (path.length > 1) {
             // Mark the attachment cell itself too, not just the new cells —
             // otherwise a branch touching a straight run mid-segment never
             // registers a second direction there, so it never gets flagged
