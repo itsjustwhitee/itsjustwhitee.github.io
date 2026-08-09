@@ -254,14 +254,21 @@ function reduceToCorners(path) {
 // branch attachment points, so branches spread along a run's whole length
 // instead of only ever landing on turn points, which are disproportionately
 // likely to be a project node itself on a short board.
+// Each cell also carries dirIdx — the compass direction the trace is
+// running in at that point — so a branch attaching there can start off in
+// a direction related to its parent's local heading instead of a fully
+// independent one, which is what reads as an unrelated, sharp-looking
+// junction angle.
 function segmentCells(corners) {
     const cells = [];
-    for (let i = 0; i < corners.length; i++) {
-        if (i === 0) { cells.push(corners[i]); continue; }
+    if (corners.length < 2) { if (corners.length === 1) cells.push({ row: corners[0].row, col: corners[0].col, dirIdx: 0 }); return cells; }
+    for (let i = 1; i < corners.length; i++) {
         const a = corners[i - 1], b = corners[i];
         const dr = Math.sign(b.row - a.row), dc = Math.sign(b.col - a.col);
+        const dirIdx = compassIndexFor(dr, dc);
         const steps = Math.max(Math.abs(b.row - a.row), Math.abs(b.col - a.col));
-        for (let s = 1; s <= steps; s++) cells.push({ row: a.row + dr * s, col: a.col + dc * s });
+        if (i === 1) cells.push({ row: a.row, col: a.col, dirIdx: dirIdx });
+        for (let s = 1; s <= steps; s++) cells.push({ row: a.row + dr * s, col: a.col + dc * s, dirIdx: dirIdx });
     }
     return cells;
 }
@@ -308,6 +315,13 @@ const COMPASS_DIRS = [
     { row: -1, col: -1, dir: 'd2' },
 ];
 
+function compassIndexFor(dr, dc) {
+    for (let i = 0; i < COMPASS_DIRS.length; i++) {
+        if (COMPASS_DIRS[i].row === dr && COMPASS_DIRS[i].col === dc) return i;
+    }
+    return 0;
+}
+
 function shuffled(arr, rng) {
     const copy = arr.slice();
     for (let i = copy.length - 1; i > 0; i--) {
@@ -317,9 +331,20 @@ function shuffled(arr, rng) {
     return copy;
 }
 
-function growRandomWalk(occupancy, from, rng, columns, maxRow, minLen, maxLen) {
+function growRandomWalk(occupancy, from, rng, columns, maxRow, minLen, maxLen, parentDirIdx) {
     const len = randInt(rng, minLen, maxLen);
-    for (const startIdx of shuffled([0, 1, 2, 3, 4, 5, 6, 7], rng)) {
+    // Left fully free (all 8), a branch's starting heading has no relation
+    // to the direction the trace it's attaching to is actually running in
+    // at that point — no chamfering ever gets applied between two separate
+    // paths meeting at a junction, only within one path's own corners, so
+    // an unrelated departure angle reads as a sharp, disconnected-looking
+    // elbow right where it attaches. When the parent's local direction is
+    // known, restrict the start to a forward-facing arc off of it (same
+    // direction through ±90°) — never doubling back sharply against it.
+    const startCandidates = parentDirIdx === undefined
+        ? [0, 1, 2, 3, 4, 5, 6, 7]
+        : [parentDirIdx, (parentDirIdx + 1) % 8, (parentDirIdx + 7) % 8, (parentDirIdx + 2) % 8, (parentDirIdx + 6) % 8];
+    for (const startIdx of shuffled(startCandidates, rng)) {
         const path = [{ row: from.row, col: from.col }];
         const dirs = [];
         let cur = { row: from.row, col: from.col };
@@ -491,7 +516,7 @@ function generate(opts) {
         for (let i = 0; i < deadEndCount; i++) {
             if (countVias(occupancy) >= maxVias) break;
             const point = pickAttachmentPoint(segments);
-            const branch = growRandomWalk(occupancy, point, rng, columns, maxRow, 3, 6);
+            const branch = growRandomWalk(occupancy, point, rng, columns, maxRow, 3, 6, point.dirIdx);
             if (branch) {
                 segments.push({ corners: reduceToCorners(branch), traveled: true, kind: 'deadend' });
                 decorativeSpots.push(branch[branch.length - 1]);
@@ -521,7 +546,7 @@ function generate(opts) {
         if (countVias(occupancy) >= maxVias) break;
         const pool = segments.concat(untraveled);
         const point = pickAttachmentPoint(pool);
-        const branch = growRandomWalk(occupancy, point, rng, columns, maxRow, 3, 10);
+        const branch = growRandomWalk(occupancy, point, rng, columns, maxRow, 3, 10, point.dirIdx);
         if (branch) {
             untraveled.push({ corners: reduceToCorners(branch), traveled: false });
             if (rng() < 0.4) decorativeSpots.push(branch[branch.length - 1]);
