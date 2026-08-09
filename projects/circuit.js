@@ -134,6 +134,7 @@ function init() {
 
     collected.grid.classList.add('circuit-active');
     runChargeAnimation(rendered, board);
+    buildNodeButtons(stage, rendered, board, collected.projects, cellSize);
 }
 
 if (document.readyState === 'loading') {
@@ -245,6 +246,67 @@ document.addEventListener('circuit:charged', function (e) {
 });
 
 window.Circuit.onNodeExcite = onNodeExcite;
+
+function projectTitle(cardEl) {
+    const h3 = cardEl.querySelector('h3');
+    return h3 ? h3.textContent.trim() : cardEl.id;
+}
+
+function projectLogoSrc(cardEl) {
+    const img = cardEl.querySelector('.project-img[src]');
+    return img ? img.getAttribute('src') : null;
+}
+
+const boardIconEls = {}; // slug -> the small logo element inside that node's button
+
+function buildNodeButtons(stage, rendered, board, projects, cellSize) {
+    const overlay = document.createElement('div');
+    overlay.className = 'circuit-node-overlay';
+    overlay.style.width = rendered.width + 'px';
+
+    rendered.nodeElements.forEach(function (n) {
+        const project = projects[n.index];
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'circuit-node-btn';
+        btn.dataset.slug = project.slug;
+        btn.setAttribute('aria-label', projectTitle(project.cardEl));
+        btn.style.left = ((n.cx / rendered.width) * 100) + '%';
+        btn.style.top = n.cy + 'px';
+
+        if (project.slug !== 'justwhitee-notes') {
+            const logoSrc = projectLogoSrc(project.cardEl);
+            if (logoSrc) {
+                const icon = document.createElement('img');
+                icon.className = 'circuit-node-icon';
+                icon.src = logoSrc;
+                icon.alt = '';
+                icon.loading = 'lazy';
+                btn.appendChild(icon);
+                boardIconEls[project.slug] = icon;
+            }
+        } else {
+            const label = document.createElement('span');
+            label.className = 'circuit-node-icon circuit-node-icon-text';
+            label.textContent = 't';
+            btn.appendChild(label);
+            boardIconEls[project.slug] = label;
+        }
+
+        btn.addEventListener('click', function () {
+            document.dispatchEvent(new CustomEvent('circuit:node-activate', { detail: { slug: project.slug } }));
+        });
+
+        overlay.appendChild(btn);
+    });
+
+    stage.appendChild(overlay);
+    return overlay;
+}
+
+function getBoardIconEl(slug) { return boardIconEls[slug]; }
+function getNodeButtonEl(slug) { return document.querySelector('.circuit-node-btn[data-slug="' + slug + '"]'); }
+window.Circuit.getBoardIconEl = getBoardIconEl;
 
 window.Circuit.init = init;
 

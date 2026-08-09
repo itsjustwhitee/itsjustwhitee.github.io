@@ -82,3 +82,52 @@
 .circuit-node.is-excited .circuit-node-fill {
     filter: drop-shadow(0 0 10px rgba(var(--accent-bright-rgb), 0.9));
 }
+
+.circuit-node-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    pointer-events: none;
+}
+
+.circuit-node-btn {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    pointer-events: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+}
+
+.circuit-node-btn:focus-visible {
+    outline: 2px solid var(--accent-bright);
+    outline-offset: 3px;
+    border-radius: 50%;
+}
+
+.circuit-node-icon {
+    width: 28px;
+    height: 28px;
+    object-fit: contain;
+    pointer-events: none;
+    filter: brightness(0.9);
+}
+
+.circuit-node-icon-text {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-style: italic;
+    font-size: 1.2rem;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
