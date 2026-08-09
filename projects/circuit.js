@@ -135,6 +135,7 @@ function init() {
     collected.grid.classList.add('circuit-active');
     runChargeAnimation(rendered, board);
     buildNodeButtons(stage, rendered, board, collected.projects, cellSize);
+    wireHoverPopups(collected.projects);
 }
 
 if (document.readyState === 'loading') {
@@ -311,6 +312,58 @@ function getBoardIconEl(slug) { return boardIconEls[slug]; }
 // nothing for edgecv4safety/sliceceipt, whose icons load asynchronously later.
 function getNodeButtonEl(slug) { return document.querySelector('.circuit-node-btn[data-slug="' + slug + '"]'); }
 window.Circuit.getBoardIconEl = getBoardIconEl;
+
+let openPanel = null; // { type: 'popup'|'window', slug, panelEl, cardEl, originalParent, originalNextSibling, triggerBtn }
+
+function closeAnyOpenPanel() {
+    if (!openPanel) return;
+    const { cardEl, originalParent, originalNextSibling, panelEl } = openPanel;
+    originalParent.insertBefore(cardEl, originalNextSibling);
+    panelEl.remove();
+    openPanel = null;
+}
+
+function isPointerFine() {
+    return window.matchMedia && window.matchMedia('(pointer: fine)').matches;
+}
+
+function openPopup(project, triggerBtn) {
+    if (openPanel && openPanel.slug === project.slug && openPanel.type === 'popup') return;
+    closeAnyOpenPanel();
+
+    const panel = document.createElement('div');
+    panel.className = 'circuit-popup';
+    panel.setAttribute('role', 'tooltip');
+
+    const originalParent = project.cardEl.parentNode;
+    const originalNextSibling = project.cardEl.nextSibling;
+    panel.appendChild(project.cardEl);
+    document.body.appendChild(panel);
+
+    const btnRect = triggerBtn.getBoundingClientRect();
+    const panelRect = panel.getBoundingClientRect();
+    let left = btnRect.right + 12;
+    if (left + panelRect.width > window.innerWidth - 12) left = btnRect.left - panelRect.width - 12;
+    if (left < 12) left = 12;
+    let top = btnRect.top + window.scrollY - panelRect.height / 2 + btnRect.height / 2;
+    top = Math.max(12 + window.scrollY, Math.min(top, document.documentElement.scrollHeight - panelRect.height - 12));
+    panel.style.left = left + 'px';
+    panel.style.top = top + 'px';
+
+    openPanel = { type: 'popup', slug: project.slug, panelEl: panel, cardEl: project.cardEl, originalParent, originalNextSibling, triggerBtn };
+}
+
+function wireHoverPopups(projects) {
+    if (!isPointerFine()) return;
+    projects.forEach(function (project) {
+        const btn = getNodeButtonEl(project.slug);
+        if (!btn) return;
+        btn.addEventListener('mouseenter', function () { openPopup(project, btn); });
+        btn.addEventListener('mouseleave', function () {
+            if (openPanel && openPanel.type === 'popup' && openPanel.slug === project.slug) closeAnyOpenPanel();
+        });
+    });
+}
 
 window.Circuit.init = init;
 
