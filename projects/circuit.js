@@ -187,7 +187,7 @@ function runChargeAnimation(rendered, board) {
     }, CHARGE_DURATION_MS + 100);
 }
 
-const FLOW_SPEED_PX_PER_S = 60;
+const FLOW_SPEED_PX_PER_S = 24 / 1.4; // dash pattern total (6+18) / circuit-flow keyframe period, circuit.css
 const FLOW_PERIOD_MS = 1400; // must match the circuit-flow keyframe duration in circuit.css
 
 function startContinuousFlow(rendered) {
