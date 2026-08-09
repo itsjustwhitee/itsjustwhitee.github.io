@@ -349,6 +349,13 @@ function growRandomWalk(occupancy, from, rng, columns, maxRow, minLen, maxLen, p
         const dirs = [];
         let cur = { row: from.row, col: from.col };
         let dirIdx = startIdx;
+        // Once the branch establishes a vertical trend (descending or
+        // ascending), a bend may only ease it toward horizontal or hold it —
+        // never flip it. Enough small 45° bends compounding in the same
+        // rotational direction can otherwise walk a branch's heading all the
+        // way around to its own reverse, producing a hook that climbs back
+        // over itself instead of reading as one consistent stroke.
+        let verticalSign = Math.sign(COMPASS_DIRS[dirIdx].row);
         for (let i = 0; i < len; i++) {
             // Same organic-bend model as the main router: mostly hold the
             // current heading, occasionally ease 45° either side — a branch
@@ -358,7 +365,17 @@ function growRandomWalk(occupancy, from, rng, columns, maxRow, minLen, maxLen, p
             // against it. Kept rare and delayed past the first couple of
             // steps — these branches are short, so a high chance here reads
             // as a wiggly snake, not an occasional gentle bend.
-            if (i > 1 && rng() < 0.15) dirIdx = rng() < 0.5 ? (dirIdx + 1) % 8 : (dirIdx + 7) % 8;
+            if (i > 1 && rng() < 0.15) {
+                const bendCandidates = [(dirIdx + 1) % 8, (dirIdx + 7) % 8].filter(function (idx) {
+                    const s = Math.sign(COMPASS_DIRS[idx].row);
+                    return verticalSign === 0 || s === 0 || s === verticalSign;
+                });
+                if (bendCandidates.length) {
+                    dirIdx = bendCandidates[Math.floor(rng() * bendCandidates.length)];
+                    const s = Math.sign(COMPASS_DIRS[dirIdx].row);
+                    if (s !== 0) verticalSign = s;
+                }
+            }
             const d = COMPASS_DIRS[dirIdx];
             const nr = Math.max(0, Math.min(maxRow, cur.row + d.row));
             const nc = Math.max(0, Math.min(columns - 1, cur.col + d.col));
@@ -475,7 +492,7 @@ function generate(opts) {
     // add — without it, enough dead-end/untraveled branches will eventually
     // cross something no matter how sparse the board, reading as visual
     // clutter rather than a clean board.
-    const maxVias = projectCount * 9;
+    const maxVias = projectCount * 6;
 
     // A global cap alone still lets crossings bunch up around one busy spot
     // (typically a node, where several segments already meet) — this steers
@@ -497,11 +514,11 @@ function generate(opts) {
     // when that whole segment runs through it.
     function pickAttachmentPoint(pool) {
         let point = null;
-        for (let attempt = 0; attempt < 12; attempt++) {
+        for (let attempt = 0; attempt < 20; attempt++) {
             const seg = pool[randInt(rng, 0, pool.length - 1)];
             const cells = segmentCells(seg.corners);
             point = cells[randInt(rng, 0, cells.length - 1)];
-            if (localViaCount(point, 2) < 2) break;
+            if (localViaCount(point, 3) < 1) break;
         }
         return point;
     }
