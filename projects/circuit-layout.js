@@ -87,6 +87,8 @@ function routeOrthogonal(occupancy, from, to, rng, columns, maxRow) {
         path.push({ row: cur.row, col: cur.col });
     }
 
+    let lastWasDiagonal = false;
+
     while (cur.row !== to.row || cur.col !== to.col) {
         steps++;
         const dRow = to.row - cur.row;
@@ -107,38 +109,43 @@ function routeOrthogonal(occupancy, from, to, rng, columns, maxRow) {
         // Past budget: stop trying alternatives, force straight toward `to`
         // every remaining iteration — still one cell at a time, always
         // shrinking distance, never an unconstrained beeline.
-        if (steps > maxSteps) { forceStep(primary.row, primary.col, primary.dir); continue; }
+        if (steps > maxSteps) { forceStep(primary.row, primary.col, primary.dir); lastWasDiagonal = false; continue; }
 
         // A diagonal step closes both the row and col gap at once, so it's
         // tried as a first-class move whenever both are open — this is what
         // produces real 45° runs instead of only tiny post-hoc chamfers at
-        // orthogonal turns.
+        // orthogonal turns. The choice is sticky (much likelier to continue
+        // diagonal once started, or to keep going orthogonal once not) so a
+        // route reads as a few long clean runs, not a jittery diagonal/
+        // orthogonal stitch re-decided every single cell.
         let diag = null;
         if (dRow !== 0 && dCol !== 0) {
             const dr = Math.sign(dRow), dc = Math.sign(dCol);
             diag = { row: cur.row + dr, col: cur.col + dc, dir: dr === dc ? 'd2' : 'd1' };
         }
-        if (diag && rng() < 0.55 && tryStep(diag.row, diag.col, diag.dir)) continue;
+        const diagChance = lastWasDiagonal ? 0.9 : 0.4;
+        if (diag && rng() < diagChance && tryStep(diag.row, diag.col, diag.dir)) { lastWasDiagonal = true; continue; }
 
-        if (tryStep(primary.row, primary.col, primary.dir)) continue;
+        if (tryStep(primary.row, primary.col, primary.dir)) { lastWasDiagonal = false; continue; }
 
         const secondary = axis === 'row' && dCol !== 0 ? { row: cur.row, col: cur.col + Math.sign(dCol), dir: 'h' }
             : axis === 'col' && dRow !== 0 ? { row: cur.row + Math.sign(dRow), col: cur.col, dir: 'v' }
             : null;
-        if (secondary && tryStep(secondary.row, secondary.col, secondary.dir)) continue;
+        if (secondary && tryStep(secondary.row, secondary.col, secondary.dir)) { lastWasDiagonal = false; continue; }
 
-        if (diag && tryStep(diag.row, diag.col, diag.dir)) continue;
+        if (diag && tryStep(diag.row, diag.col, diag.dir)) { lastWasDiagonal = true; continue; }
 
         // Both axes and the diagonal blocked — sidestep perpendicular around the obstruction.
         const sideDir = axis === 'row' ? 'h' : 'v';
         const sideA = sideDir === 'h' ? { row: cur.row, col: cur.col + 1, dir: 'h' } : { row: cur.row + 1, col: cur.col, dir: 'v' };
         const sideB = sideDir === 'h' ? { row: cur.row, col: cur.col - 1, dir: 'h' } : { row: cur.row - 1, col: cur.col, dir: 'v' };
-        if (tryStep(sideA.row, sideA.col, sideA.dir)) continue;
-        if (tryStep(sideB.row, sideB.col, sideB.dir)) continue;
+        if (tryStep(sideA.row, sideA.col, sideA.dir)) { lastWasDiagonal = false; continue; }
+        if (tryStep(sideB.row, sideB.col, sideB.dir)) { lastWasDiagonal = false; continue; }
 
         // Boxed in on all sides this iteration — force the primary move; the
         // loop re-evaluates both axes fresh next iteration either way.
         forceStep(primary.row, primary.col, primary.dir);
+        lastWasDiagonal = false;
     }
 
     return path;
