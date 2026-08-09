@@ -184,7 +184,18 @@ const FLOW_PERIOD_MS = 1200; // must match the circuit-flow keyframe duration in
 
 function startContinuousFlow(rendered) {
     if (window.prefersReducedMotion) return;
-    rendered.traveledPaths.forEach(function (t) { t.el.classList.add('is-flowing'); });
+    // A segment's flow-streak overlay must switch on only once the pulse has
+    // actually reached its start point — same startDistance-based wave as
+    // is-lit in runChargeAnimation — not globally the moment charging ends,
+    // which read as every output already streaming before its input node
+    // had actually been reached.
+    const totalDistance = rendered.traveledPaths.reduce(function (max, t) {
+        return Math.max(max, t.startDistance + t.length);
+    }, 0) || 1;
+    rendered.traveledPaths.forEach(function (t) {
+        const delay = (t.startDistance / totalDistance) * CHARGE_DURATION_MS;
+        setTimeout(function () { t.el.classList.add('is-flowing'); }, delay);
+    });
 }
 
 document.addEventListener('circuit:charged', function (e) {

@@ -324,10 +324,22 @@ function generate(opts) {
         }
     }
 
+    function countVias(occ) {
+        let n = 0;
+        occ.forEach(function (e) { if (e.via) n++; });
+        return n;
+    }
+    // Caps how many crossings the decorative branches below are allowed to
+    // add — without it, enough dead-end/untraveled branches will eventually
+    // cross something no matter how sparse the board, reading as visual
+    // clutter rather than a clean board.
+    const maxVias = projectCount * 9;
+
     const decorativeSpots = [];
     if (segments.length > 0) {
         const deadEndCount = randInt(rng, projectCount * 3, projectCount * 6);
         for (let i = 0; i < deadEndCount; i++) {
+            if (countVias(occupancy) >= maxVias) break;
             const seg = segments[randInt(rng, 0, segments.length - 1)];
             const point = seg.corners[randInt(rng, 0, seg.corners.length - 1)];
             const branch = growRandomWalk(occupancy, point, rng, columns, maxRow, 3, 6);
@@ -357,6 +369,7 @@ function generate(opts) {
     const untraveled = [];
     const untraveledCount = randInt(rng, projectCount * 8, projectCount * 14);
     for (let i = 0; i < untraveledCount; i++) {
+        if (countVias(occupancy) >= maxVias) break;
         const pool = segments.concat(untraveled);
         const seg = pool[randInt(rng, 0, pool.length - 1)];
         const point = seg.corners[randInt(rng, 0, seg.corners.length - 1)];
