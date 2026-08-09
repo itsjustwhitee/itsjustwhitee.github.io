@@ -126,11 +126,8 @@ test('many routes through a congested shared grid never reuse a cell in the same
 });
 
 test('routeOrthogonal self-corrects a column drift introduced while closing the final row gap (regression)', () => {
-    // Forces a dead end at (2,5), then a sidestep from (3,5) to (3,6) once
-    // only the row gap remains open — the exact drift a two-phase tail
-    // (col-closing loop, then row-closing loop) could introduce and never
-    // revisit. Verified against a pre-fix two-loop implementation: it ends
-    // at {row:5,col:6}. The single merged loop must land on {row:5,col:5}.
+    // Forces a dead end at (2,5), then a sidestep to (3,6) once only the row
+    // gap remains — the drift a two-phase tail could leave uncorrected.
     const occ = new Map();
     const block = (row, col, dir) => occ.set(CircuitLayout.cellKey(row, col), { dirs: new Set([dir]), via: false });
     block(3, 5, 'v');
