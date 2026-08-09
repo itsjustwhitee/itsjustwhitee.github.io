@@ -136,6 +136,7 @@ function init() {
     runChargeAnimation(rendered, board);
     buildNodeButtons(stage, rendered, board, collected.projects, cellSize);
     wireHoverPopups(collected.projects);
+    wireActivation(collected.projects);
 }
 
 if (document.readyState === 'loading') {
@@ -362,6 +363,53 @@ function wireHoverPopups(projects) {
         btn.addEventListener('mouseleave', function () {
             if (openPanel && openPanel.type === 'popup' && openPanel.slug === project.slug) closeAnyOpenPanel();
         });
+    });
+}
+
+function openWindow(project, triggerBtn) {
+    closeAnyOpenPanel();
+
+    const backdrop = document.createElement('div');
+    backdrop.className = 'circuit-window-backdrop';
+
+    const panel = document.createElement('div');
+    panel.className = 'circuit-window';
+    panel.setAttribute('role', 'dialog');
+    panel.setAttribute('aria-modal', 'true');
+
+    const closeBtn = document.createElement('button');
+    closeBtn.type = 'button';
+    closeBtn.className = 'circuit-window-close';
+    closeBtn.setAttribute('aria-label', 'Close');
+    closeBtn.textContent = '×';
+    closeBtn.addEventListener('click', closeAnyOpenPanel);
+
+    const originalParent = project.cardEl.parentNode;
+    const originalNextSibling = project.cardEl.nextSibling;
+    panel.appendChild(closeBtn);
+    panel.appendChild(project.cardEl);
+    backdrop.appendChild(panel);
+    document.body.appendChild(backdrop);
+
+    backdrop.addEventListener('mousedown', function (e) {
+        if (e.target === backdrop) closeAnyOpenPanel();
+    });
+
+    openPanel = { type: 'window', slug: project.slug, panelEl: backdrop, cardEl: project.cardEl, originalParent, originalNextSibling, triggerBtn };
+
+    closeBtn.focus();
+}
+
+function wireActivation(projects) {
+    document.addEventListener('circuit:node-activate', function (e) {
+        const project = projects.filter(function (p) { return p.slug === e.detail.slug; })[0];
+        if (!project) return;
+        const btn = getNodeButtonEl(project.slug);
+        openWindow(project, btn);
+    });
+
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && openPanel) closeAnyOpenPanel();
     });
 }
 
