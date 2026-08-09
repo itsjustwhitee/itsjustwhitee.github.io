@@ -192,7 +192,7 @@
     transition: transform 0.5s ease, filter 0.5s ease;
     filter: brightness(0.92);
 }
-.project-card:hover .project-img { transform: scale(1.04); filter: brightness(1); }
+.projects-grid .project-card:hover .project-img { transform: scale(1.04); filter: brightness(1); }
 .project-img-placeholder {
     width: 100%; height: 190px;
     background: linear-gradient(135deg, rgba(var(--accent-rgb),0.2) 0%, rgba(0,0,0,0.35) 100%);

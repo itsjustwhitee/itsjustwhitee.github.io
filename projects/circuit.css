@@ -24,7 +24,7 @@
 
 .circuit-path-untraveled {
     stroke: rgba(var(--accent-rgb), 0.18);
-    stroke-width: 2;
+    stroke-width: 3.5;
 }
 
 .circuit-path-traveled {
@@ -35,22 +35,40 @@
 /* Stroke-width hierarchy (spec Routing rules): main path thickest, forks
    thinner, dead-ends thinnest-of-the-traveled — all still heavier than the
    untraveled network above, so "what's conducting" reads at a glance. */
-.circuit-path-main    { stroke-width: 4; }
-.circuit-path-fork    { stroke-width: 3; }
-.circuit-path-deadend { stroke-width: 2.5; }
+.circuit-path-main    { stroke-width: 7; }
+.circuit-path-fork    { stroke-width: 6; }
+.circuit-path-deadend { stroke-width: 5; }
 
-.circuit-path-traveled.is-lit {
+.circuit-segment.is-lit .circuit-path-traveled {
     stroke: var(--accent-bright);
-    filter: drop-shadow(0 0 4px rgba(var(--accent-bright-rgb), 0.6));
+    filter: drop-shadow(0 0 5px rgba(var(--accent-bright-rgb), 0.65));
 }
 
-.circuit-path-traveled.is-flowing {
-    stroke-dasharray: 6 18;
-    animation: circuit-flow 1.4s linear infinite;
+/* The base line above stays solid once lit — a steady, thick "live wire."
+   This overlay is the separate bright streak that travels along it,
+   reading as energy moving through the wire rather than the wire itself
+   blinking. Same geometry (identical `d`), drawn on top. */
+.circuit-flow-overlay {
+    fill: none;
+    stroke: #fff;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 2.5;
+    opacity: 0;
+}
+
+.circuit-segment.is-lit .circuit-flow-overlay {
+    opacity: 0.9;
+}
+
+.circuit-segment.is-flowing .circuit-flow-overlay {
+    stroke-dasharray: 26 70;
+    filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.9)) drop-shadow(0 0 14px rgba(var(--accent-bright-rgb), 0.8));
+    animation: circuit-flow 1.6s linear infinite;
 }
 
 @keyframes circuit-flow {
-    to { stroke-dashoffset: -24; }
+    to { stroke-dashoffset: -96; }
 }
 
 .circuit-via {
@@ -156,9 +174,10 @@
 .circuit-popup {
     position: absolute;
     z-index: 50;
-    width: min(380px, 90vw);
-    max-height: 80vh;
-    overflow: auto;
+    width: min(400px, 90vw);
+    max-height: 82vh;
+    overflow-y: auto;
+    scrollbar-gutter: stable;
     border-radius: var(--radius);
     box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), 0 0 24px rgba(var(--accent-bright-rgb), 0.25);
 }
@@ -166,6 +185,19 @@
 .circuit-popup .project-card {
     width: 100%;
 }
+
+/* The featured card's 2-column layout needs real width (~1000px, its
+   natural grid size) to look right — a hover popup never has that much
+   room, so it always gets the same single-column layout the site already
+   uses below 900px viewport width, rather than squeezing 2 columns into
+   400px. */
+.circuit-popup .project-card.featured {
+    grid-column: span 1;
+    display: flex;
+    flex-direction: column;
+}
+.circuit-popup .project-card.featured .project-img-wrap { height: auto; }
+.circuit-popup .project-card.featured .project-img { height: 200px; min-height: unset; padding: 16px; }
 
 .circuit-window-backdrop {
     position: fixed;
@@ -180,11 +212,18 @@
 
 .circuit-window {
     position: relative;
-    width: min(92vw, 960px);
+    width: min(92vw, 560px);
     max-height: 90vh;
-    overflow: auto;
+    overflow-y: auto;
+    scrollbar-gutter: stable;
     border-radius: var(--radius);
     box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6), 0 0 32px rgba(var(--accent-bright-rgb), 0.3);
+}
+
+/* Featured cards (currently just EdgeCV4Safety) keep their original 2-column
+   grid treatment, which needs real width to look right. */
+.circuit-window:has(.project-card.featured) {
+    width: min(92vw, 960px);
 }
 
 .circuit-window .project-card {

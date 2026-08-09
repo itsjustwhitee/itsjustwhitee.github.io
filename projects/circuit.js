@@ -53,10 +53,15 @@ function render(container, board, cellSize) {
         const pts = window.CircuitLayout.chamferCorners(seg.corners, cellSize, CHAMFER);
         const d = window.CircuitLayout.pointsToPathD(pts);
         const length = pts.reduce(function (sum, p, idx) { return idx === 0 ? 0 : sum + Math.hypot(p.x - pts[idx - 1].x, p.y - pts[idx - 1].y); }, 0);
-        // seg.kind drives stroke-width tiering in circuit.css.
-        const pathEl = svgEl('path', { d: d, class: 'circuit-path circuit-path-traveled circuit-path-' + seg.kind, 'data-length': length.toFixed(1) });
-        traveledGroup.appendChild(pathEl);
-        return { el: pathEl, length: length, corners: seg.corners };
+        // seg.kind drives stroke-width tiering in circuit.css. The group is
+        // what gets is-lit/is-flowing toggled — both children style off it.
+        const segGroup = svgEl('g', { class: 'circuit-segment circuit-path-' + seg.kind });
+        const baseEl = svgEl('path', { d: d, class: 'circuit-path circuit-path-traveled circuit-path-' + seg.kind, 'data-length': length.toFixed(1) });
+        const flowEl = svgEl('path', { d: d, class: 'circuit-flow-overlay' });
+        segGroup.appendChild(baseEl);
+        segGroup.appendChild(flowEl);
+        traveledGroup.appendChild(segGroup);
+        return { el: segGroup, length: length, corners: seg.corners };
     });
     svg.appendChild(traveledGroup);
 

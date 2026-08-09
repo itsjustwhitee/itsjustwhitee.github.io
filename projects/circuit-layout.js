@@ -234,6 +234,16 @@ function generate(opts) {
     const occupancy = new Map();
 
     const segments = [];
+
+    const leadIn = [{ row: nodes[0].row, col: nodes[0].col }];
+    let leadCur = { row: nodes[0].row, col: nodes[0].col };
+    while (leadCur.row > 0 && canStep(occupancy, leadCur.row - 1, leadCur.col, 'v')) {
+        leadCur = { row: leadCur.row - 1, col: leadCur.col };
+        markStep(occupancy, leadCur.row, leadCur.col, 'v');
+        leadIn.push({ row: leadCur.row, col: leadCur.col });
+    }
+    if (leadIn.length > 1) segments.push({ corners: reduceToCorners(leadIn), traveled: true, kind: 'main' });
+
     for (let i = 0; i < nodes.length - 1; i++) {
         const rawPath = routeOrthogonal(occupancy, nodes[i], nodes[i + 1], rng, columns, maxRow);
         segments.push({ corners: reduceToCorners(rawPath), traveled: true, kind: 'main' });
@@ -248,7 +258,7 @@ function generate(opts) {
 
     const decorativeSpots = [];
     if (segments.length > 0) {
-        const deadEndCount = randInt(rng, projectCount, projectCount * 2);
+        const deadEndCount = randInt(rng, projectCount * 2, projectCount * 4);
         for (let i = 0; i < deadEndCount; i++) {
             const seg = segments[randInt(rng, 0, segments.length - 1)];
             const point = seg.corners[randInt(rng, 0, seg.corners.length - 1)];
@@ -260,11 +270,21 @@ function generate(opts) {
         }
     }
 
-    const untraveledPaths = generateUntraveledNetwork(occupancy, columns, maxRow, rng, projectCount * 2, 4, 10);
-    const untraveled = untraveledPaths.map(function (path) { return { corners: reduceToCorners(path), traveled: false }; });
-    untraveled.forEach(function (t) {
-        if (rng() < 0.4) decorativeSpots.push(t.corners[randInt(rng, 0, t.corners.length - 1)]);
-    });
+    // Untraveled branches attach to any point already on the graph (traveled
+    // or untraveled), so the whole board stays one connected network — only
+    // whether current reaches a given branch differs, never its connectivity.
+    const untraveled = [];
+    const untraveledCount = randInt(rng, projectCount * 4, projectCount * 7);
+    for (let i = 0; i < untraveledCount; i++) {
+        const pool = segments.concat(untraveled);
+        const seg = pool[randInt(rng, 0, pool.length - 1)];
+        const point = seg.corners[randInt(rng, 0, seg.corners.length - 1)];
+        const branch = growRandomWalk(occupancy, point, rng, columns, maxRow, 3, 8);
+        if (branch) {
+            untraveled.push({ corners: reduceToCorners(branch), traveled: false });
+            if (rng() < 0.4) decorativeSpots.push(branch[branch.length - 1]);
+        }
+    }
 
     const vias = [];
     occupancy.forEach(function (entry, key) {
