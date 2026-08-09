@@ -309,10 +309,11 @@ let openPanel = null; // { type: 'popup'|'window', slug, panelEl, cardEl, origin
 
 function closeAnyOpenPanel() {
     if (!openPanel) return;
-    const { cardEl, originalParent, originalNextSibling, panelEl } = openPanel;
+    const { cardEl, originalParent, originalNextSibling, panelEl, triggerBtn } = openPanel;
     originalParent.insertBefore(cardEl, originalNextSibling);
     panelEl.remove();
     openPanel = null;
+    if (triggerBtn) triggerBtn.focus();
 }
 
 function isPointerFine() {
@@ -400,7 +401,18 @@ function wireActivation(projects) {
     });
 
     document.addEventListener('keydown', function (e) {
-        if (e.key === 'Escape' && openPanel) closeAnyOpenPanel();
+        if (!openPanel) return;
+        if (e.key === 'Escape') { closeAnyOpenPanel(); return; }
+        if (e.key !== 'Tab' || openPanel.type !== 'window') return;
+
+        const focusable = Array.prototype.slice.call(
+            openPanel.panelEl.querySelectorAll('a[href], button, input, select, textarea, [tabindex]:not([tabindex="-1"])')
+        ).filter(function (el) { return el.offsetParent !== null; });
+        if (!focusable.length) return;
+
+        const first = focusable[0], last = focusable[focusable.length - 1];
+        if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+        else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
     });
 }
 
