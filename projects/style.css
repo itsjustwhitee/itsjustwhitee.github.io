@@ -292,6 +292,9 @@
     .project-card.featured .project-img-placeholder { height: var(--mobile-logo-size); min-height: unset; font-size: 1.8rem; }
     /* #edgecv-container's own min-height:250px (id selector) otherwise clamps it back up past --mobile-logo-size above - both now derive from the same variable so they can't drift apart again */
     #edgecv-container { min-height: var(--mobile-logo-size); }
+    /* justwhitee-notes' desktop-only ID rules above (160px wrap, 90px width:auto glyph) outrank the class-based mobile rules on specificity - reset back to the shared box here */
+    #justwhitee-notes-card .project-img-wrap { height: var(--mobile-logo-size); }
+    #justwhitee-notes-card .project-img { width: 100%; height: 100%; padding: 14px; }
     .project-card h3 { font-size: 1.05rem; }
     .project-card .tagline { font-size: 0.8rem; }
     .project-card .proj-desc { font-size: 0.85rem; }
