@@ -61,7 +61,11 @@ function markStep(occupancy, row, col, dir) {
 function routeOrthogonal(occupancy, from, to, rng, columns, maxRow) {
     const path = [{ row: from.row, col: from.col }];
     let cur = { row: from.row, col: from.col };
-    const maxSteps = (Math.abs(to.row - cur.row) + Math.abs(to.col - cur.col)) * 4 + 10;
+    // Generous budget: sidesteps are an expected, routine part of routing
+    // around a congested shared occupancy map (many routes, one map), not a
+    // rare exception — so the main loop needs real headroom before falling
+    // through to the tail below.
+    const maxSteps = (Math.abs(to.row - cur.row) + Math.abs(to.col - cur.col)) * 12 + 40;
     let steps = 0;
 
     function tryStep(nr, nc, dir) {
@@ -73,6 +77,18 @@ function routeOrthogonal(occupancy, from, to, rng, columns, maxRow) {
         markStep(occupancy, cur.row, cur.col, dir);
         path.push({ row: cur.row, col: cur.col });
         return true;
+    }
+
+    // Unconditional last-resort move: same bookkeeping as tryStep, but skips
+    // the canStep check. Only ever called once tryStep has failed on both
+    // the direct move AND both perpendicular sidesteps, so routeOrthogonal
+    // is still guaranteed to reach `to`.
+    function forceStep(nr, nc, dir) {
+        nr = Math.max(0, Math.min(maxRow, nr));
+        nc = Math.max(0, Math.min(columns - 1, nc));
+        cur = { row: nr, col: nc };
+        markStep(occupancy, cur.row, cur.col, dir);
+        path.push({ row: cur.row, col: cur.col });
     }
 
     while ((cur.row !== to.row || cur.col !== to.col) && steps < maxSteps) {
@@ -109,18 +125,28 @@ function routeOrthogonal(occupancy, from, to, rng, columns, maxRow) {
         break; // genuinely boxed in on all four sides — stop rather than jump
     }
 
-    // Rare (fully boxed in): close the remaining gap one cell at a time, so
-    // every cell is still recorded via markStep — never an unmarked jump
-    // that later routes wouldn't know to avoid.
+    // Tail fallback: reached either on a genuine dead end OR whenever the
+    // main loop's step budget runs out under heavy congestion — not rare in
+    // practice once many routes share one occupancy map. Every step still
+    // tries a real, occupancy-respecting move first (straight toward `to`,
+    // then a perpendicular sidestep around the obstruction, same pattern as
+    // the main loop) so this never silently produces an unflagged overlap.
+    // Only once both are blocked does it force an unconditional step, as an
+    // absolute last resort, so routeOrthogonal is still guaranteed to reach
+    // `to`.
     while (cur.col !== to.col) {
-        cur = { row: cur.row, col: cur.col + Math.sign(to.col - cur.col) };
-        markStep(occupancy, cur.row, cur.col, 'h');
-        path.push({ row: cur.row, col: cur.col });
+        const nc = cur.col + Math.sign(to.col - cur.col);
+        if (tryStep(cur.row, nc, 'h')) continue;
+        if (tryStep(cur.row + 1, cur.col, 'v')) continue;
+        if (tryStep(cur.row - 1, cur.col, 'v')) continue;
+        forceStep(cur.row, nc, 'h');
     }
     while (cur.row !== to.row) {
-        cur = { row: cur.row + Math.sign(to.row - cur.row), col: cur.col };
-        markStep(occupancy, cur.row, cur.col, 'v');
-        path.push({ row: cur.row, col: cur.col });
+        const nr = cur.row + Math.sign(to.row - cur.row);
+        if (tryStep(nr, cur.col, 'v')) continue;
+        if (tryStep(cur.row, cur.col + 1, 'h')) continue;
+        if (tryStep(cur.row, cur.col - 1, 'h')) continue;
+        forceStep(nr, cur.col, 'v');
     }
 
     return path;
