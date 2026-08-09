@@ -166,6 +166,33 @@
 .circuit-node-icon.is-flapping #sliceceipt-back-board  { transform: translate(-12px, -9px) rotate(-7deg); }
 .circuit-node-icon.is-flapping #sliceceipt-front-board { transform: translate(12px, 9px) rotate(7deg); }
 
+/* scrollbar-gutter:stable always reserves the track's width, but with no
+   custom styling that reserved strip shows the browser's default (usually
+   light) scrollbar track against this dark panel — reading as a stray
+   border down the right edge even before anything scrolls. */
+.circuit-popup,
+.circuit-window {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(var(--accent-bright-rgb), 0.35) transparent;
+}
+.circuit-popup::-webkit-scrollbar,
+.circuit-window::-webkit-scrollbar {
+    width: 8px;
+}
+.circuit-popup::-webkit-scrollbar-track,
+.circuit-window::-webkit-scrollbar-track {
+    background: transparent;
+}
+.circuit-popup::-webkit-scrollbar-thumb,
+.circuit-window::-webkit-scrollbar-thumb {
+    background: rgba(var(--accent-bright-rgb), 0.35);
+    border-radius: 4px;
+}
+.circuit-popup::-webkit-scrollbar-thumb:hover,
+.circuit-window::-webkit-scrollbar-thumb:hover {
+    background: rgba(var(--accent-bright-rgb), 0.55);
+}
+
 .circuit-popup {
     position: absolute;
     z-index: 50;
@@ -191,8 +218,17 @@
     display: flex;
     flex-direction: column;
 }
-.circuit-popup .project-card.featured .project-img-wrap { height: auto; }
-.circuit-popup .project-card.featured .project-img { height: 200px; min-height: unset; padding: 16px; }
+/* Targets project-img-wrap directly (not .project-img) — EdgeCV4Safety's
+   image is injected SVG (svg-inject mode), which never carries the
+   .project-img class the plain <img> cards use, so a rule scoped to that
+   class silently never matched here and the image rendered at its full
+   intrinsic size instead of the intended compact height. */
+.circuit-popup .project-card.featured .project-img-wrap {
+    height: 200px;
+    padding: 16px;
+    box-sizing: border-box;
+}
+.circuit-popup .project-card.featured .project-img { height: 100%; min-height: unset; padding: 0; }
 
 .circuit-window-backdrop {
     position: fixed;
