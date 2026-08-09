@@ -136,6 +136,7 @@ function init() {
     buildNodeButtons(stage, rendered, board, collected.projects, cellSize);
     wireHoverPopups(collected.projects);
     wireActivation(collected.projects);
+    initRackControllerExcite();
 }
 
 if (document.readyState === 'loading') {
@@ -413,6 +414,26 @@ function wireActivation(projects) {
         const first = focusable[0], last = focusable[focusable.length - 1];
         if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
         else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+    });
+}
+
+function initRackControllerExcite() {
+    const icon = getBoardIconEl('rackcontroller');
+    if (!icon || window.prefersReducedMotion) return;
+    const BASE_SPEED = 0.5, MAX_SPEED = 3.2, DECAY = 0.06;
+    let angle = 0, speed = BASE_SPEED, target = BASE_SPEED;
+
+    function spin() {
+        speed += (target - speed) * DECAY;
+        angle += speed;
+        icon.style.transform = 'rotate(' + angle + 'deg)';
+        requestAnimationFrame(spin);
+    }
+    requestAnimationFrame(spin);
+
+    window.Circuit.onNodeExcite('rackcontroller', function () {
+        target = MAX_SPEED;
+        setTimeout(function () { target = BASE_SPEED; }, 500);
     });
 }
 
