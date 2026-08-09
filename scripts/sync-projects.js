@@ -121,7 +121,7 @@ function renderCard(project) {
     const badgeClass = project.badgeVariant ? ' ' + project.badgeVariant : '';
     const taglineAttr = project.taglineHtml ? 'data-i18n-html' : 'data-i18n';
 
-    return '            <div class="project-card' + featuredClass + ' reveal" id="' + project.slug + '-card">\n' +
+    return '            <div class="project-card' + featuredClass + ' reveal" id="' + project.slug + '-card" data-date="' + project.date + '">\n' +
         '                ' + renderImage(project) + '\n' +
         '                <div class="project-body">\n' +
         '                    <div class="project-meta">\n' +
