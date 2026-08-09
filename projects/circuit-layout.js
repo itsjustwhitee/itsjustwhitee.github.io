@@ -294,15 +294,18 @@ function pointsToPathD(points) {
     return points.map(function (p, i) { return (i === 0 ? 'M' : 'L') + p.x.toFixed(1) + ',' + p.y.toFixed(1); }).join(' ');
 }
 
-const STEP_DIRS = [
+// In compass order (N, NE, E, SE, S, SW, W, NW) so index ±1 (mod 8) is
+// always the neighboring direction 45° either side — used to let a walk
+// bend gently instead of jumping to an unrelated heading.
+const COMPASS_DIRS = [
     { row: -1, col: 0, dir: 'v' },
-    { row: 1, col: 0, dir: 'v' },
-    { row: 0, col: -1, dir: 'h' },
-    { row: 0, col: 1, dir: 'h' },
     { row: -1, col: 1, dir: 'd1' },
-    { row: 1, col: -1, dir: 'd1' },
-    { row: -1, col: -1, dir: 'd2' },
+    { row: 0, col: 1, dir: 'h' },
     { row: 1, col: 1, dir: 'd2' },
+    { row: 1, col: 0, dir: 'v' },
+    { row: 1, col: -1, dir: 'd1' },
+    { row: 0, col: -1, dir: 'h' },
+    { row: -1, col: -1, dir: 'd2' },
 ];
 
 function shuffled(arr, rng) {
@@ -316,10 +319,20 @@ function shuffled(arr, rng) {
 
 function growRandomWalk(occupancy, from, rng, columns, maxRow, minLen, maxLen) {
     const len = randInt(rng, minLen, maxLen);
-    for (const d of shuffled(STEP_DIRS, rng)) {
+    for (const startIdx of shuffled([0, 1, 2, 3, 4, 5, 6, 7], rng)) {
         const path = [{ row: from.row, col: from.col }];
+        const dirs = [];
         let cur = { row: from.row, col: from.col };
+        let dirIdx = startIdx;
         for (let i = 0; i < len; i++) {
+            // Same organic-bend model as the main router: mostly hold the
+            // current heading, occasionally ease 45° either side — a branch
+            // that's perfectly ruler-straight for its whole length reads as
+            // stiff and geometric next to the zigzagging main path, and is
+            // exactly what tends to close into an unnaturally sharp triangle
+            // against it.
+            if (i > 0 && rng() < 0.3) dirIdx = rng() < 0.5 ? (dirIdx + 1) % 8 : (dirIdx + 7) % 8;
+            const d = COMPASS_DIRS[dirIdx];
             const nr = Math.max(0, Math.min(maxRow, cur.row + d.row));
             const nc = Math.max(0, Math.min(columns - 1, cur.col + d.col));
             if (nr === cur.row && nc === cur.col) break; // hit the board edge — stop here
@@ -327,6 +340,7 @@ function growRandomWalk(occupancy, from, rng, columns, maxRow, minLen, maxLen) {
             if (entry && entry.dirs.has(d.dir)) break; // same-lane overlap — stop without taking this step
             cur = { row: nr, col: nc };
             path.push({ row: cur.row, col: cur.col });
+            dirs.push(d.dir);
             // Touching a different trace: join it with this one step (flags
             // a via) and stop growing, rather than crossing through it and
             // continuing — branches read as organically grown until they
@@ -339,8 +353,8 @@ function growRandomWalk(occupancy, from, rng, columns, maxRow, minLen, maxLen) {
             // registers a second direction there, so it never gets flagged
             // as a via and reads as visually unconnected even though it's
             // graph-connected.
-            markStep(occupancy, from.row, from.col, d.dir);
-            for (let i = 1; i < path.length; i++) markStep(occupancy, path[i].row, path[i].col, d.dir);
+            markStep(occupancy, from.row, from.col, dirs[0]);
+            for (let i = 1; i < path.length; i++) markStep(occupancy, path[i].row, path[i].col, dirs[i - 1]);
             return path;
         }
     }
