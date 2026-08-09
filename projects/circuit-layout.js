@@ -355,8 +355,10 @@ function growRandomWalk(occupancy, from, rng, columns, maxRow, minLen, maxLen, p
             // that's perfectly ruler-straight for its whole length reads as
             // stiff and geometric next to the zigzagging main path, and is
             // exactly what tends to close into an unnaturally sharp triangle
-            // against it.
-            if (i > 0 && rng() < 0.3) dirIdx = rng() < 0.5 ? (dirIdx + 1) % 8 : (dirIdx + 7) % 8;
+            // against it. Kept rare and delayed past the first couple of
+            // steps — these branches are short, so a high chance here reads
+            // as a wiggly snake, not an occasional gentle bend.
+            if (i > 1 && rng() < 0.15) dirIdx = rng() < 0.5 ? (dirIdx + 1) % 8 : (dirIdx + 7) % 8;
             const d = COMPASS_DIRS[dirIdx];
             const nr = Math.max(0, Math.min(maxRow, cur.row + d.row));
             const nc = Math.max(0, Math.min(columns - 1, cur.col + d.col));
@@ -554,14 +556,24 @@ function generate(opts) {
     }
 
     const vias = [];
+    const viaKeys = new Set();
     occupancy.forEach(function (entry, key) {
         if (entry.via) {
             const parts = key.split(',');
             vias.push({ row: Number(parts[0]), col: Number(parts[1]) });
+            viaKeys.add(key);
         }
     });
 
-    return { columns, rows: maxRow + 1, rowsPerProject, nodes, segments, untraveled, decorativeSpots, vias };
+    // Filtered only now that every branch has been grown — a spot recorded
+    // as a clean free-floating tip can still end up a via later, once some
+    // subsequent branch attaches to that exact point. A 2-lead part like a
+    // resistor only makes sense at a genuine dead end, never a junction.
+    const cleanDecorativeSpots = decorativeSpots.filter(function (s) {
+        return !viaKeys.has(s.row + ',' + s.col);
+    });
+
+    return { columns, rows: maxRow + 1, rowsPerProject, nodes, segments, untraveled, decorativeSpots: cleanDecorativeSpots, vias };
 }
 
 return {
