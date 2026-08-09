@@ -78,21 +78,11 @@ test('two routes never share a cell in the same direction (no overlapping parall
 });
 
 test('many routes through a congested shared grid never reuse a cell in the same direction', () => {
-    // Small, deliberately tight grid (7 columns) shared by 18 overlapping
-    // short routes (each spans a few rows, staggered by 1 row per route, so
-    // many routes' row-bands overlap at once) forces real congestion: routes
-    // must sidestep around each other, and — verified below — this specific,
-    // deterministic scenario drives at least one route into the tail
-    // fallback, not just the main loop's own sidestep.
-    //
-    // NOTE on the invariant check: with N > 2 routes, a cell can legitimately
-    // collect an 'h' AND a 'v' (a via) from two different earlier routes.
-    // Checking a new direction only against the *last* direction recorded at
-    // that cell (as the existing 2-route test does — sufficient there, since
-    // at most 2 routes ever touch a cell) would miss a later route reusing a
-    // direction that isn't the most recent one. So this checks every
-    // (cell, direction) pair against the full set ever used, not just the
-    // last one.
+    // 18 staggered, overlapping routes on a tight 7-col grid force real
+    // congestion (sidesteps + tail fallback). Checked against the full
+    // (cell,dir) history, not just the last dir per cell — with N>2 routes a
+    // cell can legitimately hold both 'h' and 'v' (a via) from two earlier
+    // routes, which a last-direction-only check would miss.
     const planRng = CircuitLayout.makeRng(101 * 101);
     const rng = CircuitLayout.makeRng(101 * 303);
     const occ = new Map();
@@ -122,12 +112,7 @@ test('many routes through a congested shared grid never reuse a cell in the same
         }
     });
 
-    // Sanity check that congestion actually forced extra work (sidesteps /
-    // tail fallback) rather than every route sailing straight to its target
-    // — otherwise this test wouldn't be exercising the fix at all. (Verified
-    // separately that this exact seed/grid drives one route into the tail
-    // fallback loop, which resolves via its own occupancy-respecting
-    // sidestep rather than forcing — the behavior this fix adds.)
+    // Confirms congestion actually forced detours, not straight-line routes.
     assert.ok(totalSteps > manhattanSum, 'routes took no detours at all — congestion was not exercised (' + totalSteps + ' <= ' + manhattanSum + ')');
 });
 
@@ -136,13 +121,8 @@ test('a perpendicular crossing between two routes is flagged with via: true', ()
     const occ = new Map();
     const columns = 11;
     const maxRow = 12;
-    // Straight horizontal route along row 5. dRow === 0 forces the 'col'
-    // axis on every step (no rng branching), and the grid is empty, so this
-    // is a deterministic straight line through (5,5).
+    // dRow===0 / dCol===0 force a deterministic straight line each; they cross at (5,5).
     CircuitLayout.routeOrthogonal(occ, { row: 5, col: 0 }, { row: 5, col: 10 }, rng, columns, maxRow);
-    // Straight vertical route along col 5. dCol === 0 forces the 'row' axis
-    // likewise — also deterministic, and crosses the horizontal trace
-    // perpendicularly at (5,5).
     CircuitLayout.routeOrthogonal(occ, { row: 0, col: 5 }, { row: 10, col: 5 }, rng, columns, maxRow);
 
     const crossing = occ.get(CircuitLayout.cellKey(5, 5));

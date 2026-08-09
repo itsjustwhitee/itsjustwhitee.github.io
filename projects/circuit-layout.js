@@ -61,10 +61,7 @@ function markStep(occupancy, row, col, dir) {
 function routeOrthogonal(occupancy, from, to, rng, columns, maxRow) {
     const path = [{ row: from.row, col: from.col }];
     let cur = { row: from.row, col: from.col };
-    // Generous budget: sidesteps are an expected, routine part of routing
-    // around a congested shared occupancy map (many routes, one map), not a
-    // rare exception — so the main loop needs real headroom before falling
-    // through to the tail below.
+    // Generous: sidesteps are routine under a congested shared occupancy map, not rare.
     const maxSteps = (Math.abs(to.row - cur.row) + Math.abs(to.col - cur.col)) * 12 + 40;
     let steps = 0;
 
@@ -79,10 +76,7 @@ function routeOrthogonal(occupancy, from, to, rng, columns, maxRow) {
         return true;
     }
 
-    // Unconditional last-resort move: same bookkeeping as tryStep, but skips
-    // the canStep check. Only ever called once tryStep has failed on both
-    // the direct move AND both perpendicular sidesteps, so routeOrthogonal
-    // is still guaranteed to reach `to`.
+    // Last resort — skips canStep, only reached once tryStep fails on all axes.
     function forceStep(nr, nc, dir) {
         nr = Math.max(0, Math.min(maxRow, nr));
         nc = Math.max(0, Math.min(columns - 1, nc));
@@ -114,26 +108,18 @@ function routeOrthogonal(occupancy, from, to, rng, columns, maxRow) {
             : null;
         if (secondary && tryStep(secondary.row, secondary.col, secondary.dir)) continue;
 
-        // Blocked on both preferred axes — sidestep perpendicular (either
-        // direction) to route AROUND the obstruction instead of giving up.
+        // Both axes blocked — sidestep perpendicular around the obstruction.
         const sideDir = axis === 'row' ? 'h' : 'v';
         const sideA = sideDir === 'h' ? { row: cur.row, col: cur.col + 1, dir: 'h' } : { row: cur.row + 1, col: cur.col, dir: 'v' };
         const sideB = sideDir === 'h' ? { row: cur.row, col: cur.col - 1, dir: 'h' } : { row: cur.row - 1, col: cur.col, dir: 'v' };
         if (tryStep(sideA.row, sideA.col, sideA.dir)) continue;
         if (tryStep(sideB.row, sideB.col, sideB.dir)) continue;
 
-        break; // genuinely boxed in on all four sides — stop rather than jump
+        break; // boxed in on all sides — stop rather than jump
     }
 
-    // Tail fallback: reached either on a genuine dead end OR whenever the
-    // main loop's step budget runs out under heavy congestion — not rare in
-    // practice once many routes share one occupancy map. Every step still
-    // tries a real, occupancy-respecting move first (straight toward `to`,
-    // then a perpendicular sidestep around the obstruction, same pattern as
-    // the main loop) so this never silently produces an unflagged overlap.
-    // Only once both are blocked does it force an unconditional step, as an
-    // absolute last resort, so routeOrthogonal is still guaranteed to reach
-    // `to`.
+    // Reached on a dead end or a spent step budget under congestion — still
+    // tries real, occupancy-respecting steps before forceStep.
     while (cur.col !== to.col) {
         const nc = cur.col + Math.sign(to.col - cur.col);
         if (tryStep(cur.row, nc, 'h')) continue;
