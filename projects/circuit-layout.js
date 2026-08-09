@@ -380,14 +380,47 @@ function generate(opts) {
     // clutter rather than a clean board.
     const maxVias = projectCount * 9;
 
+    // A global cap alone still lets crossings bunch up around one busy spot
+    // (typically a node, where several segments already meet) — this steers
+    // new attachment points away from a neighborhood that's already crossing
+    // -heavy, spreading vias across the board instead of just capping their
+    // total.
+    function localViaCount(point, radius) {
+        let n = 0;
+        occupancy.forEach(function (e, key) {
+            if (!e.via) return;
+            const comma = key.indexOf(',');
+            const r = Number(key.slice(0, comma)), c = Number(key.slice(comma + 1));
+            if (Math.abs(r - point.row) <= radius && Math.abs(c - point.col) <= radius) n++;
+        });
+        return n;
+    }
+    // Re-picks both the segment and the cell on each retry — retrying only
+    // the cell within one already-chosen segment can't escape a hot spot
+    // when that whole segment runs through it.
+    function pickAttachmentPoint(pool) {
+        let point = null;
+        for (let attempt = 0; attempt < 12; attempt++) {
+            const seg = pool[randInt(rng, 0, pool.length - 1)];
+            const cells = segmentCells(seg.corners);
+            point = cells[randInt(rng, 0, cells.length - 1)];
+            if (localViaCount(point, 2) < 2) break;
+        }
+        return point;
+    }
+
     const decorativeSpots = [];
     if (segments.length > 0) {
-        const deadEndCount = randInt(rng, projectCount * 3, projectCount * 6);
+        // Dead-ends render bright/lit/flowing, same as the main path — they
+        // need to stay a minor accent (roughly on the order of the main
+        // path's own segment count), not outnumber it several times over,
+        // or the board reads as uniformly busy instead of one clear glowing
+        // path with occasional bright branches. Board texture/density
+        // belongs to the untraveled network below, which renders dim.
+        const deadEndCount = randInt(rng, Math.max(2, Math.floor(projectCount / 2)), projectCount);
         for (let i = 0; i < deadEndCount; i++) {
             if (countVias(occupancy) >= maxVias) break;
-            const seg = segments[randInt(rng, 0, segments.length - 1)];
-            const cells = segmentCells(seg.corners);
-            const point = cells[randInt(rng, 0, cells.length - 1)];
+            const point = pickAttachmentPoint(segments);
             const branch = growRandomWalk(occupancy, point, rng, columns, maxRow, 3, 6);
             if (branch) {
                 segments.push({ corners: reduceToCorners(branch), traveled: true, kind: 'deadend' });
@@ -417,9 +450,7 @@ function generate(opts) {
     for (let i = 0; i < untraveledCount; i++) {
         if (countVias(occupancy) >= maxVias) break;
         const pool = segments.concat(untraveled);
-        const seg = pool[randInt(rng, 0, pool.length - 1)];
-        const cells = segmentCells(seg.corners);
-        const point = cells[randInt(rng, 0, cells.length - 1)];
+        const point = pickAttachmentPoint(pool);
         const branch = growRandomWalk(occupancy, point, rng, columns, maxRow, 3, 10);
         if (branch) {
             untraveled.push({ corners: reduceToCorners(branch), traveled: false });
