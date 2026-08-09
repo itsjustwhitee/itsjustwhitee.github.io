@@ -132,6 +132,7 @@ function init() {
     window.CIRCUIT_RENDERED = rendered;
 
     collected.grid.classList.add('circuit-active');
+    collected.projects.forEach(function (p) { p.cardEl.classList.remove('reveal'); });
     runChargeAnimation(rendered, board);
     buildNodeButtons(stage, rendered, board, collected.projects, cellSize);
     wireHoverPopups(collected.projects);
@@ -140,12 +141,6 @@ function init() {
     initHashCrackerzExcite();
     initEdgeCVExcite();
     initSliceCeiptExcite();
-}
-
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', init);
-} else {
-    init();
 }
 
 const CHARGE_DURATION_MS = 2000;
@@ -553,5 +548,11 @@ function initSliceCeiptExcite() {
 }
 
 window.Circuit.init = init;
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+} else {
+    init();
+}
 
 })();
