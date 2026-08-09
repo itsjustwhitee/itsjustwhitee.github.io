@@ -78,3 +78,7 @@
     stroke: var(--accent-bright);
     filter: drop-shadow(0 0 6px rgba(var(--accent-bright-rgb), 0.55));
 }
+
+.circuit-node.is-excited .circuit-node-fill {
+    filter: drop-shadow(0 0 10px rgba(var(--accent-bright-rgb), 0.9));
+}

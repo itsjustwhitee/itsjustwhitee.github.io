@@ -202,6 +202,50 @@ document.addEventListener('circuit:charged', function (e) {
 window.Circuit.FLOW_SPEED_PX_PER_S = FLOW_SPEED_PX_PER_S;
 window.Circuit.FLOW_PERIOD_MS = FLOW_PERIOD_MS;
 
+const EXCITE_DECAY_MS = 550;
+const nodeExciteHandlers = {}; // slug -> function(nodeEl)
+const nodeExciteTimers = {};   // slug -> timeout id (for decay-extend)
+
+function onNodeExcite(slug, handler) {
+    nodeExciteHandlers[slug] = handler;
+}
+
+function excite(project, nodeEl) {
+    if (project.slug === 'justwhitee-notes') return; // spec: never excites
+    nodeEl.classList.add('is-excited');
+    clearTimeout(nodeExciteTimers[project.slug]);
+    nodeExciteTimers[project.slug] = setTimeout(function () {
+        nodeEl.classList.remove('is-excited');
+    }, EXCITE_DECAY_MS);
+    const handler = nodeExciteHandlers[project.slug];
+    if (handler) handler(nodeEl);
+}
+
+function startPulseScheduler(rendered, projects) {
+    if (window.prefersReducedMotion) return;
+    const timed = cumulativeDistanceFromRoot(rendered);
+    // A node's distance = the cumulative length up to (and including) the
+    // segment that terminates at it; approximated the same way charge timing
+    // is (see Task 10's comment) — good enough for a "roughly synced" pulse.
+    const nodes = rendered.nodeElements.map(function (n) {
+        const frac = rendered.nodeElements.length > 1 ? n.index / (rendered.nodeElements.length - 1) : 0;
+        const totalLength = timed.reduce(function (sum, t) { return sum + t.length; }, 0) || 1;
+        return { distance: frac * totalLength, nodeEl: n.groupEl, project: projects[n.index] };
+    });
+    window.CircuitPulse.schedule(
+        nodes,
+        window.Circuit.FLOW_SPEED_PX_PER_S,
+        window.Circuit.FLOW_PERIOD_MS,
+        function (node) { excite(node.project, node.nodeEl); }
+    );
+}
+
+document.addEventListener('circuit:charged', function (e) {
+    startPulseScheduler(e.detail.rendered, window.CIRCUIT_PROJECTS);
+});
+
+window.Circuit.onNodeExcite = onNodeExcite;
+
 window.Circuit.init = init;
 
 })();
