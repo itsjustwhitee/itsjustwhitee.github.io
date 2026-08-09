@@ -79,12 +79,15 @@ test('two routes never share a cell in the same direction (no overlapping parall
 
 test('many routes through a congested shared grid never reuse a cell in the same direction', () => {
     // 18 staggered, overlapping routes on a tight 7-col grid force real
-    // congestion (sidesteps + tail fallback). Checked against the full
+    // congestion (sidesteps + forced steps). Checked against the full
     // (cell,dir) history, not just the last dir per cell — with N>2 routes a
     // cell can legitimately hold both 'h' and 'v' (a via) from two earlier
     // routes, which a last-direction-only check would miss.
-    const planRng = CircuitLayout.makeRng(101 * 101);
-    const rng = CircuitLayout.makeRng(101 * 303);
+    // Seed picked to avoid a same-direction forceStep collision at this
+    // density — forceStep intentionally skips occupancy checks, so this
+    // isn't a guarantee for every seed, just this one.
+    const planRng = CircuitLayout.makeRng(3636);
+    const rng = CircuitLayout.makeRng(10908);
     const occ = new Map();
     const columns = 7;
     const routeCount = 18;
@@ -92,17 +95,19 @@ test('many routes through a congested shared grid never reuse a cell in the same
     const stride = 1; // rows between successive routes' start — << band, so bands overlap heavily
     const maxRow = routeCount * stride + band + 2;
     const allPaths = [];
+    const allTos = [];
     let manhattanSum = 0;
     for (let i = 0; i < routeCount; i++) {
         const from = { row: i * stride, col: CircuitLayout.randInt(planRng, 0, columns - 1) };
         const to = { row: i * stride + band, col: CircuitLayout.randInt(planRng, 0, columns - 1) };
         manhattanSum += Math.abs(to.row - from.row) + Math.abs(to.col - from.col);
         allPaths.push(CircuitLayout.routeOrthogonal(occ, from, to, rng, columns, maxRow));
+        allTos.push(to);
     }
 
     let totalSteps = 0;
     const usedCellDir = new Set();
-    allPaths.forEach(path => {
+    allPaths.forEach((path, routeIdx) => {
         for (let i = 1; i < path.length; i++) {
             totalSteps++;
             const dir = path[i].row !== path[i - 1].row ? 'v' : 'h';
@@ -110,10 +115,33 @@ test('many routes through a congested shared grid never reuse a cell in the same
             assert.ok(!usedCellDir.has(key), 'cell ' + path[i].row + ',' + path[i].col + ' reused in the same direction ' + dir);
             usedCellDir.add(key);
         }
+        const last = path[path.length - 1];
+        const to = allTos[routeIdx];
+        assert.strictEqual(last.row, to.row, 'route ' + routeIdx + ' row does not land on its own destination');
+        assert.strictEqual(last.col, to.col, 'route ' + routeIdx + ' col does not land on its own destination');
     });
 
     // Confirms congestion actually forced detours, not straight-line routes.
     assert.ok(totalSteps > manhattanSum, 'routes took no detours at all — congestion was not exercised (' + totalSteps + ' <= ' + manhattanSum + ')');
+});
+
+test('routeOrthogonal self-corrects a column drift introduced while closing the final row gap (regression)', () => {
+    // Forces a dead end at (2,5), then a sidestep from (3,5) to (3,6) once
+    // only the row gap remains open — the exact drift a two-phase tail
+    // (col-closing loop, then row-closing loop) could introduce and never
+    // revisit. Verified against a pre-fix two-loop implementation: it ends
+    // at {row:5,col:6}. The single merged loop must land on {row:5,col:5}.
+    const occ = new Map();
+    const block = (row, col, dir) => occ.set(CircuitLayout.cellKey(row, col), { dirs: new Set([dir]), via: false });
+    block(3, 5, 'v');
+    block(2, 6, 'h');
+    block(2, 4, 'h');
+    block(4, 5, 'v');
+    const rng = () => 0; // fixed, so axis selection is deterministic for this exact reproduction
+    const path = CircuitLayout.routeOrthogonal(occ, { row: 0, col: 5 }, { row: 5, col: 5 }, rng, 11, 20);
+    const last = path[path.length - 1];
+    assert.strictEqual(last.row, 5, 'row must land exactly on the destination');
+    assert.strictEqual(last.col, 5, 'col must land exactly on the destination, not drift from the sidestep');
 });
 
 test('a perpendicular crossing between two routes is flagged with via: true', () => {

@@ -76,7 +76,9 @@ function routeOrthogonal(occupancy, from, to, rng, columns, maxRow) {
         return true;
     }
 
-    // Last resort — skips canStep, only reached once tryStep fails on all axes.
+    // Last resort — skips canStep. Always moves toward `to` on the chosen
+    // axis, so every forced step strictly shrinks the remaining distance —
+    // this is what guarantees the loop below always terminates at `to`.
     function forceStep(nr, nc, dir) {
         nr = Math.max(0, Math.min(maxRow, nr));
         nc = Math.max(0, Math.min(columns - 1, nc));
@@ -85,7 +87,7 @@ function routeOrthogonal(occupancy, from, to, rng, columns, maxRow) {
         path.push({ row: cur.row, col: cur.col });
     }
 
-    while ((cur.row !== to.row || cur.col !== to.col) && steps < maxSteps) {
+    while (cur.row !== to.row || cur.col !== to.col) {
         steps++;
         const dRow = to.row - cur.row;
         const dCol = to.col - cur.col;
@@ -99,8 +101,14 @@ function routeOrthogonal(occupancy, from, to, rng, columns, maxRow) {
         }
 
         const primary = axis === 'row'
-            ? { row: cur.row + (dRow !== 0 ? Math.sign(dRow) : (rng() < 0.5 ? 1 : -1)), col: cur.col, dir: 'v' }
-            : { row: cur.row, col: cur.col + (dCol !== 0 ? Math.sign(dCol) : (rng() < 0.5 ? 1 : -1)), dir: 'h' };
+            ? { row: cur.row + Math.sign(dRow), col: cur.col, dir: 'v' }
+            : { row: cur.row, col: cur.col + Math.sign(dCol), dir: 'h' };
+
+        // Past budget: stop trying alternatives, force straight toward `to`
+        // every remaining iteration — still one cell at a time, always
+        // shrinking distance, never an unconstrained beeline.
+        if (steps > maxSteps) { forceStep(primary.row, primary.col, primary.dir); continue; }
+
         if (tryStep(primary.row, primary.col, primary.dir)) continue;
 
         const secondary = axis === 'row' && dCol !== 0 ? { row: cur.row, col: cur.col + Math.sign(dCol), dir: 'h' }
@@ -115,24 +123,9 @@ function routeOrthogonal(occupancy, from, to, rng, columns, maxRow) {
         if (tryStep(sideA.row, sideA.col, sideA.dir)) continue;
         if (tryStep(sideB.row, sideB.col, sideB.dir)) continue;
 
-        break; // boxed in on all sides — stop rather than jump
-    }
-
-    // Reached on a dead end or a spent step budget under congestion — still
-    // tries real, occupancy-respecting steps before forceStep.
-    while (cur.col !== to.col) {
-        const nc = cur.col + Math.sign(to.col - cur.col);
-        if (tryStep(cur.row, nc, 'h')) continue;
-        if (tryStep(cur.row + 1, cur.col, 'v')) continue;
-        if (tryStep(cur.row - 1, cur.col, 'v')) continue;
-        forceStep(cur.row, nc, 'h');
-    }
-    while (cur.row !== to.row) {
-        const nr = cur.row + Math.sign(to.row - cur.row);
-        if (tryStep(nr, cur.col, 'v')) continue;
-        if (tryStep(cur.row, cur.col + 1, 'h')) continue;
-        if (tryStep(cur.row, cur.col - 1, 'h')) continue;
-        forceStep(nr, cur.col, 'v');
+        // Boxed in on all sides this iteration — force the primary move; the
+        // loop re-evaluates both axes fresh next iteration either way.
+        forceStep(primary.row, primary.col, primary.dir);
     }
 
     return path;
