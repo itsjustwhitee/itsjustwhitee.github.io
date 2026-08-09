@@ -49,12 +49,14 @@ function canStep(occupancy, row, col, dir) {
     return !entry.dirs.has(dir);
 }
 
-function markStep(occupancy, row, col, dir) {
+function markStep(occupancy, row, col, dir, dirIdx) {
     const key = cellKey(row, col);
     let entry = occupancy.get(key);
-    if (!entry) { entry = { dirs: new Set(), via: false }; occupancy.set(key, entry); }
+    if (!entry) { entry = { dirs: new Set(), preciseDirs: new Set(), via: false }; occupancy.set(key, entry); }
+    if (!entry.preciseDirs) entry.preciseDirs = new Set(); // defensive: entries built by hand (e.g. tests) may predate this field
     if (entry.dirs.size > 0 && !entry.dirs.has(dir)) entry.via = true;
     entry.dirs.add(dir);
+    if (dirIdx !== undefined) entry.preciseDirs.add(dirIdx);
     return entry.via;
 }
 
@@ -70,8 +72,9 @@ function routeLeg(occupancy, from, to, rng, columns, maxRow) {
         nc = Math.max(0, Math.min(columns - 1, nc));
         if (nr === cur.row && nc === cur.col) return false;
         if (!canStep(occupancy, nr, nc, dir)) return false;
+        const dirIdx = compassIndexFor(Math.sign(nr - cur.row), Math.sign(nc - cur.col));
         cur = { row: nr, col: nc };
-        markStep(occupancy, cur.row, cur.col, dir);
+        markStep(occupancy, cur.row, cur.col, dir, dirIdx);
         path.push({ row: cur.row, col: cur.col });
         return true;
     }
@@ -82,8 +85,9 @@ function routeLeg(occupancy, from, to, rng, columns, maxRow) {
     function forceStep(nr, nc, dir) {
         nr = Math.max(0, Math.min(maxRow, nr));
         nc = Math.max(0, Math.min(columns - 1, nc));
+        const dirIdx = compassIndexFor(Math.sign(nr - cur.row), Math.sign(nc - cur.col));
         cur = { row: nr, col: nc };
-        markStep(occupancy, cur.row, cur.col, dir);
+        markStep(occupancy, cur.row, cur.col, dir, dirIdx);
         path.push({ row: cur.row, col: cur.col });
     }
 
@@ -322,6 +326,18 @@ function compassIndexFor(dr, dc) {
     return 0;
 }
 
+// Every decorative symbol is drawn horizontally (leads running left-right,
+// dirIdx 2/East as the neutral 0°) — this is the rotation (in degrees,
+// screen/SVG convention) needed to align it with the branch's final
+// approach direction, so a component reads as sitting in-line on its own
+// stub instead of a fixed icon dropped at an unrelated angle.
+function spotWithApproachDir(branch) {
+    const tip = branch[branch.length - 1];
+    const prev = branch[branch.length - 2];
+    const dirIdx = compassIndexFor(Math.sign(tip.row - prev.row), Math.sign(tip.col - prev.col));
+    return { row: tip.row, col: tip.col, angle: (dirIdx - 2) * 45 };
+}
+
 function shuffled(arr, rng) {
     const copy = arr.slice();
     for (let i = copy.length - 1; i > 0; i--) {
@@ -344,9 +360,20 @@ function growRandomWalk(occupancy, from, rng, columns, maxRow, minLen, maxLen, p
     const startCandidates = parentDirIdx === undefined
         ? [0, 1, 2, 3, 4, 5, 6, 7]
         : [parentDirIdx, (parentDirIdx + 1) % 8, (parentDirIdx + 7) % 8, (parentDirIdx + 2) % 8, (parentDirIdx + 6) % 8];
+    // Two direction indices are "correctly" joinable when they're at most
+    // 90° apart (compass distance <=2) — 45°/90° reads as a clean merge,
+    // 135° as an unrelated trace grazed at a shallow, near-parallel angle
+    // right before it happens to touch. 180° (running straight into the
+    // same lane) is already excluded by the same-tag block below.
+    function anglesJoinCleanly(idxA, idxB) {
+        const diff = Math.abs(idxA - idxB) % 8;
+        return Math.min(diff, 8 - diff) <= 2;
+    }
+
     for (const startIdx of shuffled(startCandidates, rng)) {
         const path = [{ row: from.row, col: from.col }];
         const dirs = [];
+        const dirIdxs = [];
         let cur = { row: from.row, col: from.col };
         let dirIdx = startIdx;
         // Once the branch establishes a vertical trend (descending or
@@ -382,9 +409,20 @@ function growRandomWalk(occupancy, from, rng, columns, maxRow, minLen, maxLen, p
             if (nr === cur.row && nc === cur.col) break; // hit the board edge — stop here
             const entry = occupancy.get(cellKey(nr, nc));
             if (entry && entry.dirs.has(d.dir)) break; // same-lane overlap — stop without taking this step
+            if (entry && entry.preciseDirs && entry.preciseDirs.size > 0) {
+                let joinsCleanly = false;
+                entry.preciseDirs.forEach(function (existingIdx) {
+                    if (anglesJoinCleanly(dirIdx, existingIdx)) joinsCleanly = true;
+                });
+                // Every existing direction here is a shallow, near-parallel
+                // graze rather than a real join — stop one cell short instead
+                // of touching it at an unrelated angle.
+                if (!joinsCleanly) break;
+            }
             cur = { row: nr, col: nc };
             path.push({ row: cur.row, col: cur.col });
             dirs.push(d.dir);
+            dirIdxs.push(dirIdx);
             // Touching a different trace: join it with this one step (flags
             // a via) and stop growing, rather than crossing through it and
             // continuing — branches read as organically grown until they
@@ -397,8 +435,8 @@ function growRandomWalk(occupancy, from, rng, columns, maxRow, minLen, maxLen, p
             // registers a second direction there, so it never gets flagged
             // as a via and reads as visually unconnected even though it's
             // graph-connected.
-            markStep(occupancy, from.row, from.col, dirs[0]);
-            for (let i = 1; i < path.length; i++) markStep(occupancy, path[i].row, path[i].col, dirs[i - 1]);
+            markStep(occupancy, from.row, from.col, dirs[0], dirIdxs[0]);
+            for (let i = 1; i < path.length; i++) markStep(occupancy, path[i].row, path[i].col, dirs[i - 1], dirIdxs[i - 1]);
             return path;
         }
     }
@@ -538,7 +576,7 @@ function generate(opts) {
             const branch = growRandomWalk(occupancy, point, rng, columns, maxRow, 3, 6, point.dirIdx);
             if (branch) {
                 segments.push({ corners: reduceToCorners(branch), traveled: true, kind: 'deadend' });
-                decorativeSpots.push(branch[branch.length - 1]);
+                decorativeSpots.push(spotWithApproachDir(branch));
             }
         }
     }
@@ -568,7 +606,7 @@ function generate(opts) {
         const branch = growRandomWalk(occupancy, point, rng, columns, maxRow, 3, 10, point.dirIdx);
         if (branch) {
             untraveled.push({ corners: reduceToCorners(branch), traveled: false });
-            if (rng() < 0.4) decorativeSpots.push(branch[branch.length - 1]);
+            if (rng() < 0.4) decorativeSpots.push(spotWithApproachDir(branch));
         }
     }
 

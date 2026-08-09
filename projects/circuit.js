@@ -81,7 +81,11 @@ function render(container, board, cellSize) {
     board.decorativeSpots.forEach(function (spot, i) {
         const name = window.CIRCUIT_SYMBOL_NAMES[i % window.CIRCUIT_SYMBOL_NAMES.length];
         const size = 20;
-        const use = svgEl('use', { href: '#circuit-sym-' + name, x: spot.col * cellSize - size / 2, y: spot.row * cellSize - size / 2, width: size, height: size, class: 'circuit-decor' });
+        const cx = spot.col * cellSize, cy = spot.row * cellSize;
+        const use = svgEl('use', {
+            href: '#circuit-sym-' + name, x: cx - size / 2, y: cy - size / 2, width: size, height: size,
+            class: 'circuit-decor', transform: 'rotate(' + (spot.angle || 0) + ' ' + cx + ' ' + cy + ')',
+        });
         decorGroup.appendChild(use);
     });
     svg.appendChild(decorGroup);
