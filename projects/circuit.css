@@ -132,6 +132,17 @@
     justify-content: center;
 }
 
+.circuit-node-icon.is-vibrating {
+    animation: crackerVibrate 0.1s linear infinite;
+}
+
+.circuit-node-crumb {
+    position: absolute;
+    border: 1px solid #1a0f00;
+    border-radius: 40%;
+    pointer-events: none;
+}
+
 .circuit-popup {
     position: absolute;
     z-index: 50;

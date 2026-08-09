@@ -137,6 +137,7 @@ function init() {
     wireHoverPopups(collected.projects);
     wireActivation(collected.projects);
     initRackControllerExcite();
+    initHashCrackerzExcite();
 }
 
 if (document.readyState === 'loading') {
@@ -434,6 +435,42 @@ function initRackControllerExcite() {
     window.Circuit.onNodeExcite('rackcontroller', function () {
         target = MAX_SPEED;
         setTimeout(function () { target = BASE_SPEED; }, 500);
+    });
+}
+
+function initHashCrackerzExcite() {
+    const icon = getBoardIconEl('hashcrackerz');
+    if (!icon || window.prefersReducedMotion) return;
+    const wrap = icon.parentElement; // .circuit-node-btn — small, positioned, good enough as the crumb spawn container
+
+    function spawnCrumb() {
+        const crumb = document.createElement('div');
+        crumb.className = 'circuit-node-crumb';
+        const size = Math.floor(Math.random() * 3) + 2;
+        crumb.style.width = size + 'px';
+        crumb.style.height = size + 'px';
+        const colors = ['#e8a35c', '#d9914a', '#5a3820', '#fff2df'];
+        crumb.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+        crumb.style.left = (14 + Math.random() * 16) + 'px';
+        crumb.style.top = (14 + Math.random() * 16) + 'px';
+        const dx = (Math.random() - 0.5) * 30;
+        const rot = (Math.random() - 0.5) * 500;
+        crumb.style.setProperty('--dx', dx + 'px');
+        crumb.style.setProperty('--rot', rot + 'deg');
+        const duration = 0.3 + Math.random() * 0.3;
+        crumb.style.animation = 'crumbFall ' + duration + 's cubic-bezier(0.55,0.06,0.68,0.19) forwards';
+        wrap.appendChild(crumb);
+        setTimeout(function () { crumb.remove(); }, duration * 1000);
+    }
+
+    window.Circuit.onNodeExcite('hashcrackerz', function () {
+        icon.classList.add('is-vibrating');
+        let count = 0;
+        const id = setInterval(function () {
+            spawnCrumb();
+            if (++count >= 6) clearInterval(id);
+        }, 60);
+        setTimeout(function () { icon.classList.remove('is-vibrating'); }, 450);
     });
 }
 
