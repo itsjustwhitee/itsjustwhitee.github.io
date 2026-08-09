@@ -164,6 +164,24 @@ function reduceToCorners(path) {
     return corners;
 }
 
+// Expands a reduced corner list back to every cell it passes through
+// (turns only reduceToCorners keeps the endpoints, so a long straight or
+// diagonal run collapses to 2 points) — used as the candidate pool for
+// branch attachment points, so branches spread along a run's whole length
+// instead of only ever landing on turn points, which are disproportionately
+// likely to be a project node itself on a short board.
+function segmentCells(corners) {
+    const cells = [];
+    for (let i = 0; i < corners.length; i++) {
+        if (i === 0) { cells.push(corners[i]); continue; }
+        const a = corners[i - 1], b = corners[i];
+        const dr = Math.sign(b.row - a.row), dc = Math.sign(b.col - a.col);
+        const steps = Math.max(Math.abs(b.row - a.row), Math.abs(b.col - a.col));
+        for (let s = 1; s <= steps; s++) cells.push({ row: a.row + dr * s, col: a.col + dc * s });
+    }
+    return cells;
+}
+
 function dist(a, b) { return Math.hypot(b.x - a.x, b.y - a.y); }
 
 function lerpTowards(from, to, len) {
@@ -341,7 +359,8 @@ function generate(opts) {
         for (let i = 0; i < deadEndCount; i++) {
             if (countVias(occupancy) >= maxVias) break;
             const seg = segments[randInt(rng, 0, segments.length - 1)];
-            const point = seg.corners[randInt(rng, 0, seg.corners.length - 1)];
+            const cells = segmentCells(seg.corners);
+            const point = cells[randInt(rng, 0, cells.length - 1)];
             const branch = growRandomWalk(occupancy, point, rng, columns, maxRow, 3, 6);
             if (branch) {
                 segments.push({ corners: reduceToCorners(branch), traveled: true, kind: 'deadend' });
@@ -372,7 +391,8 @@ function generate(opts) {
         if (countVias(occupancy) >= maxVias) break;
         const pool = segments.concat(untraveled);
         const seg = pool[randInt(rng, 0, pool.length - 1)];
-        const point = seg.corners[randInt(rng, 0, seg.corners.length - 1)];
+        const cells = segmentCells(seg.corners);
+        const point = cells[randInt(rng, 0, cells.length - 1)];
         const branch = growRandomWalk(occupancy, point, rng, columns, maxRow, 3, 10);
         if (branch) {
             untraveled.push({ corners: reduceToCorners(branch), traveled: false });

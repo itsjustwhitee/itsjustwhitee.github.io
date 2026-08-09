@@ -24,11 +24,16 @@ function segmentPathD(segment, cellSize) {
 function render(container, board, cellSize) {
     const width = board.columns * cellSize;
     const height = board.rows * cellSize;
+    // Vias and decorative symbols anchor at col*cellSize - halfSize / row*cellSize
+    // - halfSize; at the board's own col 0 or row 0 that offset goes negative,
+    // outside a "0 0 w h" viewBox — clipped at the SVG edge. This margin gives
+    // that negative offset room without touching any of the drawing math below.
+    const margin = 24;
 
     const svg = svgEl('svg', {
-        viewBox: '0 0 ' + width + ' ' + height,
+        viewBox: (-margin) + ' ' + (-margin) + ' ' + (width + margin * 2) + ' ' + (height + margin * 2),
         width: '100%',
-        height: height,
+        height: height + margin * 2,
         class: 'circuit-svg',
         'aria-hidden': 'true',
         focusable: 'false',
@@ -93,7 +98,10 @@ function render(container, board, cellSize) {
     svg.appendChild(nodeGroup);
 
     container.appendChild(svg);
-    return { svg: svg, traveledPaths: traveledPaths, nodeElements: nodeElements, width: width, height: height };
+    return {
+        svg: svg, traveledPaths: traveledPaths, nodeElements: nodeElements,
+        width: width + margin * 2, height: height + margin * 2, margin: margin,
+    };
 }
 
 window.Circuit = window.Circuit || {};
@@ -268,8 +276,11 @@ function buildNodeButtons(stage, rendered, board, projects, cellSize) {
         btn.className = 'circuit-node-btn';
         btn.dataset.slug = project.slug;
         btn.setAttribute('aria-label', projectTitle(project.cardEl));
-        btn.style.left = ((n.cx / rendered.width) * 100) + '%';
-        btn.style.top = ((n.cy / rendered.height) * 100) + '%';
+        // n.cx/cy are in the unshifted board coordinate space; rendered.width/
+        // height are the full margin-inclusive viewBox span (see render()),
+        // so the margin has to be added back in before taking the fraction.
+        btn.style.left = (((n.cx + rendered.margin) / rendered.width) * 100) + '%';
+        btn.style.top = (((n.cy + rendered.margin) / rendered.height) * 100) + '%';
 
         const logoSrc = projectLogoSrc(project.cardEl);
         if (logoSrc) {
