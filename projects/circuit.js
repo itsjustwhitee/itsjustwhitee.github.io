@@ -53,8 +53,7 @@ function render(container, board, cellSize) {
         const pts = window.CircuitLayout.chamferCorners(seg.corners, cellSize, CHAMFER);
         const d = window.CircuitLayout.pointsToPathD(pts);
         const length = pts.reduce(function (sum, p, idx) { return idx === 0 ? 0 : sum + Math.hypot(p.x - pts[idx - 1].x, p.y - pts[idx - 1].y); }, 0);
-        // kind drives stroke-width tiering in circuit.css: main path thickest,
-        // forks thinner, dead-ends thinnest-of-the-traveled — see Routing rules.
+        // seg.kind drives stroke-width tiering in circuit.css.
         const pathEl = svgEl('path', { d: d, class: 'circuit-path circuit-path-traveled circuit-path-' + seg.kind, 'data-length': length.toFixed(1) });
         traveledGroup.appendChild(pathEl);
         return { el: pathEl, length: length, corners: seg.corners };
@@ -148,10 +147,7 @@ if (document.readyState === 'loading') {
 const CHARGE_DURATION_MS = 2000;
 
 function cumulativeDistanceFromRoot(rendered) {
-    // Distance is approximated as the traveled path's own on-screen length,
-    // ordered by its position in board.segments (built root-to-leaf in
-    // circuit-layout.js's generate()), which is good enough for a wavefront
-    // that only needs to *look* like it's expanding outward, not be exact.
+    // Approximated via segment order (root-to-leaf), not true graph distance.
     let running = 0;
     return rendered.traveledPaths.map(function (p) {
         const start = running;
@@ -179,8 +175,7 @@ function runChargeAnimation(rendered, board) {
     });
 
     rendered.nodeElements.forEach(function (n) {
-        // Light a node once the segment(s) reaching it have had time to arrive:
-        // approximate via the node's index fraction along the total charge duration.
+        // Approximated via index fraction, not per-node arrival time.
         const frac = board.nodes.length > 1 ? n.index / (board.nodes.length - 1) : 0;
         setTimeout(function () { n.groupEl.classList.add('is-lit'); }, frac * CHARGE_DURATION_MS);
     });
@@ -227,9 +222,7 @@ function excite(project, nodeEl) {
 function startPulseScheduler(rendered, projects) {
     if (window.prefersReducedMotion) return;
     const timed = cumulativeDistanceFromRoot(rendered);
-    // A node's distance = the cumulative length up to (and including) the
-    // segment that terminates at it; approximated the same way charge timing
-    // is (see Task 10's comment) — good enough for a "roughly synced" pulse.
+    // Same index-fraction approximation as the charge animation.
     const nodes = rendered.nodeElements.map(function (n) {
         const frac = rendered.nodeElements.length > 1 ? n.index / (rendered.nodeElements.length - 1) : 0;
         const totalLength = timed.reduce(function (sum, t) { return sum + t.length; }, 0) || 1;
@@ -264,8 +257,7 @@ const boardIconEls = {}; // slug -> the small logo element inside that node's bu
 function buildNodeButtons(stage, rendered, board, projects, cellSize) {
     const overlay = document.createElement('div');
     overlay.className = 'circuit-node-overlay';
-    // Match circuit.css's SVG width:100% so left/top % coords resolve against
-    // the real, CSS-scaled board size, not the raw viewBox pixel space.
+    // Matches circuit.css's SVG width:100% so % coords track the real board size.
     overlay.style.width = '100%';
 
     rendered.nodeElements.forEach(function (n) {
@@ -309,8 +301,7 @@ function buildNodeButtons(stage, rendered, board, projects, cellSize) {
 }
 
 function getBoardIconEl(slug) { return boardIconEls[slug]; }
-// Always use this to find a node's button — getBoardIconEl(...).closest(...) returns
-// nothing for edgecv4safety/sliceceipt, whose icons load asynchronously later.
+// Use this, not getBoardIconEl(...).closest(...) — misses edgecv4safety/sliceceipt.
 function getNodeButtonEl(slug) { return document.querySelector('.circuit-node-btn[data-slug="' + slug + '"]'); }
 window.Circuit.getBoardIconEl = getBoardIconEl;
 
