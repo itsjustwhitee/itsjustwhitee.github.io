@@ -58,7 +58,7 @@ function markStep(occupancy, row, col, dir) {
     return entry.via;
 }
 
-function routeOrthogonal(occupancy, from, to, rng, columns, maxRow) {
+function routeLeg(occupancy, from, to, rng, columns, maxRow) {
     const path = [{ row: from.row, col: from.col }];
     let cur = { row: from.row, col: from.col };
     // Generous: sidesteps are routine under a congested shared occupancy map, not rare.
@@ -110,14 +110,16 @@ function routeOrthogonal(occupancy, from, to, rng, columns, maxRow) {
     }
 
     // Weighted order for when there's no continuation preference in play:
-    // diagonal ~45% (still the main lever for real 45° runs), then the axis
-    // with the larger remaining delta 70% of the remainder.
+    // diagonal ~70% (the main lever for real 45° runs — this is a PCB board
+    // that should read as mostly-diagonal with straight runs as the accent,
+    // not the reverse), then the axis with the larger remaining delta 70%
+    // of the remainder.
     function weightedOrder(moves, dRow, dCol) {
         const pool = moves.slice();
         const weight = function (m) {
-            if (m.dir === 'd1' || m.dir === 'd2') return 0.45;
+            if (m.dir === 'd1' || m.dir === 'd2') return 0.7;
             const larger = Math.abs(dRow) >= Math.abs(dCol) ? 'v' : 'h';
-            return m.dir === larger ? 0.55 * 0.7 : 0.55 * 0.3;
+            return m.dir === larger ? 0.3 * 0.7 : 0.3 * 0.3;
         };
         const ordered = [];
         while (pool.length) {
@@ -131,10 +133,17 @@ function routeOrthogonal(occupancy, from, to, rng, columns, maxRow) {
         return ordered;
     }
 
+    function isDiagonalId(id) {
+        const comma = id.indexOf(',');
+        return id.slice(0, comma) !== '0' && id.slice(comma + 1) !== '0';
+    }
+
     // Runs are biased to hold their current direction rather than re-decide
-    // every cell (MIN_RUN..MAX_RUN, high odds in between) — long enough to
-    // read as clean strokes, bounded so no single run dominates the path.
-    const MIN_RUN = 2, MAX_RUN = 9, CONTINUE_CHANCE = 0.82;
+    // every cell — bounds are asymmetric on purpose: a diagonal run gets a
+    // much longer leash (reads as one clean 45° stroke) while a straight
+    // run is capped short (an accent between diagonal stretches, not the
+    // dominant shape).
+    const MIN_RUN = 2, MAX_RUN_DIAG = 14, MAX_RUN_STRAIGHT = 5, CONTINUE_CHANCE = 0.85;
     let lastId = null, runLen = 0;
 
     while (cur.row !== to.row || cur.col !== to.col) {
@@ -149,7 +158,8 @@ function routeOrthogonal(occupancy, from, to, rng, columns, maxRow) {
         if (steps > maxSteps) { const m = moves[0]; forceStep(m.row, m.col, m.dir); lastId = null; runLen = 0; continue; }
 
         const continuing = moves.find(function (m) { return m.id === lastId; });
-        const preferContinue = continuing && runLen < MAX_RUN && (runLen < MIN_RUN || rng() < CONTINUE_CHANCE);
+        const maxRunForContinuing = continuing && isDiagonalId(continuing.id) ? MAX_RUN_DIAG : MAX_RUN_STRAIGHT;
+        const preferContinue = continuing && runLen < maxRunForContinuing && (runLen < MIN_RUN || rng() < CONTINUE_CHANCE);
         const ordered = preferContinue
             ? [continuing].concat(weightedOrder(moves.filter(function (m) { return m !== continuing; }), dRow, dCol))
             : weightedOrder(moves, dRow, dCol);
@@ -183,6 +193,46 @@ function routeOrthogonal(occupancy, from, to, rng, columns, maxRow) {
     }
 
     return path;
+}
+
+function routeOrthogonal(occupancy, from, to, rng, columns, maxRow) {
+    const totalDRow = to.row - from.row;
+    const totalDCol = to.col - from.col;
+
+    // Nodes sit rowsPerProject rows apart but only a few columns apart, so a
+    // direct leg exhausts its small column delta almost immediately, then
+    // has nothing left to do but run straight for the rest of a much larger
+    // row delta — reading as long straights capped with a short diagonal
+    // nub. Waypoints are placed at even row fractions, each offset from the
+    // straight line by roughly that leg's own row-span — so every resulting
+    // leg (including the tail into `to`) has comparable row and column
+    // magnitude, close to a true 45° run, rather than one small nudge that
+    // just recreates the same imbalance one level down. Alternating sides
+    // keeps the zigzag centered on the direct line. Only kicks in when
+    // there's a real column delta to stretch out (totalDCol !== 0) — a
+    // genuinely same-column connection stays a clean straight line.
+    const waypoints = [from];
+    if (totalDCol !== 0 && Math.abs(totalDRow) > 6 && Math.abs(totalDRow) > Math.abs(totalDCol) * 2) {
+        const legCount = Math.max(2, Math.round(Math.abs(totalDRow) / 5));
+        const wanderMag = Math.max(2, Math.round(Math.abs(totalDRow) / legCount));
+        let side = rng() < 0.5 ? 1 : -1;
+        for (let i = 1; i < legCount; i++) {
+            const frac = i / legCount;
+            const row = Math.round(from.row + totalDRow * frac);
+            const straightCol = from.col + totalDCol * frac;
+            const col = Math.max(0, Math.min(columns - 1, Math.round(straightCol) + side * wanderMag));
+            waypoints.push({ row: row, col: col });
+            side = -side;
+        }
+    }
+    waypoints.push(to);
+
+    let fullPath = [{ row: from.row, col: from.col }];
+    for (let i = 1; i < waypoints.length; i++) {
+        const leg = routeLeg(occupancy, waypoints[i - 1], waypoints[i], rng, columns, maxRow);
+        fullPath = fullPath.concat(leg.slice(1));
+    }
+    return fullPath;
 }
 
 function reduceToCorners(path) {
