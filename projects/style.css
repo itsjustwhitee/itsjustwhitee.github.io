@@ -12,7 +12,7 @@
     position: relative;
     overflow: hidden;
 }
-#hashcrackerz-card:hover .project-img {
+.projects-grid #hashcrackerz-card:hover .project-img {
     animation: crackerVibrate 0.1s linear infinite;
 }
 @keyframes crackerVibrate {
@@ -89,8 +89,8 @@
     transform-origin: center;
     transition: transform 0.45s cubic-bezier(0.175,0.885,0.32,1.275);
 }
-.project-card:hover #sliceceipt-back  { transform: translate(-34px, -26px) rotate(-4deg); }
-.project-card:hover #sliceceipt-front { transform: translate(34px, 26px) rotate(4deg); }
+.projects-grid .project-card:hover #sliceceipt-back  { transform: translate(-34px, -26px) rotate(-4deg); }
+.projects-grid .project-card:hover #sliceceipt-front { transform: translate(34px, 26px) rotate(4deg); }
 
 /* justwhitee-notes: the logo is just a lowercase "t" (Typst's wordmark glyph) —
    on hover, "ypst" appears letter by letter right beside it, as if being

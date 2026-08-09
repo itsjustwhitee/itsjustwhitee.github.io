@@ -19,8 +19,14 @@ if (fanWrapper && !window.prefersReducedMotion) {
     let currentAngle = 0;
     let currentSpeed = BASE_SPEED;
     let targetSpeed = BASE_SPEED;
-    projectCard.addEventListener('mouseenter', () => targetSpeed = MAX_SPEED);
-    projectCard.addEventListener('mouseleave', () => targetSpeed = BASE_SPEED);
+    projectCard.addEventListener('mouseenter', () => {
+        if (projectCard.closest('.circuit-popup, .circuit-window')) return;
+        targetSpeed = MAX_SPEED;
+    });
+    projectCard.addEventListener('mouseleave', () => {
+        if (projectCard.closest('.circuit-popup, .circuit-window')) return;
+        targetSpeed = BASE_SPEED;
+    });
     function spinFan() {
         currentSpeed += (targetSpeed - currentSpeed) * 0.05;
         currentAngle += currentSpeed;
@@ -63,6 +69,7 @@ function initEyeTracking(edgeSvg) {
     if (!pupilGroup || window.prefersReducedMotion) return;
 
     window.addEventListener('mousemove', (e) => {
+        if (edgeSvg.closest('.circuit-popup, .circuit-window')) return;
         const rect = edgeSvg.getBoundingClientRect();
         const centerX = rect.left + rect.width / 2;
         const centerY = rect.top + rect.height / 2;
@@ -182,6 +189,7 @@ if (crackerCard && crackerImg && imgWrap && !window.prefersReducedMotion) {
         setTimeout(() => { crumb.remove(); }, duration * 1000);
     }
     crackerCard.addEventListener('mouseenter', () => {
+        if (crackerCard.closest('.circuit-popup, .circuit-window')) return;
         if (!intervalId) intervalId = setInterval(createCrumb, 60);
     });
     crackerCard.addEventListener('mouseleave', () => {
