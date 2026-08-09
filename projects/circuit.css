@@ -32,11 +32,10 @@
     transition: stroke 0.4s ease;
 }
 
-/* Stroke-width hierarchy (spec Routing rules): main path thickest, forks
-   thinner, dead-ends thinnest-of-the-traveled — all still heavier than the
-   untraveled network above, so "what's conducting" reads at a glance. */
+/* Stroke-width hierarchy (spec Routing rules): main path thickest,
+   dead-ends thinner — still heavier than the untraveled network above,
+   so "what's conducting" reads at a glance. */
 .circuit-path-main    { stroke-width: 7; }
-.circuit-path-fork    { stroke-width: 6; }
 .circuit-path-deadend { stroke-width: 5; }
 
 .circuit-segment.is-lit .circuit-path-traveled {
