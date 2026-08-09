@@ -172,5 +172,56 @@ function pointsToPathD(points) {
     return points.map(function (p, i) { return (i === 0 ? 'M' : 'L') + p.x.toFixed(1) + ',' + p.y.toFixed(1); }).join(' ');
 }
 
-return { makeRng, randInt, placeNodes, routeOrthogonal, reduceToCorners, chamferCorners, pointsToPathD, cellKey, canStep, markStep };
+const STEP_DIRS = [
+    { row: -1, col: 0, dir: 'v' },
+    { row: 1, col: 0, dir: 'v' },
+    { row: 0, col: -1, dir: 'h' },
+    { row: 0, col: 1, dir: 'h' },
+];
+
+function shuffled(arr, rng) {
+    const copy = arr.slice();
+    for (let i = copy.length - 1; i > 0; i--) {
+        const j = Math.floor(rng() * (i + 1));
+        const tmp = copy[i]; copy[i] = copy[j]; copy[j] = tmp;
+    }
+    return copy;
+}
+
+function growRandomWalk(occupancy, from, rng, columns, maxRow, minLen, maxLen) {
+    const len = randInt(rng, minLen, maxLen);
+    for (const d of shuffled(STEP_DIRS, rng)) {
+        const path = [{ row: from.row, col: from.col }];
+        let cur = { row: from.row, col: from.col };
+        let ok = true;
+        for (let i = 0; i < len; i++) {
+            const nr = Math.max(0, Math.min(maxRow, cur.row + d.row));
+            const nc = Math.max(0, Math.min(columns - 1, cur.col + d.col));
+            if ((nr === cur.row && nc === cur.col) || !canStep(occupancy, nr, nc, d.dir)) { ok = false; break; }
+            cur = { row: nr, col: nc };
+            path.push({ row: cur.row, col: cur.col });
+        }
+        if (ok && path.length > 1) {
+            for (let i = 1; i < path.length; i++) markStep(occupancy, path[i].row, path[i].col, d.dir);
+            return path;
+        }
+    }
+    return null;
+}
+
+function generateUntraveledNetwork(occupancy, columns, maxRow, rng, traceCount, minLen, maxLen) {
+    const traces = [];
+    for (let i = 0; i < traceCount; i++) {
+        const start = { row: randInt(rng, 0, maxRow), col: randInt(rng, 0, columns - 1) };
+        const walk = growRandomWalk(occupancy, start, rng, columns, maxRow, minLen, maxLen);
+        if (walk) traces.push(walk);
+    }
+    return traces;
+}
+
+return {
+    makeRng, randInt, placeNodes,
+    routeOrthogonal, reduceToCorners, chamferCorners, pointsToPathD, cellKey, canStep, markStep,
+    growRandomWalk, generateUntraveledNetwork,
+};
 });
