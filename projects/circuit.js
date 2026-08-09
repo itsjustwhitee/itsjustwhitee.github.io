@@ -262,7 +262,9 @@ const boardIconEls = {}; // slug -> the small logo element inside that node's bu
 function buildNodeButtons(stage, rendered, board, projects, cellSize) {
     const overlay = document.createElement('div');
     overlay.className = 'circuit-node-overlay';
-    overlay.style.width = rendered.width + 'px';
+    // Match circuit.css's SVG width:100% so left/top % coords resolve against
+    // the real, CSS-scaled board size, not the raw viewBox pixel space.
+    overlay.style.width = '100%';
 
     rendered.nodeElements.forEach(function (n) {
         const project = projects[n.index];
@@ -272,7 +274,7 @@ function buildNodeButtons(stage, rendered, board, projects, cellSize) {
         btn.dataset.slug = project.slug;
         btn.setAttribute('aria-label', projectTitle(project.cardEl));
         btn.style.left = ((n.cx / rendered.width) * 100) + '%';
-        btn.style.top = n.cy + 'px';
+        btn.style.top = ((n.cy / rendered.height) * 100) + '%';
 
         if (project.slug !== 'justwhitee-notes') {
             const logoSrc = projectLogoSrc(project.cardEl);
