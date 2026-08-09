@@ -138,6 +138,7 @@ function init() {
     wireActivation(collected.projects);
     initRackControllerExcite();
     initHashCrackerzExcite();
+    initEdgeCVExcite();
 }
 
 if (document.readyState === 'loading') {
@@ -471,6 +472,64 @@ function initHashCrackerzExcite() {
             if (++count >= 6) clearInterval(id);
         }, 60);
         setTimeout(function () { icon.classList.remove('is-vibrating'); }, 450);
+    });
+}
+
+function injectSvgWithUniqueIds(url, suffix, onReady) {
+    fetch(url)
+        .then(function (r) { return r.text(); })
+        .then(function (svgText) {
+            const doc = new DOMParser().parseFromString(svgText, 'image/svg+xml');
+            const svg = doc.documentElement;
+            const idMap = {};
+            // doc, not svg: also covers the root <svg>'s own id attribute.
+            doc.querySelectorAll('[id]').forEach(function (el) {
+                const oldId = el.getAttribute('id');
+                const newId = oldId + suffix;
+                idMap[oldId] = newId;
+                el.setAttribute('id', newId);
+            });
+            // hasAttribute/getAttribute (not a CSS `[xlink\:href]` selector) — the latter
+            // silently matches nothing for namespaced attrs in an XML-parsed document.
+            const refAttrs = ['href', 'xlink:href', 'fill', 'stroke', 'clip-path', 'mask', 'filter'];
+            doc.querySelectorAll('*').forEach(function (el) {
+                refAttrs.forEach(function (attr) {
+                    if (!el.hasAttribute(attr)) return;
+                    const val = el.getAttribute(attr);
+                    if (!val) return;
+                    const match = val.match(/^#(.+)$/) || val.match(/^url\(#(.+)\)$/);
+                    if (match && idMap[match[1]]) {
+                        el.setAttribute(attr, val.indexOf('url(') === 0 ? 'url(#' + idMap[match[1]] + ')' : '#' + idMap[match[1]]);
+                    }
+                });
+            });
+            onReady(svg, idMap);
+        })
+        .catch(function (err) { console.error('circuit board icon fetch failed for ' + url, err); });
+}
+
+function initEdgeCVExcite() {
+    const btn = document.querySelector('.circuit-node-btn[data-slug="edgecv4safety"]');
+    if (!btn) return;
+    injectSvgWithUniqueIds('/assets/projects/edgecv4safety.svg', '-board', function (svg) {
+        svg.classList.add('circuit-node-icon');
+        svg.removeAttribute('width');
+        svg.removeAttribute('height');
+        btn.appendChild(svg);
+        boardIconEls['edgecv4safety'] = svg;
+
+        if (window.prefersReducedMotion) return;
+        const pupil = svg.querySelector('#pupil-focus-group-board');
+        if (!pupil) return;
+
+        window.Circuit.onNodeExcite('edgecv4safety', function () {
+            const sweep = [{ x: -6, y: -3 }, { x: 6, y: 3 }, { x: 0, y: 0 }];
+            sweep.forEach(function (p, i) {
+                setTimeout(function () {
+                    pupil.style.transform = 'translate(' + p.x + 'px,' + p.y + 'px)';
+                }, i * 170);
+            });
+        });
     });
 }
 
