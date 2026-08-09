@@ -307,6 +307,8 @@ function buildNodeButtons(stage, rendered, board, projects, cellSize) {
 }
 
 function getBoardIconEl(slug) { return boardIconEls[slug]; }
+// Always use this to find a node's button — getBoardIconEl(...).closest(...) returns
+// nothing for edgecv4safety/sliceceipt, whose icons load asynchronously later.
 function getNodeButtonEl(slug) { return document.querySelector('.circuit-node-btn[data-slug="' + slug + '"]'); }
 window.Circuit.getBoardIconEl = getBoardIconEl;
 
