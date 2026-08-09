@@ -326,18 +326,6 @@ function compassIndexFor(dr, dc) {
     return 0;
 }
 
-// Every decorative symbol is drawn horizontally (leads running left-right,
-// dirIdx 2/East as the neutral 0°) — this is the rotation (in degrees,
-// screen/SVG convention) needed to align it with the branch's final
-// approach direction, so a component reads as sitting in-line on its own
-// stub instead of a fixed icon dropped at an unrelated angle.
-function spotWithApproachDir(branch) {
-    const tip = branch[branch.length - 1];
-    const prev = branch[branch.length - 2];
-    const dirIdx = compassIndexFor(Math.sign(tip.row - prev.row), Math.sign(tip.col - prev.col));
-    return { row: tip.row, col: tip.col, angle: (dirIdx - 2) * 45 };
-}
-
 function shuffled(arr, rng) {
     const copy = arr.slice();
     for (let i = copy.length - 1; i > 0; i--) {
@@ -561,7 +549,6 @@ function generate(opts) {
         return point;
     }
 
-    const decorativeSpots = [];
     if (segments.length > 0) {
         // Dead-ends render bright/lit/flowing, same as the main path — they
         // need to stay a minor accent (roughly on the order of the main
@@ -574,10 +561,7 @@ function generate(opts) {
             if (countVias(occupancy) >= maxVias) break;
             const point = pickAttachmentPoint(segments);
             const branch = growRandomWalk(occupancy, point, rng, columns, maxRow, 3, 6, point.dirIdx);
-            if (branch) {
-                segments.push({ corners: reduceToCorners(branch), traveled: true, kind: 'deadend' });
-                decorativeSpots.push(spotWithApproachDir(branch));
-            }
+            if (branch) segments.push({ corners: reduceToCorners(branch), traveled: true, kind: 'deadend' });
         }
     }
 
@@ -604,10 +588,7 @@ function generate(opts) {
         const pool = segments.concat(untraveled);
         const point = pickAttachmentPoint(pool);
         const branch = growRandomWalk(occupancy, point, rng, columns, maxRow, 3, 10, point.dirIdx);
-        if (branch) {
-            untraveled.push({ corners: reduceToCorners(branch), traveled: false });
-            if (rng() < 0.4) decorativeSpots.push(spotWithApproachDir(branch));
-        }
+        if (branch) untraveled.push({ corners: reduceToCorners(branch), traveled: false });
     }
 
     const vias = [];
@@ -620,15 +601,29 @@ function generate(opts) {
         }
     });
 
-    // Filtered only now that every branch has been grown — a spot recorded
-    // as a clean free-floating tip can still end up a via later, once some
-    // subsequent branch attaches to that exact point. A 2-lead part like a
-    // resistor only makes sense at a genuine dead end, never a junction.
-    const cleanDecorativeSpots = decorativeSpots.filter(function (s) {
-        return !viaKeys.has(s.row + ',' + s.col);
+    // Components sit in-line on an existing trace's own course — the real
+    // PCB motif of current running straight through a resistor/capacitor —
+    // rotated to the trace's local direction there, rather than dangling
+    // off a dead-end tip. Drawn from every segment's *interior* cells only
+    // (excludes both endpoints, so it's genuinely mid-run, never a corner
+    // or a via/junction where a 2-lead part wouldn't make sense).
+    const interiorPool = [];
+    segments.concat(untraveled).forEach(function (seg) {
+        const cells = segmentCells(seg.corners);
+        for (let i = 1; i < cells.length - 1; i++) {
+            if (!viaKeys.has(cells[i].row + ',' + cells[i].col)) interiorPool.push(cells[i]);
+        }
     });
+    const decorativeSpots = [];
+    const componentCount = Math.min(interiorPool.length, randInt(rng, projectCount, projectCount * 2));
+    for (let i = 0; i < componentCount; i++) {
+        const idx = randInt(rng, 0, interiorPool.length - 1);
+        const point = interiorPool[idx];
+        decorativeSpots.push({ row: point.row, col: point.col, angle: (point.dirIdx - 2) * 45 });
+        interiorPool.splice(idx, 1);
+    }
 
-    return { columns, rows: maxRow + 1, rowsPerProject, nodes, segments, untraveled, decorativeSpots: cleanDecorativeSpots, vias };
+    return { columns, rows: maxRow + 1, rowsPerProject, nodes, segments, untraveled, decorativeSpots, vias };
 }
 
 return {
