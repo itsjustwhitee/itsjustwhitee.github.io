@@ -133,12 +133,58 @@ function init() {
     window.CIRCUIT_RENDERED = rendered;
 
     collected.grid.classList.add('circuit-active');
+    runChargeAnimation(rendered, board);
 }
 
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', init);
 } else {
     init();
+}
+
+const CHARGE_DURATION_MS = 2000;
+
+function cumulativeDistanceFromRoot(rendered) {
+    // Distance is approximated as the traveled path's own on-screen length,
+    // ordered by its position in board.segments (built root-to-leaf in
+    // circuit-layout.js's generate()), which is good enough for a wavefront
+    // that only needs to *look* like it's expanding outward, not be exact.
+    let running = 0;
+    return rendered.traveledPaths.map(function (p) {
+        const start = running;
+        running += p.length;
+        return { el: p.el, length: p.length, startOffset: start };
+    });
+}
+
+function runChargeAnimation(rendered, board) {
+    const timed = cumulativeDistanceFromRoot(rendered);
+    const totalLength = timed.reduce(function (sum, t) { return sum + t.length; }, 0) || 1;
+
+    if (window.prefersReducedMotion) {
+        timed.forEach(function (t) { t.el.classList.add('is-lit'); });
+        rendered.nodeElements.forEach(function (n) { n.groupEl.classList.add('is-lit'); });
+        document.dispatchEvent(new CustomEvent('circuit:charged', { detail: { rendered: rendered, board: board } }));
+        return;
+    }
+
+    timed.forEach(function (t) {
+        const delay = (t.startOffset / totalLength) * CHARGE_DURATION_MS;
+        const duration = Math.max(150, (t.length / totalLength) * CHARGE_DURATION_MS);
+        setTimeout(function () { t.el.classList.add('is-lit'); }, delay);
+        setTimeout(function () { t.el.classList.add('is-lit'); }, delay + duration);
+    });
+
+    rendered.nodeElements.forEach(function (n) {
+        // Light a node once the segment(s) reaching it have had time to arrive:
+        // approximate via the node's index fraction along the total charge duration.
+        const frac = board.nodes.length > 1 ? n.index / (board.nodes.length - 1) : 0;
+        setTimeout(function () { n.groupEl.classList.add('is-lit'); }, frac * CHARGE_DURATION_MS);
+    });
+
+    setTimeout(function () {
+        document.dispatchEvent(new CustomEvent('circuit:charged', { detail: { rendered: rendered, board: board } }));
+    }, CHARGE_DURATION_MS + 100);
 }
 
 window.Circuit.init = init;
