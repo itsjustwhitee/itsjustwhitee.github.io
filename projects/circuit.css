@@ -1,0 +1,71 @@
+/* ═══════════════════════════════════════════════════════════════════════
+   projects/circuit.css — justwhitee · Matteo Fontolan
+   PCB visual language for the /projects/ circuit. Tokens (--accent,
+   --accent-bright, --bg-color, --radius) come from shared.css.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+.circuit-stage {
+    position: relative;
+    width: 100%;
+}
+
+.circuit-svg {
+    display: block;
+    width: 100%;
+    height: auto;
+    color: rgba(var(--accent-rgb), 0.35);
+}
+
+.circuit-path {
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.circuit-path-untraveled {
+    stroke: rgba(var(--accent-rgb), 0.18);
+    stroke-width: 2;
+}
+
+.circuit-path-traveled {
+    stroke: rgba(var(--accent-rgb), 0.18);
+    transition: stroke 0.4s ease;
+}
+
+/* Stroke-width hierarchy (spec Routing rules): main path thickest, forks
+   thinner, dead-ends thinnest-of-the-traveled — all still heavier than the
+   untraveled network above, so "what's conducting" reads at a glance. */
+.circuit-path-main    { stroke-width: 4; }
+.circuit-path-fork    { stroke-width: 3; }
+.circuit-path-deadend { stroke-width: 2.5; }
+
+.circuit-path-traveled.is-lit {
+    stroke: var(--accent-bright);
+    filter: drop-shadow(0 0 4px rgba(var(--accent-bright-rgb), 0.6));
+}
+
+.circuit-via {
+    color: rgba(var(--accent-rgb), 0.4);
+}
+
+.circuit-decor {
+    color: rgba(var(--accent-rgb), 0.3);
+}
+
+.circuit-node-pad {
+    fill: none;
+    stroke: rgba(var(--accent-rgb), 0.4);
+    stroke-width: 1.5;
+}
+
+.circuit-node-fill {
+    fill: #0b2b2d;
+    stroke: rgba(var(--accent-bright-rgb), 0.5);
+    stroke-width: 1.5;
+    transition: stroke 0.4s ease, filter 0.4s ease;
+}
+
+.circuit-node.is-lit .circuit-node-fill {
+    stroke: var(--accent-bright);
+    filter: drop-shadow(0 0 6px rgba(var(--accent-bright-rgb), 0.55));
+}
