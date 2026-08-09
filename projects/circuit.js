@@ -187,6 +187,21 @@ function runChargeAnimation(rendered, board) {
     }, CHARGE_DURATION_MS + 100);
 }
 
+const FLOW_SPEED_PX_PER_S = 60;
+const FLOW_PERIOD_MS = 1400; // must match the circuit-flow keyframe duration in circuit.css
+
+function startContinuousFlow(rendered) {
+    if (window.prefersReducedMotion) return;
+    rendered.traveledPaths.forEach(function (t) { t.el.classList.add('is-flowing'); });
+}
+
+document.addEventListener('circuit:charged', function (e) {
+    startContinuousFlow(e.detail.rendered);
+});
+
+window.Circuit.FLOW_SPEED_PX_PER_S = FLOW_SPEED_PX_PER_S;
+window.Circuit.FLOW_PERIOD_MS = FLOW_PERIOD_MS;
+
 window.Circuit.init = init;
 
 })();

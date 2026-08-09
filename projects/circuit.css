@@ -44,6 +44,15 @@
     filter: drop-shadow(0 0 4px rgba(var(--accent-bright-rgb), 0.6));
 }
 
+.circuit-path-traveled.is-flowing {
+    stroke-dasharray: 6 18;
+    animation: circuit-flow 1.4s linear infinite;
+}
+
+@keyframes circuit-flow {
+    to { stroke-dashoffset: -24; }
+}
+
 .circuit-via {
     color: rgba(var(--accent-rgb), 0.4);
 }
