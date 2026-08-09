@@ -6,6 +6,15 @@ function test(name, fn) {
     catch (e) { console.error('FAIL ' + name + ': ' + e.message); process.exitCode = 1; }
 }
 
+// Classifies a single grid step into its occupancy lane tag — mirrors the
+// 'v'/'h'/'d1'/'d2' tags routeOrthogonal/growRandomWalk attach internally,
+// so tests can check same-lane reuse from positions alone.
+function dirOf(a, b) {
+    const dr = Math.sign(b.row - a.row), dc = Math.sign(b.col - a.col);
+    if (dr !== 0 && dc !== 0) return dr === dc ? 'd2' : 'd1';
+    return dr !== 0 ? 'v' : 'h';
+}
+
 test('makeRng is deterministic for a given seed', () => {
     const a = CircuitLayout.makeRng(42);
     const b = CircuitLayout.makeRng(42);
@@ -40,15 +49,23 @@ test('placeNodes keeps columns within a central band, not at the edges', () => {
     });
 });
 
-test('routeOrthogonal only moves one cell at a time, orthogonally', () => {
+test('routeOrthogonal only moves one cell at a time, orthogonally or diagonally', () => {
     const rng = CircuitLayout.makeRng(3);
     const occ = new Map();
     const path = CircuitLayout.routeOrthogonal(occ, { row: 0, col: 0 }, { row: 6, col: 4 }, rng, 13, 40);
     for (let i = 1; i < path.length; i++) {
         const dr = Math.abs(path[i].row - path[i - 1].row);
         const dc = Math.abs(path[i].col - path[i - 1].col);
-        assert.ok((dr === 1 && dc === 0) || (dr === 0 && dc === 1), 'step ' + i + ' is not a single orthogonal move');
+        assert.ok(dr <= 1 && dc <= 1 && (dr + dc) > 0, 'step ' + i + ' is not a single-cell move');
     }
+});
+
+test('routeOrthogonal actually takes real diagonal steps, not just orthogonal ones (style regression guard)', () => {
+    const rng = CircuitLayout.makeRng(3);
+    const occ = new Map();
+    const path = CircuitLayout.routeOrthogonal(occ, { row: 0, col: 0 }, { row: 20, col: 15 }, rng, 20, 40);
+    const diagonalSteps = path.slice(1).filter((p, i) => p.row !== path[i].row && p.col !== path[i].col);
+    assert.ok(diagonalSteps.length > 0, 'expected at least one diagonal step across a long unobstructed route');
 });
 
 test('routeOrthogonal always reaches its destination', () => {
@@ -68,11 +85,12 @@ test('two routes never share a cell in the same direction (no overlapping parall
     const seen = new Map();
     [p1, p2].forEach(path => {
         for (let i = 1; i < path.length; i++) {
-            const dir = path[i].row !== path[i - 1].row ? 'v' : 'h';
+            const dir = dirOf(path[i - 1], path[i]);
             const key = path[i].row + ',' + path[i].col;
-            const prevDir = seen.get(key);
-            assert.notStrictEqual(prevDir, dir, 'cell ' + key + ' reused in the same direction ' + dir);
-            seen.set(key, dir);
+            const prevDirs = seen.get(key) || new Set();
+            assert.ok(!prevDirs.has(dir), 'cell ' + key + ' reused in the same direction ' + dir);
+            prevDirs.add(dir);
+            seen.set(key, prevDirs);
         }
     });
 });
@@ -96,11 +114,13 @@ test('many routes through a congested shared grid never reuse a cell in the same
     const maxRow = routeCount * stride + band + 2;
     const allPaths = [];
     const allTos = [];
-    let manhattanSum = 0;
+    let chebyshevSum = 0;
     for (let i = 0; i < routeCount; i++) {
         const from = { row: i * stride, col: CircuitLayout.randInt(planRng, 0, columns - 1) };
         const to = { row: i * stride + band, col: CircuitLayout.randInt(planRng, 0, columns - 1) };
-        manhattanSum += Math.abs(to.row - from.row) + Math.abs(to.col - from.col);
+        // Chebyshev, not Manhattan: diagonal steps are now a legal single
+        // move, so this is the true unobstructed lower bound on step count.
+        chebyshevSum += Math.max(Math.abs(to.row - from.row), Math.abs(to.col - from.col));
         allPaths.push(CircuitLayout.routeOrthogonal(occ, from, to, rng, columns, maxRow));
         allTos.push(to);
     }
@@ -110,7 +130,7 @@ test('many routes through a congested shared grid never reuse a cell in the same
     allPaths.forEach((path, routeIdx) => {
         for (let i = 1; i < path.length; i++) {
             totalSteps++;
-            const dir = path[i].row !== path[i - 1].row ? 'v' : 'h';
+            const dir = dirOf(path[i - 1], path[i]);
             const key = path[i].row + ',' + path[i].col + ',' + dir;
             assert.ok(!usedCellDir.has(key), 'cell ' + path[i].row + ',' + path[i].col + ' reused in the same direction ' + dir);
             usedCellDir.add(key);
@@ -122,7 +142,7 @@ test('many routes through a congested shared grid never reuse a cell in the same
     });
 
     // Confirms congestion actually forced detours, not straight-line routes.
-    assert.ok(totalSteps > manhattanSum, 'routes took no detours at all — congestion was not exercised (' + totalSteps + ' <= ' + manhattanSum + ')');
+    assert.ok(totalSteps > chebyshevSum, 'routes took no detours at all — congestion was not exercised (' + totalSteps + ' <= ' + chebyshevSum + ')');
 });
 
 test('routeOrthogonal self-corrects a column drift introduced while closing the final row gap (regression)', () => {
@@ -170,6 +190,31 @@ test('chamferCorners never leaves a corner at a sharp/acute angle', () => {
         const angleDeg = Math.acos(Math.max(-1, Math.min(1, dot / mag))) * 180 / Math.PI;
         assert.ok(angleDeg >= 89, 'angle at point ' + i + ' is ' + angleDeg.toFixed(1) + '°, sharper than 90°');
     }
+});
+
+function assertNoSharpChamferAngle(corners, label) {
+    const pts = CircuitLayout.chamferCorners(corners, 32, 12);
+    for (let i = 1; i < pts.length - 1; i++) {
+        const a = pts[i - 1], b = pts[i], c = pts[i + 1];
+        const v1 = { x: a.x - b.x, y: a.y - b.y };
+        const v2 = { x: c.x - b.x, y: c.y - b.y };
+        const dot = v1.x * v2.x + v1.y * v2.y;
+        const mag = Math.hypot(v1.x, v1.y) * Math.hypot(v2.x, v2.y);
+        const angleDeg = Math.acos(Math.max(-1, Math.min(1, dot / mag))) * 180 / Math.PI;
+        assert.ok(angleDeg >= 89, label + ': angle at point ' + i + ' is ' + angleDeg.toFixed(1) + '°, sharper than 90°');
+    }
+}
+
+test('chamferCorners stays safe across a horizontal-to-diagonal (45°) turn', () => {
+    // (0,0)->(0,4) horizontal, then (0,4)->(4,8) diagonal: a 45° turn, gentler
+    // than the 90° case above — chamfering it should never sharpen it.
+    assertNoSharpChamferAngle([{ row: 0, col: 0 }, { row: 0, col: 4 }, { row: 4, col: 8 }], 'h-to-diagonal');
+});
+
+test('chamferCorners stays safe across a diagonal-to-diagonal (90°) turn', () => {
+    // (0,0)->(4,4) is the d2 diagonal, (4,4)->(8,0) is the d1 diagonal —
+    // same 90°-turn geometry as the h/v case, just rotated 45°.
+    assertNoSharpChamferAngle([{ row: 0, col: 0 }, { row: 4, col: 4 }, { row: 8, col: 0 }], 'diagonal-to-diagonal');
 });
 
 test('pointsToPathD starts with M and continues with L', () => {

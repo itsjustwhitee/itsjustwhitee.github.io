@@ -61,7 +61,7 @@ function render(container, board, cellSize) {
         segGroup.appendChild(baseEl);
         segGroup.appendChild(flowEl);
         traveledGroup.appendChild(segGroup);
-        return { el: segGroup, length: length, corners: seg.corners };
+        return { el: segGroup, length: length, corners: seg.corners, startDistance: seg.startDistance * cellSize };
     });
     svg.appendChild(traveledGroup);
 
@@ -85,10 +85,10 @@ function render(container, board, cellSize) {
     const nodeElements = board.nodes.map(function (n, i) {
         const cx = n.col * cellSize, cy = n.row * cellSize;
         const g = svgEl('g', { class: 'circuit-node', 'data-node-index': i, transform: 'translate(' + cx + ',' + cy + ')' });
-        g.appendChild(svgEl('circle', { r: 22, class: 'circuit-node-pad' }));
-        g.appendChild(svgEl('circle', { r: 16, class: 'circuit-node-fill' }));
+        g.appendChild(svgEl('circle', { r: 27, class: 'circuit-node-pad' }));
+        g.appendChild(svgEl('circle', { r: 21, class: 'circuit-node-fill' }));
         nodeGroup.appendChild(g);
-        return { index: i, cx: cx, cy: cy, groupEl: g };
+        return { index: i, cx: cx, cy: cy, groupEl: g, distanceFromRoot: n.distanceFromRoot * cellSize };
     });
     svg.appendChild(nodeGroup);
 
@@ -150,38 +150,28 @@ function init() {
 
 const CHARGE_DURATION_MS = 2000;
 
-function cumulativeDistanceFromRoot(rendered) {
-    // Approximated via segment order (root-to-leaf), not true graph distance.
-    let running = 0;
-    return rendered.traveledPaths.map(function (p) {
-        const start = running;
-        running += p.length;
-        return { el: p.el, length: p.length, startOffset: start };
-    });
-}
-
 function runChargeAnimation(rendered, board) {
-    const timed = cumulativeDistanceFromRoot(rendered);
-    const totalLength = timed.reduce(function (sum, t) { return sum + t.length; }, 0) || 1;
+    const totalDistance = rendered.traveledPaths.reduce(function (max, t) {
+        return Math.max(max, t.startDistance + t.length);
+    }, 0) || 1;
 
     if (window.prefersReducedMotion) {
-        timed.forEach(function (t) { t.el.classList.add('is-lit'); });
+        rendered.traveledPaths.forEach(function (t) { t.el.classList.add('is-lit'); });
         rendered.nodeElements.forEach(function (n) { n.groupEl.classList.add('is-lit'); });
         document.dispatchEvent(new CustomEvent('circuit:charged', { detail: { rendered: rendered, board: board } }));
         return;
     }
 
-    timed.forEach(function (t) {
-        const delay = (t.startOffset / totalLength) * CHARGE_DURATION_MS;
-        const duration = Math.max(150, (t.length / totalLength) * CHARGE_DURATION_MS);
+    rendered.traveledPaths.forEach(function (t) {
+        const delay = (t.startDistance / totalDistance) * CHARGE_DURATION_MS;
+        const duration = Math.max(150, (t.length / totalDistance) * CHARGE_DURATION_MS);
         setTimeout(function () { t.el.classList.add('is-lit'); }, delay);
         setTimeout(function () { t.el.classList.add('is-lit'); }, delay + duration);
     });
 
     rendered.nodeElements.forEach(function (n) {
-        // Approximated via index fraction, not per-node arrival time.
-        const frac = board.nodes.length > 1 ? n.index / (board.nodes.length - 1) : 0;
-        setTimeout(function () { n.groupEl.classList.add('is-lit'); }, frac * CHARGE_DURATION_MS);
+        const delay = (n.distanceFromRoot / totalDistance) * CHARGE_DURATION_MS;
+        setTimeout(function () { n.groupEl.classList.add('is-lit'); }, delay);
     });
 
     setTimeout(function () {
@@ -189,8 +179,8 @@ function runChargeAnimation(rendered, board) {
     }, CHARGE_DURATION_MS + 100);
 }
 
-const FLOW_SPEED_PX_PER_S = 24 / 1.4; // dash pattern total (6+18) / circuit-flow keyframe period, circuit.css
-const FLOW_PERIOD_MS = 1400; // must match the circuit-flow keyframe duration in circuit.css
+const FLOW_SPEED_PX_PER_S = 180 / 1.2; // dash pattern total (26+154) / circuit-flow keyframe period, circuit.css
+const FLOW_PERIOD_MS = 1200; // must match the circuit-flow keyframe duration in circuit.css
 
 function startContinuousFlow(rendered) {
     if (window.prefersReducedMotion) return;
@@ -225,12 +215,8 @@ function excite(project, nodeEl) {
 
 function startPulseScheduler(rendered, projects) {
     if (window.prefersReducedMotion) return;
-    const timed = cumulativeDistanceFromRoot(rendered);
-    // Same index-fraction approximation as the charge animation.
     const nodes = rendered.nodeElements.map(function (n) {
-        const frac = rendered.nodeElements.length > 1 ? n.index / (rendered.nodeElements.length - 1) : 0;
-        const totalLength = timed.reduce(function (sum, t) { return sum + t.length; }, 0) || 1;
-        return { distance: frac * totalLength, nodeEl: n.groupEl, project: projects[n.index] };
+        return { distance: n.distanceFromRoot, nodeEl: n.groupEl, project: projects[n.index] };
     });
     window.CircuitPulse.schedule(
         nodes,
@@ -274,23 +260,15 @@ function buildNodeButtons(stage, rendered, board, projects, cellSize) {
         btn.style.left = ((n.cx / rendered.width) * 100) + '%';
         btn.style.top = ((n.cy / rendered.height) * 100) + '%';
 
-        if (project.slug !== 'justwhitee-notes') {
-            const logoSrc = projectLogoSrc(project.cardEl);
-            if (logoSrc) {
-                const icon = document.createElement('img');
-                icon.className = 'circuit-node-icon';
-                icon.src = logoSrc;
-                icon.alt = '';
-                icon.loading = 'lazy';
-                btn.appendChild(icon);
-                boardIconEls[project.slug] = icon;
-            }
-        } else {
-            const label = document.createElement('span');
-            label.className = 'circuit-node-icon circuit-node-icon-text';
-            label.textContent = 't';
-            btn.appendChild(label);
-            boardIconEls[project.slug] = label;
+        const logoSrc = projectLogoSrc(project.cardEl);
+        if (logoSrc) {
+            const icon = document.createElement('img');
+            icon.className = 'circuit-node-icon';
+            icon.src = logoSrc;
+            icon.alt = '';
+            icon.loading = 'lazy';
+            btn.appendChild(icon);
+            boardIconEls[project.slug] = icon;
         }
 
         btn.addEventListener('click', function () {

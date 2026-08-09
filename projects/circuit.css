@@ -62,13 +62,13 @@
 }
 
 .circuit-segment.is-flowing .circuit-flow-overlay {
-    stroke-dasharray: 26 70;
+    stroke-dasharray: 26 154;
     filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.9)) drop-shadow(0 0 14px rgba(var(--accent-bright-rgb), 0.8));
-    animation: circuit-flow 1.6s linear infinite;
+    animation: circuit-flow 1.2s linear infinite;
 }
 
 @keyframes circuit-flow {
-    to { stroke-dashoffset: -96; }
+    to { stroke-dashoffset: -180; }
 }
 
 .circuit-via {
@@ -112,8 +112,8 @@
 .circuit-node-btn {
     position: absolute;
     transform: translate(-50%, -50%);
-    width: 44px;
-    height: 44px;
+    width: 54px;
+    height: 54px;
     border-radius: 50%;
     border: none;
     background: transparent;
@@ -132,22 +132,18 @@
 }
 
 .circuit-node-icon {
-    width: 28px;
-    height: 28px;
+    width: 36px;
+    height: 36px;
     object-fit: contain;
     pointer-events: none;
     filter: brightness(0.9);
 }
 
-.circuit-node-icon-text {
-    font-family: 'Syne', sans-serif;
-    font-weight: 800;
-    font-style: italic;
-    font-size: 1.2rem;
-    color: #fff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+/* Its eye-sweep excite reads best with real room to move in — give it a
+   bigger stage than the uniform node-icon size. */
+.circuit-node-btn[data-slug="edgecv4safety"] .circuit-node-icon {
+    width: 44px;
+    height: 44px;
 }
 
 .circuit-node-icon.is-vibrating {
@@ -168,8 +164,8 @@
     transition: transform 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
-.circuit-node-icon.is-flapping #sliceceipt-back-board  { transform: translate(-8px, -6px) rotate(-4deg); }
-.circuit-node-icon.is-flapping #sliceceipt-front-board { transform: translate(8px, 6px) rotate(4deg); }
+.circuit-node-icon.is-flapping #sliceceipt-back-board  { transform: translate(-12px, -9px) rotate(-7deg); }
+.circuit-node-icon.is-flapping #sliceceipt-front-board { transform: translate(12px, 9px) rotate(7deg); }
 
 .circuit-popup {
     position: absolute;

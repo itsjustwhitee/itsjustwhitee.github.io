@@ -109,6 +109,17 @@ function routeOrthogonal(occupancy, from, to, rng, columns, maxRow) {
         // shrinking distance, never an unconstrained beeline.
         if (steps > maxSteps) { forceStep(primary.row, primary.col, primary.dir); continue; }
 
+        // A diagonal step closes both the row and col gap at once, so it's
+        // tried as a first-class move whenever both are open — this is what
+        // produces real 45° runs instead of only tiny post-hoc chamfers at
+        // orthogonal turns.
+        let diag = null;
+        if (dRow !== 0 && dCol !== 0) {
+            const dr = Math.sign(dRow), dc = Math.sign(dCol);
+            diag = { row: cur.row + dr, col: cur.col + dc, dir: dr === dc ? 'd2' : 'd1' };
+        }
+        if (diag && rng() < 0.55 && tryStep(diag.row, diag.col, diag.dir)) continue;
+
         if (tryStep(primary.row, primary.col, primary.dir)) continue;
 
         const secondary = axis === 'row' && dCol !== 0 ? { row: cur.row, col: cur.col + Math.sign(dCol), dir: 'h' }
@@ -116,7 +127,9 @@ function routeOrthogonal(occupancy, from, to, rng, columns, maxRow) {
             : null;
         if (secondary && tryStep(secondary.row, secondary.col, secondary.dir)) continue;
 
-        // Both axes blocked — sidestep perpendicular around the obstruction.
+        if (diag && tryStep(diag.row, diag.col, diag.dir)) continue;
+
+        // Both axes and the diagonal blocked — sidestep perpendicular around the obstruction.
         const sideDir = axis === 'row' ? 'h' : 'v';
         const sideA = sideDir === 'h' ? { row: cur.row, col: cur.col + 1, dir: 'h' } : { row: cur.row + 1, col: cur.col, dir: 'v' };
         const sideB = sideDir === 'h' ? { row: cur.row, col: cur.col - 1, dir: 'h' } : { row: cur.row - 1, col: cur.col, dir: 'v' };
@@ -177,6 +190,10 @@ const STEP_DIRS = [
     { row: 1, col: 0, dir: 'v' },
     { row: 0, col: -1, dir: 'h' },
     { row: 0, col: 1, dir: 'h' },
+    { row: -1, col: 1, dir: 'd1' },
+    { row: 1, col: -1, dir: 'd1' },
+    { row: -1, col: -1, dir: 'd2' },
+    { row: 1, col: 1, dir: 'd2' },
 ];
 
 function shuffled(arr, rng) {
@@ -202,6 +219,12 @@ function growRandomWalk(occupancy, from, rng, columns, maxRow, minLen, maxLen) {
             path.push({ row: cur.row, col: cur.col });
         }
         if (ok && path.length > 1) {
+            // Mark the attachment cell itself too, not just the new cells —
+            // otherwise a branch touching a straight run mid-segment never
+            // registers a second direction there, so it never gets flagged
+            // as a via and reads as visually unconnected even though it's
+            // graph-connected.
+            markStep(occupancy, from.row, from.col, d.dir);
             for (let i = 1; i < path.length; i++) markStep(occupancy, path[i].row, path[i].col, d.dir);
             return path;
         }
@@ -217,6 +240,44 @@ function generateUntraveledNetwork(occupancy, columns, maxRow, rng, traceCount, 
         if (walk) traces.push(walk);
     }
     return traces;
+}
+
+function computeDistances(segments, root) {
+    const adj = new Map();
+    function key(p) { return p.row + ',' + p.col; }
+    function addEdge(a, b, dist) {
+        const ka = key(a), kb = key(b);
+        if (!adj.has(ka)) adj.set(ka, []);
+        if (!adj.has(kb)) adj.set(kb, []);
+        adj.get(ka).push({ to: kb, dist: dist });
+        adj.get(kb).push({ to: ka, dist: dist });
+    }
+    segments.forEach(function (seg) {
+        for (let i = 1; i < seg.corners.length; i++) {
+            const a = seg.corners[i - 1], b = seg.corners[i];
+            // Chebyshev distance: a diagonal run covers both row and col
+            // deltas in one grid step each, so max(...) — not Manhattan's
+            // sum(...) — is the true step count along a corner-to-corner run.
+            addEdge(a, b, Math.max(Math.abs(a.row - b.row), Math.abs(a.col - b.col)));
+        }
+    });
+
+    const dist = new Map();
+    dist.set(key(root), 0);
+    const visited = new Set();
+    for (;;) {
+        let curKey = null, curDist = Infinity;
+        dist.forEach(function (d, k) {
+            if (!visited.has(k) && d < curDist) { curDist = d; curKey = k; }
+        });
+        if (curKey === null) break;
+        visited.add(curKey);
+        (adj.get(curKey) || []).forEach(function (edge) {
+            const nd = curDist + edge.dist;
+            if (!dist.has(edge.to) || nd < dist.get(edge.to)) dist.set(edge.to, nd);
+        });
+    }
+    return dist;
 }
 
 function generate(opts) {
@@ -258,7 +319,7 @@ function generate(opts) {
 
     const decorativeSpots = [];
     if (segments.length > 0) {
-        const deadEndCount = randInt(rng, projectCount * 2, projectCount * 4);
+        const deadEndCount = randInt(rng, projectCount * 3, projectCount * 6);
         for (let i = 0; i < deadEndCount; i++) {
             const seg = segments[randInt(rng, 0, segments.length - 1)];
             const point = seg.corners[randInt(rng, 0, seg.corners.length - 1)];
@@ -270,16 +331,29 @@ function generate(opts) {
         }
     }
 
+    const root = leadIn[leadIn.length - 1];
+    const distances = computeDistances(segments, root);
+    nodes.forEach(function (n) {
+        const d = distances.get(n.row + ',' + n.col);
+        n.distanceFromRoot = d !== undefined ? d : 0;
+    });
+    segments.forEach(function (seg) {
+        const a = seg.corners[0], b = seg.corners[seg.corners.length - 1];
+        const da = distances.get(a.row + ',' + a.col);
+        const db = distances.get(b.row + ',' + b.col);
+        seg.startDistance = Math.min(da !== undefined ? da : Infinity, db !== undefined ? db : Infinity);
+    });
+
     // Untraveled branches attach to any point already on the graph (traveled
     // or untraveled), so the whole board stays one connected network — only
     // whether current reaches a given branch differs, never its connectivity.
     const untraveled = [];
-    const untraveledCount = randInt(rng, projectCount * 4, projectCount * 7);
+    const untraveledCount = randInt(rng, projectCount * 8, projectCount * 14);
     for (let i = 0; i < untraveledCount; i++) {
         const pool = segments.concat(untraveled);
         const seg = pool[randInt(rng, 0, pool.length - 1)];
         const point = seg.corners[randInt(rng, 0, seg.corners.length - 1)];
-        const branch = growRandomWalk(occupancy, point, rng, columns, maxRow, 3, 8);
+        const branch = growRandomWalk(occupancy, point, rng, columns, maxRow, 3, 10);
         if (branch) {
             untraveled.push({ corners: reduceToCorners(branch), traveled: false });
             if (rng() < 0.4) decorativeSpots.push(branch[branch.length - 1]);
@@ -300,6 +374,6 @@ function generate(opts) {
 return {
     makeRng, randInt, placeNodes,
     routeOrthogonal, reduceToCorners, chamferCorners, pointsToPathD, cellKey, canStep, markStep,
-    growRandomWalk, generateUntraveledNetwork, generate,
+    growRandomWalk, generateUntraveledNetwork, computeDistances, generate,
 };
 });
