@@ -225,6 +225,10 @@ function generate(opts) {
     const rowsPerProject = opts.rowsPerProject || 8;
     const projectCount = opts.projectCount;
 
+    if (projectCount <= 0) {
+        return { columns, rows: rowsPerProject, rowsPerProject, nodes: [], segments: [], untraveled: [], decorativeSpots: [], vias: [] };
+    }
+
     const nodes = placeNodes(projectCount, columns, rowsPerProject, rng);
     const maxRow = nodes[nodes.length - 1].row + rowsPerProject;
     const occupancy = new Map();
@@ -243,14 +247,16 @@ function generate(opts) {
     }
 
     const decorativeSpots = [];
-    const deadEndCount = randInt(rng, projectCount, projectCount * 2);
-    for (let i = 0; i < deadEndCount; i++) {
-        const seg = segments[randInt(rng, 0, segments.length - 1)];
-        const point = seg.corners[randInt(rng, 0, seg.corners.length - 1)];
-        const branch = growRandomWalk(occupancy, point, rng, columns, maxRow, 3, 6);
-        if (branch) {
-            segments.push({ corners: reduceToCorners(branch), traveled: true, kind: 'deadend' });
-            decorativeSpots.push(branch[branch.length - 1]);
+    if (segments.length > 0) {
+        const deadEndCount = randInt(rng, projectCount, projectCount * 2);
+        for (let i = 0; i < deadEndCount; i++) {
+            const seg = segments[randInt(rng, 0, segments.length - 1)];
+            const point = seg.corners[randInt(rng, 0, seg.corners.length - 1)];
+            const branch = growRandomWalk(occupancy, point, rng, columns, maxRow, 3, 6);
+            if (branch) {
+                segments.push({ corners: reduceToCorners(branch), traveled: true, kind: 'deadend' });
+                decorativeSpots.push(branch[branch.length - 1]);
+            }
         }
     }
 

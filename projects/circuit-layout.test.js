@@ -233,8 +233,24 @@ test('generate is reproducible for the same seed and varies across seeds', () =>
     const a = CircuitLayout.generate({ projectCount: 5, columns: 13, rowsPerProject: 8, seed: 7 });
     const b = CircuitLayout.generate({ projectCount: 5, columns: 13, rowsPerProject: 8, seed: 7 });
     const c = CircuitLayout.generate({ projectCount: 5, columns: 13, rowsPerProject: 8, seed: 8 });
-    assert.deepStrictEqual(a.nodes, b.nodes);
-    assert.notDeepStrictEqual(a.nodes, c.nodes);
+    assert.deepStrictEqual(a, b);
+    assert.notDeepStrictEqual(a, c);
+});
+
+test('generate does not crash for projectCount 0 or 1 and returns the normal board shape', () => {
+    const shapeKeys = ['columns', 'rows', 'rowsPerProject', 'nodes', 'segments', 'untraveled', 'decorativeSpots', 'vias'];
+    const one = CircuitLayout.generate({ projectCount: 1, columns: 13, rowsPerProject: 8, seed: 1 });
+    const zero = CircuitLayout.generate({ projectCount: 0, columns: 13, rowsPerProject: 8, seed: 1 });
+    [one, zero].forEach(board => {
+        shapeKeys.forEach(key => assert.ok(key in board, 'missing field ' + key));
+        assert.ok(Array.isArray(board.nodes));
+        assert.ok(Array.isArray(board.segments));
+        assert.ok(Array.isArray(board.untraveled));
+        assert.ok(Array.isArray(board.decorativeSpots));
+        assert.ok(Array.isArray(board.vias));
+    });
+    assert.strictEqual(one.nodes.length, 1);
+    assert.strictEqual(zero.nodes.length, 0);
 });
 
 test('generate never leaves segments and untraveled traces sharing a same-direction cell', () => {
