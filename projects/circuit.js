@@ -139,6 +139,7 @@ function init() {
     initRackControllerExcite();
     initHashCrackerzExcite();
     initEdgeCVExcite();
+    initSliceCeiptExcite();
 }
 
 if (document.readyState === 'loading') {
@@ -529,6 +530,24 @@ function initEdgeCVExcite() {
                     pupil.style.transform = 'translate(' + p.x + 'px,' + p.y + 'px)';
                 }, i * 170);
             });
+        });
+    });
+}
+
+function initSliceCeiptExcite() {
+    const btn = document.querySelector('.circuit-node-btn[data-slug="sliceceipt"]');
+    if (!btn) return;
+    injectSvgWithUniqueIds('/assets/projects/sliceceipt.svg', '-board', function (svg) {
+        svg.classList.add('circuit-node-icon');
+        svg.removeAttribute('width');
+        svg.removeAttribute('height');
+        btn.appendChild(svg);
+        boardIconEls['sliceceipt'] = svg;
+
+        if (window.prefersReducedMotion) return;
+        window.Circuit.onNodeExcite('sliceceipt', function () {
+            svg.classList.add('is-flapping');
+            setTimeout(function () { svg.classList.remove('is-flapping'); }, 500);
         });
     });
 }

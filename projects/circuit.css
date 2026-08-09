@@ -143,6 +143,16 @@
     pointer-events: none;
 }
 
+.circuit-node-icon #sliceceipt-back-board,
+.circuit-node-icon #sliceceipt-front-board {
+    transform-box: fill-box;
+    transform-origin: center;
+    transition: transform 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.circuit-node-icon.is-flapping #sliceceipt-back-board  { transform: translate(-8px, -6px) rotate(-4deg); }
+.circuit-node-icon.is-flapping #sliceceipt-front-board { transform: translate(8px, 6px) rotate(4deg); }
+
 .circuit-popup {
     position: absolute;
     z-index: 50;
