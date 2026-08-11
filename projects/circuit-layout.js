@@ -535,7 +535,7 @@ function generate(opts) {
     // packed edge-to-edge, not sparse — this is deliberately generous; the
     // local anti-clustering check below keeps density even rather than
     // clumped, so a high cap here reads as "full," not "messy."
-    const maxVias = projectCount * 20;
+    const maxVias = projectCount * 10;
 
     // A global cap alone still lets crossings bunch up around one busy spot
     // (typically a node, where several segments already meet) — this steers
@@ -598,13 +598,18 @@ function generate(opts) {
     // Untraveled branches attach to any point already on the graph (traveled
     // or untraveled), so the whole board stays one connected network — only
     // whether current reaches a given branch differs, never its connectivity.
+    // Independent random-walk branches don't coordinate with each other —
+    // pushed high enough in COUNT, that just produces a dense, incoherent
+    // crosshatch (many short, unrelated segments crossing everywhere) not
+    // the reference's look (a handful of long, mostly-straight runs reading
+    // as real bus lines). Fewer, much longer branches instead.
     const untraveled = [];
-    const untraveledCount = randInt(rng, projectCount * 20, projectCount * 35);
+    const untraveledCount = randInt(rng, projectCount * 5, projectCount * 8);
     for (let i = 0; i < untraveledCount; i++) {
         if (countVias(occupancy) >= maxVias) break;
         const pool = segments.concat(untraveled);
         const point = pickAttachmentPoint(pool);
-        const branch = growRandomWalk(occupancy, point, rng, columns, maxRow, 3, 10, point.dirIdx);
+        const branch = growRandomWalk(occupancy, point, rng, columns, maxRow, 8, 22, point.dirIdx);
         if (branch) untraveled.push({ corners: reduceToCorners(branch), traveled: false });
     }
 
