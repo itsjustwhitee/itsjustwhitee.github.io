@@ -326,6 +326,14 @@ function compassIndexFor(dr, dc) {
     return 0;
 }
 
+function directionSequenceFromPath(path) {
+    const seq = [];
+    for (let i = 1; i < path.length; i++) {
+        seq.push(compassIndexFor(Math.sign(path[i].row - path[i - 1].row), Math.sign(path[i].col - path[i - 1].col)));
+    }
+    return seq;
+}
+
 function growRandomWalk(occupancy, from, rng, columns, maxRow, minLen, maxLen, parentDirIdx) {
     const len = randInt(rng, minLen, maxLen);
     // Left fully free (all 8), a branch's starting heading has no relation
@@ -443,6 +451,37 @@ function growRandomWalk(occupancy, from, rng, columns, maxRow, minLen, maxLen, p
         }
     }
     return null;
+}
+
+// Replays an already-grown branch's exact direction sequence from a
+// perpendicular-offset start point, so the result runs alongside it —
+// same turns, same shape, just shifted — like a real PCB's parallel bus
+// bundle, rather than every trace being an independent, uncorrelated walk.
+// Stops early (same rules as growRandomWalk: same-lane block, or one final
+// step to touch-and-join a different trace) wherever the sibling's own
+// path happens to run into something the original didn't.
+function growParallelWalk(occupancy, start, dirSeq, columns, maxRow) {
+    const path = [{ row: start.row, col: start.col }];
+    const dirs = [];
+    const dirIdxs = [];
+    let cur = { row: start.row, col: start.col };
+    for (let i = 0; i < dirSeq.length; i++) {
+        const d = COMPASS_DIRS[dirSeq[i]];
+        const nr = Math.max(0, Math.min(maxRow, cur.row + d.row));
+        const nc = Math.max(0, Math.min(columns - 1, cur.col + d.col));
+        if (nr === cur.row && nc === cur.col) break;
+        const entry = occupancy.get(cellKey(nr, nc));
+        if (entry && entry.dirs.has(d.dir)) break;
+        cur = { row: nr, col: nc };
+        path.push({ row: cur.row, col: cur.col });
+        dirs.push(d.dir);
+        dirIdxs.push(dirSeq[i]);
+        if (entry) break;
+    }
+    if (path.length <= 1) return null;
+    markStep(occupancy, start.row, start.col, dirs[0], dirIdxs[0]);
+    for (let i = 1; i < path.length; i++) markStep(occupancy, path[i].row, path[i].col, dirs[i - 1], dirIdxs[i - 1]);
+    return path;
 }
 
 function generateUntraveledNetwork(occupancy, columns, maxRow, rng, traceCount, minLen, maxLen) {
@@ -610,7 +649,32 @@ function generate(opts) {
         const pool = segments.concat(untraveled);
         const point = pickAttachmentPoint(pool);
         const branch = growRandomWalk(occupancy, point, rng, columns, maxRow, 8, 22, point.dirIdx);
-        if (branch) untraveled.push({ corners: reduceToCorners(branch), traveled: false });
+        // A branch that got blocked almost immediately is just a short stub —
+        // adds visual noise, not a real trace. Skip it rather than keep it.
+        if (!branch || branch.length < 5) continue;
+        untraveled.push({ corners: reduceToCorners(branch), traveled: false });
+        // Real PCB backgrounds read as bundles of parallel traces running
+        // together, not independent unrelated lines — spawn up to 2 siblings
+        // that replay this branch's exact turn sequence, so they trace the
+        // same shape as the original. Each sibling starts at the same
+        // already-connected point and walks one step perpendicular first (a
+        // short rung) before replaying the sequence — starting from an
+        // arbitrary offset point instead would leave it floating,
+        // disconnected from the rest of the board. Siblings go on opposite
+        // sides (not stacked deeper on the same side) so a second sibling's
+        // own rung never collides with the first's.
+        if (rng() < 0.55) {
+            const dirSeq = directionSequenceFromPath(branch);
+            const sides = rng() < 0.5
+                ? [(dirSeq[0] + 2) % 8, (dirSeq[0] + 6) % 8]
+                : [(dirSeq[0] + 6) % 8, (dirSeq[0] + 2) % 8];
+            const siblingCount = randInt(rng, 1, 2);
+            for (let s = 0; s < siblingCount; s++) {
+                if (countVias(occupancy) >= maxVias) break;
+                const sibling = growParallelWalk(occupancy, point, [sides[s]].concat(dirSeq), columns, maxRow);
+                if (sibling && sibling.length >= 5) untraveled.push({ corners: reduceToCorners(sibling), traveled: false });
+            }
+        }
     }
 
     const vias = [];
