@@ -326,15 +326,6 @@ function compassIndexFor(dr, dc) {
     return 0;
 }
 
-function shuffled(arr, rng) {
-    const copy = arr.slice();
-    for (let i = copy.length - 1; i > 0; i--) {
-        const j = Math.floor(rng() * (i + 1));
-        const tmp = copy[i]; copy[i] = copy[j]; copy[j] = tmp;
-    }
-    return copy;
-}
-
 function growRandomWalk(occupancy, from, rng, columns, maxRow, minLen, maxLen, parentDirIdx) {
     const len = randInt(rng, minLen, maxLen);
     // Left fully free (all 8), a branch's starting heading has no relation
@@ -348,6 +339,24 @@ function growRandomWalk(occupancy, from, rng, columns, maxRow, minLen, maxLen, p
     const startCandidates = parentDirIdx === undefined
         ? [0, 1, 2, 3, 4, 5, 6, 7]
         : [parentDirIdx, (parentDirIdx + 1) % 8, (parentDirIdx + 7) % 8, (parentDirIdx + 2) % 8, (parentDirIdx + 6) % 8];
+    // Real PCB traces (and the background of this board) read as
+    // predominantly orthogonal with 45° chamfers as the exception, not the
+    // rule — the opposite bias from the main path. Weights the start (and
+    // every bend below) toward even compass indices (N/E/S/W).
+    function orthoBiasedOrder(candidates) {
+        const weight = function (idx) { return idx % 2 === 0 ? 0.78 : 0.35; };
+        const pool = candidates.slice();
+        const ordered = [];
+        while (pool.length) {
+            const weights = pool.map(weight);
+            const total = weights.reduce(function (a, b) { return a + b; }, 0);
+            let r = rng() * total, i = 0;
+            for (; i < pool.length - 1; i++) { r -= weights[i]; if (r <= 0) break; }
+            ordered.push(pool[i]);
+            pool.splice(i, 1);
+        }
+        return ordered;
+    }
     // Two direction indices are "correctly" joinable when they're at most
     // 90° apart (compass distance <=2) — 45°/90° reads as a clean merge,
     // 135° as an unrelated trace grazed at a shallow, near-parallel angle
@@ -358,7 +367,7 @@ function growRandomWalk(occupancy, from, rng, columns, maxRow, minLen, maxLen, p
         return Math.min(diff, 8 - diff) <= 2;
     }
 
-    for (const startIdx of shuffled(startCandidates, rng)) {
+    for (const startIdx of orthoBiasedOrder(startCandidates)) {
         const path = [{ row: from.row, col: from.col }];
         const dirs = [];
         const dirIdxs = [];
@@ -372,16 +381,21 @@ function growRandomWalk(occupancy, from, rng, columns, maxRow, minLen, maxLen, p
         // over itself instead of reading as one consistent stroke.
         let verticalSign = Math.sign(COMPASS_DIRS[dirIdx].row);
         for (let i = 0; i < len; i++) {
-            // Same organic-bend model as the main router: mostly hold the
-            // current heading, occasionally ease 45° either side — a branch
-            // that's perfectly ruler-straight for its whole length reads as
-            // stiff and geometric next to the zigzagging main path, and is
-            // exactly what tends to close into an unnaturally sharp triangle
-            // against it. Kept rare and delayed past the first couple of
-            // steps — these branches are short, so a high chance here reads
-            // as a wiggly snake, not an occasional gentle bend.
+            // Bends mostly turn a straight orthogonal run 90° onto another
+            // orthogonal heading — a real PCB trace's normal turn — and only
+            // occasionally ease 45° into a diagonal; once ON a diagonal, a
+            // bend eases straight back toward orthogonal rather than
+            // continuing the diagonal run, so diagonal stays the occasional
+            // accent rather than a sustained style. Kept rare and delayed
+            // past the first couple of steps — these branches are short, so
+            // a high chance here reads as a wiggly snake, not an occasional
+            // gentle bend.
             if (i > 1 && rng() < 0.15) {
-                const bendCandidates = [(dirIdx + 1) % 8, (dirIdx + 7) % 8].filter(function (idx) {
+                const isOrtho = dirIdx % 2 === 0;
+                const raw = isOrtho && rng() < 0.7
+                    ? [(dirIdx + 2) % 8, (dirIdx + 6) % 8]
+                    : [(dirIdx + 1) % 8, (dirIdx + 7) % 8];
+                const bendCandidates = raw.filter(function (idx) {
                     const s = Math.sign(COMPASS_DIRS[idx].row);
                     return verticalSign === 0 || s === 0 || s === verticalSign;
                 });
@@ -517,8 +531,11 @@ function generate(opts) {
     // Caps how many crossings the decorative branches below are allowed to
     // add — without it, enough dead-end/untraveled branches will eventually
     // cross something no matter how sparse the board, reading as visual
-    // clutter rather than a clean board.
-    const maxVias = projectCount * 6;
+    // clutter rather than a clean board. Reference PCB boards read as
+    // packed edge-to-edge, not sparse — this is deliberately generous; the
+    // local anti-clustering check below keeps density even rather than
+    // clumped, so a high cap here reads as "full," not "messy."
+    const maxVias = projectCount * 20;
 
     // A global cap alone still lets crossings bunch up around one busy spot
     // (typically a node, where several segments already meet) — this steers
@@ -582,7 +599,7 @@ function generate(opts) {
     // or untraveled), so the whole board stays one connected network — only
     // whether current reaches a given branch differs, never its connectivity.
     const untraveled = [];
-    const untraveledCount = randInt(rng, projectCount * 8, projectCount * 14);
+    const untraveledCount = randInt(rng, projectCount * 20, projectCount * 35);
     for (let i = 0; i < untraveledCount; i++) {
         if (countVias(occupancy) >= maxVias) break;
         const pool = segments.concat(untraveled);
