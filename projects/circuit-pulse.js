@@ -17,13 +17,28 @@ function computeNodeOffset(distancePx, speedPxPerS, periodMs) {
     return travelMs % periodMs;
 }
 
+// computeNodeOffset alone assumes the flow is already in steady state
+// (an infinite repeating stream) — fine once it's actually flowing, but a
+// far node can compute a small offset (mod periodMs is always < periodMs)
+// while its own connecting wire is still under a much longer one-time
+// warm-up delay (e.g. the proportional-to-distance ramp used to bring the
+// board up to full flow), firing the node's excite well before its wire
+// even looks lit. Returns the smallest delay that both matches the node's
+// place in the periodic cycle AND is not earlier than warmupMs.
+function firstFireDelay(distancePx, speedPxPerS, periodMs, warmupMs) {
+    const offset = computeNodeOffset(distancePx, speedPxPerS, periodMs);
+    if (!warmupMs || offset >= warmupMs) return offset;
+    const cycles = Math.ceil((warmupMs - offset) / periodMs);
+    return offset + cycles * periodMs;
+}
+
 function schedule(nodes, speedPxPerS, periodMs, onExcite, setTimer) {
     setTimer = setTimer || function (fn, ms) { return setTimeout(fn, ms); };
     const timers = [];
     let stopped = false;
 
     nodes.forEach(function (node) {
-        const offset = computeNodeOffset(node.distance, speedPxPerS, periodMs);
+        const offset = firstFireDelay(node.distance, speedPxPerS, periodMs, node.warmupMs);
         function tick() {
             if (stopped) return;
             onExcite(node);
@@ -38,5 +53,5 @@ function schedule(nodes, speedPxPerS, periodMs, onExcite, setTimer) {
     };
 }
 
-return { computeNodeOffset, schedule };
+return { computeNodeOffset, firstFireDelay, schedule };
 });

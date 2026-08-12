@@ -18,6 +18,23 @@ test('computeNodeOffset is proportional to distance for distances under one peri
     assert.strictEqual(o2, 2000 % 1400);
 });
 
+test('firstFireDelay never fires before warmupMs, even though computeNodeOffset alone would', () => {
+    // distance/speed*1000 = 100ms travel, mod a 1400ms period = 100ms — but
+    // a 3000ms warm-up (e.g. a far node's one-time proportional ramp-in)
+    // must push the first fire out to the next 100ms-aligned cycle at or
+    // after 3000ms, not fire at the raw 100ms offset.
+    const bare = CircuitPulse.computeNodeOffset(6, 60, 1400);
+    assert.strictEqual(bare, 100, 'sanity: bare offset should be 100ms');
+    const delay = CircuitPulse.firstFireDelay(6, 60, 1400, 3000);
+    assert.ok(delay >= 3000, 'delay ' + delay + ' fires before warmupMs');
+    assert.strictEqual((delay - bare) % 1400, 0, 'delay must still land on the same periodic cycle as the bare offset');
+});
+
+test('firstFireDelay falls back to the bare offset when it already clears warmupMs', () => {
+    const delay = CircuitPulse.firstFireDelay(300, 60, 1400, 200);
+    assert.strictEqual(delay, CircuitPulse.computeNodeOffset(300, 60, 1400));
+});
+
 test('schedule calls onExcite once per period per node, and stop() halts future excites', () => {
     // Deterministic fake clock instead of real setTimeout, so the test is
     // synchronous and exact — no timing flakiness, no async test-runner needed.

@@ -56,6 +56,12 @@ function render(container, board, cellSize) {
     const untraveledGroup = svgEl('g', { class: 'circuit-trace circuit-trace-untraveled' });
     board.untraveled.forEach(function (seg) {
         untraveledGroup.appendChild(svgEl('path', { d: segmentPathD(seg, cellSize, chamfer), class: 'circuit-path circuit-path-untraveled' }));
+        // seg.cap marks lanes that end together as a parallel bundle — a
+        // thicker overlay on just the final stretch reads as a row of
+        // chip solder pads instead of wires trailing off into nothing.
+        if (seg.cap) {
+            untraveledGroup.appendChild(svgEl('path', { d: segmentPathD({ corners: seg.cap }, cellSize, chamfer), class: 'circuit-path circuit-path-untraveled-cap' }));
+        }
     });
     svg.appendChild(untraveledGroup);
 
@@ -100,8 +106,8 @@ function render(container, board, cellSize) {
     const nodeElements = board.nodes.map(function (n, i) {
         const cx = n.col * cellSize, cy = n.row * cellSize;
         const g = svgEl('g', { class: 'circuit-node', 'data-node-index': i, transform: 'translate(' + cx + ',' + cy + ')' });
-        g.appendChild(svgEl('circle', { r: 27, class: 'circuit-node-pad' }));
-        g.appendChild(svgEl('circle', { r: 21, class: 'circuit-node-fill' }));
+        g.appendChild(svgEl('circle', { r: 31, class: 'circuit-node-pad' }));
+        g.appendChild(svgEl('circle', { r: 24, class: 'circuit-node-fill' }));
         nodeGroup.appendChild(g);
         return { index: i, cx: cx, cy: cy, groupEl: g, distanceFromRoot: n.distanceFromRoot * cellSize };
     });
@@ -254,8 +260,20 @@ function excite(project, nodeEl) {
 
 function startPulseScheduler(rendered, projects) {
     if (window.prefersReducedMotion) return;
+    // Same warm-up basis as startContinuousFlow's per-segment delay — a
+    // node's first excite must not fire before its own connecting wire has
+    // actually started showing the flow-streak visual, or the "impulse"
+    // reads as arriving before the animation that's supposed to carry it,
+    // worst for nodes far from the root (their wire's warm-up delay is
+    // largest, but computeNodeOffset alone caps out at FLOW_PERIOD_MS).
+    const totalDistance = rendered.traveledPaths.reduce(function (max, t) {
+        return Math.max(max, t.startDistance + t.length);
+    }, 0) || 1;
     const nodes = rendered.nodeElements.map(function (n) {
-        return { distance: n.distanceFromRoot, nodeEl: n.groupEl, project: projects[n.index] };
+        return {
+            distance: n.distanceFromRoot, nodeEl: n.groupEl, project: projects[n.index],
+            warmupMs: (n.distanceFromRoot / totalDistance) * CHARGE_DURATION_MS,
+        };
     });
     window.CircuitPulse.schedule(
         nodes,

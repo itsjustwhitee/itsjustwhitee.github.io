@@ -169,6 +169,66 @@ function build() {
         });
     });
 
+    // Groups of parallel lanes that end together get a short, thicker cap
+    // over their last stretch — like the row of solder pads on a chip's
+    // parallel pins, instead of every lane just trailing off on its own.
+    const CAP_LENGTH = 22;
+    const CLUSTER_RADIUS = 45; // px between endpoints to count as "ending together"
+    const ANGLE_TOLERANCE_DEG = 12; // final-leg direction similarity
+    function finalDirectionDeg(corners) {
+        const a = corners[corners.length - 2], b = corners[corners.length - 1];
+        return Math.atan2(b.row - a.row, b.col - a.col) * 180 / Math.PI;
+    }
+    function angleDiff(a1, a2) {
+        let d = Math.abs(a1 - a2) % 360;
+        if (d > 180) d = 360 - d;
+        return Math.min(d, 180 - d); // parallel and anti-parallel both count
+    }
+    function splitTail(corners, capLength) {
+        let remaining = capLength;
+        const capPts = [corners[corners.length - 1]];
+        for (let i = corners.length - 1; i > 0; i--) {
+            const a = corners[i - 1], b = corners[i];
+            const legLen = dist({ x: a.col, y: a.row }, { x: b.col, y: b.row });
+            if (legLen >= remaining) {
+                const t = (legLen - remaining) / legLen;
+                capPts.unshift({ row: a.row + (b.row - a.row) * t, col: a.col + (b.col - a.col) * t });
+                return capPts;
+            }
+            remaining -= legLen;
+            capPts.unshift(a);
+        }
+        return capPts;
+    }
+
+    const tips = untraveled.map((seg) => ({
+        point: seg.corners[seg.corners.length - 1],
+        angle: finalDirectionDeg(seg.corners),
+    }));
+    const parent = tips.map((_, i) => i);
+    function find(i) { while (parent[i] !== i) { parent[i] = parent[parent[i]]; i = parent[i]; } return i; }
+    function union(i, j) { const ri = find(i), rj = find(j); if (ri !== rj) parent[ri] = rj; }
+    for (let i = 0; i < tips.length; i++) {
+        for (let j = i + 1; j < tips.length; j++) {
+            const d = dist({ x: tips[i].point.col, y: tips[i].point.row }, { x: tips[j].point.col, y: tips[j].point.row });
+            if (d <= CLUSTER_RADIUS && angleDiff(tips[i].angle, tips[j].angle) <= ANGLE_TOLERANCE_DEG) union(i, j);
+        }
+    }
+    const groups = new Map();
+    tips.forEach((t, i) => {
+        const root = find(i);
+        if (!groups.has(root)) groups.set(root, []);
+        groups.get(root).push(i);
+    });
+    let cappedCount = 0;
+    groups.forEach((memberIdxs) => {
+        if (memberIdxs.length < 2) return; // needs 2+ parallel lanes to read as a bundle
+        memberIdxs.forEach((idx) => {
+            untraveled[idx].cap = splitTail(untraveled[idx].corners, CAP_LENGTH);
+            cappedCount++;
+        });
+    });
+
     const allLegs = [];
     function collectLegs(cornersXY, owner) {
         for (let i = 1; i < cornersXY.length; i++) allLegs.push({ a: cornersXY[i - 1], b: cornersXY[i], owner });
@@ -230,8 +290,8 @@ function build() {
 
     fs.writeFileSync(OUTPUT_JS, header);
     console.log('Wrote ' + path.relative(ROOT_DIR, OUTPUT_JS) + ' — ' + nodes.length + ' nodes, ' +
-        board.segments[0].corners.length + ' main-path corners, ' + untraveled.length + ' background traces, ' +
-        dedupedVias.length + ' vias.');
+        board.segments[0].corners.length + ' main-path corners, ' + untraveled.length + ' background traces (' +
+        cappedCount + ' with a parallel-bundle cap), ' + dedupedVias.length + ' vias.');
 }
 
 build();
