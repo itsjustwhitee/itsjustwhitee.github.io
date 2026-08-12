@@ -51,6 +51,22 @@ function render(container, board, cellSize) {
         const doc = parser.parseFromString('<svg xmlns="' + SVG_NS + '">' + window.CIRCUIT_SYMBOLS[name] + '</svg>', 'image/svg+xml');
         defs.appendChild(doc.documentElement.firstChild);
     });
+    // Displaces the flow overlay's own geometry along fractal noise, then
+    // jump-cuts (calcMode:discrete, not smooth interpolation) the noise
+    // seed a few times a second — the jitter that makes the pulse read as
+    // an erratic electric arc instead of a smooth, precise dash. Region is
+    // widened past the default so displaced pixels near a stroke's edge
+    // don't get clipped to the element's own tight bounding box.
+    const lightningFilter = svgEl('filter', { id: 'circuit-lightning-jitter', x: '-40%', y: '-40%', width: '180%', height: '180%' });
+    const turbulence = svgEl('feTurbulence', { type: 'fractalNoise', baseFrequency: '0.9 0.15', numOctaves: '2', seed: '3', result: 'jitter-noise' });
+    turbulence.appendChild(svgEl('animate', {
+        attributeName: 'seed', values: '2;9;4;11;1;7;5', dur: '0.6s', repeatCount: 'indefinite', calcMode: 'discrete',
+    }));
+    lightningFilter.appendChild(turbulence);
+    lightningFilter.appendChild(svgEl('feDisplacementMap', {
+        in: 'SourceGraphic', in2: 'jitter-noise', scale: '5', xChannelSelector: 'R', yChannelSelector: 'G',
+    }));
+    defs.appendChild(lightningFilter);
     svg.appendChild(defs);
 
     const untraveledGroup = svgEl('g', { class: 'circuit-trace circuit-trace-untraveled' });
@@ -106,8 +122,8 @@ function render(container, board, cellSize) {
     const nodeElements = board.nodes.map(function (n, i) {
         const cx = n.col * cellSize, cy = n.row * cellSize;
         const g = svgEl('g', { class: 'circuit-node', 'data-node-index': i, transform: 'translate(' + cx + ',' + cy + ')' });
-        g.appendChild(svgEl('circle', { r: 31, class: 'circuit-node-pad' }));
-        g.appendChild(svgEl('circle', { r: 24, class: 'circuit-node-fill' }));
+        g.appendChild(svgEl('circle', { r: 38, class: 'circuit-node-pad' }));
+        g.appendChild(svgEl('circle', { r: 30, class: 'circuit-node-fill' }));
         nodeGroup.appendChild(g);
         return { index: i, cx: cx, cy: cy, groupEl: g, distanceFromRoot: n.distanceFromRoot * cellSize };
     });
@@ -180,6 +196,37 @@ function init() {
     initHashCrackerzExcite();
     initEdgeCVExcite();
     initSliceCeiptExcite();
+    buildViewToggle(stage, collected.grid);
+}
+
+// The plain project-card grid never went away (see .projects-grid.circuit-active
+// in style.css) — this just gives visitors who prefer it, or who want to
+// scan every project at once, a way back to it without losing the circuit.
+function buildViewToggle(stage, grid) {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'circuit-view-toggle';
+    btn.setAttribute('aria-pressed', 'false');
+    let showingGrid = false;
+
+    function applyLabel() {
+        const key = showingGrid ? 'projects.view_circuit' : 'projects.view_grid';
+        btn.setAttribute('data-i18n', key);
+        btn.textContent = window.t ? window.t(key) : (showingGrid ? '// view as circuit' : '// view as grid');
+    }
+    applyLabel();
+
+    btn.addEventListener('click', function () {
+        showingGrid = !showingGrid;
+        if (showingGrid) closeAnyOpenPanel();
+        stage.classList.toggle('is-hidden', showingGrid);
+        grid.classList.toggle('circuit-active', !showingGrid);
+        btn.setAttribute('aria-pressed', String(showingGrid));
+        applyLabel();
+    });
+
+    stage.insertAdjacentElement('beforebegin', btn);
+    return btn;
 }
 
 const CHARGE_DURATION_MS = 2000;
