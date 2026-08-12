@@ -133,15 +133,25 @@ function init() {
     const collected = collectProjects();
     if (!stage || !collected || !collected.projects.length) return; // no-JS/degraded path: grid stays visible as-is
 
-    const columns = columnsForWidth(window.innerWidth);
-    const board = window.CircuitLayout.generate({
-        projectCount: collected.projects.length,
-        columns: columns,
-        rowsPerProject: 8,
-        seed: Math.floor(Math.random() * 2147483647),
-    });
+    // Hand-authored board (projects/circuit-board-data.js, built from
+    // projects/circuit-board-source.svg by scripts/build-circuit-board.js)
+    // is the real board whenever its node count still matches the live
+    // project count — falls back to the procedural generator otherwise
+    // (e.g. a project was added before the source SVG/data were updated),
+    // so the page never silently breaks out of sync.
+    const staticData = window.CIRCUIT_BOARD_DATA;
+    const useStatic = staticData && staticData.nodes.length === collected.projects.length;
 
-    const cellSize = window.innerWidth < 480 ? 26 : 32;
+    const board = useStatic
+        ? window.CircuitLayout.generateFromStatic(staticData, {})
+        : window.CircuitLayout.generate({
+            projectCount: collected.projects.length,
+            columns: columnsForWidth(window.innerWidth),
+            rowsPerProject: 8,
+            seed: Math.floor(Math.random() * 2147483647),
+        });
+
+    const cellSize = useStatic ? 1 : (window.innerWidth < 480 ? 26 : 32);
     const rendered = render(stage, board, cellSize);
 
     window.CIRCUIT_PROJECTS = collected.projects;

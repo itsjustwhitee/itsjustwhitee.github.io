@@ -494,7 +494,12 @@ function generateUntraveledNetwork(occupancy, columns, maxRow, rng, traceCount, 
     return traces;
 }
 
-function computeDistances(segments, root) {
+// distanceFn defaults to Chebyshev (correct for the procedural board's
+// grid, where a diagonal run's row/col deltas are always equal) — the
+// hand-authored static board has arbitrary-angle legs, so it passes true
+// Euclidean distance instead.
+function computeDistances(segments, root, distanceFn) {
+    distanceFn = distanceFn || function (a, b) { return Math.max(Math.abs(a.row - b.row), Math.abs(a.col - b.col)); };
     const adj = new Map();
     function key(p) { return p.row + ',' + p.col; }
     function addEdge(a, b, dist) {
@@ -507,10 +512,7 @@ function computeDistances(segments, root) {
     segments.forEach(function (seg) {
         for (let i = 1; i < seg.corners.length; i++) {
             const a = seg.corners[i - 1], b = seg.corners[i];
-            // Chebyshev distance: a diagonal run covers both row and col
-            // deltas in one grid step each, so max(...) — not Manhattan's
-            // sum(...) — is the true step count along a corner-to-corner run.
-            addEdge(a, b, Math.max(Math.abs(a.row - b.row), Math.abs(a.col - b.col)));
+            addEdge(a, b, distanceFn(a, b));
         }
     });
 
@@ -712,9 +714,76 @@ function generate(opts) {
     return { columns, rows: maxRow + 1, rowsPerProject, nodes, segments, untraveled, decorativeSpots, vias };
 }
 
+function euclideanDist(a, b) { return Math.hypot(a.row - b.row, a.col - b.col); }
+
+// Every leg (a real PCB trace's own straight run) gets 0-2 candidate
+// component spots, at random points along its middle 60% — never right at
+// a corner or a via, where a 2-lead part wouldn't sit naturally in-line.
+function sampleStaticDecorativeSpots(segments, untraveled, vias, rng, count) {
+    const pool = [];
+    segments.concat(untraveled).forEach(function (seg) {
+        const corners = seg.corners;
+        for (let i = 1; i < corners.length; i++) {
+            const a = corners[i - 1], b = corners[i];
+            const legLen = euclideanDist(a, b);
+            if (legLen < 40) continue; // too short for a spot to read as "mid-run"
+            const t = 0.3 + rng() * 0.4;
+            const row = a.row + (b.row - a.row) * t;
+            const col = a.col + (b.col - a.col) * t;
+            const angle = Math.atan2(b.row - a.row, b.col - a.col) * 180 / Math.PI;
+            pool.push({ row: row, col: col, angle: angle });
+        }
+    });
+    const clean = pool.filter(function (p) {
+        return !vias.some(function (v) { return euclideanDist(v, p) < 20; });
+    });
+    const chosen = [];
+    for (let i = 0; i < count && clean.length; i++) {
+        const idx = randInt(rng, 0, clean.length - 1);
+        chosen.push(clean[idx]);
+        clean.splice(idx, 1);
+    }
+    return chosen;
+}
+
+// Renders a hand-authored board (fixed nodes/segments/untraveled/vias — see
+// projects/circuit-board-data.js) through the same pipeline as the
+// procedural one: only decorativeSpots and each node's distanceFromRoot
+// (for charge/pulse timing) are computed fresh per call, so the geometry
+// stays exactly as drawn while the board still feels alive each load.
+function generateFromStatic(staticBoard, opts) {
+    opts = opts || {};
+    const rng = makeRng(opts.seed != null ? opts.seed : Math.floor(Math.random() * 2147483647));
+
+    const nodes = staticBoard.nodes.map(function (n) { return { row: n.row, col: n.col }; });
+    const segments = staticBoard.segments.map(function (s) { return { corners: s.corners, traveled: true, kind: s.kind || 'main' }; });
+    const untraveled = staticBoard.untraveled;
+    const vias = staticBoard.vias;
+
+    const root = nodes[0];
+    const distances = computeDistances(segments, root, euclideanDist);
+    nodes.forEach(function (n) {
+        const d = distances.get(n.row + ',' + n.col);
+        n.distanceFromRoot = d !== undefined ? d : 0;
+    });
+    segments.forEach(function (seg) {
+        const a = seg.corners[0], b = seg.corners[seg.corners.length - 1];
+        const da = distances.get(a.row + ',' + a.col);
+        const db = distances.get(b.row + ',' + b.col);
+        seg.startDistance = Math.min(da !== undefined ? da : Infinity, db !== undefined ? db : Infinity);
+    });
+
+    const decorativeSpots = sampleStaticDecorativeSpots(segments, untraveled, vias, rng, opts.componentCount || 7);
+
+    return {
+        columns: staticBoard.columns, rows: staticBoard.rows, rowsPerProject: 0,
+        nodes: nodes, segments: segments, untraveled: untraveled, decorativeSpots: decorativeSpots, vias: vias,
+    };
+}
+
 return {
     makeRng, randInt, placeNodes,
     routeOrthogonal, reduceToCorners, chamferCorners, pointsToPathD, cellKey, canStep, markStep,
-    growRandomWalk, generateUntraveledNetwork, computeDistances, generate,
+    growRandomWalk, generateUntraveledNetwork, computeDistances, generate, generateFromStatic,
 };
 });
