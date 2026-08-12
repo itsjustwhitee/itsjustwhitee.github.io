@@ -245,37 +245,18 @@ function build() {
         if (!groups.has(root)) groups.set(root, []);
         groups.get(root).push(i);
     });
-    // A real bundle's members are all mutually close (one small shared
-    // neighborhood, like a row of chip pins); union-find only guarantees
-    // each member is close to some other member, which a curved/coiled
-    // trace chopped into many short touching pieces also satisfies —
-    // consecutive pieces "match" at each bend, transitively chaining the
-    // whole curve into one group even though it spans far more than
-    // CLUSTER_RADIUS end to end. Reject those by requiring the group's own
-    // extent to still fit inside that one neighborhood.
-    function maxPairwiseDist(memberIdxs) {
-        let max = 0;
-        for (let a = 0; a < memberIdxs.length; a++) {
-            for (let b = a + 1; b < memberIdxs.length; b++) {
-                const pa = tips[memberIdxs[a]].point, pb = tips[memberIdxs[b]].point;
-                const d = dist({ x: pa.col, y: pa.row }, { x: pb.col, y: pb.row });
-                if (d > max) max = d;
-            }
-        }
-        return max;
-    }
+    // This used to also reject any group whose own span exceeded
+    // CLUSTER_RADIUS, to catch a curved/coiled trace chopped into many
+    // short touching pieces (each bend transitively chaining into one
+    // giant "bundle"). That was a source-SVG problem, not a general one —
+    // circuit-board-source.svg now has those decorative curves combined
+    // into single paths, which only ever contribute their own two real
+    // tips — so a wide group here is a genuine multi-lane bundle again.
     let cappedCount = 0;
     const tipVias = [];
     groups.forEach((memberIdxs) => {
         if (memberIdxs.length < 2) {
             tipVias.push(tips[memberIdxs[0]].point); // a genuinely free-standing tip, nothing nearby at all
-            return;
-        }
-        if (maxPairwiseDist(memberIdxs) > CLUSTER_RADIUS) {
-            // Chain artifact (see comment above maxPairwiseDist): these are
-            // interior joints of one continuous curve split into many small
-            // touching pieces, not real terminals — leave them undecorated
-            // rather than falling back to a via dot on every one of them.
             return;
         }
         memberIdxs.forEach((i) => {
