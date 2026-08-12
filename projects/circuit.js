@@ -75,11 +75,16 @@ function render(container, board, cellSize) {
     const untraveledGroup = svgEl('g', { class: 'circuit-trace circuit-trace-untraveled' });
     board.untraveled.forEach(function (seg) {
         untraveledGroup.appendChild(svgEl('path', { d: segmentPathD(seg, cellSize, chamfer), class: 'circuit-path circuit-path-untraveled' }));
-        // seg.cap marks lanes that end together as a parallel bundle — a
-        // thicker overlay on just the final stretch reads as a row of
-        // chip solder pads instead of wires trailing off into nothing.
-        if (seg.cap) {
-            untraveledGroup.appendChild(svgEl('path', { d: segmentPathD({ corners: seg.cap }, cellSize, chamfer), class: 'circuit-path circuit-path-untraveled-cap' }));
+        // seg.capStart/capEnd each mark one of this lane's two extremities as
+        // ending together with a parallel bundle — a thicker overlay on just
+        // that final stretch reads as a row of chip solder pads. Every
+        // terminal that isn't part of a bundle gets a via-dot circle instead
+        // (board.vias, rendered below) — never both at the same point.
+        if (seg.capStart) {
+            untraveledGroup.appendChild(svgEl('path', { d: segmentPathD({ corners: seg.capStart }, cellSize, chamfer), class: 'circuit-path circuit-path-untraveled-cap' }));
+        }
+        if (seg.capEnd) {
+            untraveledGroup.appendChild(svgEl('path', { d: segmentPathD({ corners: seg.capEnd }, cellSize, chamfer), class: 'circuit-path circuit-path-untraveled-cap' }));
         }
     });
     svg.appendChild(untraveledGroup);

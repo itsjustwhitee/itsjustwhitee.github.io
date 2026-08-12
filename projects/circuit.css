@@ -92,18 +92,16 @@
     opacity: 0.7;
 }
 
-/* A mix of the two earlier attempts: many short dash/gap runs (still 180
-   total, so FLOW_SPEED_PX_PER_S/FLOW_PERIOD_MS in circuit.js stay in
-   sync) so the sparks stay small and close to the wire rather than a
-   couple of long, wandering ones; a touch of blur back in (paired with a
-   now-much-smaller displacement scale in the #circuit-lightning-jitter
-   filter itself, circuit.js) so the jitter reads as current crackling
-   along its own lane instead of scribbles floating off to the side of
-   it; softer/less opaque glow so the whole thing sits back under the
-   solid lit wire rather than dominating it. */
+/* A mix of the original smooth pulse and the jagged-lightning attempt:
+   a few medium-length dashes (not the single long pulse of the original,
+   not the many tiny ticks of the lightning version) with clear gaps
+   between them (still 180 total, so FLOW_SPEED_PX_PER_S/FLOW_PERIOD_MS in
+   circuit.js stay in sync), blurred enough to glow softly like the
+   original, with #circuit-lightning-jitter (circuit.js) still kinking
+   their geometry underneath that blur for the "electric" texture. */
 .circuit-segment.is-flowing .circuit-flow-overlay {
-    stroke-dasharray: 10 14 6 20 4 26 12 18 8 22 14 26;
-    filter: url(#circuit-lightning-jitter) blur(0.5px) drop-shadow(0 0 4px rgba(255, 255, 255, 0.8)) drop-shadow(0 0 10px rgba(var(--accent-bright-rgb), 0.75));
+    stroke-dasharray: 24 56 20 80;
+    filter: url(#circuit-lightning-jitter) blur(1px) drop-shadow(0 0 4px rgba(255, 255, 255, 0.85)) drop-shadow(0 0 11px rgba(var(--accent-bright-rgb), 0.8));
     animation: circuit-flow 1.2s linear infinite;
 }
 

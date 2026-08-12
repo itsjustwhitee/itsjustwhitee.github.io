@@ -169,14 +169,17 @@ function build() {
         });
     });
 
-    // Groups of parallel lanes that end together get a short, thicker cap
-    // over their last stretch — like the row of solder pads on a chip's
-    // parallel pins, instead of every lane just trailing off on its own.
+    // Every lane has two extremities, and each one independently gets
+    // exactly one terminal treatment: a short thicker cap if it ends
+    // together with 2+ other lanes pointing the same way (reads as a row
+    // of chip solder pads), otherwise a plain via-dot ring — never both
+    // at the same point, never neither.
     const CAP_LENGTH = 22;
     const CLUSTER_RADIUS = 45; // px between endpoints to count as "ending together"
     const ANGLE_TOLERANCE_DEG = 12; // final-leg direction similarity
-    function finalDirectionDeg(corners) {
-        const a = corners[corners.length - 2], b = corners[corners.length - 1];
+    function tipDirectionDeg(corners, end) {
+        const a = end === 'end' ? corners[corners.length - 2] : corners[1];
+        const b = end === 'end' ? corners[corners.length - 1] : corners[0];
         return Math.atan2(b.row - a.row, b.col - a.col) * 180 / Math.PI;
     }
     function angleDiff(a1, a2) {
@@ -200,11 +203,28 @@ function build() {
         }
         return capPts;
     }
+    function splitHead(corners, capLength) {
+        let remaining = capLength;
+        const capPts = [corners[0]];
+        for (let i = 0; i < corners.length - 1; i++) {
+            const a = corners[i], b = corners[i + 1];
+            const legLen = dist({ x: a.col, y: a.row }, { x: b.col, y: b.row });
+            if (legLen >= remaining) {
+                const t = remaining / legLen;
+                capPts.push({ row: a.row + (b.row - a.row) * t, col: a.col + (b.col - a.col) * t });
+                return capPts;
+            }
+            remaining -= legLen;
+            capPts.push(b);
+        }
+        return capPts;
+    }
 
-    const tips = untraveled.map((seg) => ({
-        point: seg.corners[seg.corners.length - 1],
-        angle: finalDirectionDeg(seg.corners),
-    }));
+    const tips = [];
+    untraveled.forEach((seg, segIdx) => {
+        tips.push({ segIdx, end: 'start', point: seg.corners[0], angle: tipDirectionDeg(seg.corners, 'start') });
+        tips.push({ segIdx, end: 'end', point: seg.corners[seg.corners.length - 1], angle: tipDirectionDeg(seg.corners, 'end') });
+    });
     const parent = tips.map((_, i) => i);
     function find(i) { while (parent[i] !== i) { parent[i] = parent[parent[i]]; i = parent[i]; } return i; }
     function union(i, j) { const ri = find(i), rj = find(j); if (ri !== rj) parent[ri] = rj; }
@@ -220,15 +240,17 @@ function build() {
         if (!groups.has(root)) groups.set(root, []);
         groups.get(root).push(i);
     });
-    // Every trace tip gets the via-dot circle — capped bundle tips too, not
-    // just the isolated ones — the solder-pad cap is an addition on top of
-    // that terminal, not a replacement for it.
     let cappedCount = 0;
-    const tipVias = tips.map((t) => t.point);
+    const tipVias = [];
     groups.forEach((memberIdxs) => {
-        if (memberIdxs.length < 2) return; // needs 2+ parallel lanes to read as a bundle
-        memberIdxs.forEach((idx) => {
-            untraveled[idx].cap = splitTail(untraveled[idx].corners, CAP_LENGTH);
+        if (memberIdxs.length < 2) {
+            tipVias.push(tips[memberIdxs[0]].point);
+            return;
+        }
+        memberIdxs.forEach((i) => {
+            const t = tips[i];
+            if (t.end === 'end') untraveled[t.segIdx].capEnd = splitTail(untraveled[t.segIdx].corners, CAP_LENGTH);
+            else untraveled[t.segIdx].capStart = splitHead(untraveled[t.segIdx].corners, CAP_LENGTH);
             cappedCount++;
         });
     });
@@ -262,7 +284,14 @@ function build() {
         const tip = seg.corners[seg.corners.length - 1];
         dedupedVias.push({ row: tip.row, col: tip.col });
     });
-    tipVias.forEach((tip) => dedupedVias.push({ row: tip.row, col: tip.col }));
+    // A lane's "start" tip is sometimes actually a real junction (it touches
+    // another lane/the spine there rather than dangling free) that already
+    // got a via dot from the crossing pass above — skip re-adding one on top.
+    tipVias.forEach((tip) => {
+        if (!dedupedVias.some((o) => dist({ x: o.col, y: o.row }, { x: tip.col, y: tip.row }) < 2)) {
+            dedupedVias.push({ row: tip.row, col: tip.col });
+        }
+    });
 
     const board = {
         columns: widthMatch ? parseFloat(widthMatch[1]) : 1125,
@@ -296,7 +325,8 @@ function build() {
     fs.writeFileSync(OUTPUT_JS, header);
     console.log('Wrote ' + path.relative(ROOT_DIR, OUTPUT_JS) + ' — ' + nodes.length + ' nodes, ' +
         board.segments[0].corners.length + ' main-path corners, ' + untraveled.length + ' background traces (' +
-        cappedCount + ' also with a parallel-bundle cap), ' + dedupedVias.length + ' vias.');
+        cappedCount + ' of ' + (untraveled.length * 2) + ' terminal ends got a solder cap), ' +
+        dedupedVias.length + ' vias.');
 }
 
 build();
