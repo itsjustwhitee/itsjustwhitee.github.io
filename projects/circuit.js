@@ -51,17 +51,20 @@ function render(container, board, cellSize) {
         const doc = parser.parseFromString('<svg xmlns="' + SVG_NS + '">' + window.CIRCUIT_SYMBOLS[name] + '</svg>', 'image/svg+xml');
         defs.appendChild(doc.documentElement.firstChild);
     });
-    // Displaces the flow overlay's own geometry along blocky (single-octave,
-    // non-fractal) turbulence, then jump-cuts (calcMode:discrete, not smooth
-    // interpolation) the noise seed ~12x/second — a real kink in the line
-    // itself, strobing too fast to track as motion, rather than a smoothly-
-    // moving glow. scale is deliberately modest (a wider displacement wanders
-    // far enough off the wire's own path to read as separate floating
-    // scribbles instead of current jittering through that lane). Region is
-    // widened past the default so the displaced pixels don't get clipped to
-    // the element's own tight bounding box.
+    // Displaces the flow overlay's own geometry along noise, then jump-cuts
+    // (calcMode:discrete, not smooth interpolation) the noise seed ~12x/second
+    // — a real kink in the line itself, strobing too fast to track as motion,
+    // rather than a smoothly-moving glow. type MUST be fractalNoise, not
+    // turbulence: turbulence sums the *absolute value* of each octave, which
+    // is not zero-centered — it visibly biased every displaced pixel toward
+    // one consistent side instead of jittering around the true path.
+    // scale is deliberately modest (a wider displacement wanders far enough
+    // off the wire's own path to read as separate floating scribbles instead
+    // of current jittering through that lane). Region is widened past the
+    // default so the displaced pixels don't get clipped to the element's own
+    // tight bounding box.
     const lightningFilter = svgEl('filter', { id: 'circuit-lightning-jitter', x: '-40%', y: '-40%', width: '180%', height: '180%' });
-    const turbulence = svgEl('feTurbulence', { type: 'turbulence', baseFrequency: '0.35 0.12', numOctaves: '1', seed: '3', result: 'jitter-noise' });
+    const turbulence = svgEl('feTurbulence', { type: 'fractalNoise', baseFrequency: '0.35 0.12', numOctaves: '1', seed: '3', result: 'jitter-noise' });
     turbulence.appendChild(svgEl('animate', {
         attributeName: 'seed', values: '2;9;4;11;1;7;5;3;10', dur: '0.75s', repeatCount: 'indefinite', calcMode: 'discrete',
     }));

@@ -182,10 +182,15 @@ function build() {
         const b = end === 'end' ? corners[corners.length - 1] : corners[0];
         return Math.atan2(b.row - a.row, b.col - a.col) * 180 / Math.PI;
     }
+    // Deliberately direction-sensitive, NOT folded to also match anti-parallel
+    // (180°-apart) tips: a hairpin bend drawn as several short touching
+    // subpaths has its joints pointing in near-opposite directions by
+    // construction, and folding those into a "match" was capping every bend
+    // of a curved/coiled decorative trace instead of just its true free ends.
     function angleDiff(a1, a2) {
         let d = Math.abs(a1 - a2) % 360;
         if (d > 180) d = 360 - d;
-        return Math.min(d, 180 - d); // parallel and anti-parallel both count
+        return d;
     }
     function splitTail(corners, capLength) {
         let remaining = capLength;
@@ -240,11 +245,30 @@ function build() {
         if (!groups.has(root)) groups.set(root, []);
         groups.get(root).push(i);
     });
+    // A real bundle's members are all mutually close (one small shared
+    // neighborhood, like a row of chip pins); union-find only guarantees
+    // each member is close to some other member, which a curved/coiled
+    // trace chopped into many short touching pieces also satisfies —
+    // consecutive pieces "match" at each bend, transitively chaining the
+    // whole curve into one group even though it spans far more than
+    // CLUSTER_RADIUS end to end. Reject those by requiring the group's own
+    // extent to still fit inside that one neighborhood.
+    function maxPairwiseDist(memberIdxs) {
+        let max = 0;
+        for (let a = 0; a < memberIdxs.length; a++) {
+            for (let b = a + 1; b < memberIdxs.length; b++) {
+                const pa = tips[memberIdxs[a]].point, pb = tips[memberIdxs[b]].point;
+                const d = dist({ x: pa.col, y: pa.row }, { x: pb.col, y: pb.row });
+                if (d > max) max = d;
+            }
+        }
+        return max;
+    }
     let cappedCount = 0;
     const tipVias = [];
     groups.forEach((memberIdxs) => {
-        if (memberIdxs.length < 2) {
-            tipVias.push(tips[memberIdxs[0]].point);
+        if (memberIdxs.length < 2 || maxPairwiseDist(memberIdxs) > CLUSTER_RADIUS) {
+            memberIdxs.forEach((i) => tipVias.push(tips[i].point));
             return;
         }
         memberIdxs.forEach((i) => {
