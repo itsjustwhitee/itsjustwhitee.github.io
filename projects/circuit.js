@@ -522,10 +522,20 @@ function initRackControllerExcite() {
     const BASE_SPEED = 0.5, MAX_SPEED = 3.2, DECAY = 0.06;
     let angle = 0, speed = BASE_SPEED, target = BASE_SPEED;
 
+    // Runs forever regardless of which project it excited from, so it must
+    // stay cheap while the circuit itself is hidden (grid view toggled on) —
+    // offsetParent is null whenever a display:none ancestor (.circuit-stage.
+    // is-hidden) takes this icon out of the render tree, letting the loop
+    // skip the style write (and the layout/paint it triggers) instead of
+    // quietly burning main-thread time every frame behind the scenes,
+    // competing with things like the project-card eye-tracking's own
+    // unthrottled mousemove handler.
     function spin() {
-        speed += (target - speed) * DECAY;
-        angle += speed;
-        icon.style.transform = 'rotate(' + angle + 'deg)';
+        if (icon.offsetParent !== null) {
+            speed += (target - speed) * DECAY;
+            angle += speed;
+            icon.style.transform = 'rotate(' + angle + 'deg)';
+        }
         requestAnimationFrame(spin);
     }
     requestAnimationFrame(spin);
