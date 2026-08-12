@@ -267,8 +267,15 @@ function build() {
     let cappedCount = 0;
     const tipVias = [];
     groups.forEach((memberIdxs) => {
-        if (memberIdxs.length < 2 || maxPairwiseDist(memberIdxs) > CLUSTER_RADIUS) {
-            memberIdxs.forEach((i) => tipVias.push(tips[i].point));
+        if (memberIdxs.length < 2) {
+            tipVias.push(tips[memberIdxs[0]].point); // a genuinely free-standing tip, nothing nearby at all
+            return;
+        }
+        if (maxPairwiseDist(memberIdxs) > CLUSTER_RADIUS) {
+            // Chain artifact (see comment above maxPairwiseDist): these are
+            // interior joints of one continuous curve split into many small
+            // touching pieces, not real terminals — leave them undecorated
+            // rather than falling back to a via dot on every one of them.
             return;
         }
         memberIdxs.forEach((i) => {
