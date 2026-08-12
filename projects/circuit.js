@@ -207,6 +207,7 @@ function init() {
     initHashCrackerzExcite();
     initEdgeCVExcite();
     initSliceCeiptExcite();
+    initTypstExcite();
     buildViewToggle(stage, collected.grid);
 }
 
@@ -306,7 +307,6 @@ function onNodeExcite(slug, handler) {
 }
 
 function excite(project, nodeEl) {
-    if (project.slug === 'justwhitee-notes') return; // spec: never excites
     nodeEl.classList.add('is-excited');
     clearTimeout(nodeExciteTimers[project.slug]);
     nodeExciteTimers[project.slug] = setTimeout(function () {
@@ -618,14 +618,19 @@ function initEdgeCVExcite() {
         if (window.prefersReducedMotion) return;
         const pupil = svg.querySelector('#pupil-focus-group-board');
         if (!pupil) return;
+        // Card version tracks the cursor continuously; this board icon has no
+        // cursor to follow, so each excite instead jumps the eye to a fresh
+        // random spot — a quick saccade rather than a smooth pursuit — then
+        // settles back to center before the next pulse.
+        pupil.style.transition = 'transform 0.18s ease-out';
 
         window.Circuit.onNodeExcite('edgecv4safety', function () {
-            const sweep = [{ x: -6, y: -3 }, { x: 6, y: 3 }, { x: 0, y: 0 }];
-            sweep.forEach(function (p, i) {
-                setTimeout(function () {
-                    pupil.style.transform = 'translate(' + p.x + 'px,' + p.y + 'px)';
-                }, i * 170);
-            });
+            const rx = (Math.random() - 0.5) * 14;
+            const ry = (Math.random() - 0.5) * 8;
+            pupil.style.transform = 'translate(' + rx.toFixed(1) + 'px,' + ry.toFixed(1) + 'px)';
+            setTimeout(function () {
+                pupil.style.transform = 'translate(0px,0px)';
+            }, 350);
         });
     });
 }
@@ -645,6 +650,18 @@ function initSliceCeiptExcite() {
             svg.classList.add('is-flapping');
             setTimeout(function () { svg.classList.remove('is-flapping'); }, 500);
         });
+    });
+}
+
+function initTypstExcite() {
+    const icon = getBoardIconEl('justwhitee-notes');
+    if (!icon || window.prefersReducedMotion) return;
+    icon.style.transition = 'transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1)';
+
+    window.Circuit.onNodeExcite('justwhitee-notes', function () {
+        const angle = (Math.random() < 0.5 ? -1 : 1) * (8 + Math.random() * 6);
+        icon.style.transform = 'rotate(' + angle.toFixed(1) + 'deg)';
+        setTimeout(function () { icon.style.transform = 'rotate(0deg)'; }, 350);
     });
 }
 
