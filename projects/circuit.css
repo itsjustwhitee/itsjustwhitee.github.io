@@ -93,14 +93,14 @@
 }
 
 /* A mix of the original smooth pulse and the jagged-lightning attempt:
-   a few medium-length dashes (not the single long pulse of the original,
-   not the many tiny ticks of the lightning version) with clear gaps
-   between them (still 180 total, so FLOW_SPEED_PX_PER_S/FLOW_PERIOD_MS in
-   circuit.js stay in sync), blurred enough to glow softly like the
-   original, with #circuit-lightning-jitter (circuit.js) still kinking
-   their geometry underneath that blur for the "electric" texture. */
+   a single medium-length dash per 180px cycle (half as many as the
+   two-dash version, so the gap between sparks is effectively doubled —
+   still 180 total, so FLOW_SPEED_PX_PER_S/FLOW_PERIOD_MS in circuit.js
+   stay in sync), blurred enough to glow softly like the original, with
+   #circuit-lightning-jitter (circuit.js) still kinking its geometry
+   underneath that blur for the "electric" texture. */
 .circuit-segment.is-flowing .circuit-flow-overlay {
-    stroke-dasharray: 24 56 20 80;
+    stroke-dasharray: 22 158;
     filter: url(#circuit-lightning-jitter) blur(1px) drop-shadow(0 0 4px rgba(255, 255, 255, 0.85)) drop-shadow(0 0 11px rgba(var(--accent-bright-rgb), 0.8));
     animation: circuit-flow 1.2s linear infinite;
 }
