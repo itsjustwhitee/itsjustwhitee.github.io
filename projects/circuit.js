@@ -16,14 +16,20 @@ function svgEl(tag, attrs) {
     return el;
 }
 
-function segmentPathD(segment, cellSize) {
-    const pts = window.CircuitLayout.chamferCorners(segment.corners, cellSize, CHAMFER);
+function segmentPathD(segment, cellSize, chamfer) {
+    const pts = window.CircuitLayout.chamferCorners(segment.corners, cellSize, chamfer);
     return window.CircuitLayout.pointsToPathD(pts);
 }
 
 function render(container, board, cellSize) {
     const width = board.columns * cellSize;
     const height = board.rows * cellSize;
+    // The procedural board is grid-quantized (right-angle corners need
+    // softening); the hand-authored one already has the exact angles drawn
+    // — chamfering it too would round corners the artist deliberately
+    // placed. board.chamferAmount (set by generateFromStatic) overrides the
+    // default for that case.
+    const chamfer = board.chamferAmount !== undefined ? board.chamferAmount : CHAMFER;
     // Vias and decorative symbols anchor at col*cellSize - halfSize / row*cellSize
     // - halfSize; at the board's own col 0 or row 0 that offset goes negative,
     // outside a "0 0 w h" viewBox — clipped at the SVG edge. This margin gives
@@ -49,13 +55,13 @@ function render(container, board, cellSize) {
 
     const untraveledGroup = svgEl('g', { class: 'circuit-trace circuit-trace-untraveled' });
     board.untraveled.forEach(function (seg) {
-        untraveledGroup.appendChild(svgEl('path', { d: segmentPathD(seg, cellSize), class: 'circuit-path circuit-path-untraveled' }));
+        untraveledGroup.appendChild(svgEl('path', { d: segmentPathD(seg, cellSize, chamfer), class: 'circuit-path circuit-path-untraveled' }));
     });
     svg.appendChild(untraveledGroup);
 
     const traveledGroup = svgEl('g', { class: 'circuit-trace circuit-trace-traveled' });
     const traveledPaths = board.segments.map(function (seg, i) {
-        const pts = window.CircuitLayout.chamferCorners(seg.corners, cellSize, CHAMFER);
+        const pts = window.CircuitLayout.chamferCorners(seg.corners, cellSize, chamfer);
         const d = window.CircuitLayout.pointsToPathD(pts);
         const length = pts.reduce(function (sum, p, idx) { return idx === 0 ? 0 : sum + Math.hypot(p.x - pts[idx - 1].x, p.y - pts[idx - 1].y); }, 0);
         // seg.kind drives stroke-width tiering in circuit.css. The group is

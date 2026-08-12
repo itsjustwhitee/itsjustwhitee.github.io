@@ -148,14 +148,18 @@ function build() {
         if (remaining.length) throw new Error('Node(s) not found on the main path: ' + JSON.stringify(remaining));
         return out;
     }
-    const withNodes = insertNodesAsCorners(mainPath, nodes);
+    const spine = insertNodesAsCorners(mainPath, nodes);
 
-    // Trim the spine to end exactly at the last node — everything the
-    // artist drew beyond it is reserved for future project slots.
-    const lastNode = nodes[nodes.length - 1];
-    const lastIdx = withNodes.findIndex((p) => p.x === lastNode.col && p.y === lastNode.row);
-    if (lastIdx === -1) throw new Error('Could not find the last confirmed node after inserting it as a corner.');
-    const trimmed = withNodes.slice(0, lastIdx + 1);
+    // Every other path in the Main layer (dead-end spurs off a node, plus
+    // whatever the spine itself continues into past the last confirmed
+    // node) renders too — active/bright, current genuinely reaches it via
+    // computeDistances same as everything else — just without a node
+    // circle or click/hover behavior, since there's no real project there
+    // yet. Visually says "there's room to grow" instead of the spine just
+    // stopping dead at the last real node.
+    const reservedMainSegments = main
+        .filter((p) => p.id !== MAIN_PATH_ID)
+        .map((p) => ({ corners: p.subpaths[0].map((pt) => ({ row: pt.y, col: pt.x })), traveled: true, kind: 'deadend' }));
 
     const untraveled = [];
     bg.forEach((p) => {
@@ -169,7 +173,8 @@ function build() {
     function collectLegs(cornersXY, owner) {
         for (let i = 1; i < cornersXY.length; i++) allLegs.push({ a: cornersXY[i - 1], b: cornersXY[i], owner });
     }
-    collectLegs(trimmed, -1);
+    collectLegs(spine, -1);
+    reservedMainSegments.forEach((seg, si) => collectLegs(seg.corners.map((c) => ({ x: c.col, y: c.row })), -2 - si));
     bg.forEach((p, pi) => p.subpaths.forEach((sp, si) => collectLegs(sp, pi * 1000 + si)));
 
     const vias = [];
@@ -185,12 +190,21 @@ function build() {
         if (!dedupedVias.some((o) => dist({ x: o.col, y: o.row }, { x: v.col, y: v.row }) < 2)) dedupedVias.push(v);
     });
 
+    // Reserved branches don't get a node circle (no real project to click
+    // into yet) — a via dot at the tip instead of the trace just trailing
+    // off into a rounded line-cap, reading as a deliberate unpopulated pad
+    // rather than an accident.
+    reservedMainSegments.forEach((seg) => {
+        const tip = seg.corners[seg.corners.length - 1];
+        dedupedVias.push({ row: tip.row, col: tip.col });
+    });
+
     const board = {
         columns: widthMatch ? parseFloat(widthMatch[1]) : 1125,
         rows: heightMatch ? parseFloat(heightMatch[1]) : 2436,
         rowsPerProject: 0,
         nodes,
-        segments: [{ corners: trimmed.map((p) => ({ row: p.y, col: p.x })), traveled: true, kind: 'main' }],
+        segments: [{ corners: spine.map((p) => ({ row: p.y, col: p.x })), traveled: true, kind: 'main' }].concat(reservedMainSegments),
         untraveled,
         vias: dedupedVias,
     };

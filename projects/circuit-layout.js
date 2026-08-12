@@ -778,6 +778,9 @@ function generateFromStatic(staticBoard, opts) {
     return {
         columns: staticBoard.columns, rows: staticBoard.rows, rowsPerProject: 0,
         nodes: nodes, segments: segments, untraveled: untraveled, decorativeSpots: decorativeSpots, vias: vias,
+        // Hand-drawn corners already have the exact angles the artist
+        // wants — chamferCorners' cut is a grid-quantized-board concern.
+        chamferAmount: 0,
     };
 }
 
