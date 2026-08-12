@@ -221,8 +221,16 @@ function build() {
         groups.get(root).push(i);
     });
     let cappedCount = 0;
+    const isolatedTipVias = [];
     groups.forEach((memberIdxs) => {
-        if (memberIdxs.length < 2) return; // needs 2+ parallel lanes to read as a bundle
+        if (memberIdxs.length < 2) {
+            // Not part of a parallel bundle — no solder-pad cap, so it needs
+            // the other terminal treatment instead: a via dot at the tip, same
+            // as reservedMainSegments below, so no trace tip is ever left as a
+            // bare rounded line-cap trailing into nothing.
+            isolatedTipVias.push(tips[memberIdxs[0]].point);
+            return;
+        }
         memberIdxs.forEach((idx) => {
             untraveled[idx].cap = splitTail(untraveled[idx].corners, CAP_LENGTH);
             cappedCount++;
@@ -258,6 +266,7 @@ function build() {
         const tip = seg.corners[seg.corners.length - 1];
         dedupedVias.push({ row: tip.row, col: tip.col });
     });
+    isolatedTipVias.forEach((tip) => dedupedVias.push({ row: tip.row, col: tip.col }));
 
     const board = {
         columns: widthMatch ? parseFloat(widthMatch[1]) : 1125,
@@ -291,7 +300,8 @@ function build() {
     fs.writeFileSync(OUTPUT_JS, header);
     console.log('Wrote ' + path.relative(ROOT_DIR, OUTPUT_JS) + ' — ' + nodes.length + ' nodes, ' +
         board.segments[0].corners.length + ' main-path corners, ' + untraveled.length + ' background traces (' +
-        cappedCount + ' with a parallel-bundle cap), ' + dedupedVias.length + ' vias.');
+        cappedCount + ' with a parallel-bundle cap, ' + isolatedTipVias.length + ' isolated tips), ' +
+        dedupedVias.length + ' vias.');
 }
 
 build();
