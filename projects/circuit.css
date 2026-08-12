@@ -84,23 +84,26 @@
     stroke: #fff;
     stroke-linecap: round;
     stroke-linejoin: round;
-    stroke-width: 4.5;
+    stroke-width: 3.5;
     opacity: 0;
 }
 
 .circuit-segment.is-lit .circuit-flow-overlay {
-    opacity: 0.85;
+    opacity: 0.7;
 }
 
-/* Two "spark" chunks (34+60+16+70 = still 180, so FLOW_SPEED_PX_PER_S/
-   FLOW_PERIOD_MS in circuit.js stay in sync) each long enough to actually
-   show the zigzag #circuit-lightning-jitter (defined per-board in
-   circuit.js) kinks into their geometry — no blur here, real lightning
-   has a sharp core; the drop-shadows are what give it a glow without
-   sanding the jagged edges back down to a smooth line.  */
+/* A mix of the two earlier attempts: many short dash/gap runs (still 180
+   total, so FLOW_SPEED_PX_PER_S/FLOW_PERIOD_MS in circuit.js stay in
+   sync) so the sparks stay small and close to the wire rather than a
+   couple of long, wandering ones; a touch of blur back in (paired with a
+   now-much-smaller displacement scale in the #circuit-lightning-jitter
+   filter itself, circuit.js) so the jitter reads as current crackling
+   along its own lane instead of scribbles floating off to the side of
+   it; softer/less opaque glow so the whole thing sits back under the
+   solid lit wire rather than dominating it. */
 .circuit-segment.is-flowing .circuit-flow-overlay {
-    stroke-dasharray: 34 60 16 70;
-    filter: url(#circuit-lightning-jitter) drop-shadow(0 0 4px rgba(255, 255, 255, 0.95)) drop-shadow(0 0 12px rgba(var(--accent-bright-rgb), 0.95));
+    stroke-dasharray: 10 14 6 20 4 26 12 18 8 22 14 26;
+    filter: url(#circuit-lightning-jitter) blur(0.5px) drop-shadow(0 0 4px rgba(255, 255, 255, 0.8)) drop-shadow(0 0 10px rgba(var(--accent-bright-rgb), 0.75));
     animation: circuit-flow 1.2s linear infinite;
 }
 
