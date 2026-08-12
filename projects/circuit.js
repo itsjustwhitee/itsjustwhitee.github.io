@@ -224,7 +224,7 @@ function buildViewToggle(stage, grid) {
     function applyLabel() {
         const key = showingGrid ? 'projects.view_circuit' : 'projects.view_grid';
         btn.setAttribute('data-i18n', key);
-        btn.textContent = window.t ? window.t(key) : (showingGrid ? '// view as circuit' : '// view as grid');
+        btn.textContent = window.t ? window.t(key) : (showingGrid ? 'View as circuit' : 'View as grid');
     }
     applyLabel();
 

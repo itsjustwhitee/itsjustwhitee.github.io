@@ -24,14 +24,23 @@ A static personal website hosted on **GitHub Pages** with Cloudflare as CDN and 
 ├── scripts/
 │   ├── sync-head.js        # Syncs partials/shared-head.html into every page
 │   ├── sync-projects.js    # Generates project cards (home subset + full list) from projects/data.js
+│   ├── build-circuit-board.js # Parses circuit-board-source.svg into circuit-board-data.js (see below)
 │   ├── generate-og-image.js # Screenshots the hero for assets/og-image.jpg (run by CI)
 │   └── dev-server.js       # Local dev server with GitHub-Pages-like 404 handling (see Setup below)
 │
 ├── projects/
 │   ├── data.js             # Single source of truth for every project (pin/date/tags/links/…)
-│   ├── index.html          # Full project list page
+│   ├── index.html          # Full project list page — animated circuit board by default, with a
+│   │                       #   toggle button back to the plain grid
 │   ├── style.css           # Project-card grid styles, shared with index.html's #projects section
-│   └── script.js           # Per-project logo animations, shared with index.html
+│   ├── script.js           # Per-project logo animations, shared with index.html
+│   ├── circuit.js          # Circuit board rendering/animation/interaction engine (browser-only)
+│   ├── circuit.css         # PCB visual language for the circuit board
+│   ├── circuit-layout.js   # Pure board-geometry algorithms (dual Node/browser, unit-tested)
+│   ├── circuit-pulse.js    # Pure "impulse" timing math for the periodic node excite (unit-tested)
+│   ├── circuit-symbols.js  # Decorative PCB component SVG symbols
+│   ├── circuit-board-source.svg # Hand-drawn board layout (Inkscape) — edit this, not the .js below
+│   └── circuit-board-data.js    # Generated from circuit-board-source.svg — do not hand-edit
 │
 ├── bento/
 │   ├── index.html          # Bento page - header fadeUp, parallax orbs, mouse tracking
@@ -82,7 +91,7 @@ Page-specific tags (title, description, canonical, og/twitter, per-page styleshe
 Full-length scrollable portfolio: Hero → About → Projects → Skills → Experience & Education → CTA → Footer. The Projects section shows a bounded, pinned+recency-curated subset (see "Adding a New Project" below) with a link to the full list; each card has its own interactive micro-animation - see Interactive Features below.
 
 ### `projects/index.html` - Projects
-Full list of every project, generated the same way as home's subset (see "Adding a New Project" below). Same card styles and logo animations as the home page's Projects section, via the shared `projects/style.css` / `projects/script.js`.
+Full list of every project, generated the same way as home's subset (see "Adding a New Project" below). Card markup, styles, and logo animations are the same as the home page's Projects section, via the shared `projects/style.css` / `projects/script.js` — but by default this page shows an animated PCB "circuit board" instead (`circuit.js` + `circuit-layout.js` + `circuit-pulse.js` + `circuit.css`, board geometry from `circuit-board-source.svg`), one node per project, with hover popups and per-project excite animations. A toggle button switches back to the plain card grid. The circuit falls back to the plain grid automatically if the project count doesn't match the hand-drawn board's node count (e.g. a project was added before the board was updated — see "Adding a New Project").
 
 ### `bento/index.html` - Bento
 Grid of link cards rendered by `bento/script.js`. Card types: `github-custom` (live GitHub API data + streak-stats image, cached 1h), `solid` (branded gradient + SVG icon, i18n-able), `instagram-manual` (2×2 photo grid). Header uses a staggered `fadeUp`; cards only reveal once every async fetch has settled, so the loading spinner and the fetched content never double-flash. Hover glow (`--glow-rgb` in `bento/style.css`) is derived per-card from the same brand color already driving its background gradient (via `hexToRgb()` in `bento/script.js`), not a fixed site-wide accent - cards with no defined brand color (the Instagram photo-grid cards) fall back to the site's default accent glow.
@@ -296,6 +305,7 @@ Hosted on **GitHub Pages**, with **Cloudflare** as DNS/CDN/security layer.
 3. If the logo needs a custom animation beyond a plain `<img>` (see `image.mode` in `projects/data.js`'s header comment), write it in `projects/script.js`, targeting the project's `slug`-derived id(s) — the generator only knows how to emit the container, never what happens inside it.
 4. Place any image asset in `assets/projects/`; `.webp` for raster, `.svg` for vector (see Image format policy above).
 5. Run `node scripts/sync-projects.js` to regenerate both `index.html` and `projects/index.html`. `check-projects-sync.yml` fails CI if this step is forgotten.
+6. The `/projects/` circuit board only shows the new project once it has its own node: open `projects/circuit-board-source.svg` in Inkscape, place a green circle for it, add that circle's id to `CONFIRMED_NODE_IDS` in `scripts/build-circuit-board.js`, then run `node scripts/build-circuit-board.js` to regenerate `circuit-board-data.js`. Until then the page silently falls back to the plain grid (node count no longer matches project count) — not broken, just not showing the new board.
 
 ## Adding a New Bento Card
 
