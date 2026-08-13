@@ -17,14 +17,10 @@ function computeNodeOffset(distancePx, speedPxPerS, periodMs) {
     return travelMs % periodMs;
 }
 
-// computeNodeOffset alone assumes the flow is already in steady state
-// (an infinite repeating stream) — fine once it's actually flowing, but a
-// far node can compute a small offset (mod periodMs is always < periodMs)
-// while its own connecting wire is still under a much longer one-time
-// warm-up delay (e.g. the proportional-to-distance ramp used to bring the
-// board up to full flow), firing the node's excite well before its wire
-// even looks lit. Returns the smallest delay that both matches the node's
-// place in the periodic cycle AND is not earlier than warmupMs.
+// computeNodeOffset alone assumes the flow is already steady-state, so a far
+// node could fire before its own wire clears its one-time warm-up delay.
+// Returns the smallest delay that both matches the periodic cycle and isn't
+// earlier than warmupMs.
 function firstFireDelay(distancePx, speedPxPerS, periodMs, warmupMs) {
     const offset = computeNodeOffset(distancePx, speedPxPerS, periodMs);
     if (!warmupMs || offset >= warmupMs) return offset;
@@ -34,22 +30,24 @@ function firstFireDelay(distancePx, speedPxPerS, periodMs, warmupMs) {
 
 function schedule(nodes, speedPxPerS, periodMs, onExcite, setTimer) {
     setTimer = setTimer || function (fn, ms) { return setTimeout(fn, ms); };
-    const timers = [];
+    // One slot per node, overwritten each cycle — not an ever-growing array;
+    // a node only ever has one pulse pending at a time.
+    const timerIds = new Array(nodes.length);
     let stopped = false;
 
-    nodes.forEach(function (node) {
+    nodes.forEach(function (node, i) {
         const offset = firstFireDelay(node.distance, speedPxPerS, periodMs, node.warmupMs);
         function tick() {
             if (stopped) return;
             onExcite(node);
-            timers.push(setTimer(tick, periodMs));
+            timerIds[i] = setTimer(tick, periodMs);
         }
-        timers.push(setTimer(tick, offset));
+        timerIds[i] = setTimer(tick, offset);
     });
 
     return function stop() {
         stopped = true;
-        timers.forEach(function (id) { clearTimeout(id); });
+        timerIds.forEach(function (id) { clearTimeout(id); });
     };
 }
 

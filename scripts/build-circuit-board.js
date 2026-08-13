@@ -124,14 +124,11 @@ function build() {
     if (!mainPathEntry) throw new Error('Main path id "' + MAIN_PATH_ID + '" not found.');
     const mainPath = mainPathEntry.subpaths[0];
 
-    // A node doesn't have to sit exactly at a drawn corner — it can fall
-    // mid-run on a straight or diagonal leg (the artist only marks direction
-    // changes as corners, not every node along a run). computeDistances'
-    // graph only has edges between *consecutive corners*, so a node that
-    // isn't itself a corner is never a vertex in that graph and its
-    // distance-from-root lookup silently comes back as 0 for every node.
-    // Every node has to be inserted as an explicit corner, splitting
-    // whichever leg it falls on.
+    // A node can fall mid-run on a leg rather than exactly at a drawn
+    // corner. computeDistances' graph only has edges between *consecutive
+    // corners*, so a non-corner node is never a graph vertex and its
+    // distance-from-root silently comes back 0 — insert it as an explicit
+    // corner, splitting whichever leg it falls on.
     function insertNodesAsCorners(pathXY, nodesRC) {
         let remaining = nodesRC.slice();
         const out = [pathXY[0]];
@@ -245,13 +242,6 @@ function build() {
         if (!groups.has(root)) groups.set(root, []);
         groups.get(root).push(i);
     });
-    // This used to also reject any group whose own span exceeded
-    // CLUSTER_RADIUS, to catch a curved/coiled trace chopped into many
-    // short touching pieces (each bend transitively chaining into one
-    // giant "bundle"). That was a source-SVG problem, not a general one —
-    // circuit-board-source.svg now has those decorative curves combined
-    // into single paths, which only ever contribute their own two real
-    // tips — so a wide group here is a genuine multi-lane bundle again.
     let cappedCount = 0;
     const tipVias = [];
     groups.forEach((memberIdxs) => {

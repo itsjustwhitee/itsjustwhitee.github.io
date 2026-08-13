@@ -203,18 +203,11 @@ function routeOrthogonal(occupancy, from, to, rng, columns, maxRow) {
     const totalDRow = to.row - from.row;
     const totalDCol = to.col - from.col;
 
-    // Nodes sit rowsPerProject rows apart but only a few columns apart, so a
-    // direct leg exhausts its small column delta almost immediately, then
-    // has nothing left to do but run straight for the rest of a much larger
-    // row delta — reading as long straights capped with a short diagonal
-    // nub. Waypoints are placed at even row fractions, each offset from the
-    // straight line by roughly that leg's own row-span — so every resulting
-    // leg (including the tail into `to`) has comparable row and column
-    // magnitude, close to a true 45° run, rather than one small nudge that
-    // just recreates the same imbalance one level down. Alternating sides
-    // keeps the zigzag centered on the direct line. Only kicks in when
-    // there's a real column delta to stretch out (totalDCol !== 0) — a
-    // genuinely same-column connection stays a clean straight line.
+    // A direct leg between nodes (many rows apart, few columns apart) would
+    // exhaust its column delta almost immediately then run straight — a long
+    // straight capped with a short diagonal nub. Waypoints zigzag it into
+    // legs with comparable row/column magnitude instead, closer to a true
+    // 45° run. Only kicks in with a real column delta to stretch out.
     const waypoints = [from];
     if (totalDCol !== 0 && Math.abs(totalDRow) > 6 && Math.abs(totalDRow) > Math.abs(totalDCol) * 2) {
         const legCount = Math.max(2, Math.round(Math.abs(totalDRow) / 5));
@@ -252,17 +245,12 @@ function reduceToCorners(path) {
     return corners;
 }
 
-// Expands a reduced corner list back to every cell it passes through
-// (turns only reduceToCorners keeps the endpoints, so a long straight or
-// diagonal run collapses to 2 points) — used as the candidate pool for
-// branch attachment points, so branches spread along a run's whole length
-// instead of only ever landing on turn points, which are disproportionately
-// likely to be a project node itself on a short board.
-// Each cell also carries dirIdx — the compass direction the trace is
-// running in at that point — so a branch attaching there can start off in
-// a direction related to its parent's local heading instead of a fully
-// independent one, which is what reads as an unrelated, sharp-looking
-// junction angle.
+// Expands a reduced corner list back to every cell it passes through (turns
+// only reduceToCorners keeps endpoints, so a long run collapses to 2 points)
+// — the candidate pool for branch attachment points, so branches spread
+// along a run instead of landing only on turns. Each cell carries dirIdx (the
+// local compass direction) so an attaching branch can start related to its
+// parent's heading instead of at an unrelated, sharp-looking angle.
 function segmentCells(corners) {
     const cells = [];
     if (corners.length < 2) { if (corners.length === 1) cells.push({ row: corners[0].row, col: corners[0].col, dirIdx: 0 }); return cells; }

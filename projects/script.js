@@ -68,29 +68,32 @@ function initEyeTracking(edgeSvg) {
     const pupilGroup = document.getElementById('pupil-focus-group');
     if (!pupilGroup || window.prefersReducedMotion) return;
 
+    // Still off inside the circuit's hover popup (a fly-by preview) — on
+    // again inside .circuit-window (a click deliberately opens the real
+    // card, not a clone). The circuit's own small node icon is a separate
+    // injected SVG instance (initEdgeCVExcite in circuit.js) with its own
+    // excite-driven random jump, unaffected by this.
+    let ticking = false;
     window.addEventListener('mousemove', (e) => {
-        // Still off inside the circuit's hover popup (a fly-by preview, not
-        // worth the distraction) — but on again inside .circuit-window (the
-        // full card a click deliberately opens): same cursor-follow as the
-        // plain grid, same eye element either way since openWindow() moves
-        // the real project-card into place rather than cloning it. The
-        // circuit's own small node icon is a separate injected SVG instance
-        // entirely (see initEdgeCVExcite in circuit.js) — its excite-driven
-        // random eye jump is unaffected by this.
-        if (edgeSvg.closest('.circuit-popup')) return;
-        const rect = edgeSvg.getBoundingClientRect();
-        const centerX = rect.left + rect.width / 2;
-        const centerY = rect.top + rect.height / 2;
-        const dx = (e.clientX - centerX) / (window.innerWidth / 2);
-        const dy = (e.clientY - centerY) / (window.innerHeight / 2);
+        if (ticking) return;
+        ticking = true;
+        requestAnimationFrame(() => {
+            ticking = false;
+            if (edgeSvg.closest('.circuit-popup')) return;
+            const rect = edgeSvg.getBoundingClientRect();
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 2;
+            const dx = (e.clientX - centerX) / (window.innerWidth / 2);
+            const dy = (e.clientY - centerY) / (window.innerHeight / 2);
 
-        const movementLimitX = 120;
-        const movementLimitY = 100;
-        const offsetX = 30;
-        const tx = (dx * movementLimitX) - offsetX;
-        const ty = dy * movementLimitY;
-        pupilGroup.style.transform = `translate(${tx}px, ${ty}px)`;
-    });
+            const movementLimitX = 120;
+            const movementLimitY = 100;
+            const offsetX = 30;
+            const tx = (dx * movementLimitX) - offsetX;
+            const ty = dy * movementLimitY;
+            pupilGroup.style.transform = `translate(${tx}px, ${ty}px)`;
+        });
+    }, { passive: true });
     const edgeCard = edgeSvg.closest('.project-card');
     if (edgeCard) {
         edgeCard.addEventListener('mouseleave', () => {

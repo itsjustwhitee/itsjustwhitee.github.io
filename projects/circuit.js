@@ -24,16 +24,12 @@ function segmentPathD(segment, cellSize, chamfer) {
 function render(container, board, cellSize) {
     const width = board.columns * cellSize;
     const height = board.rows * cellSize;
-    // The procedural board is grid-quantized (right-angle corners need
-    // softening); the hand-authored one already has the exact angles drawn
-    // — chamfering it too would round corners the artist deliberately
-    // placed. board.chamferAmount (set by generateFromStatic) overrides the
-    // default for that case.
+    // Hand-authored corners are already the exact angles the artist drew;
+    // chamfering them too would round them off. generateFromStatic sets
+    // board.chamferAmount to 0 to skip that.
     const chamfer = board.chamferAmount !== undefined ? board.chamferAmount : CHAMFER;
-    // Vias and decorative symbols anchor at col*cellSize - halfSize / row*cellSize
-    // - halfSize; at the board's own col 0 or row 0 that offset goes negative,
-    // outside a "0 0 w h" viewBox — clipped at the SVG edge. This margin gives
-    // that negative offset room without touching any of the drawing math below.
+    // Vias/decorative symbols anchor at col*cellSize - halfSize (etc.), which
+    // goes negative at col/row 0 — outside a "0 0 w h" viewBox and clipped.
     const margin = 24;
 
     const svg = svgEl('svg', {
@@ -51,18 +47,12 @@ function render(container, board, cellSize) {
         const doc = parser.parseFromString('<svg xmlns="' + SVG_NS + '">' + window.CIRCUIT_SYMBOLS[name] + '</svg>', 'image/svg+xml');
         defs.appendChild(doc.documentElement.firstChild);
     });
-    // Displaces the flow overlay's own geometry along noise, then jump-cuts
-    // (calcMode:discrete, not smooth interpolation) the noise seed ~12x/second
-    // — a real kink in the line itself, strobing too fast to track as motion,
-    // rather than a smoothly-moving glow. type MUST be fractalNoise, not
-    // turbulence: turbulence sums the *absolute value* of each octave, which
-    // is not zero-centered — it visibly biased every displaced pixel toward
-    // one consistent side instead of jittering around the true path.
-    // scale is deliberately modest (a wider displacement wanders far enough
-    // off the wire's own path to read as separate floating scribbles instead
-    // of current jittering through that lane). Region is widened past the
-    // default so the displaced pixels don't get clipped to the element's own
-    // tight bounding box.
+    // Displaces the flow overlay along noise, jump-cutting the seed several
+    // times a second for a jittery "electric" kink instead of a smooth glow.
+    // type must stay fractalNoise, not turbulence — turbulence sums each
+    // octave's absolute value, which isn't zero-centered and visibly biases
+    // the displacement toward one side. scale is kept modest so the jitter
+    // stays on the wire instead of wandering off it.
     const lightningFilter = svgEl('filter', { id: 'circuit-lightning-jitter', x: '-40%', y: '-40%', width: '180%', height: '180%' });
     const turbulence = svgEl('feTurbulence', { type: 'fractalNoise', baseFrequency: '0.35 0.12', numOctaves: '1', seed: '3', result: 'jitter-noise' });
     turbulence.appendChild(svgEl('animate', {
@@ -78,11 +68,9 @@ function render(container, board, cellSize) {
     const untraveledGroup = svgEl('g', { class: 'circuit-trace circuit-trace-untraveled' });
     board.untraveled.forEach(function (seg) {
         untraveledGroup.appendChild(svgEl('path', { d: segmentPathD(seg, cellSize, chamfer), class: 'circuit-path circuit-path-untraveled' }));
-        // seg.capStart/capEnd each mark one of this lane's two extremities as
-        // ending together with a parallel bundle — a thicker overlay on just
-        // that final stretch reads as a row of chip solder pads. Every
-        // terminal that isn't part of a bundle gets a via-dot circle instead
-        // (board.vias, rendered below) — never both at the same point.
+        // capStart/capEnd mark a lane end that's part of a parallel bundle —
+        // a thicker overlay reading as a chip solder pad. Every other
+        // terminal gets a via-dot circle instead (board.vias below).
         if (seg.capStart) {
             untraveledGroup.appendChild(svgEl('path', { d: segmentPathD({ corners: seg.capStart }, cellSize, chamfer), class: 'circuit-path circuit-path-untraveled-cap' }));
         }
@@ -172,12 +160,9 @@ function init() {
     const collected = collectProjects();
     if (!stage || !collected || !collected.projects.length) return; // no-JS/degraded path: grid stays visible as-is
 
-    // Hand-authored board (projects/circuit-board-data.js, built from
-    // projects/circuit-board-source.svg by scripts/build-circuit-board.js)
-    // is the real board whenever its node count still matches the live
-    // project count — falls back to the procedural generator otherwise
-    // (e.g. a project was added before the source SVG/data were updated),
-    // so the page never silently breaks out of sync.
+    // Falls back to the procedural generator if the hand-authored board's
+    // node count doesn't match the live project count (e.g. a project was
+    // added before circuit-board-source.svg was updated).
     const staticData = window.CIRCUIT_BOARD_DATA;
     const useStatic = staticData && staticData.nodes.length === collected.projects.length;
 
@@ -211,9 +196,8 @@ function init() {
     buildViewToggle(stage, collected.grid);
 }
 
-// The plain project-card grid never went away (see .projects-grid.circuit-active
-// in style.css) — this just gives visitors who prefer it, or who want to
-// scan every project at once, a way back to it without losing the circuit.
+// The plain grid stays in the DOM (.projects-grid.circuit-active in
+// style.css hides it) — this toggles back to it without losing the circuit.
 function buildViewToggle(stage, grid) {
     const btn = document.createElement('button');
     btn.type = 'button';
@@ -277,11 +261,8 @@ const FLOW_PERIOD_MS = 1200; // must match the circuit-flow keyframe duration in
 
 function startContinuousFlow(rendered) {
     if (window.prefersReducedMotion) return;
-    // A segment's flow-streak overlay must switch on only once the pulse has
-    // actually reached its start point — same startDistance-based wave as
-    // is-lit in runChargeAnimation — not globally the moment charging ends,
-    // which read as every output already streaming before its input node
-    // had actually been reached.
+    // Same startDistance-based delay as is-lit in runChargeAnimation — a
+    // segment must not start streaming before the pulse has reached it.
     const totalDistance = rendered.traveledPaths.reduce(function (max, t) {
         return Math.max(max, t.startDistance + t.length);
     }, 0) || 1;
@@ -318,12 +299,8 @@ function excite(project, nodeEl) {
 
 function startPulseScheduler(rendered, projects) {
     if (window.prefersReducedMotion) return;
-    // Same warm-up basis as startContinuousFlow's per-segment delay — a
-    // node's first excite must not fire before its own connecting wire has
-    // actually started showing the flow-streak visual, or the "impulse"
-    // reads as arriving before the animation that's supposed to carry it,
-    // worst for nodes far from the root (their wire's warm-up delay is
-    // largest, but computeNodeOffset alone caps out at FLOW_PERIOD_MS).
+    // Same warm-up delay as startContinuousFlow's per-segment one — a node
+    // must not excite before its own wire visibly starts flowing.
     const totalDistance = rendered.traveledPaths.reduce(function (max, t) {
         return Math.max(max, t.startDistance + t.length);
     }, 0) || 1;
@@ -522,14 +499,9 @@ function initRackControllerExcite() {
     const BASE_SPEED = 0.5, MAX_SPEED = 3.2, DECAY = 0.06;
     let angle = 0, speed = BASE_SPEED, target = BASE_SPEED;
 
-    // Runs forever regardless of which project it excited from, so it must
-    // stay cheap while the circuit itself is hidden (grid view toggled on) —
-    // offsetParent is null whenever a display:none ancestor (.circuit-stage.
-    // is-hidden) takes this icon out of the render tree, letting the loop
-    // skip the style write (and the layout/paint it triggers) instead of
-    // quietly burning main-thread time every frame behind the scenes,
-    // competing with things like the project-card eye-tracking's own
-    // unthrottled mousemove handler.
+    // Runs forever, so it must stay cheap while hidden (grid view toggled
+    // on): offsetParent is null once a display:none ancestor takes this
+    // icon out of the render tree, skipping the per-frame style write.
     function spin() {
         if (icon.offsetParent !== null) {
             speed += (target - speed) * DECAY;
@@ -628,15 +600,15 @@ function initEdgeCVExcite() {
         if (window.prefersReducedMotion) return;
         const pupil = svg.querySelector('#pupil-focus-group-board');
         if (!pupil) return;
-        // Card version tracks the cursor continuously; this board icon has no
-        // cursor to follow, so each excite instead jumps the eye to a fresh
-        // random spot — a quick saccade rather than a smooth pursuit — then
-        // settles back to center before the next pulse.
+        // No cursor to follow here, so each excite jumps the pupil to a
+        // random spot and back. Range matches script.js's initEyeTracking
+        // limits (120/100) — same 2750-unit SVG viewBox regardless of this
+        // icon's tiny on-screen size, so the magnitude has to match too.
         pupil.style.transition = 'transform 0.18s ease-out';
 
         window.Circuit.onNodeExcite('edgecv4safety', function () {
-            const rx = (Math.random() - 0.5) * 14;
-            const ry = (Math.random() - 0.5) * 8;
+            const rx = (Math.random() - 0.5) * 240;
+            const ry = (Math.random() - 0.5) * 200;
             pupil.style.transform = 'translate(' + rx.toFixed(1) + 'px,' + ry.toFixed(1) + 'px)';
             setTimeout(function () {
                 pupil.style.transform = 'translate(0px,0px)';

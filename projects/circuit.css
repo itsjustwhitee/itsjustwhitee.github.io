@@ -177,7 +177,7 @@
     filter: brightness(0.9);
 }
 
-/* Its eye-sweep excite reads best with real room to move in — give it a
+/* Its random-jump excite reads best with real room to move in — give it a
    bigger stage than the uniform node-icon size. */
 .circuit-node-btn[data-slug="edgecv4safety"] .circuit-node-icon {
     width: 40px;
