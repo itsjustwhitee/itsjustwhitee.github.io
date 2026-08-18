@@ -1,0 +1,86 @@
+/* All design tokens (--bg-color, --card-bg, --accent-bright, --radius, etc.)
+   and .container / .profile-header / .card-base / .card-slug come from
+   shared.css — this file only adds resources-page-specific layout. */
+
+/* ── SECTIONS ────────────────────────────────────────────────────────────── */
+.resource-section { margin-top: 48px; }
+.resource-section:first-child { margin-top: 0; }
+.resource-section-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.3rem; font-weight: 700; color: #fff;
+    margin-bottom: 20px;
+}
+
+/* ── GRID ────────────────────────────────────────────────────────────────── */
+.resource-grid {
+    display: grid;
+    /* auto-fit avoids empty tracks with few cards; 380px cap keeps a lone card from stretching full width */
+    grid-template-columns: repeat(auto-fit, minmax(260px, 380px));
+    gap: 18px;
+}
+
+/* ── CARD ────────────────────────────────────────────────────────────────── */
+/* Background/border match projects/style.css's .project-card palette rather
+   than .card-base's own (lighter, shared with bento/contacts, untouched). */
+.resource-card {
+    display: flex; align-items: center; gap: 16px;
+    background: #0b2b2d;
+    border-color: rgba(var(--accent-rgb),0.4);
+    padding: 20px 22px;
+    min-height: 96px;
+}
+@media (hover: hover) and (pointer: fine) {
+    .resource-card:hover { border-color: rgba(var(--accent-bright-rgb),0.65); }
+}
+.resource-card-main { display: flex; align-items: center; gap: 16px; flex: 1; min-width: 0; }
+.resource-icon-wrap {
+    width: 52px; height: 52px;
+    border-radius: 14px;
+    font-size: 1.5rem; line-height: 1;
+}
+.resource-text { display: flex; flex-direction: column; gap: 4px; }
+.resource-text h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 1rem; font-weight: 700; color: #fff; line-height: 1.2;
+}
+.resource-text p {
+    font-size: 0.74rem; color: rgba(255,255,255,0.65); line-height: 1.45;
+}
+.resource-text p:not(.resource-author) { margin-top: 6px; }
+.resource-author {
+    font-style: italic;
+    font-size: 0.65rem; color: var(--accent-bright); opacity: 0.85;
+    letter-spacing: 0.03em;
+}
+
+/* Multi-download variant: card is a <div>, not an <a> (see script.js). */
+.resource-card.resource-card-downloads {
+    flex-direction: column; align-items: stretch; gap: 14px;
+    padding-bottom: 34px; /* room for the absolutely-positioned .card-slug below the buttons */
+    cursor: default;
+}
+.resource-downloads { display: flex; gap: 10px; flex-wrap: wrap; }
+.resource-downloads .btn-pill i { font-size: 0.8rem; }
+
+/* Same treatment as .project-img-wrap/.project-img: tinted box bleeds to
+   the card edges, image shrunk via object-fit:contain, not full-bleed. */
+.resource-preview-wrap {
+    width: calc(100% + 44px); height: 170px;
+    margin: -20px -22px 0;
+    background: rgba(var(--accent-rgb),0.08);
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden;
+    cursor: pointer;
+}
+.resource-preview {
+    display: block; width: 100%; height: 100%;
+    object-fit: contain; padding: 22px;
+    /* drop-shadow (not box-shadow) hugs the image's visible pixels, not its padded box */
+    filter: brightness(0.92) drop-shadow(0 10px 20px rgba(0,0,0,0.45));
+}
+
+/* ── MOBILE ≤600px ───────────────────────────────────────────────────────── */
+@media (max-width: 600px) {
+    .resource-grid    { grid-template-columns: 1fr; gap: 12px; }
+    .resource-section { margin-top: 36px; }
+}

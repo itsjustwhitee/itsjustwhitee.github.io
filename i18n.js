@@ -22,11 +22,13 @@
     const T = {
         en: {
             // ── Home: nav ────────────────────────────────────────────────────
-            'nav.about':    '// about',
-            'nav.projects': '// projects',
-            'nav.skills':   '// skills',
-            'nav.bento':    '// bento',
-            'nav.cv':       '// cv',
+            'nav.about':      '// about',
+            'nav.projects':   '// projects',
+            'nav.skills':     '// skills',
+            'nav.bento':      '// bento',
+            'nav.resources':  '// resources',
+            'nav.cv':         '// cv',
+            'nav.menu':       '// menu',
 
             // ── Home: hero ───────────────────────────────────────────────────
             'hero.eyebrow':      '// hello world · itsjustwhitee',
@@ -55,6 +57,16 @@
             'projects.page_sub':      "Everything I've built: university coursework, internships, and personal experiments. The home page only shows a few highlights; this is the full list.",
             'projects.view_grid':     'View as grid',
             'projects.view_circuit':  'View as circuit',
+
+            // ── Resources page ──────────────────────────────────────────────────
+            'resources.page_label': '// resources',
+            'resources.title':      'Free <span>resources</span>',
+            'resources.page_sub':   'Tools, articles, and other things I find worth sharing, created by me or other people!',
+            'section.desktop.title':  'Desktop & Wallpapers',
+            'resource.deskmat.title': 'BluePrint Wallpaper',
+            'resource.deskmat.desc':  'Blueprint-style desktop wallpaper, in two variants.',
+            'resource.deskmat.dl_normal': 'Normal',
+            'resource.deskmat.dl_blank':  'Blank',
 
             'proj.edgecv.badge':      'Internship · Thesis',
             'proj.edgecv.tagline':    '🛡️ AI-Driven Contextual Safety System for Industry 5.0',
@@ -181,11 +193,13 @@
         },
         it: {
             // ── Home: nav ────────────────────────────────────────────────────
-            'nav.about':    '// about',
-            'nav.projects': '// projects',
-            'nav.skills':   '// skills',
-            'nav.bento':    '// bento',
-            'nav.cv':       '// cv',
+            'nav.about':      '// about',
+            'nav.projects':   '// projects',
+            'nav.skills':     '// skills',
+            'nav.bento':      '// bento',
+            'nav.resources':  '// resources',
+            'nav.cv':         '// cv',
+            'nav.menu':       '// menu',
 
             // ── Home: hero ───────────────────────────────────────────────────
             'hero.eyebrow':      '// hello world · itsjustwhitee',
@@ -214,6 +228,16 @@
             'projects.page_sub':      "Tutto quello che ho costruito: corsi universitari, tirocini ed esperimenti personali. La home mostra solo alcuni punti salienti, qui trovi la lista completa.",
             'projects.view_grid':     'Vedi come griglia',
             'projects.view_circuit':  'Vedi come circuito',
+
+            // ── Resources page ──────────────────────────────────────────────────
+            'resources.page_label': '// resources',
+            'resources.title':      'Risorse <span>gratuite</span>',
+            'resources.page_sub':   'Tool, articoli e altre cose che trovo utili da condividere, creati da me o da altri!',
+            'section.desktop.title':  'Desktop & Sfondi',
+            'resource.deskmat.title': 'BluePrint Wallpaper',
+            'resource.deskmat.desc':  'Sfondo desktop in stile blueprint, in due varianti.',
+            'resource.deskmat.dl_normal': 'Normale',
+            'resource.deskmat.dl_blank':  'Blank',
 
             'proj.edgecv.badge':      'Tirocinio · Tesi',
             'proj.edgecv.tagline':    '🛡️ Sistema di Sicurezza Contestuale AI-Driven per Industry 5.0',
@@ -386,13 +410,15 @@
             grid.innerHTML = '';
             loadBento();
         }
+        if (document.getElementById('resources-root') && typeof renderResources === 'function') {
+            renderResources();
+        }
     };
 
     // ── INJECT TOGGLE BUTTON INTO NAV ────────────────────────────────────────
     function injectToggle() {
-        const navLinks = document.querySelector('.nav-links');
-        if (!navLinks || document.getElementById('jw-lang-toggle')) return;
-        const li  = document.createElement('li');
+        const controls = document.querySelector('.nav-controls');
+        if (!controls || document.getElementById('jw-lang-toggle')) return;
         const btn = document.createElement('button');
         btn.id          = 'jw-lang-toggle';
         btn.type        = 'button';
@@ -420,8 +446,7 @@
             this.style.background = 'none';
             this.style.color      = 'var(--accent-bright)';
         });
-        li.appendChild(btn);
-        navLinks.appendChild(li);
+        controls.appendChild(btn);
     }
 
     // ── INIT ─────────────────────────────────────────────────────────────────

@@ -10,7 +10,7 @@
      <nav id="site-nav" class="site-nav" data-active="bento"></nav>
      <footer id="site-footer" class="site-footer" data-copy-key="bento.footer_copy"></footer>
 
-   data-active values: "home" | "projects" | "bento" | "cv" | "contacts" | ""
+   data-active values: "home" | "projects" | "bento" | "resources" | "cv" | "contacts" | ""
    ═══════════════════════════════════════════════════════════════════════════ */
 
 (function () {
@@ -59,10 +59,11 @@
 
     // ── NAV ───────────────────────────────────────────────────────────────────
     var NAV_LINKS = [
-        { key: 'home',     href: r(''),           label: '// home',     i18n: null            },
-        { key: 'projects', href: r('projects/'),  label: '// projects', i18n: 'nav.projects' },
-        { key: 'bento',    href: r('bento/'),     label: '// bento',    i18n: 'nav.bento'     },
-        { key: 'cv',       href: r('cv/'),        label: '// cv',       i18n: 'nav.cv'        },
+        { key: 'home',      href: r(''),           label: '// home',      i18n: null             },
+        { key: 'projects',  href: r('projects/'),  label: '// projects',  i18n: 'nav.projects'  },
+        { key: 'bento',     href: r('bento/'),     label: '// bento',     i18n: 'nav.bento'     },
+        { key: 'resources', href: r('resources/'), label: '// resources', i18n: 'nav.resources' },
+        { key: 'cv',        href: r('cv/'),        label: '// cv',        i18n: 'nav.cv'        },
     ];
 
     function buildNav(el) {
@@ -72,13 +73,65 @@
             var i18n = item.i18n ? ' data-i18n="' + item.i18n + '"' : '';
             return '<li><a href="' + item.href + '"' + cls + i18n + '>' + item.label + '</a></li>';
         }).join('');
+
+        // "•• // page" chip; the label hides while open since the current
+        // page is already highlighted in the list below (.active). One flat
+        // level today — a `children` array per entry is the seam for sub-pages.
+        var activeItem  = NAV_LINKS.filter(function (item) { return item.key === active; })[0];
+        var crumbLabel  = activeItem ? activeItem.label : window.t('nav.menu');
+        var crumbI18n   = activeItem
+            ? ((activeItem.i18n) ? ' data-i18n="' + activeItem.i18n + '"' : '')
+            : ' data-i18n="nav.menu"';
+
         el.innerHTML =
             '<a href="' + r('') + '" class="nav-logo">' +
                 '<img src="' + r('assets/logo.svg') + '" alt="justwhitee">' +
                 'justwhitee' +
             '</a>' +
-            '<ul class="nav-links">' + links + '</ul>';
-        // i18n.js appends the language toggle into .nav-links after this runs
+            '<div class="nav-right">' +
+                '<span class="nav-crumb-menu">' +
+                    '<span class="nav-crumb-row">' +
+                        '<button type="button" class="nav-crumb-trigger" aria-haspopup="true" aria-expanded="false" aria-label="Menu">' +
+                            '&bull;&bull;' +
+                        '</button>' +
+                        '<span class="nav-crumb-current"' + crumbI18n + '>' + crumbLabel + '</span>' +
+                    '</span>' +
+                    '<ul class="nav-links">' + links + '</ul>' +
+                '</span>' +
+                '<div class="nav-controls"></div>' +
+            '</div>';
+        // i18n.js appends the language toggle into .nav-controls after this runs
+        wireNavDropdown(el.querySelector('.nav-crumb-menu'));
+    }
+
+    // ── NAV DROPDOWN INTERACTION ─────────────────────────────────────────────
+    // Trigger click toggles the panel; outside click, Escape, or picking a link
+    // all close it again (navigation itself is handled by initPageTransitions()).
+    function wireNavDropdown(menu) {
+        if (!menu) return;
+        var trigger = menu.querySelector('.nav-crumb-trigger');
+
+        function setOpen(open) {
+            menu.classList.toggle('open', open);
+            trigger.setAttribute('aria-expanded', open ? 'true' : 'false');
+        }
+
+        trigger.addEventListener('click', function (e) {
+            e.stopPropagation();
+            setOpen(!menu.classList.contains('open'));
+        });
+        document.addEventListener('click', function (e) {
+            if (menu.classList.contains('open') && !menu.contains(e.target)) setOpen(false);
+        });
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape' && menu.classList.contains('open')) {
+                setOpen(false);
+                trigger.focus();
+            }
+        });
+        menu.querySelectorAll('.nav-links a').forEach(function (a) {
+            a.addEventListener('click', function () { setOpen(false); });
+        });
     }
 
     // ── FOOTER ────────────────────────────────────────────────────────────────
@@ -133,6 +186,7 @@
     // elements, staggered by sibling index. Used by home + contacts, each with
     // its own step/cap. (bento/script.js has its own batch-based variant since
     // its cards can be added to the DOM asynchronously after this runs.)
+    var _scrollRevealFallbackTimer = null;
     window.initScrollReveal = function (opts) {
         opts = opts || {};
         var delayStep    = opts.delayStep    || 80;
@@ -166,7 +220,8 @@
         document.querySelectorAll('.reveal').forEach(function (el) { revealObs.observe(el); });
 
         // Hard fallback: anything still hidden after 2s gets force-shown
-        setTimeout(function () {
+        if (_scrollRevealFallbackTimer) clearTimeout(_scrollRevealFallbackTimer);
+        _scrollRevealFallbackTimer = setTimeout(function () {
             document.querySelectorAll('.reveal:not(.visible)').forEach(function (el) {
                 el.style.transitionDelay = '0ms';
                 el.classList.add('visible');
