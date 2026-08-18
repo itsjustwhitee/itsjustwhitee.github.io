@@ -33,13 +33,13 @@
             // ── Home: hero ───────────────────────────────────────────────────
             'hero.eyebrow':      '// hello world · itsjustwhitee',
             'hero.role_tag':     'MSc Computer Engineering · Università di Bologna',
-            'hero.desc':         "I work on projects that mix hardware and software — I like getting my hands dirty (and often frustrated) with Edge and IoT systems, and every now and then GPUs too. I'm convinced you never really know something until you understand exactly how it works underneath.",
+            'hero.desc':         "I work on projects that mix hardware and software: I like getting my hands dirty (and often frustrated) with Edge and IoT systems, and every now and then GPUs too. I'm convinced you never really know something until you understand exactly how it works underneath.",
             'hero.btn_projects': 'View Projects',
             'hero.btn_cv':       'Curriculum',
             'hero.scroll':       'scroll',
 
             // ── Home: about ──────────────────────────────────────────────────
-            'about.label':   '// 01 — about me',
+            'about.label':   '// 01 · about me',
             'about.title':   'Engineer on paper,<br><span class="accent">tinkerer at heart</span>',
             'about.badge':   'BSc grade',
             'about.h3':      'From nowhere to... (who knows?)',
@@ -48,7 +48,7 @@
             'about.p3_html': "When I'm not staring at a terminal, I'm likely eating sushi 🍣, or drawing caricatures or overthinking a graphic design layout 🖱️.<br> I believe <em>knowledge is worthless if it's not shared</em>.",
 
             // ── Home: projects ───────────────────────────────────────────────
-            'projects.label':         '// 02 — projects',
+            'projects.label':         '// 02 · projects',
             'projects.title':         'My <span class="accent">projects</span>',
             'projects.sub':           'Selected work from university courses, internships, and personal experiments.',
             'projects.contrib_label': 'with',
@@ -74,7 +74,7 @@
             'proj.edgecv.stat1_lbl':  'Inference',
             'proj.edgecv.stat1_desc': 'on Jetson AGX Orin via TensorRT',
             'proj.edgecv.stat2_lbl':  'Architecture',
-            'proj.edgecv.stat2_desc': 'Super-repo with Git Submodules — strict decoupling of Vision and Robot Control components.',
+            'proj.edgecv.stat2_desc': 'Super-repo with Git Submodules: strict decoupling of Vision and Robot Control components.',
 
             'proj.hash.badge':   'MSc Course',
             'proj.hash.tagline': '🔓 Multi-Platform SHA-256 Parallel Cracking Suite',
@@ -93,45 +93,45 @@
             'proj.notes.desc':    'Typst template for clean lecture notes: styled cover page, automatic table of contents, callouts and inline annotations. Published on Typst Universe, used in several course-note repos including ICCBD-notes.',
 
             // ── Home: skills ─────────────────────────────────────────────────
-            'skills.label': '// 03 — skills',
+            'skills.label': '// 03 · skills',
             'skills.title': 'Tech <span class="accent">stack.</span>',
             'skills.sub':   "A focused collection of technologies I've learned to use.",
 
             // ── Home: experience & education ─────────────────────────────────
-            'exp.label':    '// 04 — experience &amp; education',
+            'exp.label':    '// 04 · experience &amp; education',
             'exp.title':    'My <span class="accent">journey</span>',
             'exp.col_work': 'Work',
             'exp.col_edu':  'Education',
 
-            'exp.eyecan.period':  'may 2026 — now',
+            'exp.eyecan.period':  'may 2026 - now',
             'exp.eyecan.role':    'Analyst Programmer / AI Integration Engineer',
             'exp.eyecan.company': 'EyeCan',
             'exp.eyecan.location': '· Bologna, IT',
             'exp.eyecan.desc':    'Practical implementation of ideas: software development, integration of AI models, and direct hands-on management of hardware components.',
 
-            'exp.tutor.period':  'may 2025 — now',
+            'exp.tutor.period':  'may 2025 - now',
             'exp.tutor.role':    'Didactic Tutor',
             'exp.tutor.company': 'Freelance',
             'exp.tutor.location': '· Ferrara, IT',
             'exp.tutor.desc':    'Academic support for upper secondary students in Computer Science and Mathematics, with a focus on logic and problem solving.',
 
-            'exp.birex.period':  'apr 2025 — oct 2025',
+            'exp.birex.period':  'apr 2025 - oct 2025',
             'exp.birex.role':    'Computer Vision Engineer Intern',
             'exp.birex.company': 'BI-REX Competence Center',
             'exp.birex.location': '· Bologna, IT',
             'exp.birex.desc':    'Development of the EdgeCV4Safety framework on the industrial pilot line: optimized computer vision pipelines integrated with collaborative robotics UR.',
 
-            'edu.msc.period': 'oct 2025 — in progress',
+            'edu.msc.period': 'oct 2025 - in progress',
             'edu.msc.degree': 'Master Degree<br>Computer Engineering',
             'edu.msc.school': 'Università di Bologna',
             'edu.msc.grade':  '// Real-Time Systems · Accelerated Computing and more...',
 
-            'edu.bsc.period': 'oct 2022 — dec 2025',
+            'edu.bsc.period': 'oct 2022 - dec 2025',
             'edu.bsc.degree': 'Bachelor Degree<br>Computer Engineering',
             'edu.bsc.school': 'Università di Bologna',
             'edu.bsc.grade':  '// Grade 96/110',
 
-            'edu.hs.period': 'sep 2017 — jul 2022',
+            'edu.hs.period': 'sep 2017 - jul 2022',
             'edu.hs.degree': 'Scientific High School Diploma',
             'edu.hs.school': 'Liceo Galileo Galilei · Adria (RO)',
             'edu.hs.grade':  '// Grade 96/100 · Applied Sciences',
@@ -142,13 +142,13 @@
             'cta.desc':  "I'm open to internships, collaborations, and interesting projects. If you have an idea or just want to chat tech, I'm always up for it.",
 
             // ── Home: footer ─────────────────────────────────────────────────
-            'home.footer_copy': '&copy; YEAR Matteo Fontolan<br>Caricatures, illustrations and graphic design are copyrighted — ask before reusing them.<br>Code and repositories are <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank">copyleft</a> (unless stated otherwise) — knowledge is meant to be shared.',
+            'home.footer_copy': '&copy; YEAR Matteo Fontolan<br>Caricatures, illustrations and graphic design are copyrighted: ask before reusing them.<br>Code and repositories are <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank">copyleft</a> (unless stated otherwise): knowledge is meant to be shared.',
 
             // ── Bento ────────────────────────────────────────────────────────
             'bento.header_label': "// justwhitee's bento",
             'bento.bio':          'Tech enthusiast 👾 | Computer Engineering (M.Sc. WIP) 🧑‍💻 | Foodie 🍣 | Caricature &amp; Graphic Design for hobby 🖱️',
             'bento.cta':          'Let\'s work together, or just chat about tech. Reach out!💡',
-            'bento.footer_copy':  '&copy; YEAR Matteo Fontolan<br>Caricatures, illustrations and graphic design are copyrighted — ask before reusing them.<br>Code, repositories and other works/assets are <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank">copyleft</a> (unless stated otherwise) — knowledge is meant to be shared.',
+            'bento.footer_copy':  '&copy; YEAR Matteo Fontolan<br>Caricatures, illustrations and graphic design are copyrighted: ask before reusing them.<br>Code, repositories and other works/assets are <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank">copyleft</a> (unless stated otherwise): knowledge is meant to be shared.',
 
             'card.telegram.title':   'Contact Me ✍️',
             'card.telegram.desc':    'Collaborations? Reach out here or at matteo.fontolan@justwhitee.org',
@@ -161,7 +161,7 @@
             'card.studio.title':     'Tech & Creative Stuff 🖱',
 
             // ── 404 ──────────────────────────────────────────────────────────
-            'notfound.label': '// 404 — page not found',
+            'notfound.label': '// 404 · page not found',
             'notfound.title': "This page doesn't exist.",
             'notfound.desc':  'The link you followed is broken, expired, or never existed.<br>Maybe you were looking for something else?',
             'notfound.btn':   'Back to home',
@@ -178,7 +178,7 @@
             'contacts.btn.call':     'Call',
             'contacts.btn.save':     'Save Contact',
             'contacts.footer_back':  '← back to bento',
-            'contacts.footer_copy': '&copy; YEAR Matteo Fontolan<br>Caricatures, illustrations and graphic design are copyrighted — ask before reusing them.<br>Code and repositories are <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank">copyleft</a> (unless stated otherwise) — knowledge is meant to be shared.',
+            'contacts.footer_copy': '&copy; YEAR Matteo Fontolan<br>Caricatures, illustrations and graphic design are copyrighted: ask before reusing them.<br>Code and repositories are <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank">copyleft</a> (unless stated otherwise): knowledge is meant to be shared.',
             'contacts.wa_msg':       'Hi Matteo, I found something of yours! 👋',
 
             // ── CV ────────────────────────────────────────────────────────────
@@ -189,7 +189,7 @@
             'cv.btn_download': 'Download CV',
             'cv.btn_open':     'Open in new tab',
             'cv.footer_back':  'back to home',
-            'cv.footer_copy': '&copy; YEAR Matteo Fontolan<br>Caricatures, illustrations and graphic design are copyrighted — ask before reusing them.<br>Code and repositories are <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank">copyleft</a> (unless stated otherwise) — knowledge is meant to be shared.',
+            'cv.footer_copy': '&copy; YEAR Matteo Fontolan<br>Caricatures, illustrations and graphic design are copyrighted: ask before reusing them.<br>Code and repositories are <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank">copyleft</a> (unless stated otherwise): knowledge is meant to be shared.',
         },
         it: {
             // ── Home: nav ────────────────────────────────────────────────────
@@ -210,7 +210,7 @@
             'hero.scroll':       'scorri',
 
             // ── Home: about ──────────────────────────────────────────────────
-            'about.label':   '// 01 — chi sono',
+            'about.label':   '// 01 · chi sono',
             'about.title':   'Ingegnere sulla carta,<br><span class="accent">smanettone dentro</span>',
             'about.badge':   'voto triennale',
             'about.h3':      'Dal nulla a... (Chissà?)',
@@ -219,7 +219,7 @@
             'about.p3_html': "Quando non fisso un terminale, probabilmente sto mangiando sushi🍣, disegnando caricature o perfezionando qualche layout🖱️.<br>Credo che <em>la conoscenza non valga nulla se non viene condivisa</em>.",
 
             // ── Home: projects ───────────────────────────────────────────────
-            'projects.label':         '// 02 — progetti',
+            'projects.label':         '// 02 · progetti',
             'projects.title':         'I miei <span class="accent">progetti</span>',
             'projects.sub':           'Progetti selezionati da corsi universitari, tirocini ed esperimenti personali.',
             'projects.contrib_label': 'con',
@@ -245,7 +245,7 @@
             'proj.edgecv.stat1_lbl':  'Inferenza',
             'proj.edgecv.stat1_desc': 'su Jetson AGX Orin via TensorRT',
             'proj.edgecv.stat2_lbl':  'Architettura',
-            'proj.edgecv.stat2_desc': 'Super-repo con Git Submodules — disaccoppiamento rigoroso dei componenti Vision e Controller.',
+            'proj.edgecv.stat2_desc': 'Super-repo con Git Submodules: disaccoppiamento rigoroso dei componenti Vision e Controller.',
 
             'proj.hash.badge':   'Corso Magistrale',
             'proj.hash.tagline': '🔓 Suite Multi-Piattaforma per Cracking SHA-256 Parallelo',
@@ -264,45 +264,45 @@
             'proj.notes.desc':    'Template Typst per appunti puliti e ordinati: copertina personalizzata, indice automatico, callout e annotazioni inline. Pubblicato su Typst Universe, usato in diversi repository di appunti tra cui ICCBD-notes.',
 
             // ── Home: skills ─────────────────────────────────────────────────
-            'skills.label': '// 03 — competenze',
+            'skills.label': '// 03 · competenze',
             'skills.title': 'Tech <span class="accent">stack</span>',
             'skills.sub':   'Una selezione mirata di tecnologie che ho imparato a usare.',
 
             // ── Home: experience & education ─────────────────────────────────
-            'exp.label':    '// 04 — esperienza &amp; formazione',
+            'exp.label':    '// 04 · esperienza &amp; formazione',
             'exp.title':    'Il mio <span class="accent">percorso</span>',
             'exp.col_work': 'Lavoro',
             'exp.col_edu':  'Formazione',
 
-            'exp.eyecan.period':  'mag 2026 — oggi',
+            'exp.eyecan.period':  'mag 2026 - oggi',
             'exp.eyecan.role':    'Analista Programmatore / AI Integration Engineer',
             'exp.eyecan.company': 'EyeCan',
             'exp.eyecan.location': '· Bologna, IT',
             'exp.eyecan.desc':    'Implementazione concreta delle idee: sviluppo del software, integrazione di modelli di intelligenza artificiale e gestione diretta dei componenti hardware.',
 
-            'exp.tutor.period':  'mag 2025 — oggi',
+            'exp.tutor.period':  'mag 2025 - oggi',
             'exp.tutor.role':    'Tutor Didattico',
             'exp.tutor.company': 'Privato',
             'exp.tutor.location': '· Ferrara, IT',
             'exp.tutor.desc':    'Supporto accademico per studenti delle scuole superiori in Informatica e Matematica, con focus su logica e problem solving.',
 
-            'exp.birex.period':  'apr 2025 — ott 2025',
+            'exp.birex.period':  'apr 2025 - ott 2025',
             'exp.birex.role':    'Computer Vision Engineer Intern',
             'exp.birex.company': 'BI-REX Competence Center',
             'exp.birex.location': '· Bologna, IT',
             'exp.birex.desc':    'Sviluppo del framework EdgeCV4Safety sulla linea pilota industriale: pipeline di computer vision ottimizzate integrate con la robotica collaborativa UR.',
 
-            'edu.msc.period': 'ott 2025 — in corso',
+            'edu.msc.period': 'ott 2025 - in corso',
             'edu.msc.degree': 'Laurea Magistrale<br>Ingegneria Informatica',
             'edu.msc.school': 'Università di Bologna',
             'edu.msc.grade':  '// Sistemi Real-Time, Calcolo Accelerato e altro...',
 
-            'edu.bsc.period': 'ott 2022 — dic 2025',
+            'edu.bsc.period': 'ott 2022 - dic 2025',
             'edu.bsc.degree': 'Laurea Triennale<br>Ingegneria Informatica',
             'edu.bsc.school': 'Università di Bologna',
             'edu.bsc.grade':  '// Voto 96/110',
 
-            'edu.hs.period': 'set 2017 — lug 2022',
+            'edu.hs.period': 'set 2017 - lug 2022',
             'edu.hs.degree': 'Diploma Scientifico',
             'edu.hs.school': 'Liceo Galileo Galilei · Adria (RO)',
             'edu.hs.grade':  '// Voto 96/100 · Scienze Applicate',
@@ -313,13 +313,13 @@
             'cta.desc':  "Sono aperto a tirocini, collaborazioni e progetti interessanti. Se hai un'idea o vuoi semplicemente parlare di tech, sono sempre disponibile 👀",
 
             // ── Home: footer ─────────────────────────────────────────────────
-            'home.footer_copy': '&copy; YEAR Matteo Fontolan<br>Caricature, illustrazioni e grafica sono protette da copyright. Non riprodurre senza permesso esplicito.<br>Codice e repository sono <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank">copyleft</a> (salvo diversa indicazione) — la conoscenza va condivisa.',
+            'home.footer_copy': '&copy; YEAR Matteo Fontolan<br>Caricature, illustrazioni e grafica sono protette da copyright. Non riprodurre senza permesso esplicito.<br>Codice e repository sono <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank">copyleft</a> (salvo diversa indicazione): la conoscenza va condivisa.',
 
             // ── Bento ────────────────────────────────────────────────────────
             'bento.header_label': '// justwhitee\'s bento',
             'bento.bio':          'Appassionato di tech 👾 | Ingegneria Informatica (Magistrale WIP) 🧑‍💻 | Foodie 🍣 | Caricature &amp; Graphic Design per hobby 🖱️',
             'bento.cta':          'Collaboriamo o parliamo di tech. Contattami!💡',
-            'bento.footer_copy':  '&copy; YEAR Matteo Fontolan<br>Caricature, illustrazioni e grafica sono protette da copyright. Non riprodurre senza permesso esplicito.<br>Codice, repository e altri lavori/asset sono <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank">copyleft</a> (salvo diversa indicazione) — la conoscenza va condivisa.',
+            'bento.footer_copy':  '&copy; YEAR Matteo Fontolan<br>Caricature, illustrazioni e grafica sono protette da copyright. Non riprodurre senza permesso esplicito.<br>Codice, repository e altri lavori/asset sono <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank">copyleft</a> (salvo diversa indicazione): la conoscenza va condivisa.',
 
             'card.telegram.title':   'Contattami ✍️',
             'card.telegram.desc':    'Collaborazioni? Scrivimi qui o a matteo.fontolan@justwhitee.org',
@@ -332,7 +332,7 @@
             'card.studio.title':     'Tech & Roba Creativa 🖱',
 
             // ── 404 ──────────────────────────────────────────────────────────
-            'notfound.label': '// 404 — pagina non trovata',
+            'notfound.label': '// 404 · pagina non trovata',
             'notfound.title': 'Questa pagina non esiste.',
             'notfound.desc':  'Il link che hai seguito è corrotto, scaduto o non è mai esistito.<br>Forse stavi cercando qualcosa di diverso?',
             'notfound.btn':   'Torna alla home',
@@ -349,7 +349,7 @@
             'contacts.btn.call':     'Chiama',
             'contacts.btn.save':     'Salva Contatto',
             'contacts.footer_back':  '← torna al bento',
-            'contacts.footer_copy': '&copy; YEAR Matteo Fontolan<br>Caricature, illustrazioni e grafica sono protette da copyright. Non riprodurre senza permesso esplicito.<br>Codice e repository sono <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank">copyleft</a> (salvo diversa indicazione) — la conoscenza va condivisa.',
+            'contacts.footer_copy': '&copy; YEAR Matteo Fontolan<br>Caricature, illustrazioni e grafica sono protette da copyright. Non riprodurre senza permesso esplicito.<br>Codice e repository sono <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank">copyleft</a> (salvo diversa indicazione): la conoscenza va condivisa.',
             'contacts.wa_msg':       'Ciao Matteo, ho trovato il tuo oggetto! 👋',
 
             // ── CV ────────────────────────────────────────────────────────────
@@ -360,7 +360,7 @@
             'cv.btn_download': 'Scarica il CV',
             'cv.btn_open':     'Apri in una nuova scheda',
             'cv.footer_back':  'torna alla home',
-            'cv.footer_copy': '&copy; YEAR Matteo Fontolan<br>Caricature, illustrazioni e grafica sono protette da copyright. Non riprodurre senza permesso esplicito.<br>Codice e repository sono <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank">copyleft</a> (salvo diversa indicazione) — la conoscenza va condivisa.',
+            'cv.footer_copy': '&copy; YEAR Matteo Fontolan<br>Caricature, illustrazioni e grafica sono protette da copyright. Non riprodurre senza permesso esplicito.<br>Codice e repository sono <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank">copyleft</a> (salvo diversa indicazione): la conoscenza va condivisa.',
         }
     };
 

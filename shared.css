@@ -443,8 +443,8 @@ body.konami-active::after {
 .nav-crumb-menu {
     display: flex; flex-direction: column;
     margin-top: 14px; /* fakes centering the ~30px-tall closed row in the 58px bar */
-    background: rgba(var(--accent-bright-rgb),0.1);
-    border: 1px solid rgba(var(--accent-bright-rgb),0.32); border-radius: 8px;
+    background: none;
+    border: 1px solid rgba(var(--accent-bright-rgb),0.38); border-radius: 6px;
     transition: background 0.2s ease, border-color 0.2s ease;
 }
 .nav-crumb-row { display: flex; align-items: center; gap: 7px; padding: 7px 12px; }

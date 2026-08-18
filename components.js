@@ -140,7 +140,7 @@
         el.innerHTML =
             '<div class="footer-inner">' +
                 '<img src="' + r('assets/logo.svg') + '" alt="justwhitee logo" class="footer-logo">' +
-                '<p class="footer-name">justwhitee &mdash; Matteo Fontolan</p>' +
+                '<p class="footer-name">justwhitee · Matteo Fontolan</p>' +
                 '<p class="footer-copy" data-i18n-html="' + copyKey + '"></p>' +
                 '<div class="footer-links">' +
                     '<a href="https://github.com/itsjustwhitee" target="_blank" rel="noopener noreferrer">' +
@@ -547,8 +547,8 @@
         setTimeout(function () { document.body.classList.remove('konami-active'); }, 2600);
 
         var msg = window.currentLang === 'it'
-            ? '🕵️ hai scovato la parola magica — bravo detective, ma qui non c\'è nessun tesoro nascosto.'
-            : '🕵️ you found the magic word — nice detective work, but there\'s no hidden treasure here.';
+            ? '🕵️ hai scovato la parola magica: bravo detective, ma qui non c\'è nessun tesoro nascosto.'
+            : '🕵️ you found the magic word: nice detective work, but there\'s no hidden treasure here.';
         var toast = document.createElement('div');
         toast.className = 'konami-toast';
         toast.textContent = msg;
@@ -779,7 +779,7 @@
                 gameOverShown = true;
                 var msg = document.createElement('div');
                 msg.className = 'tetris-gameover';
-                msg.textContent = window.currentLang === 'it' ? 'GAME OVER — premi R' : 'GAME OVER — press R';
+                msg.textContent = window.currentLang === 'it' ? 'GAME OVER · premi R' : 'GAME OVER · press R';
                 bodyEl.appendChild(msg);
             }
         });
