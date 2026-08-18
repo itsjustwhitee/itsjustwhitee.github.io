@@ -478,14 +478,17 @@ body.konami-active::after {
     display: flex;
     flex-direction: column; gap: 2px;
     list-style: none;
-    padding: 0 8px 8px;
+    padding: 0 8px; /* padding-bottom moved to .open below — a static bottom padding here
+                        still renders (max-height can't shrink a box past its own padding),
+                        which was the phantom sliver making the closed pill too tall */
     max-height: 0; opacity: 0; overflow: hidden; visibility: hidden; pointer-events: none;
-    transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.2s ease,
+    transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.2s ease, padding 0.3s ease,
                 visibility 0s linear 0.3s;
 }
 .nav-crumb-menu.open .nav-links {
+    padding-bottom: 8px;
     max-height: 320px; opacity: 1; visibility: visible; pointer-events: auto;
-    transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.25s ease 0.05s,
+    transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.25s ease 0.05s, padding 0.3s ease,
                 visibility 0s linear 0s;
 }
 .nav-links a {
