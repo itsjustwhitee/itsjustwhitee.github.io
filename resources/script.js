@@ -41,8 +41,15 @@
         var title = (item.key && window.t('resource.' + item.key + '.title')) || item.title;
         var desc  = (item.key && window.t('resource.' + item.key + '.desc'))  || item.desc;
         // A preview image replaces the emoji icon — the image itself is the visual identity.
+        // Same treatment as projects/style.css's .project-img-wrap: a tinted
+        // box with the image shrunk via object-fit:contain, not full-bleed.
+        // Clicking it opens the full-size image in a new tab (view, not
+        // download — the download buttons below already handle that).
+        var previewLink = item.downloads ? item.downloads[0].href : item.link;
         var previewHtml = item.preview
-            ? '<img class="resource-preview" src="' + item.preview + '" alt="' + title + '" loading="lazy">'
+            ? '<a class="resource-preview-wrap" href="' + previewLink + '" target="_blank" rel="noopener noreferrer">' +
+                  '<img class="resource-preview" src="' + item.preview + '" alt="' + title + '" loading="lazy">' +
+              '</a>'
             : '';
         var iconHtml   = item.preview ? '' : '<div class="icon-wrap resource-icon-wrap">' + item.icon + '</div>';
         var authorHtml = item.author ? '<p class="resource-author">by <strong>' + item.author + '</strong></p>' : '';

@@ -22,11 +22,19 @@
 }
 
 /* ── CARD ────────────────────────────────────────────────────────────────── */
+/* Background/border match projects/style.css's .project-card palette
+   (darker teal, more visible border) rather than .card-base's own lighter
+   defaults (shared with bento/contacts, left untouched) — same family of
+   card, closer visual match. */
 .resource-card {
     display: flex; align-items: center; gap: 16px;
-    background: var(--card-bg);
+    background: #0b2b2d;
+    border-color: rgba(var(--accent-rgb),0.4);
     padding: 20px 22px;
     min-height: 96px;
+}
+@media (hover: hover) and (pointer: fine) {
+    .resource-card:hover { border-color: rgba(var(--accent-bright-rgb),0.65); }
 }
 .resource-card-main { display: flex; align-items: center; gap: 16px; flex: 1; min-width: 0; }
 .resource-icon-wrap {
@@ -61,12 +69,26 @@
 .resource-downloads { display: flex; gap: 10px; flex-wrap: wrap; }
 .resource-downloads .btn-pill i { font-size: 0.8rem; }
 
-/* Bleeds to the card's own edges (cancels .resource-card's padding), clipped
-   to the card's rounded corners by .card-base's overflow:hidden. */
-.resource-preview {
-    display: block; width: calc(100% + 44px); height: 200px;
+/* Same treatment as projects/style.css's .project-img-wrap/.project-img:
+   a tinted box (not the raw image) bleeds to the card's own edges — clipped
+   to the card's rounded corners by .card-base's overflow:hidden — with the
+   image itself shrunk via object-fit:contain + padding instead of filling/
+   cropping the box, so it reads as a small centered logo, not a banner. */
+.resource-preview-wrap {
+    width: calc(100% + 44px); height: 170px;
     margin: -20px -22px 0;
-    object-fit: cover;
+    background: rgba(var(--accent-rgb),0.08);
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden;
+    cursor: pointer;
+}
+.resource-preview {
+    display: block; width: 100%; height: 100%;
+    object-fit: contain; padding: 22px;
+    /* drop-shadow (not box-shadow) hugs the image's actual visible pixels,
+       not its padded layout box, so the shadow sits right under the logo
+       itself rather than framing the whole tinted background area. */
+    filter: brightness(0.92) drop-shadow(0 10px 20px rgba(0,0,0,0.45));
 }
 
 /* ── MOBILE ≤600px ───────────────────────────────────────────────────────── */
