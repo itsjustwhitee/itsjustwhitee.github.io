@@ -20,10 +20,13 @@
                     key: 'deskmat',
                     title: 'BluePrint Wallpaper',
                     desc: 'Blueprint-style desktop wallpaper, in two variants.',
+                    // Preview stays in-repo (small, needed by the site itself); the
+                    // full-size downloads live in a GitHub Release instead, so this
+                    // repo doesn't grow with every large downloadable asset.
                     preview: 'assets/deskmat-wallpaper-preview.png',
                     downloads: [
-                        { key: 'normal', label: 'Normale', href: 'assets/deskmat-wallpaper.png' },
-                        { key: 'blank', label: 'Blank', href: 'assets/deskmat-wallpaper-blank.png' }
+                        { key: 'normal', label: 'Normale', href: 'https://github.com/itsjustwhitee/itsjustwhitee.github.io/releases/download/resources-assets-v1/deskmat-wallpaper.png' },
+                        { key: 'blank', label: 'Blank', href: 'https://github.com/itsjustwhitee/itsjustwhitee.github.io/releases/download/resources-assets-v1/deskmat-wallpaper-blank.png' }
                     ],
                     author: 'justwhitee',
                     date: '2026-08',
@@ -60,7 +63,7 @@
             card.className = 'card-base resource-card resource-card-downloads reveal';
             var buttonsHtml = item.downloads.map(function (dl, i) {
                 var dlLabel = (item.key && dl.key && window.t('resource.' + item.key + '.dl_' + dl.key)) || dl.label;
-                return '<a class="btn-pill ' + (i === 0 ? 'btn-primary' : 'btn-ghost') + '" href="' + dl.href + '" download>' +
+                return '<a class="btn-pill ' + (i === 0 ? 'btn-primary' : 'btn-ghost') + '" href="' + dl.href + '" download target="_blank" rel="noopener noreferrer">' +
                     '<i class="fa-solid fa-download"></i><span>' + dlLabel + '</span>' +
                 '</a>';
             }).join('');
