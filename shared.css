@@ -463,6 +463,10 @@ body.konami-active::after {
 .nav-crumb-current {
     font-family: 'JetBrains Mono', monospace;
     font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase;
+    line-height: 1; /* no explicit value here meant the browser's default line-height
+        (taller than the font's actual glyph height) was setting the row's real
+        height, since .nav-crumb-row centers this against .nav-crumb-trigger's
+        own line-height:1 — the row was only ever as short as its TALLER child */
     color: var(--accent-bright);
 }
 .nav-crumb-menu.open {
