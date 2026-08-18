@@ -74,9 +74,18 @@
             return '<li><a href="' + item.href + '"' + cls + i18n + '>' + item.label + '</a></li>';
         }).join('');
 
-        var activeItem   = NAV_LINKS.filter(function (item) { return item.key === active; })[0];
-        var triggerLabel = activeItem ? activeItem.label : window.t('nav.menu');
-        var triggerI18n  = activeItem
+        // File-explorer-style breadcrumb chip: "•• // page" while closed —
+        // clicking "•• " opens the list below, and the label next to it
+        // hides for as long as the list is open (CSS: .open .nav-crumb-current
+        // { display:none }), since the current page is now shown highlighted
+        // in its normal spot within that same list instead (.active, from
+        // the links map above) — never shown in both places at once, and the
+        // list's row order/count never changes. NAV_LINKS is still one flat
+        // level today; if a page ever grows sub-pages, this is the seam to
+        // extend — a `children` array per entry and one more chip per level.
+        var activeItem  = NAV_LINKS.filter(function (item) { return item.key === active; })[0];
+        var crumbLabel  = activeItem ? activeItem.label : window.t('nav.menu');
+        var crumbI18n   = activeItem
             ? ((activeItem.i18n) ? ' data-i18n="' + activeItem.i18n + '"' : '')
             : ' data-i18n="nav.menu"';
 
@@ -86,45 +95,47 @@
                 'justwhitee' +
             '</a>' +
             '<div class="nav-right">' +
-                '<div class="nav-dropdown">' +
-                    '<button type="button" class="nav-trigger" aria-haspopup="true" aria-expanded="false">' +
-                        '<span class="nav-trigger-label"' + triggerI18n + '>' + triggerLabel + '</span>' +
-                        '<span class="nav-trigger-caret" aria-hidden="true">▾</span>' +
-                    '</button>' +
+                '<span class="nav-crumb-menu">' +
+                    '<span class="nav-crumb-row">' +
+                        '<button type="button" class="nav-crumb-trigger" aria-haspopup="true" aria-expanded="false" aria-label="Menu">' +
+                            '&bull;&bull;' +
+                        '</button>' +
+                        '<span class="nav-crumb-current"' + crumbI18n + '>' + crumbLabel + '</span>' +
+                    '</span>' +
                     '<ul class="nav-links">' + links + '</ul>' +
-                '</div>' +
+                '</span>' +
                 '<div class="nav-controls"></div>' +
             '</div>';
         // i18n.js appends the language toggle into .nav-controls after this runs
-        wireNavDropdown(el.querySelector('.nav-dropdown'));
+        wireNavDropdown(el.querySelector('.nav-crumb-menu'));
     }
 
     // ── NAV DROPDOWN INTERACTION ─────────────────────────────────────────────
     // Trigger click toggles the panel; outside click, Escape, or picking a link
     // all close it again (navigation itself is handled by initPageTransitions()).
-    function wireNavDropdown(dropdown) {
-        if (!dropdown) return;
-        var trigger = dropdown.querySelector('.nav-trigger');
+    function wireNavDropdown(menu) {
+        if (!menu) return;
+        var trigger = menu.querySelector('.nav-crumb-trigger');
 
         function setOpen(open) {
-            dropdown.classList.toggle('open', open);
+            menu.classList.toggle('open', open);
             trigger.setAttribute('aria-expanded', open ? 'true' : 'false');
         }
 
         trigger.addEventListener('click', function (e) {
             e.stopPropagation();
-            setOpen(!dropdown.classList.contains('open'));
+            setOpen(!menu.classList.contains('open'));
         });
         document.addEventListener('click', function (e) {
-            if (dropdown.classList.contains('open') && !dropdown.contains(e.target)) setOpen(false);
+            if (menu.classList.contains('open') && !menu.contains(e.target)) setOpen(false);
         });
         document.addEventListener('keydown', function (e) {
-            if (e.key === 'Escape' && dropdown.classList.contains('open')) {
+            if (e.key === 'Escape' && menu.classList.contains('open')) {
                 setOpen(false);
                 trigger.focus();
             }
         });
-        dropdown.querySelectorAll('.nav-links a').forEach(function (a) {
+        menu.querySelectorAll('.nav-links a').forEach(function (a) {
             a.addEventListener('click', function () { setOpen(false); });
         });
     }
