@@ -434,7 +434,7 @@
             'font-size:0.67rem',
             'letter-spacing:0.1em',
             'padding:3px 9px',
-            'border-radius:6px',
+            'border-radius:999px',
             'transition:background 0.2s,color 0.2s',
             'line-height:1.6',
         ].join(';');
