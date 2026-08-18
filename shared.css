@@ -421,19 +421,11 @@ body.konami-active::after {
     100% { opacity: 0; }
 }
 /* ── NAV DROPDOWN ────────────────────────────────────────────────────────── */
-/* Neither child here is actually centered by .nav-right's flexbox anymore —
-   on purpose. align-items: center recalculates every time the flex line's
-   cross-size changes, so anything centered that way visibly jumps (or, for
-   the growing crumb menu specifically, overflows above the page) the
-   instant the menu opens and its box gets taller. Both children are
-   pinned to the top instead (align-self: flex-start, a fixed position that
-   never depends on a sibling's height) and each fakes the original
-   "centered in a 58px bar" look with its own fixed offset:
-   - .nav-controls centers the toggle button inside its own fixed-height
-     (58px) box, so its position can never move.
-   - .nav-crumb-menu gets a constant margin-top instead of flex centering,
-     so it starts from the same spot whether closed (short) or open (tall)
-     — nothing to jump between. */
+/* Both children are pinned to the top (align-self: flex-start) instead of
+   flex-centered — centering would jump/overflow once .nav-crumb-menu grows
+   taller on open, since align-items:center recalculates against the new
+   height. .nav-controls fakes the centered look via a fixed-height inner
+   box; .nav-crumb-menu via a constant margin-top. */
 .nav-right {
     display: flex; align-items: flex-start; gap: 14px;
     align-self: flex-start; min-height: 58px;
@@ -444,17 +436,13 @@ body.konami-active::after {
     height: 58px;
 }
 
-/* File-explorer-style breadcrumb: ONE box (.nav-crumb-menu) that holds both
-   the "•• // page" trigger row and, once opened, the sibling-pages list
-   below it — the <ul> is a normal in-flow child (not a floating overlay),
-   so the box's single border genuinely grows around both parts as it
-   expands. The page label hides while open (the current page is already
-   highlighted in its normal spot within the list itself, via .active
-   below) so it's never shown in two places at once, and reappears the
-   moment the menu closes. */
+/* One box that holds both the "•• // page" row and, once opened, the
+   sibling-pages list below it — a normal in-flow child, not a floating
+   overlay, so the border grows around both parts. Label hides while open
+   (current page is already highlighted in the list via .active). */
 .nav-crumb-menu {
     display: flex; flex-direction: column;
-    margin-top: 14px; /* approximates centering the closed (~30px-tall) row in the 58px bar — see .nav-right comment above for why this replaces flex centering */
+    margin-top: 14px; /* fakes centering the ~30px-tall closed row in the 58px bar */
     background: rgba(var(--accent-bright-rgb),0.1);
     border: 1px solid rgba(var(--accent-bright-rgb),0.32); border-radius: 8px;
     transition: background 0.2s ease, border-color 0.2s ease;

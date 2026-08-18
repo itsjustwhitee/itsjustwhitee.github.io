@@ -14,18 +14,14 @@
 /* ── GRID ────────────────────────────────────────────────────────────────── */
 .resource-grid {
     display: grid;
-    /* auto-fit (not auto-fill) so a section with fewer cards than fits a row
-       doesn't leave empty tracks — capped at 380px so a lone card grows a
-       bit but never stretches to the full container width. */
+    /* auto-fit avoids empty tracks with few cards; 380px cap keeps a lone card from stretching full width */
     grid-template-columns: repeat(auto-fit, minmax(260px, 380px));
     gap: 18px;
 }
 
 /* ── CARD ────────────────────────────────────────────────────────────────── */
-/* Background/border match projects/style.css's .project-card palette
-   (darker teal, more visible border) rather than .card-base's own lighter
-   defaults (shared with bento/contacts, left untouched) — same family of
-   card, closer visual match. */
+/* Background/border match projects/style.css's .project-card palette rather
+   than .card-base's own (lighter, shared with bento/contacts, untouched). */
 .resource-card {
     display: flex; align-items: center; gap: 16px;
     background: #0b2b2d;
@@ -57,10 +53,7 @@
     letter-spacing: 0.03em;
 }
 
-/* Variant for resources with multiple download buttons instead of a single
-   whole-card link (the card itself is a <div>, not an <a> — see script.js).
-   Preview image on top, then icon+text, then the download buttons in their
-   own row below. */
+/* Multi-download variant: card is a <div>, not an <a> (see script.js). */
 .resource-card.resource-card-downloads {
     flex-direction: column; align-items: stretch; gap: 14px;
     padding-bottom: 34px; /* room for the absolutely-positioned .card-slug below the buttons */
@@ -69,11 +62,8 @@
 .resource-downloads { display: flex; gap: 10px; flex-wrap: wrap; }
 .resource-downloads .btn-pill i { font-size: 0.8rem; }
 
-/* Same treatment as projects/style.css's .project-img-wrap/.project-img:
-   a tinted box (not the raw image) bleeds to the card's own edges — clipped
-   to the card's rounded corners by .card-base's overflow:hidden — with the
-   image itself shrunk via object-fit:contain + padding instead of filling/
-   cropping the box, so it reads as a small centered logo, not a banner. */
+/* Same treatment as .project-img-wrap/.project-img: tinted box bleeds to
+   the card edges, image shrunk via object-fit:contain, not full-bleed. */
 .resource-preview-wrap {
     width: calc(100% + 44px); height: 170px;
     margin: -20px -22px 0;
@@ -85,9 +75,7 @@
 .resource-preview {
     display: block; width: 100%; height: 100%;
     object-fit: contain; padding: 22px;
-    /* drop-shadow (not box-shadow) hugs the image's actual visible pixels,
-       not its padded layout box, so the shadow sits right under the logo
-       itself rather than framing the whole tinted background area. */
+    /* drop-shadow (not box-shadow) hugs the image's visible pixels, not its padded box */
     filter: brightness(0.92) drop-shadow(0 10px 20px rgba(0,0,0,0.45));
 }
 

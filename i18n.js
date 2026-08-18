@@ -61,7 +61,7 @@
             // ── Resources page ──────────────────────────────────────────────────
             'resources.page_label': '// resources',
             'resources.title':      'Free <span>resources</span>',
-            'resources.page_sub':   'Tools, articles, and other things I find worth sharing, created b me or other people!.',
+            'resources.page_sub':   'Tools, articles, and other things I find worth sharing, created by me or other people!',
             'section.desktop.title':  'Desktop & Wallpapers',
             'resource.deskmat.title': 'BluePrint Wallpaper',
             'resource.deskmat.desc':  'Blueprint-style desktop wallpaper, in two variants.',

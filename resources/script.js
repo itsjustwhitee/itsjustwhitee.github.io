@@ -6,14 +6,11 @@
     'use strict';
 
     // ── DATA ──────────────────────────────────────────────────────────────
-    // date: 'YYYY-MM', same convention as the `date` field in projects/data.js.
-    // item.key / section.key (optional): enables translated copy via
-    // resource.<key>.title / .desc and section.<key>.title in i18n.js; falls
-    // back to the title/desc below when missing — same fallback pattern as
-    // bento/script.js's i18n_key.
-    // item.link (single link) renders the whole card as one <a>; item.downloads
-    // (array of { label, href }) renders it as a non-link card with a row of
-    // download buttons instead — used when a resource ships multiple variants.
+    // date: 'YYYY-MM' (see projects/data.js). item.key/section.key (optional):
+    // enables translated copy via resource.<key>.title/.desc and
+    // section.<key>.title, falling back to title/desc below (same pattern as
+    // bento's i18n_key). item.link renders the card as one <a>; item.downloads
+    // (array of { key, label, href }) renders a row of download buttons instead.
     var resourceSections = [
         {
             key: 'desktop',
@@ -40,11 +37,8 @@
     function buildCard(item) {
         var title = (item.key && window.t('resource.' + item.key + '.title')) || item.title;
         var desc  = (item.key && window.t('resource.' + item.key + '.desc'))  || item.desc;
-        // A preview image replaces the emoji icon — the image itself is the visual identity.
-        // Same treatment as projects/style.css's .project-img-wrap: a tinted
-        // box with the image shrunk via object-fit:contain, not full-bleed.
-        // Clicking it opens the full-size image in a new tab (view, not
-        // download — the download buttons below already handle that).
+        // Preview replaces the emoji icon; click opens the full-size image
+        // (view, not download — the buttons below handle that).
         var previewLink = item.downloads ? item.downloads[0].href : item.link;
         var previewHtml = item.preview
             ? '<a class="resource-preview-wrap" href="' + previewLink + '" target="_blank" rel="noopener noreferrer">' +

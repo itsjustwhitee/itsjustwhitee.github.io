@@ -74,15 +74,9 @@
             return '<li><a href="' + item.href + '"' + cls + i18n + '>' + item.label + '</a></li>';
         }).join('');
 
-        // File-explorer-style breadcrumb chip: "•• // page" while closed —
-        // clicking "•• " opens the list below, and the label next to it
-        // hides for as long as the list is open (CSS: .open .nav-crumb-current
-        // { display:none }), since the current page is now shown highlighted
-        // in its normal spot within that same list instead (.active, from
-        // the links map above) — never shown in both places at once, and the
-        // list's row order/count never changes. NAV_LINKS is still one flat
-        // level today; if a page ever grows sub-pages, this is the seam to
-        // extend — a `children` array per entry and one more chip per level.
+        // "•• // page" chip; the label hides while open since the current
+        // page is already highlighted in the list below (.active). One flat
+        // level today — a `children` array per entry is the seam for sub-pages.
         var activeItem  = NAV_LINKS.filter(function (item) { return item.key === active; })[0];
         var crumbLabel  = activeItem ? activeItem.label : window.t('nav.menu');
         var crumbI18n   = activeItem
