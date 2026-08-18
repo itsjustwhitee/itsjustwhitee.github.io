@@ -489,11 +489,13 @@ body.konami-active::after {
    the tab order/AT tree only once fully collapsed, not while merely
    invisible mid-close. */
 .nav-links-collapse {
-    display: grid;
+    display: none; /* JS (wireNavDropdown) sets this to grid right before opening and back to
+        none after the close transition ends — belt-and-suspenders should grid-template-rows/
+        columns:0fr ever fail to fully collapse; see components.js */
     grid-template-rows: 0fr; grid-template-columns: 0fr;
-    min-height: 0; min-width: 0; /* flex items default to min-height/width:auto (their content's
-        own minimum size), which overrides grid-template-rows/columns:0fr from actually
-        collapsing this — it's a flex item of .nav-crumb-menu, same trap as .nav-links itself */
+    min-height: 0; min-width: 0; overflow: hidden; /* flex items default to min-height/width:auto
+        (their content's own minimum size), which overrides grid-template-rows/columns:0fr from
+        actually collapsing this — it's a flex item of .nav-crumb-menu, same trap as .nav-links */
     visibility: hidden;
     transition: grid-template-rows 0.3s cubic-bezier(0.4, 0, 0.2, 1),
                 grid-template-columns 0.3s cubic-bezier(0.4, 0, 0.2, 1),

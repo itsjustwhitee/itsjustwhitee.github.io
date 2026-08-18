@@ -109,11 +109,37 @@
     // all close it again (navigation itself is handled by initPageTransitions()).
     function wireNavDropdown(menu) {
         if (!menu) return;
-        var trigger = menu.querySelector('.nav-crumb-trigger');
+        var trigger  = menu.querySelector('.nav-crumb-trigger');
+        var collapse = menu.querySelector('.nav-links-collapse');
+        var closeTimer = null;
 
+        // Belt-and-suspenders on top of the CSS grid-collapse: whatever subtlety
+        // might leave a sliver of height/width behind while "closed", display:none
+        // can't. It's added back only once fully closed (after the transition),
+        // never while merely mid-close. Opening has to switch display:none -> grid
+        // FIRST, force a reflow, and only THEN add .open — flipping display and
+        // adding the class that changes grid-template-rows in the same tick gives
+        // the transition nothing rendered to animate from, so it would just snap
+        // straight to open instead of growing.
         function setOpen(open) {
-            menu.classList.toggle('open', open);
-            trigger.setAttribute('aria-expanded', open ? 'true' : 'false');
+            if (!collapse) {
+                menu.classList.toggle('open', open);
+                trigger.setAttribute('aria-expanded', open ? 'true' : 'false');
+                return;
+            }
+            clearTimeout(closeTimer);
+            if (open) {
+                collapse.style.display = 'grid';
+                void collapse.offsetHeight; // force the browser to render the display change before .open's transition target kicks in
+                menu.classList.add('open');
+                trigger.setAttribute('aria-expanded', 'true');
+            } else {
+                menu.classList.remove('open');
+                trigger.setAttribute('aria-expanded', 'false');
+                closeTimer = setTimeout(function () {
+                    collapse.style.display = 'none';
+                }, 320);
+            }
         }
 
         trigger.addEventListener('click', function (e) {
