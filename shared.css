@@ -449,7 +449,7 @@ body.konami-active::after {
     transition: background 0.2s ease, border-color 0.2s ease,
                 border-radius 0.3s cubic-bezier(0.4, 0, 0.2, 1); /* same duration+curve as .nav-links' max-height below, so they read as one motion */
 }
-.nav-crumb-row { display: flex; align-items: center; justify-content: center; gap: 7px; padding: 7px 12px; }
+.nav-crumb-row { display: flex; align-items: center; gap: 7px; padding: 7px 12px; }
 .nav-crumb-trigger {
     background: none; border: none; padding: 0; margin: 0;
     cursor: pointer; color: var(--accent-bright);
@@ -470,30 +470,44 @@ body.konami-active::after {
 }
 .nav-crumb-menu.open .nav-crumb-current { display: none; }
 
-/* display stays flex always — animating display:none/flex isn't possible,
-   so visibility is driven by max-height/opacity instead. visibility itself
-   only flips (with a matching transition-delay) so the links leave the tab
-   order/AT tree once fully closed, without cutting the collapse animation
-   short while opening. max-width does the same job on the horizontal axis:
-   without it, the list's own natural width (needed once open) would still
-   push the closed pill wider than "•• // page" actually needs, leaving the
-   trigger content off-center inside a too-wide pill. */
+/* Height AND width both animate to their exact real size via the CSS
+   grid "0fr → 1fr" trick, instead of guessing a fixed max-height/max-width
+   to transition toward — a guessed max noticeably bigger than the real
+   content (e.g. 320px for a ~166px-tall 5-item list) makes the box finish
+   growing well before the declared duration ends, so the motion reads as
+   an abrupt snap rather than a smooth animation. .nav-links-collapse is
+   the actual animated grid; .nav-links (the <ul> inside it) just needs
+   min-height/min-width: 0 so the grid track can genuinely reach 0fr.
+   visibility flips (with a matching transition-delay) so the links leave
+   the tab order/AT tree only once fully collapsed, not while merely
+   invisible mid-close. */
+.nav-links-collapse {
+    display: grid;
+    grid-template-rows: 0fr; grid-template-columns: 0fr;
+    visibility: hidden;
+    transition: grid-template-rows 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                grid-template-columns 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                visibility 0s linear 0.3s;
+}
+.nav-crumb-menu.open .nav-links-collapse {
+    grid-template-rows: 1fr; grid-template-columns: 1fr;
+    visibility: visible;
+    transition: grid-template-rows 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                grid-template-columns 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                visibility 0s linear 0s;
+}
 .nav-links {
     display: flex;
     flex-direction: column; gap: 2px;
     list-style: none;
-    padding: 0 8px; /* padding-bottom moved to .open below — a static bottom padding here
-                        still renders (max-height can't shrink a box past its own padding),
-                        which was the phantom sliver making the closed pill too tall */
-    max-height: 0; max-width: 0; opacity: 0; overflow: hidden; visibility: hidden; pointer-events: none;
-    transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1), max-width 0.3s cubic-bezier(0.4, 0, 0.2, 1),
-                opacity 0.2s ease, padding 0.3s ease, visibility 0s linear 0.3s;
+    min-height: 0; min-width: 0; overflow: hidden;
+    padding: 0 8px 8px;
+    opacity: 0;
+    transition: opacity 0.2s ease;
 }
 .nav-crumb-menu.open .nav-links {
-    padding-bottom: 8px;
-    max-height: 320px; max-width: 180px; opacity: 1; visibility: visible; pointer-events: auto;
-    transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1), max-width 0.3s cubic-bezier(0.4, 0, 0.2, 1),
-                opacity 0.25s ease 0.05s, padding 0.3s ease, visibility 0s linear 0s;
+    opacity: 1;
+    transition: opacity 0.25s ease 0.05s;
 }
 .nav-links a {
     display: block;

@@ -96,7 +96,7 @@
                         '</button>' +
                         '<span class="nav-crumb-current"' + crumbI18n + '>' + crumbLabel + '</span>' +
                     '</span>' +
-                    '<ul class="nav-links">' + links + '</ul>' +
+                    '<div class="nav-links-collapse"><ul class="nav-links">' + links + '</ul></div>' +
                 '</span>' +
                 '<div class="nav-controls"></div>' +
             '</div>';
