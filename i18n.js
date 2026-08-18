@@ -390,9 +390,8 @@
 
     // ── INJECT TOGGLE BUTTON INTO NAV ────────────────────────────────────────
     function injectToggle() {
-        const navLinks = document.querySelector('.nav-links');
-        if (!navLinks || document.getElementById('jw-lang-toggle')) return;
-        const li  = document.createElement('li');
+        const controls = document.querySelector('.nav-controls');
+        if (!controls || document.getElementById('jw-lang-toggle')) return;
         const btn = document.createElement('button');
         btn.id          = 'jw-lang-toggle';
         btn.type        = 'button';
@@ -420,8 +419,7 @@
             this.style.background = 'none';
             this.style.color      = 'var(--accent-bright)';
         });
-        li.appendChild(btn);
-        navLinks.appendChild(li);
+        controls.appendChild(btn);
     }
 
     // ── INIT ─────────────────────────────────────────────────────────────────

@@ -72,13 +72,58 @@
             var i18n = item.i18n ? ' data-i18n="' + item.i18n + '"' : '';
             return '<li><a href="' + item.href + '"' + cls + i18n + '>' + item.label + '</a></li>';
         }).join('');
+
+        var activeItem   = NAV_LINKS.filter(function (item) { return item.key === active; })[0];
+        var triggerLabel = activeItem ? activeItem.label : '// menu';
+        var triggerI18n  = (activeItem && activeItem.i18n) ? ' data-i18n="' + activeItem.i18n + '"' : '';
+
         el.innerHTML =
             '<a href="' + r('') + '" class="nav-logo">' +
                 '<img src="' + r('assets/logo.svg') + '" alt="justwhitee">' +
                 'justwhitee' +
             '</a>' +
-            '<ul class="nav-links">' + links + '</ul>';
-        // i18n.js appends the language toggle into .nav-links after this runs
+            '<div class="nav-right">' +
+                '<div class="nav-dropdown">' +
+                    '<button type="button" class="nav-trigger" aria-haspopup="true" aria-expanded="false">' +
+                        '<span class="nav-trigger-label"' + triggerI18n + '>' + triggerLabel + '</span>' +
+                        '<span class="nav-trigger-caret" aria-hidden="true">▾</span>' +
+                    '</button>' +
+                    '<ul class="nav-links">' + links + '</ul>' +
+                '</div>' +
+                '<div class="nav-controls"></div>' +
+            '</div>';
+        // i18n.js appends the language toggle into .nav-controls after this runs
+        wireNavDropdown(el.querySelector('.nav-dropdown'));
+    }
+
+    // ── NAV DROPDOWN INTERACTION ─────────────────────────────────────────────
+    // Trigger click toggles the panel; outside click, Escape, or picking a link
+    // all close it again (navigation itself is handled by initPageTransitions()).
+    function wireNavDropdown(dropdown) {
+        if (!dropdown) return;
+        var trigger = dropdown.querySelector('.nav-trigger');
+
+        function setOpen(open) {
+            dropdown.classList.toggle('open', open);
+            trigger.setAttribute('aria-expanded', open ? 'true' : 'false');
+        }
+
+        trigger.addEventListener('click', function (e) {
+            e.stopPropagation();
+            setOpen(!dropdown.classList.contains('open'));
+        });
+        document.addEventListener('click', function (e) {
+            if (dropdown.classList.contains('open') && !dropdown.contains(e.target)) setOpen(false);
+        });
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape' && dropdown.classList.contains('open')) {
+                setOpen(false);
+                trigger.focus();
+            }
+        });
+        dropdown.querySelectorAll('.nav-links a').forEach(function (a) {
+            a.addEventListener('click', function () { setOpen(false); });
+        });
     }
 
     // ── FOOTER ────────────────────────────────────────────────────────────────
