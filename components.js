@@ -75,8 +75,10 @@
         }).join('');
 
         var activeItem   = NAV_LINKS.filter(function (item) { return item.key === active; })[0];
-        var triggerLabel = activeItem ? activeItem.label : '// menu';
-        var triggerI18n  = (activeItem && activeItem.i18n) ? ' data-i18n="' + activeItem.i18n + '"' : '';
+        var triggerLabel = activeItem ? activeItem.label : window.t('nav.menu');
+        var triggerI18n  = activeItem
+            ? ((activeItem.i18n) ? ' data-i18n="' + activeItem.i18n + '"' : '')
+            : ' data-i18n="nav.menu"';
 
         el.innerHTML =
             '<a href="' + r('') + '" class="nav-logo">' +
@@ -179,6 +181,7 @@
     // elements, staggered by sibling index. Used by home + contacts, each with
     // its own step/cap. (bento/script.js has its own batch-based variant since
     // its cards can be added to the DOM asynchronously after this runs.)
+    var _scrollRevealFallbackTimer = null;
     window.initScrollReveal = function (opts) {
         opts = opts || {};
         var delayStep    = opts.delayStep    || 80;
@@ -212,7 +215,8 @@
         document.querySelectorAll('.reveal').forEach(function (el) { revealObs.observe(el); });
 
         // Hard fallback: anything still hidden after 2s gets force-shown
-        setTimeout(function () {
+        if (_scrollRevealFallbackTimer) clearTimeout(_scrollRevealFallbackTimer);
+        _scrollRevealFallbackTimer = setTimeout(function () {
             document.querySelectorAll('.reveal:not(.visible)').forEach(function (el) {
                 el.style.transitionDelay = '0ms';
                 el.classList.add('visible');

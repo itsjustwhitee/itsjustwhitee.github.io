@@ -40,7 +40,7 @@
         var desc  = (item.key && window.t('resource.' + item.key + '.desc'))  || item.desc;
 
         card.innerHTML =
-            '<div class="resource-icon-wrap">' + item.icon + '</div>' +
+            '<div class="icon-wrap resource-icon-wrap">' + item.icon + '</div>' +
             '<div class="resource-text">' +
                 '<h3>' + title + '</h3>' +
                 '<p>' + desc + '</p>' +
@@ -55,7 +55,6 @@
 
         var heading = document.createElement('h2');
         heading.className = 'resource-section-title';
-        if (section.key) heading.setAttribute('data-i18n', 'section.' + section.key + '.title');
         heading.textContent = (section.key && window.t('section.' + section.key + '.title')) || section.title;
         wrap.appendChild(heading);
 

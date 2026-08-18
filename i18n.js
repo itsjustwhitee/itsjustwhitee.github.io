@@ -28,6 +28,7 @@
             'nav.bento':      '// bento',
             'nav.resources':  '// resources',
             'nav.cv':         '// cv',
+            'nav.menu':       '// menu',
 
             // ── Home: hero ───────────────────────────────────────────────────
             'hero.eyebrow':      '// hello world · itsjustwhitee',
@@ -196,6 +197,7 @@
             'nav.bento':      '// bento',
             'nav.resources':  '// resources',
             'nav.cv':         '// cv',
+            'nav.menu':       '// menu',
 
             // ── Home: hero ───────────────────────────────────────────────────
             'hero.eyebrow':      '// hello world · itsjustwhitee',
