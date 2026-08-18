@@ -1,0 +1,53 @@
+/* All design tokens (--bg-color, --card-bg, --accent-bright, --radius, etc.)
+   and .container / .profile-header / .card-base / .card-slug come from
+   shared.css — this file only adds resources-page-specific layout. */
+
+/* ── SECTIONS ────────────────────────────────────────────────────────────── */
+.resource-section { margin-top: 48px; }
+.resource-section:first-child { margin-top: 0; }
+.resource-section-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.3rem; font-weight: 700; color: #fff;
+    margin-bottom: 20px;
+}
+
+/* ── GRID ────────────────────────────────────────────────────────────────── */
+.resource-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 18px;
+}
+
+/* ── CARD ────────────────────────────────────────────────────────────────── */
+.resource-card {
+    display: flex; align-items: center; gap: 16px;
+    background: var(--card-bg);
+    padding: 20px 22px;
+    min-height: 96px;
+}
+.resource-icon-wrap {
+    flex-shrink: 0; width: 52px; height: 52px;
+    border-radius: 14px;
+    background: rgba(255,255,255,0.13);
+    border: 1px solid rgba(255,255,255,0.18);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.5rem; line-height: 1;
+    transition: transform 0.3s ease, background 0.3s ease;
+}
+.resource-text { display: flex; flex-direction: column; gap: 4px; }
+.resource-text h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 1rem; font-weight: 700; color: #fff; line-height: 1.2;
+}
+.resource-text p {
+    font-size: 0.74rem; color: rgba(255,255,255,0.65); line-height: 1.45;
+}
+@media (hover: hover) and (pointer: fine) {
+    .resource-card:hover .resource-icon-wrap { transform: scale(1.1); background: rgba(255,255,255,0.2); }
+}
+
+/* ── MOBILE ≤600px ───────────────────────────────────────────────────────── */
+@media (max-width: 600px) {
+    .resource-grid    { grid-template-columns: 1fr; gap: 12px; }
+    .resource-section { margin-top: 36px; }
+}

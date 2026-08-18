@@ -61,6 +61,9 @@
             'resources.page_label': '// resources',
             'resources.title':      'Free <span>resources</span>',
             'resources.page_sub':   'Tools, articles, and other things I find worth sharing — sections grow as I add more.',
+            'section.dev.title':    'Dev & Tools',
+            'resource.vscode.title': 'Visual Studio Code',
+            'resource.vscode.desc':  'The editor this whole site was built in.',
 
             'proj.edgecv.badge':      'Internship · Thesis',
             'proj.edgecv.tagline':    '🛡️ AI-Driven Contextual Safety System for Industry 5.0',
@@ -226,6 +229,9 @@
             'resources.page_label': '// resources',
             'resources.title':      'Risorse <span>gratuite</span>',
             'resources.page_sub':   'Tool, articoli e altre cose che trovo utili da condividere — le sezioni crescono man mano che le aggiungo.',
+            'section.dev.title':    'Dev & Tools',
+            'resource.vscode.title': 'Visual Studio Code',
+            'resource.vscode.desc':  "L'editor con cui ho costruito l'intero sito.",
 
             'proj.edgecv.badge':      'Tirocinio · Tesi',
             'proj.edgecv.tagline':    '🛡️ Sistema di Sicurezza Contestuale AI-Driven per Industry 5.0',
@@ -397,6 +403,9 @@
         if (grid && typeof loadBento === 'function') {
             grid.innerHTML = '';
             loadBento();
+        }
+        if (document.getElementById('resources-root') && typeof renderResources === 'function') {
+            renderResources();
         }
     };
 
