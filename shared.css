@@ -447,9 +447,9 @@ body.konami-active::after {
     border: 1px solid rgba(var(--accent-bright-rgb),0.38);
     border-radius: 999px; /* pill while closed; .open below relaxes this for the taller list */
     transition: background 0.2s ease, border-color 0.2s ease,
-                border-radius 0.3s cubic-bezier(0.4, 0, 0.2, 1); /* matches .nav-links' max-height timing so the corners un-round in step with the growth, not on their own clock */
+                border-radius 0.3s cubic-bezier(0.4, 0, 0.2, 1); /* same duration+curve as .nav-links' max-height below, so they read as one motion */
 }
-.nav-crumb-row { display: flex; align-items: center; gap: 7px; padding: 7px 12px; }
+.nav-crumb-row { display: flex; align-items: center; justify-content: center; gap: 7px; padding: 7px 12px; }
 .nav-crumb-trigger {
     background: none; border: none; padding: 0; margin: 0;
     cursor: pointer; color: var(--accent-bright);
@@ -465,7 +465,7 @@ body.konami-active::after {
 .nav-crumb-menu.open {
     background: rgba(11,20,20,0.97);
     border-color: rgba(var(--accent-bright-rgb),0.5);
-    border-radius: 16px;
+    border-radius: 10px; /* clearly less round than the closed pill (not just 16px, too close to how a ~34px-tall 999px pill actually renders to read as a change) */
     box-shadow: 0 16px 40px rgba(0,0,0,0.5);
 }
 .nav-crumb-menu.open .nav-crumb-current { display: none; }
@@ -474,7 +474,10 @@ body.konami-active::after {
    so visibility is driven by max-height/opacity instead. visibility itself
    only flips (with a matching transition-delay) so the links leave the tab
    order/AT tree once fully closed, without cutting the collapse animation
-   short while opening. */
+   short while opening. max-width does the same job on the horizontal axis:
+   without it, the list's own natural width (needed once open) would still
+   push the closed pill wider than "•• // page" actually needs, leaving the
+   trigger content off-center inside a too-wide pill. */
 .nav-links {
     display: flex;
     flex-direction: column; gap: 2px;
@@ -482,15 +485,15 @@ body.konami-active::after {
     padding: 0 8px; /* padding-bottom moved to .open below — a static bottom padding here
                         still renders (max-height can't shrink a box past its own padding),
                         which was the phantom sliver making the closed pill too tall */
-    max-height: 0; opacity: 0; overflow: hidden; visibility: hidden; pointer-events: none;
-    transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.2s ease, padding 0.3s ease,
-                visibility 0s linear 0.3s;
+    max-height: 0; max-width: 0; opacity: 0; overflow: hidden; visibility: hidden; pointer-events: none;
+    transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1), max-width 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                opacity 0.2s ease, padding 0.3s ease, visibility 0s linear 0.3s;
 }
 .nav-crumb-menu.open .nav-links {
     padding-bottom: 8px;
-    max-height: 320px; opacity: 1; visibility: visible; pointer-events: auto;
-    transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.25s ease 0.05s, padding 0.3s ease,
-                visibility 0s linear 0s;
+    max-height: 320px; max-width: 180px; opacity: 1; visibility: visible; pointer-events: auto;
+    transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1), max-width 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                opacity 0.25s ease 0.05s, padding 0.3s ease, visibility 0s linear 0s;
 }
 .nav-links a {
     display: block;
