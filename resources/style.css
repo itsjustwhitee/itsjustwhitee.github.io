@@ -14,7 +14,10 @@
 /* ── GRID ────────────────────────────────────────────────────────────────── */
 .resource-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    /* auto-fit (not auto-fill) so a section with fewer cards than fits a row
+       doesn't leave empty tracks — capped at 380px so a lone card grows a
+       bit but never stretches to the full container width. */
+    grid-template-columns: repeat(auto-fit, minmax(260px, 380px));
     gap: 18px;
 }
 
@@ -25,6 +28,7 @@
     padding: 20px 22px;
     min-height: 96px;
 }
+.resource-card-main { display: flex; align-items: center; gap: 16px; flex: 1; min-width: 0; }
 .resource-icon-wrap {
     width: 52px; height: 52px;
     border-radius: 14px;
@@ -37,6 +41,32 @@
 }
 .resource-text p {
     font-size: 0.74rem; color: rgba(255,255,255,0.65); line-height: 1.45;
+}
+.resource-text p:not(.resource-author) { margin-top: 6px; }
+.resource-author {
+    font-style: italic;
+    font-size: 0.65rem; color: var(--accent-bright); opacity: 0.85;
+    letter-spacing: 0.03em;
+}
+
+/* Variant for resources with multiple download buttons instead of a single
+   whole-card link (the card itself is a <div>, not an <a> — see script.js).
+   Preview image on top, then icon+text, then the download buttons in their
+   own row below. */
+.resource-card.resource-card-downloads {
+    flex-direction: column; align-items: stretch; gap: 14px;
+    padding-bottom: 34px; /* room for the absolutely-positioned .card-slug below the buttons */
+    cursor: default;
+}
+.resource-downloads { display: flex; gap: 10px; flex-wrap: wrap; }
+.resource-downloads .btn-pill i { font-size: 0.8rem; }
+
+/* Bleeds to the card's own edges (cancels .resource-card's padding), clipped
+   to the card's rounded corners by .card-base's overflow:hidden. */
+.resource-preview {
+    display: block; width: calc(100% + 44px); height: 200px;
+    margin: -20px -22px 0;
+    object-fit: cover;
 }
 
 /* ── MOBILE ≤600px ───────────────────────────────────────────────────────── */

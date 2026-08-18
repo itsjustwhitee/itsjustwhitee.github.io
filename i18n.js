@@ -61,10 +61,12 @@
             // ── Resources page ──────────────────────────────────────────────────
             'resources.page_label': '// resources',
             'resources.title':      'Free <span>resources</span>',
-            'resources.page_sub':   'Tools, articles, and other things I find worth sharing — sections grow as I add more.',
-            'section.dev.title':    'Dev & Tools',
-            'resource.vscode.title': 'Visual Studio Code',
-            'resource.vscode.desc':  'The editor this whole site was built in.',
+            'resources.page_sub':   'Tools, articles, and other things I find worth sharing, created b me or other people!.',
+            'section.desktop.title':  'Desktop & Wallpapers',
+            'resource.deskmat.title': 'BluePrint Wallpaper',
+            'resource.deskmat.desc':  'Blueprint-style desktop wallpaper, in two variants.',
+            'resource.deskmat.dl_normal': 'Normal',
+            'resource.deskmat.dl_blank':  'Blank',
 
             'proj.edgecv.badge':      'Internship · Thesis',
             'proj.edgecv.tagline':    '🛡️ AI-Driven Contextual Safety System for Industry 5.0',
@@ -230,10 +232,12 @@
             // ── Resources page ──────────────────────────────────────────────────
             'resources.page_label': '// resources',
             'resources.title':      'Risorse <span>gratuite</span>',
-            'resources.page_sub':   'Tool, articoli e altre cose che trovo utili da condividere — le sezioni crescono man mano che le aggiungo.',
-            'section.dev.title':    'Dev & Tools',
-            'resource.vscode.title': 'Visual Studio Code',
-            'resource.vscode.desc':  "L'editor con cui ho costruito l'intero sito.",
+            'resources.page_sub':   'Tool, articoli e altre cose che trovo utili da condividere, creati da me o da altri!',
+            'section.desktop.title':  'Desktop & Sfondi',
+            'resource.deskmat.title': 'BluePrint Wallpaper',
+            'resource.deskmat.desc':  'Sfondo desktop in stile blueprint, in due varianti.',
+            'resource.deskmat.dl_normal': 'Normale',
+            'resource.deskmat.dl_blank':  'Blank',
 
             'proj.edgecv.badge':      'Tirocinio · Tesi',
             'proj.edgecv.tagline':    '🛡️ Sistema di Sicurezza Contestuale AI-Driven per Industry 5.0',

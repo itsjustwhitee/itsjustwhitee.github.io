@@ -11,18 +11,26 @@
     // resource.<key>.title / .desc and section.<key>.title in i18n.js; falls
     // back to the title/desc below when missing — same fallback pattern as
     // bento/script.js's i18n_key.
+    // item.link (single link) renders the whole card as one <a>; item.downloads
+    // (array of { label, href }) renders it as a non-link card with a row of
+    // download buttons instead — used when a resource ships multiple variants.
     var resourceSections = [
         {
-            key: 'dev',
-            title: 'Dev & Tools',
+            key: 'desktop',
+            title: 'Desktop & Wallpapers',
             items: [
                 {
-                    key: 'vscode',
-                    title: 'Visual Studio Code',
-                    desc: 'The editor this whole site was built in.',
-                    link: 'https://code.visualstudio.com/',
+                    key: 'deskmat',
+                    title: 'BluePrint Wallpaper',
+                    desc: 'Blueprint-style desktop wallpaper, in two variants.',
+                    preview: 'assets/deskmat-wallpaper-preview.png',
+                    downloads: [
+                        { key: 'normal', label: 'Normale', href: 'assets/deskmat-wallpaper.png' },
+                        { key: 'blank', label: 'Blank', href: 'assets/deskmat-wallpaper-blank.png' }
+                    ],
+                    author: 'justwhitee',
                     date: '2026-08',
-                    icon: '🧰'
+                    icon: '🖥️'
                 }
             ]
         }
@@ -30,22 +38,45 @@
 
     // ── RENDER ────────────────────────────────────────────────────────────
     function buildCard(item) {
+        var title = (item.key && window.t('resource.' + item.key + '.title')) || item.title;
+        var desc  = (item.key && window.t('resource.' + item.key + '.desc'))  || item.desc;
+        // A preview image replaces the emoji icon — the image itself is the visual identity.
+        var previewHtml = item.preview
+            ? '<img class="resource-preview" src="' + item.preview + '" alt="' + title + '" loading="lazy">'
+            : '';
+        var iconHtml   = item.preview ? '' : '<div class="icon-wrap resource-icon-wrap">' + item.icon + '</div>';
+        var authorHtml = item.author ? '<p class="resource-author">by <strong>' + item.author + '</strong></p>' : '';
+        var textHtml =
+            '<div class="resource-text">' +
+                '<h3>' + title + '</h3>' +
+                authorHtml +
+                '<p>' + desc + '</p>' +
+            '</div>';
+        var slugHtml = '<span class="card-slug">// ' + item.date + '</span>';
+
+        if (item.downloads) {
+            var card = document.createElement('div');
+            card.className = 'card-base resource-card resource-card-downloads reveal';
+            var buttonsHtml = item.downloads.map(function (dl, i) {
+                var dlLabel = (item.key && dl.key && window.t('resource.' + item.key + '.dl_' + dl.key)) || dl.label;
+                return '<a class="btn-pill ' + (i === 0 ? 'btn-primary' : 'btn-ghost') + '" href="' + dl.href + '" download>' +
+                    '<i class="fa-solid fa-download"></i><span>' + dlLabel + '</span>' +
+                '</a>';
+            }).join('');
+            card.innerHTML =
+                previewHtml +
+                '<div class="resource-card-main">' + iconHtml + textHtml + '</div>' +
+                '<div class="resource-downloads">' + buttonsHtml + '</div>' +
+                slugHtml;
+            return card;
+        }
+
         var card = document.createElement('a');
         card.href = item.link;
         card.target = '_blank';
         card.rel = 'noopener noreferrer';
         card.className = 'card-base resource-card reveal';
-
-        var title = (item.key && window.t('resource.' + item.key + '.title')) || item.title;
-        var desc  = (item.key && window.t('resource.' + item.key + '.desc'))  || item.desc;
-
-        card.innerHTML =
-            '<div class="icon-wrap resource-icon-wrap">' + item.icon + '</div>' +
-            '<div class="resource-text">' +
-                '<h3>' + title + '</h3>' +
-                '<p>' + desc + '</p>' +
-            '</div>' +
-            '<span class="card-slug">// ' + item.date + '</span>';
+        card.innerHTML = previewHtml + '<div class="resource-card-main">' + iconHtml + textHtml + '</div>' + slugHtml;
         return card;
     }
 
