@@ -436,18 +436,23 @@ body.konami-active::after {
     height: 58px;
 }
 
-/* One box that holds both the "•• // page" row and, once opened, the
-   sibling-pages list below it — a normal in-flow child, not a floating
-   overlay, so the border grows around both parts. Label hides while open
-   (current page is already highlighted in the list via .active). */
+/* The dropdown (.nav-links-collapse) is position:absolute — deliberately
+   NOT a normal-flow child. Two earlier in-flow versions each guaranteed a
+   new way for the collapsed dropdown to leak a few phantom pixels into
+   the closed pill's own size (padding max-height can't shrink past, then
+   a flex item's default min-height/width:auto overriding grid-template-*:
+   0fr) — with it out of flow entirely, .nav-crumb-menu's size can ONLY
+   ever come from .nav-crumb-row, no exceptions. Visual continuity (no
+   gap, matching color, one shared square corner) is done with plain
+   styling instead of shared box-model — see .nav-links-collapse below. */
 .nav-crumb-menu {
-    display: flex; flex-direction: column;
-    margin-top: 14px; /* fakes centering the ~30px-tall closed row in the 58px bar */
+    position: relative; display: flex;
+    margin-top: 14px; /* fakes centering the ~30px-tall row in the 58px bar */
     background: none;
     border: 1px solid rgba(var(--accent-bright-rgb),0.38);
     border-radius: 999px; /* pill while closed; .open below relaxes this for the taller list */
     transition: background 0.2s ease, border-color 0.2s ease,
-                border-radius 0.3s cubic-bezier(0.4, 0, 0.2, 1); /* same duration+curve as .nav-links' max-height below, so they read as one motion */
+                border-radius 0.3s cubic-bezier(0.4, 0, 0.2, 1); /* same duration+curve as .nav-links-collapse's grid-template-* below, so they read as one motion */
 }
 .nav-crumb-row { display: flex; align-items: center; gap: 7px; padding: 7px 12px; }
 .nav-crumb-trigger {
@@ -466,27 +471,28 @@ body.konami-active::after {
     background: rgba(11,20,20,0.97);
     border-color: rgba(var(--accent-bright-rgb),0.5);
     border-radius: 10px; /* clearly less round than the closed pill (not just 16px, too close to how a ~34px-tall 999px pill actually renders to read as a change) */
-    box-shadow: 0 16px 40px rgba(0,0,0,0.5);
+    border-bottom-left-radius: 0; /* the one corner .nav-links-collapse's own top-left actually touches */
 }
 .nav-crumb-menu.open .nav-crumb-current { display: none; }
 
-/* Height AND width both animate to their exact real size via the CSS
-   grid "0fr → 1fr" trick, instead of guessing a fixed max-height/max-width
-   to transition toward — a guessed max noticeably bigger than the real
-   content (e.g. 320px for a ~166px-tall 5-item list) makes the box finish
-   growing well before the declared duration ends, so the motion reads as
-   an abrupt snap rather than a smooth animation. .nav-links-collapse is
-   the actual animated grid; .nav-links (the <ul> inside it) just needs
-   min-height/min-width: 0 so the grid track can genuinely reach 0fr.
-   visibility flips (with a matching transition-delay) so the links leave
-   the tab order/AT tree only once fully collapsed, not while merely
-   invisible mid-close. */
+/* Height AND width both animate to their exact real size via the CSS grid
+   "0fr → 1fr" trick, instead of guessing a fixed max-height/max-width to
+   transition toward (a guessed max noticeably bigger than the real content
+   makes the box finish growing well before the declared duration ends, so
+   the motion reads as a snap, not an animation). Same background/border
+   color as .nav-crumb-menu.open, flush against it (top: 100%, no gap),
+   with a matching square top-left corner, so together they read as one
+   shape despite being visually separate boxes. visibility flips (with a
+   matching transition-delay) so the links leave the tab order/AT tree
+   only once fully collapsed, not while merely invisible mid-close. */
 .nav-links-collapse {
+    position: absolute; top: 100%; left: 0;
     display: grid;
     grid-template-rows: 0fr; grid-template-columns: 0fr;
-    min-height: 0; min-width: 0; /* flex items default to min-height/width:auto (their content's
-        own minimum size), which overrides grid-template-rows/columns:0fr from actually
-        collapsing this — it's a flex item of .nav-crumb-menu, same trap as .nav-links itself */
+    background: rgba(11,20,20,0.97);
+    border: 1px solid rgba(var(--accent-bright-rgb),0.5);
+    border-radius: 0 10px 10px 10px;
+    box-shadow: 0 16px 40px rgba(0,0,0,0.5);
     visibility: hidden;
     transition: grid-template-rows 0.3s cubic-bezier(0.4, 0, 0.2, 1),
                 grid-template-columns 0.3s cubic-bezier(0.4, 0, 0.2, 1),
