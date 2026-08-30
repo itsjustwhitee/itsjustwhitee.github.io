@@ -173,8 +173,8 @@
                         '<i class="fa-brands fa-github"></i> itsjustwhitee' +
                     '</a>' +
                     '<span class="footer-sep">//</span>' +
-                    '<a href="mailto:matteo.fontolan@justwhitee.org">' +
-                        '<i class="fa-solid fa-envelope"></i> matteo.fontolan [at] justwhitee.org' +
+                    '<a href="mailto:matteo.fontolan@justwhitee.com">' +
+                        '<i class="fa-solid fa-envelope"></i> matteo.fontolan [at] justwhitee.com' +
                     '</a>' +
                     '<span class="footer-sep">//</span>' +
                     '<a href="https://www.linkedin.com/in/justwhitee" target="_blank" rel="noopener noreferrer">' +
@@ -276,7 +276,7 @@
                 console.log('%c// itsjustwhitee · Matteo Fontolan', accent);
                 console.log('%c// hello, fellow curious dev 👋', text);
                 console.log('%c// if you like poking at the internals of things, we should talk:', muted);
-                console.log('%c// matteo.fontolan@justwhitee.org', accent);
+                console.log('%c// matteo.fontolan@justwhitee.com', accent);
             });
     }
 

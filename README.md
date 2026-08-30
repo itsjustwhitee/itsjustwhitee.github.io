@@ -274,7 +274,7 @@ Recommended: `node scripts/dev-server.js [port]` (default 8080). It behaves like
 Hosted on **GitHub Pages**, with **Cloudflare** as DNS/CDN/security layer.
 
 - Any push to `main` deploys automatically - no CI build step for the site itself.
-- `CNAME` binds the custom domain (`justwhitee.org`).
+- `CNAME` binds the custom domain (`justwhitee.com`).
 - GitHub Pages serves `404.html` for any unmatched URL automatically.
 
 | Cloudflare setting | Value | Notes |

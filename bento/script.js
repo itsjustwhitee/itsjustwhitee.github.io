@@ -28,7 +28,7 @@ const bentoData = [
         type: "solid", size: "wide",
         i18n_key: "telegram",
         title: "Contact Me ✍️",
-        desc: "Collaborations? Reach out here or at matteo.fontolan@justwhitee.org",
+        desc: "Collaborations? Reach out here or at matteo.fontolan@justwhitee.com",
         svgAsset: "assets/telegram.svg", iconColor: "#fff",
         link: "https://t.me/justwhitee",
         slug: "// t.me/justwhitee", brand: "telegram",

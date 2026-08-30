@@ -151,7 +151,7 @@
             'bento.footer_copy':  '&copy; YEAR Matteo Fontolan<br>Caricatures, illustrations and graphic design are copyrighted: ask before reusing them.<br>Code, repositories and other works/assets are <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank">copyleft</a> (unless stated otherwise): knowledge is meant to be shared.',
 
             'card.telegram.title':   'Contact Me ✍️',
-            'card.telegram.desc':    'Collaborations? Reach out here or at matteo.fontolan@justwhitee.org',
+            'card.telegram.desc':    'Collaborations? Reach out here or at matteo.fontolan@justwhitee.com',
             'card.paypal.title':     'Support Me 💰',
             'card.paypal.desc':      'Buy me a hot chocolate if you feel like it!',
             'card.amazon.title':     'Amazon Wishlist ✨',
@@ -322,7 +322,7 @@
             'bento.footer_copy':  '&copy; YEAR Matteo Fontolan<br>Caricature, illustrazioni e grafica sono protette da copyright. Non riprodurre senza permesso esplicito.<br>Codice, repository e altri lavori/asset sono <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank">copyleft</a> (salvo diversa indicazione): la conoscenza va condivisa.',
 
             'card.telegram.title':   'Contattami ✍️',
-            'card.telegram.desc':    'Collaborazioni? Scrivimi qui o a matteo.fontolan@justwhitee.org',
+            'card.telegram.desc':    'Collaborazioni? Scrivimi qui o a matteo.fontolan@justwhitee.com',
             'card.paypal.title':     'Supportami 💰',
             'card.paypal.desc':      'Offrimi una cioccolata calda se ti va!',
             'card.amazon.title':     'Whishlist Amazon ✨',

@@ -95,7 +95,7 @@ const projects = [
         tags: ['SvelteKit', 'TypeScript', 'Vite PWA', 'Vitest'],
         links: [
             { icon: 'fa-brands fa-github', label: 'GitHub', url: 'https://github.com/itsjustwhitee/slice-ceipt', trailing: 'arrow-right' },
-            { label: 'Live', url: 'https://slice-ceipt.justwhitee.org', trailing: 'external' },
+            { label: 'Live', url: 'https://sliceceipt.justwhitee.com', trailing: 'external' },
         ],
         image: { mode: 'svg-inject', visualId: 'sliceceipt-container', fetchSrc: '/assets/projects/sliceceipt.svg', placeholderEmoji: '🧾' },
     },
