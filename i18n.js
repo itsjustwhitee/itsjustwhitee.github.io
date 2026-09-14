@@ -33,7 +33,7 @@
             // ── Home: hero ───────────────────────────────────────────────────
             'hero.eyebrow':      '// hello world · itsjustwhitee',
             'hero.role_tag':     'MSc Computer Engineering · Università di Bologna',
-            'hero.desc':         "I work on projects that mix hardware and software: I like getting my hands dirty (and often frustrated) with Edge and IoT systems, and every now and then GPUs too. I'm convinced you never really know something until you understand exactly how it works underneath.",
+            'hero.desc':         "I work on projects that mix hardware and software: I like getting my hands dirty (and often frustrated) with Edge and IoT systems, GPUs, and the occasional DIY build. I'm endlessly curious, and convinced you never really know something until you understand exactly how it works underneath.",
             'hero.btn_projects': 'View Projects',
             'hero.btn_cv':       'Curriculum',
             'hero.scroll':       'scroll',
@@ -45,7 +45,7 @@
             'about.h3':      'From nowhere to... (who knows?)',
             'about.p1':      "I'm a Computer Engineering student at the University of Bologna (Alma Mater Studiorum), currently pursuing my Master's Degree, but I originally come from a small, quiet town (really!) in Veneto.",
             'about.p2':      "I like understanding how things actually work, and that curiosity is basically what got me here: from real-time systems to IoT, to AI, and much more.",
-            'about.p3_html': "When I'm not staring at a terminal, I'm likely eating sushi 🍣, or drawing caricatures or overthinking a graphic design layout 🖱️.<br> I believe <em>knowledge is worthless if it's not shared</em>.",
+            'about.p3_html': "When I'm not staring at a terminal, I'm likely eating sushi 🍣, drawing caricatures, overthinking a graphic design layout 🖱️, or lately getting into 3D printing and DIY electronics 🔧.<br> I believe <em>knowledge is worthless if it's not shared</em>.",
 
             // ── Home: projects ───────────────────────────────────────────────
             'projects.label':         '// 02 · projects',
@@ -204,7 +204,7 @@
             // ── Home: hero ───────────────────────────────────────────────────
             'hero.eyebrow':      '// hello world · itsjustwhitee',
             'hero.role_tag':     'Ing. Informatica Magistrale · Università di Bologna',
-            'hero.desc':         "Mi occupo di progetti che coinvolgono sia hardware che software: mi piace sporcarmi le mani e litigare con sistemi Edge e IoT (e ogni tanto anche con le GPU). Sono convinto che non si conosca davvero qualcosa finché non si capisce esattamente come funziona all'interno.",
+            'hero.desc':         "Mi occupo di progetti che coinvolgono sia hardware che software: mi piace sporcarmi le mani e litigare con sistemi Edge e IoT, GPU, e qualche progetto DIY. Sono molto curioso, e convinto che non si conosca davvero qualcosa finché non si capisce esattamente come funziona all'interno.",
             'hero.btn_projects': 'Vai ai Progetti',
             'hero.btn_cv':       'Curriculum',
             'hero.scroll':       'scorri',
@@ -216,7 +216,7 @@
             'about.h3':      'Dal nulla a... (Chissà?)',
             'about.p1':      "Sono uno studente di Ingegneria Informatica all'Università di Bologna (Alma Mater Studiorum), attualmente in Magistrale, ma vengo da un piccolo e tranquillo paesino (davvero!) del Veneto.",
             'about.p2':      "Mi piace capire come funzionano davvero le cose, e alla fine è quello che mi ha portato a lavorare un po' su tutto: dai sistemi real-time all'IoT, all'IA a molto altro ancora.",
-            'about.p3_html': "Quando non fisso un terminale, probabilmente sto mangiando sushi🍣, disegnando caricature o perfezionando qualche layout🖱️.<br>Credo che <em>la conoscenza non valga nulla se non viene condivisa</em>.",
+            'about.p3_html': "Quando non fisso un terminale, probabilmente sto mangiando sushi🍣, disegnando caricature, perfezionando qualche layout🖱️, o ultimamente sperimentando con stampa 3D ed elettronica DIY 🔧.<br>Credo che <em>la conoscenza non valga nulla se non viene condivisa</em>.",
 
             // ── Home: projects ───────────────────────────────────────────────
             'projects.label':         '// 02 · progetti',
