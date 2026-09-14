@@ -10,7 +10,6 @@ const BRAND = {
     wallapop:   { bgFrom: "#13c1ac", bgTo: "#0a9e8c" },
     ebay:       { bgFrom: "#0064d3", bgTo: "#003d83" },
     amazon:     { bgFrom: "#ffbb00", bgTo: "#e68a00" },
-    notion:     { bgFrom: "#ffffff", bgTo: "#bbbbbb" },
     private_ig: { bgFrom: "#833ab4", bgTo: "#5851db" },
 };
 
@@ -103,7 +102,7 @@ const bentoData = [
         slug: "// ebay.com", brand: "ebay",
     },
 
-    // ── ROW 6: Amazon + Notion + Me in private ────────────────────────────
+    // ── ROW 6: Amazon + Me in private ──────────────────────────────────────
     {
         type: "solid", size: "small",
         i18n_key: "amazon",
@@ -111,14 +110,6 @@ const bentoData = [
         svgAsset: "assets/amazon.svg", iconColor: "#2d2d2d",
         link: "https://www.amazon.it/hz/wishlist/ls/2VEY37Y3KUVK8?ref_=wl_share",
         slug: "// amazon.it", brand: "amazon",
-    },
-    {
-        type: "solid", size: "small",
-        i18n_key: "notion",
-        title: "Notes & Resources 🤓",
-        svgAsset: "assets/notion.svg", iconColor: "#2d2d2d",
-        link: "https://justwhitee.notion.site/Materiali-utili-su-Notion-6d4afc02fd114ee1b65fac5ab8e25201?pvs=4",
-        slug: "// notion.site", brand: "notion",
     },
     {
         type: "solid", size: "wide",

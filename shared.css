@@ -193,9 +193,9 @@ a { color: inherit; text-decoration: none; }
 /* ── CARD SLUG ───────────────────────────────────────────────────────────── */
 /* 0.65 clears 4.5:1 against both --card-bg and the plain --bg-color (measured
    4.96:1 / 8.37:1) - was 0.22, under 2:1 against either. Doesn't fully solve
-   contrast on bento's light-background brand cards (Amazon yellow, Notion
-   white) since white text can't win there at any alpha - those would need a
-   per-card slug color, not attempted here. */
+   contrast on bento's light-background brand cards (Amazon yellow) since
+   white text can't win there at any alpha - those would need a per-card
+   slug color, not attempted here. */
 .card-slug {
     position: absolute; bottom: 13px; right: 16px;
     font-size: 0.57rem; letter-spacing: 0.1em;

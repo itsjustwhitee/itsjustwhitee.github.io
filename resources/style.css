@@ -31,6 +31,7 @@
 }
 @media (hover: hover) and (pointer: fine) {
     .resource-card:hover { border-color: rgba(var(--accent-bright-rgb),0.65); }
+    .resource-card:hover .resource-preview { transform: scale(1.04); filter: brightness(1) drop-shadow(0 10px 20px rgba(0,0,0,0.45)); }
 }
 .resource-card-main { display: flex; align-items: center; gap: 16px; flex: 1; min-width: 0; }
 .resource-icon-wrap {
@@ -53,6 +54,32 @@
     letter-spacing: 0.03em;
 }
 
+/* Cost tier badge, 1-3 '$' (see script.js's item.price); free resources have
+   none. Dark chip (not just colored text) since it can sit over a preview
+   image of any color. */
+.resource-price {
+    position: absolute; top: 12px; right: 14px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.68rem; font-weight: 700; letter-spacing: 0.05em;
+    color: #fff; background: rgba(0,0,0,0.55);
+    padding: 3px 7px; border-radius: 999px;
+    z-index: 6; pointer-events: none;
+    transform-origin: center;
+}
+@keyframes resourcePriceTwist {
+    0%   { transform: rotate(0deg)    scale(1); }
+    10%  { transform: rotate(-20deg)  scale(1.15); }
+    25%  { transform: rotate(16deg)   scale(1.1); }
+    40%  { transform: rotate(-12deg)  scale(1.08); }
+    55%  { transform: rotate(9deg)    scale(1.05); }
+    70%  { transform: rotate(-5deg)   scale(1.02); }
+    85%  { transform: rotate(2deg)    scale(1); }
+    100% { transform: rotate(0deg)    scale(1); }
+}
+@media (hover: hover) and (pointer: fine) {
+    .resource-card:hover .resource-price { animation: resourcePriceTwist 0.9s ease; }
+}
+
 /* Multi-download variant: card is a <div>, not an <a> (see script.js). */
 .resource-card.resource-card-downloads {
     flex-direction: column; align-items: stretch; gap: 14px;
@@ -63,7 +90,9 @@
 .resource-downloads .btn-pill i { font-size: 0.8rem; }
 
 /* Same treatment as .project-img-wrap/.project-img: tinted box bleeds to
-   the card edges, image shrunk via object-fit:contain, not full-bleed. */
+   the card edges, image shrunk via object-fit:contain, not full-bleed.
+   Only the image itself zooms on hover (see below) - same as project cards,
+   the bled wrap always stays put, it has no room to grow into. */
 .resource-preview-wrap {
     width: calc(100% + 44px); height: 170px;
     margin: -20px -22px 0;
@@ -77,6 +106,7 @@
     object-fit: contain; padding: 22px;
     /* drop-shadow (not box-shadow) hugs the image's visible pixels, not its padded box */
     filter: brightness(0.92) drop-shadow(0 10px 20px rgba(0,0,0,0.45));
+    transition: transform 0.5s ease, filter 0.5s ease;
 }
 
 /* ── MOBILE ≤600px ───────────────────────────────────────────────────────── */
