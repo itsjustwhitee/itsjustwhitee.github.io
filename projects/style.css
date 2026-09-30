@@ -121,7 +121,7 @@
     width: 100%; height: 100%;
     display: flex; align-items: center; justify-content: center;
 }
-#sliceceipt-container svg { padding: 35px; }
+#sliceceipt-container svg { padding: 16px; }
 #sliceceipt-back, #sliceceipt-front {
     transform-box: fill-box;
     transform-origin: center;
@@ -179,7 +179,7 @@
    card; the now-90px-tall glyph just centers within the extra space,
    exactly like a smaller flex item naturally would. */
 #justwhitee-notes-card .project-img-wrap { height: 120px; }
-#justwhitee-notes-card .project-img { width: auto; height: 70px; padding: 0; }
+#justwhitee-notes-card .project-img { width: auto; height: 56px; padding: 0; }
 .typst-reveal {
     display: flex;
     align-items: center;
@@ -341,7 +341,7 @@
     #edgecv-container { min-height: var(--mobile-logo-size); }
     /* justwhitee-notes' desktop-only ID rules above (160px wrap, 90px width:auto glyph) outrank the class-based mobile rules on specificity - reset back to the shared box here */
     #justwhitee-notes-card .project-img-wrap { height: var(--mobile-logo-size-sm); }
-    #justwhitee-notes-card .project-img { width: 100%; height: 100%; padding: 14px; }
+    #justwhitee-notes-card .project-img { width: 100%; height: 100%; padding: 24px; }
     .project-card h3 { font-size: 1.05rem; }
     .project-card .tagline { font-size: 0.8rem; }
     .project-card .proj-desc { font-size: 0.85rem; }
