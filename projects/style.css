@@ -56,7 +56,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 250px;
+    min-height: 200px;
 }
 
 #edgecv-container svg {
@@ -140,8 +140,8 @@
    to 160px here keeps this card's row height consistent with every other
    card; the now-90px-tall glyph just centers within the extra space,
    exactly like a smaller flex item naturally would. */
-#justwhitee-notes-card .project-img-wrap { height: 160px; }
-#justwhitee-notes-card .project-img { width: auto; height: 90px; padding: 0; }
+#justwhitee-notes-card .project-img-wrap { height: 120px; }
+#justwhitee-notes-card .project-img { width: auto; height: 70px; padding: 0; }
 .typst-reveal {
     display: flex;
     align-items: center;
@@ -188,13 +188,13 @@
 .projects-grid .project-card:hover { transform: translateY(-7px); border-color: rgba(var(--accent-bright-rgb),0.65); box-shadow: 0 28px 60px rgba(0,0,0,0.55), 0 0 26px rgba(var(--accent-bright-rgb),0.25); }
 .project-img-wrap { overflow: hidden; background: rgba(var(--accent-rgb),0.08); display: flex; align-items: center; justify-content: center; }
 .project-img {
-    width: 100%; height: 160px; object-fit: contain; display: block; padding: 16px;
+    width: 100%; height: 120px; object-fit: contain; display: block; padding: 12px;
     transition: transform 0.5s ease, filter 0.5s ease;
     filter: brightness(0.92);
 }
 .projects-grid .project-card:hover .project-img { transform: scale(1.04); filter: brightness(1); }
 .project-img-placeholder {
-    width: 100%; height: 190px;
+    width: 100%; height: 140px;
     background: linear-gradient(135deg, rgba(var(--accent-rgb),0.2) 0%, rgba(0,0,0,0.35) 100%);
     display: flex; align-items: center; justify-content: center;
     font-size: 3rem; opacity: 0.35;
@@ -205,8 +205,8 @@
     display: grid; grid-template-columns: 1fr 1fr;
 }
 .project-card.featured .project-img-wrap { height: 100%; }
-.project-card.featured .project-img { height: 100%; min-height: 280px; padding: 24px; }
-.project-card.featured .project-img-placeholder { height: 100%; min-height: 280px; }
+.project-card.featured .project-img { height: 100%; min-height: 200px; padding: 20px; }
+.project-card.featured .project-img-placeholder { height: 100%; min-height: 200px; }
 .project-card.featured .project-body { padding: 32px 30px 28px; }
 .project-meta { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; flex-wrap: wrap; }
 .project-badge {
@@ -267,9 +267,10 @@
         display: flex; flex-direction: column;
     }
     .project-card.featured .project-img-wrap { height: auto; }
-    .project-card.featured .project-img { height: 200px; min-height: unset; padding: 16px; }
+    #edgecv-container { min-height: 150px; }
+    .project-card.featured .project-img { height: 150px; min-height: unset; padding: 14px; }
     /* Non-featured cards: fixed 160px image height read as near-empty once the card spans the full mobile width — square it up instead */
-    .project-card:not(.featured) .project-img-wrap { aspect-ratio: 1 / 1; height: auto; }
+    .project-card:not(.featured) .project-img-wrap { height: 150px; }
     .project-card:not(.featured) .project-img { height: 100%; }
     .project-card:not(.featured) .project-img-placeholder { height: 100%; }
 }
@@ -282,7 +283,7 @@
     /* Single source of truth for the three project-card logo boxes below -
        was six independent 260px literals that had already drifted out of
        sync once during tuning; now there's exactly one number to change. */
-    :root { --mobile-logo-size: 260px; }
+    :root { --mobile-logo-size: 170px; }
 
     .projects-page { padding: 56px 18px 40px; }
 

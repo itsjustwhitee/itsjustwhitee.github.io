@@ -101,7 +101,8 @@
    underneath that blur for the "electric" texture. */
 .circuit-segment.is-flowing .circuit-flow-overlay {
     stroke-dasharray: 22 158;
-    filter: url(#circuit-lightning-jitter) blur(1px) drop-shadow(0 0 4px rgba(255, 255, 255, 0.85)) drop-shadow(0 0 11px rgba(var(--accent-bright-rgb), 0.8));
+    /* One drop-shadow only: stacking blur + two shadows on top of the jitter filter re-rasterised the whole board every frame (~20fps). */
+    filter: url(#circuit-lightning-jitter) drop-shadow(0 0 5px rgba(var(--accent-bright-rgb), 0.95));
     animation: circuit-flow 1.2s linear infinite;
 }
 
