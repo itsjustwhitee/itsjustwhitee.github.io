@@ -182,6 +182,11 @@
     height: 40px;
 }
 
+.circuit-node-btn[data-slug="spaghetti"] .circuit-node-icon {
+    width: 52px;
+    height: 52px;
+}
+
 .circuit-node-icon.is-vibrating {
     animation: crackerVibrate 0.1s linear infinite;
 }
