@@ -108,6 +108,10 @@
             'proj.notes.tagline': '📝 A Modern Typst Template for University Notes',
             'proj.notes.desc':    'Typst template for clean lecture notes: styled cover page, automatic table of contents, callouts and inline annotations. Published on Typst Universe, used in several course-note repos including ICCBD-notes.',
 
+            'proj.spaghetti.badge':   'Open Source',
+            'proj.spaghetti.tagline': '🍝 Slice and Print from Your Phone',
+            'proj.spaghetti.desc':    'Phone-first web app to slice 3D models with the OrcaSlicer CLI and print them: share a model or a link, place it on the plate in 3D, slice, confirm the bed is clear, print. Printers plug in through adapters; the first one supports the Elegoo Centauri Carbon 2.',
+
             // ── Home: skills ─────────────────────────────────────────────────
             'skills.label': '// 03 · skills',
             'skills.title': 'Tech <span class="accent">stack.</span>',
@@ -293,6 +297,10 @@
             'proj.notes.badge':   'Open Source',
             'proj.notes.tagline': '📝 Un Template Typst Moderno per Appunti Universitari',
             'proj.notes.desc':    'Template Typst per appunti puliti e ordinati: copertina personalizzata, indice automatico, callout e annotazioni inline. Pubblicato su Typst Universe, usato in diversi repository di appunti tra cui ICCBD-notes.',
+
+            'proj.spaghetti.badge':   'Open Source',
+            'proj.spaghetti.tagline': '🍝 Slicing e Stampa dal Telefono',
+            'proj.spaghetti.desc':    'Web app mobile-first per fare lo slicing di modelli 3D con la CLI di OrcaSlicer e stamparli: condividi un modello o un link, posizionalo sul piatto in 3D, fai lo slicing, conferma che il piatto è libero, stampa. Le stampanti si collegano tramite adapter; il primo supporta la Elegoo Centauri Carbon 2.',
 
             // ── Home: skills ─────────────────────────────────────────────────
             'skills.label': '// 03 · competenze',

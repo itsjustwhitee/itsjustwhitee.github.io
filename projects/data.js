@@ -117,6 +117,23 @@ const projects = [
         ],
         image: { mode: 'img', src: '/assets/projects/justwhitee-notes.svg', alt: 'Typst logo', placeholderEmoji: '📝' },
     },
+    {
+        slug: 'spaghetti',
+        i18nKey: 'spaghetti',
+        title: 'Spaghetti',
+        date: '2026-09',
+        yearLabel: 'sep 2026',
+        pinned: false,
+        featured: false,
+        badgeText: 'Open Source',
+        taglineText: '🍝 Slice and Print from Your Phone',
+        descText: 'Phone-first web app to slice 3D models with the OrcaSlicer CLI and print them: share a model or a link, place it on the plate in 3D, slice, confirm the bed is clear, print. Printers plug in through adapters; the first one supports the Elegoo Centauri Carbon 2.',
+        tags: ['Python', 'FastAPI', 'OrcaSlicer', 'PWA', 'MIT'],
+        links: [
+            { icon: 'fa-brands fa-github', label: 'GitHub', url: 'https://github.com/itsjustwhitee/spaghetti', trailing: 'arrow-right' },
+        ],
+        image: { mode: 'img', src: '/assets/projects/spaghetti.svg', alt: 'Spaghetti logo', placeholderEmoji: '🍝' },
+    },
 ];
 
 module.exports = { projects: projects, HOME_COUNT: 4 };

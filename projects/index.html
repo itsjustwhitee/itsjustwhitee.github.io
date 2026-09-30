@@ -55,6 +55,28 @@
 
         <div class="projects-grid">
 <!-- PROJECTS:START -->
+            <div class="project-card reveal" id="spaghetti-card" data-date="2026-09">
+                <div class="project-img-wrap">
+                    <img src="/assets/projects/spaghetti.svg" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" alt="Spaghetti logo" class="project-img" loading="lazy">
+                    <div class="project-img-placeholder" style="display:none;">🍝</div>
+                </div>
+                <div class="project-body">
+                    <div class="project-meta">
+                        <span class="project-badge" data-i18n="proj.spaghetti.badge">Open Source</span>
+                        <span class="project-year">sep 2026</span>
+                    </div>
+                    <h3>Spaghetti</h3>
+                    <p class="tagline" data-i18n="proj.spaghetti.tagline">🍝 Slice and Print from Your Phone</p>
+                    <p class="proj-desc" data-i18n="proj.spaghetti.desc">Phone-first web app to slice 3D models with the OrcaSlicer CLI and print them: share a model or a link, place it on the plate in 3D, slice, confirm the bed is clear, print. Printers plug in through adapters; the first one supports the Elegoo Centauri Carbon 2.</p>
+                    <div class="project-tags">
+                        <span class="tag">Python</span><span class="tag">FastAPI</span><span class="tag">OrcaSlicer</span><span class="tag">PWA</span><span class="tag">MIT</span>
+                    </div>
+                    <div class="project-footer">
+                        <a href="https://github.com/itsjustwhitee/spaghetti" target="_blank" rel="noopener noreferrer" class="project-link"><i class="fa-brands fa-github"></i> GitHub <i class="fa-solid fa-arrow-right" style="font-size:0.58rem;"></i></a>
+                    </div>
+                </div>
+            </div>
+
             <div class="project-card reveal" id="sliceceipt-card" data-date="2026-07">
                 <div class="project-img-wrap">
                     <div class="project-img-wrap" id="sliceceipt-container" data-svg-src="/assets/projects/sliceceipt.svg"></div>
@@ -201,7 +223,7 @@
 
     <script src="script.js"></script>
     <script src="circuit-layout.js"></script>
-    <script src="circuit-board-data.js"></script>
+    <script src="circuit-board-data.js?v=6"></script>
     <script src="circuit-symbols.js"></script>
     <script src="circuit-pulse.js"></script>
     <script src="circuit.js"></script>

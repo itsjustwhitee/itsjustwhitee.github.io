@@ -21,7 +21,7 @@ const SOURCE_SVG = path.join(ROOT_DIR, 'projects', 'circuit-board-source.svg');
 const OUTPUT_JS = path.join(ROOT_DIR, 'projects', 'circuit-board-data.js');
 
 // Update this when the source SVG's node circles change — see file header.
-const CONFIRMED_NODE_IDS = ['path93', 'path93-1-0', 'path93-1-0-7', 'path93-1-0-7-1', 'path93-1-0-7-1-5'];
+const CONFIRMED_NODE_IDS = ['path93', 'path93-1-0', 'path93-1-0-7', 'path93-1-0-7-1', 'path93-1-0-7-1-5', 'path93-1-0-7-1-5-0'];
 const MAIN_PATH_ID = 'path3'; // the single continuous spine touching every node in order
 
 // --- minimal SVG path 'd' parser: M/m L/l H/h V/v C/c (bezier control

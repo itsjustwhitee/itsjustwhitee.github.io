@@ -149,33 +149,19 @@ function collectProjects() {
     return { grid: grid, projects: projects };
 }
 
-function columnsForWidth(width) {
-    if (width < 480) return 7;
-    if (width < 900) return 10;
-    return 13;
-}
-
 function init() {
     const stage = document.getElementById('circuit-stage');
     const collected = collectProjects();
     if (!stage || !collected || !collected.projects.length) return; // no-JS/degraded path: grid stays visible as-is
 
-    // Falls back to the procedural generator if the hand-authored board's
-    // node count doesn't match the live project count (e.g. a project was
-    // added before circuit-board-source.svg was updated).
+    // The board is hand-drawn (circuit-board-source.svg -> circuit-board-data.js) and needs one node
+    // per project. If they don't match, keep the plain grid visible instead of inventing a layout:
+    // add a node slot in scripts/build-circuit-board.js and rebuild.
     const staticData = window.CIRCUIT_BOARD_DATA;
-    const useStatic = staticData && staticData.nodes.length === collected.projects.length;
+    if (!staticData || staticData.nodes.length !== collected.projects.length) return;
 
-    const board = useStatic
-        ? window.CircuitLayout.generateFromStatic(staticData, {})
-        : window.CircuitLayout.generate({
-            projectCount: collected.projects.length,
-            columns: columnsForWidth(window.innerWidth),
-            rowsPerProject: 8,
-            seed: Math.floor(Math.random() * 2147483647),
-        });
-
-    const cellSize = useStatic ? 1 : (window.innerWidth < 480 ? 26 : 32);
+    const board = window.CircuitLayout.generateFromStatic(staticData, {});
+    const cellSize = 1;
     const rendered = render(stage, board, cellSize);
 
     window.CIRCUIT_PROJECTS = collected.projects;
