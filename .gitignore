@@ -27,3 +27,5 @@ CLAUDE.md
 # --- Planning artifact ---
 docs/superpowers/
 .superpowers
+# --- Local agent instructions ---
+AGENTS.md
