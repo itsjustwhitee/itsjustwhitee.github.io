@@ -984,9 +984,17 @@
     // Font Awesome glyphs are decorative here: the text next to them (or the
     // element's own aria-label) carries the meaning.
     function hideDecorativeIcons() {
-        document.querySelectorAll('i.fa-solid, i.fa-brands, i.fa-regular').forEach(function (i) {
-            if (!i.hasAttribute('aria-hidden')) i.setAttribute('aria-hidden', 'true');
-        });
+        var sel = 'i.fa-solid, i.fa-brands, i.fa-regular';
+        function hide(root) {
+            var list = root.matches && root.matches(sel) ? [root] : [];
+            if (root.querySelectorAll) list = list.concat([].slice.call(root.querySelectorAll(sel)));
+            list.forEach(function (i) { if (!i.hasAttribute('aria-hidden')) i.setAttribute('aria-hidden', 'true'); });
+        }
+        hide(document);
+        // Some pages (bento, resources) render their cards from JS after load.
+        new MutationObserver(function (records) {
+            records.forEach(function (r) { r.addedNodes.forEach(function (n) { if (n.nodeType === 1) hide(n); }); });
+        }).observe(document.body, { childList: true, subtree: true });
     }
 
     // ── INIT ──────────────────────────────────────────────────────────────────
