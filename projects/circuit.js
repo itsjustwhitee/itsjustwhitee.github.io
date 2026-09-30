@@ -133,18 +133,6 @@ function collectProjects() {
     return { grid: grid, projects: projects };
 }
 
-// The flowing sparks run through an SVG filter over the whole board; repainting
-// that while the page scrolls is what makes phones stutter. Freeze the effect
-// during a scroll and resume it once scrolling has been idle for a moment.
-function pauseFlowWhileScrolling(stage) {
-    let timer = null;
-    window.addEventListener('scroll', function () {
-        stage.classList.add('is-scrolling');
-        clearTimeout(timer);
-        timer = setTimeout(function () { stage.classList.remove('is-scrolling'); }, 150);
-    }, { passive: true });
-}
-
 function init() {
     const stage = document.getElementById('circuit-stage');
     const collected = collectProjects();
@@ -163,8 +151,6 @@ function init() {
     window.CIRCUIT_PROJECTS = collected.projects;
     window.CIRCUIT_BOARD = board;
     window.CIRCUIT_RENDERED = rendered;
-
-    pauseFlowWhileScrolling(stage);
 
     collected.grid.classList.add('circuit-active');
     collected.projects.forEach(function (p) { p.cardEl.classList.remove('reveal'); });

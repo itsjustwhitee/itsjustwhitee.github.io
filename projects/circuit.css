@@ -102,11 +102,6 @@
     animation: circuit-flow 1.2s linear infinite;
 }
 
-/* Set by pauseFlowWhileScrolling (circuit.js) */
-.circuit-stage.is-scrolling .circuit-segment.is-flowing .circuit-flow-overlay {
-    animation-play-state: paused;
-}
-
 @keyframes circuit-flow {
     to { stroke-dashoffset: -180; }
 }
