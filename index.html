@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="./shared.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
 
     <link rel="icon" type="image/png" href="/assets/favicon.png">
@@ -563,6 +564,7 @@
     <nav id="site-nav" class="site-nav" data-active="home"></nav>
 
     <!-- ── HERO ─────────────────────────────────────────────────────────── -->
+    <main id="main-content">
     <section id="hero">
         <p class="hero-eyebrow" data-i18n="hero.eyebrow">// hello world · itsjustwhitee</p>
         <h1 class="hero-name">
@@ -653,7 +655,7 @@
                         <span class="project-badge intern" data-i18n="proj.edgecv.badge">Internship · Thesis</span>
                         <span class="project-year">apr-oct 2025</span>
                     </div>
-                    <h3>EdgeCV4Safety</h3>
+                    <h3 translate="no">EdgeCV4Safety</h3>
                     <p class="tagline" data-i18n="proj.edgecv.tagline">🛡️ AI-Driven Contextual Safety System for Industry 5.0</p>
                     <p class="proj-desc" data-i18n="proj.edgecv.desc">Modular Computer Vision system replacing physical safety barriers. Deployed on NVIDIA Jetson AGX Orin: YOLO + UniDepth/DepthAnything over ONNX Runtime, robot control via RTDE, real-time proximity awareness for Universal Robots.</p>
                     <div class="project-stats">
@@ -693,7 +695,7 @@
                         <span class="project-badge" data-i18n="proj.spaghetti.badge">Open Source</span>
                         <span class="project-year">sep 2026</span>
                     </div>
-                    <h3>Spaghetti</h3>
+                    <h3 translate="no">Spaghetti</h3>
                     <p class="tagline" data-i18n="proj.spaghetti.tagline">🍝 Slice and Print from Your Phone</p>
                     <p class="proj-desc" data-i18n="proj.spaghetti.desc">Phone-first web app to slice 3D models with the OrcaSlicer CLI and print them: share a model or a link, place it on the plate in 3D, slice, confirm the bed is clear, print. Printers plug in through adapters; the first one supports the Elegoo Centauri Carbon 2.</p>
                     <div class="project-tags">
@@ -715,7 +717,7 @@
                         <span class="project-badge" data-i18n="proj.slice.badge">Personal</span>
                         <span class="project-year">jul 2026</span>
                     </div>
-                    <h3>SliceCeipt</h3>
+                    <h3 translate="no">SliceCeipt</h3>
                     <p class="tagline" data-i18n="proj.slice.tagline">🧾 Split Shared Receipts, Down to the Cent</p>
                     <p class="proj-desc" data-i18n="proj.slice.desc">Mobile-first PWA for splitting a shared receipt (photo, PDF, or manual entry) among multiple people, item by item. Fully static and offline-capable: OCR and parsing run client-side, no backend, no accounts.</p>
                     <div class="project-tags">
@@ -825,7 +827,7 @@
                         <p class="tl-role" data-i18n="exp.eyecan.role">Analyst Programmer / AI Integration Engineer</p>
                         <p class="tl-company">
                             <a href="https://eyecan.ai" target="_blank" rel="noopener noreferrer" class="tl-company-link">
-                                <img src="https://www.google.com/s2/favicons?domain=eyecan.ai&sz=32" class="tl-company-logo" alt="" loading="lazy">
+                                <img src="/assets/favicon-eyecan.png" class="tl-company-logo" alt="" loading="lazy">
                                 <span data-i18n="exp.eyecan.company">eyecan</span>
                             </a>
                             <span data-i18n="exp.eyecan.location">· Bologna, IT</span>
@@ -843,7 +845,7 @@
                         <p class="tl-role" data-i18n="exp.birex.role">Computer Vision Engineer Intern</p>
                         <p class="tl-company">
                             <a href="https://bi-rex.it" target="_blank" rel="noopener noreferrer" class="tl-company-link">
-                                <img src="https://www.google.com/s2/favicons?domain=bi-rex.it&sz=32" class="tl-company-logo" alt="" loading="lazy">
+                                <img src="/assets/favicon-birex.png" class="tl-company-logo" alt="" loading="lazy">
                                 <span data-i18n="exp.birex.company">BI-REX Competence Center</span>
                             </a>
                             <span data-i18n="exp.birex.location">· Bologna, IT</span>
@@ -900,8 +902,10 @@
         </div>
     </section>
 
+    </main>
+
     <!-- ── FOOTER ─────────────────────────────────────────────────────────── -->
-    <footer id="site-footer" class="site-footer" data-footer="full" data-copy-key="home.footer_copy"></footer><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+    <footer id="site-footer" class="site-footer" data-footer="full" data-copy-key="home.footer_copy"></footer><script>
     // Scroll reveal — shared implementation lives in components.js
     // initialGrace: 900ms clears hero-eyebrow's own 0.2s-delay/0.6s fadeUp (above, in this
     // page's <style>) so a section that's already in view at load (short mobile screens)

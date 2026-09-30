@@ -42,7 +42,7 @@
             'about.label':   '// 01 · about me',
             'about.title':   'Engineer on paper,<br><span class="accent">tinkerer at heart</span>',
             'about.badge':   'BSc grade',
-            'about.h3':      'From nowhere to... (who knows?)',
+            'about.h3':      'From nowhere to… (who knows?)',
             'about.p1':      "I'm a Computer Engineering student at the University of Bologna (Alma Mater Studiorum), currently pursuing my Master's Degree, but I originally come from a small, quiet town (really!) in Veneto.",
             'about.p2':      "I like understanding how things actually work, and that curiosity is basically what got me here: from real-time systems to IoT, to AI, and much more.",
             'about.p3_html': "When I'm not staring at a terminal, I'm likely eating sushi 🍣, drawing caricatures, overthinking a graphic design layout 🖱️, or lately tinkering with 3D printing and electronics 🔧.<br> I believe <em>knowledge is worthless if it's not shared</em>.",
@@ -144,7 +144,7 @@
             'edu.msc.period': 'oct 2025 - in progress',
             'edu.msc.degree': 'Master Degree<br>Computer Engineering',
             'edu.msc.school': 'Università di Bologna',
-            'edu.msc.grade':  '// Real-Time Systems · Accelerated Computing and more...',
+            'edu.msc.grade':  '// Real-Time Systems · Accelerated Computing and more…',
 
             'edu.bsc.period': 'oct 2022 - dec 2025',
             'edu.bsc.degree': 'Bachelor Degree<br>Computer Engineering',
@@ -188,7 +188,7 @@
             // ── Contacts ─────────────────────────────────────────────────────
             'contacts.header_label': '// contacts',
             'contacts.h1':           "Hi, I'm <span>Matteo</span>!",
-            'contacts.bio':          "If you're here, you found something of mine... 😅<br>You can contact me below to return it or let me know where you found it.<br>Thank you! 🙏",
+            'contacts.bio':          "If you're here, you found something of mine… 😅<br>You can contact me below to return it or let me know where you found it.<br>Thank you! 🙏",
             'contacts.wa.title':     'Message me on WhatsApp',
             'contacts.wa.desc':      'I reply quickly!',
             'contacts.tg.title':     'Message me on Telegram',
@@ -203,7 +203,7 @@
             // ── CV ────────────────────────────────────────────────────────────
             'cv.header_label': '// curriculum vitae',
             'cv.title':        'Matteo <span>Fontolan</span>',
-            'cv.subtitle':     'Computer Engineering and more...',
+            'cv.subtitle':     'Computer Engineering and more…',
             'cv.fallback':     "Your browser doesn't support inline PDFs.<br><a href=\"../assets/cvMatteoFontolan.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">Open the PDF directly</a>.",
             'cv.btn_download': 'Download CV',
             'cv.btn_open':     'Open in new tab',
@@ -232,7 +232,7 @@
             'about.label':   '// 01 · chi sono',
             'about.title':   'Ingegnere sulla carta,<br><span class="accent">smanettone dentro</span>',
             'about.badge':   'voto triennale',
-            'about.h3':      'Dal nulla a... (Chissà?)',
+            'about.h3':      'Dal nulla a… (Chissà?)',
             'about.p1':      "Sono uno studente di Ingegneria Informatica all'Università di Bologna (Alma Mater Studiorum), attualmente in Magistrale, ma vengo da un piccolo e tranquillo paesino (davvero!) del Veneto.",
             'about.p2':      "Mi piace capire come funzionano davvero le cose, e alla fine è quello che mi ha portato a lavorare un po' su tutto: dai sistemi real-time all'IoT, all'IA a molto altro ancora.",
             'about.p3_html': "Quando non fisso un terminale, probabilmente sto mangiando sushi🍣, disegnando caricature, perfezionando qualche layout🖱️, o ultimamente smanettando con stampa 3D ed elettronica 🔧.<br>Credo che <em>la conoscenza non valga nulla se non viene condivisa</em>.",
@@ -334,7 +334,7 @@
             'edu.msc.period': 'ott 2025 - in corso',
             'edu.msc.degree': 'Laurea Magistrale<br>Ingegneria Informatica',
             'edu.msc.school': 'Università di Bologna',
-            'edu.msc.grade':  '// Sistemi Real-Time, Calcolo Accelerato e altro...',
+            'edu.msc.grade':  '// Sistemi Real-Time, Calcolo Accelerato e altro…',
 
             'edu.bsc.period': 'ott 2022 - dic 2025',
             'edu.bsc.degree': 'Laurea Triennale<br>Ingegneria Informatica',
@@ -378,7 +378,7 @@
             // ── Contacts ─────────────────────────────────────────────────────
             'contacts.header_label': '// contatti',
             'contacts.h1':           'Ciao, sono <span>Matteo</span>!',
-            'contacts.bio':          "Se sei qui, hai trovato qualcosa di mio... 😅<br>Puoi contattarmi qui sotto per restituirmelo o farmi sapere dove l'hai trovato.<br>Grazie! 🙏",
+            'contacts.bio':          "Se sei qui, hai trovato qualcosa di mio… 😅<br>Puoi contattarmi qui sotto per restituirmelo o farmi sapere dove l'hai trovato.<br>Grazie! 🙏",
             'contacts.wa.title':     'Scrivimi su WhatsApp',
             'contacts.wa.desc':      'Rispondo subito!',
             'contacts.tg.title':     'Scrivimi su Telegram',
@@ -393,7 +393,7 @@
             // ── CV ────────────────────────────────────────────────────────────
             'cv.header_label': '// curriculum vitae',
             'cv.title':        'Matteo <span>Fontolan</span>',
-            'cv.subtitle':     'Ingegneria Informatica e molto altro...',
+            'cv.subtitle':     'Ingegneria Informatica e molto altro…',
             'cv.fallback':     "Il tuo browser non supporta i PDF incorporati.<br><a href=\"../assets/cvMatteoFontolan.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">Apri il PDF direttamente</a>.",
             'cv.btn_download': 'Scarica il CV',
             'cv.btn_open':     'Apri in una nuova scheda',

@@ -148,6 +148,7 @@
 }
 
 .circuit-node-btn {
+    touch-action: manipulation;
     position: absolute;
     transform: translate(-50%, -50%);
     width: 76px;

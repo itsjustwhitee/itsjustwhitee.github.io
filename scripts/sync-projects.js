@@ -128,7 +128,7 @@ function renderCard(project) {
         '                        <span class="project-badge' + badgeClass + '" data-i18n="proj.' + project.i18nKey + '.badge">' + project.badgeText + '</span>\n' +
         '                        <span class="project-year">' + project.yearLabel + '</span>\n' +
         '                    </div>\n' +
-        '                    <h3>' + project.title + '</h3>\n' +
+        '                    <h3 translate="no">' + project.title + '</h3>\n' +
         '                    <p class="tagline" ' + taglineAttr + '="proj.' + project.i18nKey + '.tagline">' + project.taglineText + '</p>\n' +
         '                    <p class="proj-desc" data-i18n="proj.' + project.i18nKey + '.desc">' + project.descText + '</p>' +
         renderStats(project) + '\n' +

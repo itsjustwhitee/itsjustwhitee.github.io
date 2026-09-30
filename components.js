@@ -980,12 +980,37 @@
         });
     }
 
+    // ── ACCESSIBILITY HELPERS ─────────────────────────────────────────────────
+    // Keyboard shortcut past the fixed nav to the page content (<main>, or the
+    // element right after the nav on pages without one).
+    function addSkipLink(nav) {
+        var target = document.querySelector('main') || (nav && nav.nextElementSibling);
+        if (!target) return;
+        if (!target.id) target.id = 'main-content';
+        target.setAttribute('tabindex', '-1');
+        var a = document.createElement('a');
+        a.className = 'skip-link';
+        a.href = '#' + target.id;
+        a.textContent = 'Skip to content';
+        document.body.insertBefore(a, document.body.firstChild);
+    }
+
+    // Font Awesome glyphs are decorative here: the text next to them (or the
+    // element's own aria-label) carries the meaning.
+    function hideDecorativeIcons() {
+        document.querySelectorAll('i.fa-solid, i.fa-brands, i.fa-regular').forEach(function (i) {
+            if (!i.hasAttribute('aria-hidden')) i.setAttribute('aria-hidden', 'true');
+        });
+    }
+
     // ── INIT ──────────────────────────────────────────────────────────────────
     document.addEventListener('DOMContentLoaded', function () {
         var nav    = document.getElementById('site-nav');
         var footer = document.getElementById('site-footer');
         if (nav)    buildNav(nav);
         if (footer) buildFooter(footer);
+        addSkipLink(nav);
+        hideDecorativeIcons();
         initParallaxOrbs();
         initFunFactTriggers();
         clearEggStateOnHardRefresh();
