@@ -66,7 +66,8 @@ if (sliceContainer) {
 
 function initEyeTracking(edgeSvg) {
     const pupilGroup = document.getElementById('pupil-focus-group');
-    if (!pupilGroup || window.prefersReducedMotion) return;
+    // Touch screens have no hover: a tap only fires a synthetic mousemove, which would leave the pupil parked at an arbitrary offset.
+    if (!pupilGroup || window.prefersReducedMotion || window.matchMedia('(hover: none)').matches) return;
 
     // Still off inside the circuit's hover popup (a fly-by preview) — on
     // again inside .circuit-window (a click deliberately opens the real
