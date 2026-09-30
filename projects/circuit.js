@@ -162,6 +162,7 @@ function init() {
     initHashCrackerzExcite();
     initEdgeCVExcite();
     initSliceCeiptExcite();
+    initSpaghettiExcite();
     initTypstExcite();
     buildViewToggle(stage, collected.grid);
 }
@@ -601,6 +602,24 @@ function initSliceCeiptExcite() {
         window.Circuit.onNodeExcite('sliceceipt', function () {
             svg.classList.add('is-flapping');
             setTimeout(function () { svg.classList.remove('is-flapping'); }, 500);
+        });
+    });
+}
+
+function initSpaghettiExcite() {
+    const btn = document.querySelector('.circuit-node-btn[data-slug="spaghetti"]');
+    if (!btn) return;
+    injectSvgWithUniqueIds('/assets/projects/spaghetti.svg', '-board', function (svg) {
+        svg.classList.add('circuit-node-icon');
+        svg.removeAttribute('width');
+        svg.removeAttribute('height');
+        btn.appendChild(svg);
+        boardIconEls['spaghetti'] = svg;
+
+        if (window.prefersReducedMotion) return;
+        window.Circuit.onNodeExcite('spaghetti', function () {
+            svg.classList.add('is-squirming');
+            setTimeout(function () { svg.classList.remove('is-squirming'); }, 900);
         });
     });
 }

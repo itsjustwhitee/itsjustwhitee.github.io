@@ -51,6 +51,18 @@ if (edgeContainer) {
         .catch(err => console.error("Errore nel caricamento del logo EdgeCV: ", err));
 }
 
+const spaghettiContainer = document.getElementById('spaghetti-container');
+
+if (spaghettiContainer) {
+    fetch(spaghettiContainer.dataset.svgSrc)
+        .then(response => response.text())
+        .then(svgCode => {
+            spaghettiContainer.innerHTML = svgCode;
+            spaghettiContainer.querySelector('svg').classList.add('project-img');
+        })
+        .catch(err => console.error("Errore nel caricamento del logo Spaghetti: ", err));
+}
+
 const sliceContainer = document.getElementById('sliceceipt-container');
 
 if (sliceContainer) {

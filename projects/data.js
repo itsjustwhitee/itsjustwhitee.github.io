@@ -132,7 +132,7 @@ const projects = [
         links: [
             { icon: 'fa-brands fa-github', label: 'GitHub', url: 'https://github.com/itsjustwhitee/spaghetti', trailing: 'arrow-right' },
         ],
-        image: { mode: 'img', src: '/assets/projects/spaghetti.svg', alt: 'Spaghetti logo', placeholderEmoji: '🍝' },
+        image: { mode: 'svg-inject', visualId: 'spaghetti-container', fetchSrc: '/assets/projects/spaghetti.svg', placeholderEmoji: '🍝' },
     },
 ];
 
