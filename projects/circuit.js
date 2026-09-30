@@ -47,22 +47,6 @@ function render(container, board, cellSize) {
         const doc = parser.parseFromString('<svg xmlns="' + SVG_NS + '">' + window.CIRCUIT_SYMBOLS[name] + '</svg>', 'image/svg+xml');
         defs.appendChild(doc.documentElement.firstChild);
     });
-    // Displaces the flow overlay along noise, jump-cutting the seed several
-    // times a second for a jittery "electric" kink instead of a smooth glow.
-    // type must stay fractalNoise, not turbulence — turbulence sums each
-    // octave's absolute value, which isn't zero-centered and visibly biases
-    // the displacement toward one side. scale is kept modest so the jitter
-    // stays on the wire instead of wandering off it.
-    const lightningFilter = svgEl('filter', { id: 'circuit-lightning-jitter', x: '-40%', y: '-40%', width: '180%', height: '180%' });
-    const turbulence = svgEl('feTurbulence', { type: 'fractalNoise', baseFrequency: '0.35 0.12', numOctaves: '1', seed: '3', result: 'jitter-noise' });
-    turbulence.appendChild(svgEl('animate', {
-        attributeName: 'seed', values: '2;9;4;11;1;7;5;3;10', dur: '0.75s', repeatCount: 'indefinite', calcMode: 'discrete',
-    }));
-    lightningFilter.appendChild(turbulence);
-    lightningFilter.appendChild(svgEl('feDisplacementMap', {
-        in: 'SourceGraphic', in2: 'jitter-noise', scale: '7', xChannelSelector: 'R', yChannelSelector: 'G',
-    }));
-    defs.appendChild(lightningFilter);
     svg.appendChild(defs);
 
     const untraveledGroup = svgEl('g', { class: 'circuit-trace circuit-trace-untraveled' });
@@ -149,6 +133,18 @@ function collectProjects() {
     return { grid: grid, projects: projects };
 }
 
+// The flowing sparks run through an SVG filter over the whole board; repainting
+// that while the page scrolls is what makes phones stutter. Freeze the effect
+// during a scroll and resume it once scrolling has been idle for a moment.
+function pauseFlowWhileScrolling(stage) {
+    let timer = null;
+    window.addEventListener('scroll', function () {
+        stage.classList.add('is-scrolling');
+        clearTimeout(timer);
+        timer = setTimeout(function () { stage.classList.remove('is-scrolling'); }, 150);
+    }, { passive: true });
+}
+
 function init() {
     const stage = document.getElementById('circuit-stage');
     const collected = collectProjects();
@@ -167,6 +163,8 @@ function init() {
     window.CIRCUIT_PROJECTS = collected.projects;
     window.CIRCUIT_BOARD = board;
     window.CIRCUIT_RENDERED = rendered;
+
+    pauseFlowWhileScrolling(stage);
 
     collected.grid.classList.add('circuit-active');
     collected.projects.forEach(function (p) { p.cardEl.classList.remove('reveal'); });

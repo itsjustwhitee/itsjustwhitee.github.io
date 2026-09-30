@@ -92,18 +92,19 @@
     opacity: 0.7;
 }
 
-/* A mix of the original smooth pulse and the jagged-lightning attempt:
-   a single medium-length dash per 180px cycle (half as many as the
-   two-dash version, so the gap between sparks is effectively doubled —
-   still 180 total, so FLOW_SPEED_PX_PER_S/FLOW_PERIOD_MS in circuit.js
-   stay in sync), blurred enough to glow softly like the original, with
-   #circuit-lightning-jitter (circuit.js) still kinking its geometry
-   underneath that blur for the "electric" texture. */
+/* Flowing spark: a single medium-length dash per 180px cycle, so FLOW_SPEED_PX_PER_S and
+   FLOW_PERIOD_MS in circuit.js stay in sync with the 1.2s keyframe below. */
 .circuit-segment.is-flowing .circuit-flow-overlay {
     stroke-dasharray: 22 158;
-    /* One drop-shadow only: stacking blur + two shadows on top of the jitter filter re-rasterised the whole board every frame (~20fps). */
-    filter: url(#circuit-lightning-jitter) drop-shadow(0 0 5px rgba(var(--accent-bright-rgb), 0.95));
+    /* GPU-friendly glow only. The old feTurbulence/feDisplacementMap jitter filter is rendered on the CPU
+       and re-rasterised the whole board every frame, which stuttered on phones. */
+    filter: drop-shadow(0 0 5px rgba(var(--accent-bright-rgb), 0.95));
     animation: circuit-flow 1.2s linear infinite;
+}
+
+/* Set by pauseFlowWhileScrolling (circuit.js) */
+.circuit-stage.is-scrolling .circuit-segment.is-flowing .circuit-flow-overlay {
+    animation-play-state: paused;
 }
 
 @keyframes circuit-flow {
