@@ -564,17 +564,10 @@ body.konami-active::after {
 .btn-ghost   { background: rgba(255,255,255,0.12); color: #fff; border: 1px solid rgba(255,255,255,0.22); }
 .btn-ghost:hover { background: rgba(255,255,255,0.22); border-color: rgba(255,255,255,0.45); box-shadow: 0 0 8px rgba(255,255,255,0.12); }
 
-/* ── SKIP LINK, ANCHOR OFFSET, TEXT BALANCE, TOUCH ───────────────────────── */
+/* ── ANCHOR OFFSET, TEXT BALANCE, TOUCH ───────────────────────── */
 html { scroll-padding-top: 76px; } /* fixed nav must not cover a focused/anchored element */
 h1, h2, h3 { text-wrap: balance; }
 a, button { touch-action: manipulation; }
-.skip-link {
-    position: fixed; top: 8px; left: 8px; z-index: 300;
-    padding: 10px 16px; border-radius: 6px;
-    background: var(--accent-bright); color: #0b1414;
-    font-weight: 700; transform: translateY(-200%);
-}
-.skip-link:focus-visible { transform: translateY(0); }
 
 /* ── FOCUS ACCESSIBILITY ─────────────────────────────────────────────────── */
 :focus-visible {
