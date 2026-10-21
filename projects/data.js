@@ -126,8 +126,8 @@ const projects = [
         pinned: false,
         featured: false,
         badgeText: 'Open Source',
-        taglineText: '🍝 Slice and Print from Your Phone',
-        descText: 'Phone-first web app to slice 3D models with the OrcaSlicer CLI and print them: share a model or a link, place it on the plate in 3D, slice, confirm the bed is clear, print. Printers plug in through adapters; the first one supports the Elegoo Centauri Carbon 2.',
+        taglineText: '🍝 Monitor, Slice and Print from Your Phone',
+        descText: 'Phone-first web app to run your 3D printers: share a model or a link, place it on the plate in 3D, slice it with the OrcaSlicer CLI (multi-colour and filament mapping included) and print. A queue with timed starts, live status, camera and timelapses keep an eye on every print. Printers plug in through adapters; the first one supports the Elegoo Centauri Carbon 2.',
         tags: ['Python', 'FastAPI', 'OrcaSlicer', 'PWA', 'MIT'],
         links: [
             { icon: 'fa-brands fa-github', label: 'GitHub', url: 'https://github.com/itsjustwhitee/spaghetti', trailing: 'arrow-right' },

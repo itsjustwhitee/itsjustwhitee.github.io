@@ -26,12 +26,12 @@
             'nav.projects':   '// projects',
             'nav.skills':     '// skills',
             'nav.bento':      '// bento',
-            'nav.resources':  '// resources',
+            'nav.toolbox':    '// toolbox',
             'nav.cv':         '// cv',
             'nav.menu':       '// menu',
 
             // ── Home: hero ───────────────────────────────────────────────────
-            'hero.eyebrow':      '// hello world · itsjustwhitee',
+            'hero.eyebrow':      '// hello world it\'s justwhitee',
             'hero.role_tag':     'MSc Computer Engineering · Università di Bologna',
             'hero.desc':         "I work on projects that mix hardware and software: I like getting my hands dirty (and often frustrated) with Edge and IoT systems, GPUs, and the occasional DIY build. I'm endlessly curious, and convinced you never really know something until you understand exactly how it works underneath.",
             'hero.btn_projects': 'View Projects',
@@ -42,8 +42,7 @@
             'about.label':   '// 01 · about me',
             'about.title':   'Engineer on paper,<br><span class="accent">tinkerer at heart</span>',
             'about.badge':   'BSc grade',
-            'about.h3':      'From nowhere to… (who knows?)',
-            'about.p1':      "I'm a Computer Engineering student at the University of Bologna (Alma Mater Studiorum), currently pursuing my Master's Degree, but I originally come from a small, quiet town (really!) in Veneto.",
+            'about.p1':      "I'm a Computer Engineering student at the University of Bologna (Alma Mater Studiorum), currently pursuing my Master's Degree, but I originally come from a small, quiet town (really!) in Italy.",
             'about.p2':      "I like understanding how things actually work, and that curiosity is basically what got me here: from real-time systems to IoT, to AI, and much more.",
             'about.p3_html': "When I'm not staring at a terminal, I'm likely eating sushi 🍣, drawing caricatures, overthinking a graphic design layout 🖱️, or lately tinkering with 3D printing and electronics 🔧.<br> I believe <em>knowledge is worthless if it's not shared</em>.",
 
@@ -58,10 +57,10 @@
             'projects.view_grid':     'View as grid',
             'projects.view_circuit':  'View as circuit',
 
-            // ── Resources page ──────────────────────────────────────────────────
-            'resources.page_label': '// resources',
-            'resources.title':      '<span>Resources</span>',
-            'resources.page_sub':   'Tools, articles, and other things I find worth sharing, created by me or other people!',
+            // ── Toolbox page ──────────────────────────────────────────────────
+            'toolbox.page_label': '// toolbox',
+            'toolbox.title':      '<span>Toolbox</span>',
+            'toolbox.page_sub':   'Tools, articles, and other things I find worth sharing, created by me or other people!',
             'section.appearance.title': 'Improve Appearance',
             'resource.deskmat.title': 'BluePrint Wallpaper',
             'resource.deskmat.desc':  'Blueprint-style desktop wallpaper, in two variants.',
@@ -83,6 +82,14 @@
             'resource.bitwarden.title': 'Bitwarden',
             'resource.bitwarden.desc':  'The password/TOTP/Secret manager I use to keep everything locked down. Has a solid free tier too.',
             'resource.bitwarden.dl_visit': 'Get Bitwarden',
+
+            'section.coding.title':    'Coding Tools',
+            'resource.claudecode.title': 'Claude Code',
+            'resource.claudecode.desc':  'Terminal coding assistant I use to build and refactor projects.',
+            'resource.claudecode.dl_visit': 'Get Claude Code',
+            'resource.codex.title':    'Codex',
+            'resource.codex.desc':     'Open-source command-line coding agent, handy for a second opinion.',
+            'resource.codex.dl_visit': 'Get Codex',
 
             'proj.edgecv.badge':      'Internship · Thesis',
             'proj.edgecv.tagline':    '🛡️ AI-Driven Contextual Safety System for Industry 5.0',
@@ -109,8 +116,8 @@
             'proj.notes.desc':    'Typst template for clean lecture notes: styled cover page, automatic table of contents, callouts and inline annotations. Published on Typst Universe, used in several course-note repos including ICCBD-notes.',
 
             'proj.spaghetti.badge':   'Open Source',
-            'proj.spaghetti.tagline': '🍝 Slice and Print from Your Phone',
-            'proj.spaghetti.desc':    'Phone-first web app to slice 3D models with the OrcaSlicer CLI and print them: share a model or a link, place it on the plate in 3D, slice, confirm the bed is clear, print. Printers plug in through adapters; the first one supports the Elegoo Centauri Carbon 2.',
+            'proj.spaghetti.tagline': '🍝 Monitor, Slice and Print from Your Phone',
+            'proj.spaghetti.desc':    'Phone-first web app to run your 3D printers: share a model or a link, place it on the plate in 3D, slice it with the OrcaSlicer CLI (multi-colour and filament mapping included) and print. A queue with timed starts, live status, camera and timelapses keep an eye on every print. Printers plug in through adapters; the first one supports the Elegoo Centauri Carbon 2.',
 
             // ── Home: skills ─────────────────────────────────────────────────
             'skills.label': '// 03 · skills',
@@ -166,7 +173,7 @@
 
             // ── Bento ────────────────────────────────────────────────────────
             'bento.header_label': "// justwhitee's bento",
-            'bento.bio':          'Tech enthusiast 👾 | Computer Engineering (M.Sc. WIP) 🧑‍💻 | Foodie 🍣 | Caricature &amp; Graphic Design for hobby 🖱️',
+            'bento.bio':          'Tech enthusiast 👾 | Computer Engineering (M.Sc. WIP) 🧑‍💻 | DIY electronics &amp; 3D printing 🔧 | Foodie 🍣 | Graphic design &amp; caricatures for fun 🖱️',
             'bento.cta':          'Let\'s work together, or just chat about tech. Reach out!💡',
             'bento.footer_copy':  '&copy; YEAR Matteo Fontolan<br>Caricatures, illustrations and graphic design are copyrighted: ask before reusing them.<br>Code, repositories and other works/assets are <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank">copyleft</a> (unless stated otherwise): knowledge is meant to be shared.',
 
@@ -216,12 +223,12 @@
             'nav.projects':   '// projects',
             'nav.skills':     '// skills',
             'nav.bento':      '// bento',
-            'nav.resources':  '// resources',
+            'nav.toolbox':    '// toolbox',
             'nav.cv':         '// cv',
             'nav.menu':       '// menu',
 
             // ── Home: hero ───────────────────────────────────────────────────
-            'hero.eyebrow':      '// hello world · itsjustwhitee',
+            'hero.eyebrow':      '// hello world it\'s justwhitee',
             'hero.role_tag':     'Ing. Informatica Magistrale · Università di Bologna',
             'hero.desc':         "Mi occupo di progetti che coinvolgono sia hardware che software: mi piace sporcarmi le mani e litigare con sistemi Edge e IoT, GPU, e qualche progetto DIY. Sono molto curioso, e convinto che non si conosca davvero qualcosa finché non si capisce esattamente come funziona all'interno.",
             'hero.btn_projects': 'Vai ai Progetti',
@@ -232,8 +239,7 @@
             'about.label':   '// 01 · chi sono',
             'about.title':   'Ingegnere sulla carta,<br><span class="accent">smanettone dentro</span>',
             'about.badge':   'voto triennale',
-            'about.h3':      'Dal nulla a… (Chissà?)',
-            'about.p1':      "Sono uno studente di Ingegneria Informatica all'Università di Bologna (Alma Mater Studiorum), attualmente in Magistrale, ma vengo da un piccolo e tranquillo paesino (davvero!) del Veneto.",
+            'about.p1':      "Sono uno studente di Ingegneria Informatica all'Università di Bologna (Alma Mater Studiorum), attualmente in Magistrale, ma vengo da un piccolo e tranquillo paesino (davvero!) italiano.",
             'about.p2':      "Mi piace capire come funzionano davvero le cose, e alla fine è quello che mi ha portato a lavorare un po' su tutto: dai sistemi real-time all'IoT, all'IA a molto altro ancora.",
             'about.p3_html': "Quando non fisso un terminale, probabilmente sto mangiando sushi🍣, disegnando caricature, perfezionando qualche layout🖱️, o ultimamente smanettando con stampa 3D ed elettronica 🔧.<br>Credo che <em>la conoscenza non valga nulla se non viene condivisa</em>.",
 
@@ -248,10 +254,10 @@
             'projects.view_grid':     'Vedi come griglia',
             'projects.view_circuit':  'Vedi come circuito',
 
-            // ── Resources page ──────────────────────────────────────────────────
-            'resources.page_label': '// resources',
-            'resources.title':      '<span>Risorse</span>',
-            'resources.page_sub':   'Tool, articoli e altre cose che trovo utili da condividere, creati da me o da altri!',
+            // ── Toolbox page ──────────────────────────────────────────────────
+            'toolbox.page_label': '// toolbox',
+            'toolbox.title':      '<span>Toolbox</span>',
+            'toolbox.page_sub':   'Tool, articoli e altre cose che trovo utili da condividere, creati da me o da altri!',
             'section.appearance.title': 'Look',
             'resource.deskmat.title': 'BluePrint Wallpaper',
             'resource.deskmat.desc':  'Sfondo desktop in stile blueprint, in due varianti.',
@@ -273,6 +279,14 @@
             'resource.bitwarden.title': 'Bitwarden',
             'resource.bitwarden.desc':  'Il password/TOTP/Secret manager che uso per tenere tutto al sicuro. Ha anche un buon piano gratuito.',
             'resource.bitwarden.dl_visit': 'Scopri Bitwarden',
+
+            'section.coding.title':    'Strumenti di sviluppo',
+            'resource.claudecode.title': 'Claude Code',
+            'resource.claudecode.desc':  'Assistente di programmazione da terminale che uso per costruire e rifattorizzare i progetti.',
+            'resource.claudecode.dl_visit': 'Scopri Claude Code',
+            'resource.codex.title':    'Codex',
+            'resource.codex.desc':     'Agente di programmazione open-source da riga di comando, utile per un secondo parere.',
+            'resource.codex.dl_visit': 'Scopri Codex',
 
             'proj.edgecv.badge':      'Tirocinio · Tesi',
             'proj.edgecv.tagline':    '🛡️ Sistema di Sicurezza Contestuale AI-Driven per Industry 5.0',
@@ -299,8 +313,8 @@
             'proj.notes.desc':    'Template Typst per appunti puliti e ordinati: copertina personalizzata, indice automatico, callout e annotazioni inline. Pubblicato su Typst Universe, usato in diversi repository di appunti tra cui ICCBD-notes.',
 
             'proj.spaghetti.badge':   'Open Source',
-            'proj.spaghetti.tagline': '🍝 Slicing e Stampa dal Telefono',
-            'proj.spaghetti.desc':    'Web app mobile-first per fare lo slicing di modelli 3D con la CLI di OrcaSlicer e stamparli: condividi un modello o un link, posizionalo sul piatto in 3D, fai lo slicing, conferma che il piatto è libero, stampa. Le stampanti si collegano tramite adapter; il primo supporta la Elegoo Centauri Carbon 2.',
+            'proj.spaghetti.tagline': '🍝 Monitora, Slicing e Stampa dal Telefono',
+            'proj.spaghetti.desc':    'Web app mobile-first per gestire le stampanti 3D: condividi un modello o un link, posizionalo sul piatto in 3D, fai lo slicing con la CLI di OrcaSlicer (multicolore e mappatura dei filamenti inclusi) e stampa. Una coda con avvii programmati, stato in diretta, camera e timelapse tengono d\'occhio ogni stampa. Le stampanti si collegano tramite adapter; il primo supporta la Elegoo Centauri Carbon 2.',
 
             // ── Home: skills ─────────────────────────────────────────────────
             'skills.label': '// 03 · competenze',
@@ -356,7 +370,7 @@
 
             // ── Bento ────────────────────────────────────────────────────────
             'bento.header_label': '// justwhitee\'s bento',
-            'bento.bio':          'Appassionato di tech 👾 | Ingegneria Informatica (Magistrale WIP) 🧑‍💻 | Foodie 🍣 | Caricature &amp; Graphic Design per hobby 🖱️',
+            'bento.bio':          'Appassionato di tech 👾 | Ingegneria Informatica (Magistrale WIP) 🧑‍💻 | DIY elettronica e stampa 3D 🔧 | Foodie 🍣 | Grafica e caricature per hobby 🖱️',
             'bento.cta':          'Collaboriamo o parliamo di tech. Contattami!💡',
             'bento.footer_copy':  '&copy; YEAR Matteo Fontolan<br>Caricature, illustrazioni e grafica sono protette da copyright. Non riprodurre senza permesso esplicito.<br>Codice, repository e altri lavori/asset sono <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank">copyleft</a> (salvo diversa indicazione): la conoscenza va condivisa.',
 

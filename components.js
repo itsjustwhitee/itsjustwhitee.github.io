@@ -10,7 +10,7 @@
      <nav id="site-nav" class="site-nav" data-active="bento"></nav>
      <footer id="site-footer" class="site-footer" data-copy-key="bento.footer_copy"></footer>
 
-   data-active values: "home" | "projects" | "bento" | "resources" | "cv" | "contacts" | ""
+   data-active values: "home" | "projects" | "bento" | "toolbox" | "cv" | "contacts" | ""
    ═══════════════════════════════════════════════════════════════════════════ */
 
 (function () {
@@ -62,7 +62,7 @@
         { key: 'home',      href: r(''),           label: '// home',      i18n: null             },
         { key: 'projects',  href: r('projects/'),  label: '// projects',  i18n: 'nav.projects'  },
         { key: 'bento',     href: r('bento/'),     label: '// bento',     i18n: 'nav.bento'     },
-        { key: 'resources', href: r('resources/'), label: '// resources', i18n: 'nav.resources' },
+        { key: 'toolbox',   href: r('toolbox/'),   label: '// toolbox',   i18n: 'nav.toolbox'   },
         { key: 'cv',        href: r('cv/'),        label: '// cv',        i18n: 'nav.cv'        },
     ];
 

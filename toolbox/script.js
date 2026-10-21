@@ -88,6 +88,34 @@
             ]
         },
         {
+            key: 'coding',
+            title: 'Coding Tools',
+            items: [
+                {
+                    key: 'claudecode',
+                    title: 'Claude Code',
+                    desc: 'Terminal coding assistant I use to build and refactor projects.',
+                    preview: 'assets/claude-code.png',
+                    downloads: [
+                        { key: 'visit', label: 'Get Claude Code', href: 'https://claude.com/product/claude-code', external: true }
+                    ],
+                    price: 2,
+                    date: '2026-10'
+                },
+                {
+                    key: 'codex',
+                    title: 'Codex',
+                    desc: 'Open-source command-line coding agent, handy for a second opinion.',
+                    preview: 'assets/codex.png',
+                    downloads: [
+                        { key: 'visit', label: 'Get Codex', href: 'https://developers.openai.com/codex', external: true }
+                    ],
+                    price: 2,
+                    date: '2026-10'
+                }
+            ]
+        },
+        {
             key: 'security',
             title: 'Security',
             items: [

@@ -29,7 +29,7 @@ const PAGES = [
     { file: 'contacts/index.html', root: '../' },
     { file: 'cv/index.html', root: '../' },
     { file: 'projects/index.html', root: '../' },
-    { file: 'resources/index.html', root: '../' },
+    { file: 'toolbox/index.html', root: '../' },
 ];
 
 function render(root) {
